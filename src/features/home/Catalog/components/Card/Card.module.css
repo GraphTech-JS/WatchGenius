@@ -87,62 +87,6 @@
   margin-bottom: clamp(8px, 1vw, 12px);
 }
 
-/* Modern responsive adjustments */
-@media (max-width: 1300px) {
-  .card {
-    width: 31%;
-    height: max-content;
-  }
-}
-
-@media (max-width: 1200px) {
-  .card {
-    width: 300px;
-  }
-}
-
-@media (max-width: 1150px) {
-  .card {
-    width: 45%;
-    max-height: 510px;
-    height: fit-content;
-  }
-}
-
-@media (max-width: 1100px) {
-  .card {
-    width: 38%;
-    max-height: 480px;
-  }
-}
-
-@media (max-width: 1000px) {
-  .card {
-    height: 470px;
-  }
-}
-
-@media (max-width: 960px) {
-  .card {
-    width: 33%;
-    max-height: 440px;
-    height: fit-content;
-    padding-bottom: 10px;
-  }
-}
-
-@media (max-width: 940px) {
-  .card {
-    max-height: 430px;
-  }
-}
-
-@media (max-width: 900px) {
-  .card {
-    max-height: 420px;
-  }
-}
-
 @media (max-width: 835px) {
   .card {
     max-width: 100%;
@@ -164,12 +108,6 @@
 }
 
 @media (max-width: 480px) {
-  .card {
-    width: 351px;
-    max-height: 420px;
-    height: fit-content;
-  }
-
   .cardContent {
     gap: clamp(6px, 1vw, 10px);
   }
@@ -180,13 +118,7 @@
   }
 }
 
-/* Very small screens */
 @media (max-width: 360px) {
-  .card {
-    width: 340px;
-    height: 400px;
-  }
-
   .cardTitle {
     font-size: clamp(12px, 3vw, 16px);
   }

@@ -1,8 +1,7 @@
 import { Header } from "@/components/Main/Header/Header";
 import { Footer } from "@/components/Main/Footer/Footer";
-import { MainContextProvider } from "@/context";
 import ChatClient from "@/features/Chat/ChatClient";
-import Contacts from "./contacts/page";
+import { Contacts } from "@/features/home/Contacts/Contacts";
 
 export default function RootLayout({
   children,
@@ -12,9 +11,7 @@ export default function RootLayout({
   return (
     <>
       <Header />
-      <MainContextProvider>
-        <ChatClient>{children}</ChatClient>
-      </MainContextProvider>
+      <ChatClient>{children}</ChatClient>
       <Contacts />
       <Footer />
     </>

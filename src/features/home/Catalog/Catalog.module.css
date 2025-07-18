@@ -1,7 +1,7 @@
 .catalog {
   background-color: var(--white);
   min-height: clamp(300px, 40vh, 600px);
-  padding: clamp(40px, 8vw, 80px) 0;
+  padding: 55px 53px 55px 70px;
 }
 
 .catalogContainer {
@@ -11,7 +11,6 @@
   align-items: flex-start;
   margin: 0 auto;
   max-width: clamp(320px, 90vw, 1300px);
-  padding: 0 clamp(20px, 3vw, 40px);
 }
 
 .catalogMenuContainer {
@@ -46,15 +45,9 @@
 .catalogCards {
   width: 100%;
   max-width: clamp(920px, 90vw, 1300px);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(clamp(350px, 30vw, 400px), 1fr)
-  );
-  gap: clamp(15px, 3vw, 25px);
-  margin-top: clamp(20px, 3vw, 30px);
-  padding: 0 clamp(10px, 2vw, 20px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
 }
 
 .catalogBtn {
@@ -82,62 +75,33 @@
     max-width: 100%;
   }
 
-  .catalogCards {
-    grid-template-columns: repeat(
-      auto-fit,
-      minmax(clamp(200px, 40vw, 280px), 1fr)
-    );
-    gap: clamp(10px, 2vw, 20px);
-    padding: 0 clamp(5px, 1vw, 15px);
-  }
-}
+  @media (max-width: 480px) {
+    .catalog {
+      padding: clamp(30px, 6vw, 60px) 0;
+    }
 
-@media (max-width: 480px) {
-  .catalog {
-    padding: clamp(30px, 6vw, 60px) 0;
-  }
+    .catalogContainer {
+      padding: 0 clamp(15px, 3vw, 25px);
+    }
 
-  .catalogContainer {
-    padding: 0 clamp(15px, 3vw, 25px);
+    .catalogBtn {
+      width: 100%;
+      max-width: 300px;
+    }
   }
 
-  .catalogCards {
-    grid-template-columns: 1fr;
-    gap: clamp(15px, 3vw, 20px);
-    padding: 0;
-  }
+  /* Menu container responsive adjustments */
+  @media (orientation: portrait) {
+    .catalogMenuContainer {
+      margin-left: 0;
+    }
 
-  .catalogBtn {
-    width: 100%;
-    max-width: 300px;
-  }
-}
+    .catalogMenuContainer .catalogContent {
+      max-width: 100%;
+    }
 
-/* Menu container responsive adjustments */
-@media (orientation: portrait) {
-  .catalogMenuContainer {
-    margin-left: 0;
-  }
-
-  .catalogMenuContainer .catalogContent {
-    max-width: 100%;
-  }
-
-  .catalogMenuContainer .catalogBtn {
-    margin-left: 0;
-  }
-}
-
-/* Card grid responsive optimization */
-@media (min-width: 1400px) {
-  .catalogCards {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  }
-}
-
-@media (max-width: 360px) {
-  .catalogCards {
-    grid-template-columns: 1fr;
-    gap: clamp(10px, 2vw, 15px);
+    .catalogMenuContainer .catalogBtn {
+      margin-left: 0;
+    }
   }
 }

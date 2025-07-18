@@ -1,7 +1,7 @@
 .topBrands {
   background-color: var(--white);
   min-height: clamp(300px, 40vh, 600px);
-  padding: clamp(40px, 8vw, 80px) 0;
+  padding: 55px 53px 0 70px;
 }
 
 .topBrandsContainer {
@@ -9,8 +9,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: clamp(320px, 85vw, 1300px);
-  margin: 0 auto;
+  width: 100%;
 }
 
 .topBrandsText {

@@ -22,12 +22,10 @@ export const TopBrands = () => {
   return (
     <section className={styles.topBrands}>
       <div className={styles.topBrandsContainer}>
-        <div className={styles.topBrandsContent}>
-          <h2 className={styles.topBrandsHeading}>Топ 5 брендів</h2>
-          <Slider items={brands} />
-          <CustomAreaChart />
-          <Indicators />
-        </div>
+        <h2 className={styles.topBrandsHeading}>Топ 5 брендів</h2>
+        <Slider items={brands} />
+        <CustomAreaChart />
+        <Indicators />
       </div>
     </section>
   );

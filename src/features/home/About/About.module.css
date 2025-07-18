@@ -2,7 +2,7 @@
   position: relative;
   background-color: var(--white);
   min-height: clamp(300px, 40vh, 600px);
-  padding: clamp(40px, 8vw, 80px) 0;
+  padding: 60px 70px;
   z-index: 2;
 }
 
@@ -13,7 +13,6 @@
   align-items: flex-start;
   margin: 0 auto;
   max-width: clamp(320px, 85vw, 1300px);
-  /* padding: 0 clamp(20px, 3vw, 40px); */
 }
 
 .aboutText {
