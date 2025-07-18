@@ -1,0 +1,287 @@
+.contacts {
+  display: flex;
+  position: relative;
+  margin: 0 auto;
+  background: #000;
+  margin-top: 30px;
+  width: 100%;
+  min-height: 530px;
+  margin-bottom: 70px;
+}
+
+.contactsTitle {
+  font-size: 40px;
+  color: var(--white);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+}
+
+.contactsSubtitle {
+  font-size: 20px;
+  color: var(--white);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+}
+
+.contactsContent {
+  display: flex;
+  flex-direction: column;
+  width: 1300px;
+  align-items: flex-start;
+  justify-content: center;
+  margin: 0 auto;
+  padding-top: 52px;
+  gap: 8px;
+  z-index: 4;
+}
+
+.contactsImg {
+  position: absolute;
+  right: 0;
+  z-index: 2;
+}
+
+.contactsMenuImg {
+  right: 310px;
+}
+
+.contactsForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 42px;
+  margin-bottom: 82px;
+  gap: 10px;
+}
+
+.contactsTextFields {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 82px;
+  gap: 15px;
+}
+
+.textField {
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "Inter", sans-serif;
+  color: rgba(109, 106, 106, 1);
+  padding: 18px;
+  border-radius: 5px;
+  background: transparent;
+  border: 2px solid #fff;
+  width: 634px;
+}
+
+.textField::placeholder {
+  color: rgba(109, 106, 106, 1);
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.contactsBtn {
+  width: 100%;
+  padding: 15px 20px !important;
+  font-size: 20px !important;
+}
+
+.contactsBtn:hover {
+  box-shadow: 2px 3px 20px 0px rgba(250, 250, 250, 0.72);
+  -webkit-box-shadow: 2px 3px 20px 0px rgba(250, 250, 250, 0.72);
+  -moz-box-shadow: 2px 3px 20px 0px rgba(250, 250, 250, 0.72);
+}
+
+@media (max-width: 1000px) {
+  .contacts {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+  .contactsContent {
+    max-width: 100%;
+    width: 100%;
+    padding: 30px 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+  }
+
+  .contactsTitle {
+    font-size: 36px;
+    text-align: center;
+    font-family: inherit;
+    margin: 0 auto;
+  }
+
+  .contactsSubtitle {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .contactsTextFields {
+    max-width: 634px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .textField {
+    width: 634px;
+    font-size: 20px;
+  }
+
+  .textField::placeholder {
+    font-size: 20px;
+  }
+
+  .contactsImg {
+    width: 511px;
+    height: 500px;
+    object-fit: cover;
+  }
+
+  .contacts::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--darkblack);
+    border-radius: 10px !important;
+    opacity: 0.7;
+    z-index: 2;
+  }
+
+  .contactsBtn {
+    font-size: 20px !important;
+  }
+}
+
+@media (max-width: 1000px) {
+  .contacts {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+  .contactsContent {
+    max-width: 100%;
+    width: 100%;
+    padding: 30px 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+  }
+
+  .contactsTitle {
+    font-size: 36px;
+    text-align: center;
+    font-family: inherit;
+    margin: 0 auto;
+  }
+
+  .contactsSubtitle {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .contactsTextFields {
+    max-width: 634px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .textField {
+    width: 634px;
+    font-size: 20px;
+  }
+
+  .textField::placeholder {
+    font-size: 20px;
+  }
+
+  .contactsImg {
+    width: 511px;
+    height: 500px;
+    object-fit: cover;
+  }
+
+  .contacts::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--darkblack);
+    border-radius: 10px !important;
+    opacity: 0.7;
+    z-index: 2;
+  }
+
+  .contactsBtn {
+    font-size: 20px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .contacts {
+    max-width: 360px;
+    border-radius: 10px;
+  }
+  .contactsContent {
+    max-width: 100%;
+    padding: 30px 20px;
+  }
+
+  .contactsTitle {
+    font-size: 32px;
+    text-align: center;
+    max-width: 298px;
+    font-family: inherit;
+    margin: 0 auto;
+  }
+
+  .contactsSubtitle {
+    font-size: 16px;
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .contactsTextFields {
+    max-width: 320px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .textField {
+    width: 320px;
+    font-size: 20px;
+  }
+
+  .textField::placeholder {
+    font-size: 20px;
+  }
+
+  .contactsImg {
+    width: 331px;
+    height: 500px;
+    object-fit: cover;
+  }
+
+  .contacts::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--darkblack);
+    border-radius: 10px;
+    opacity: 0.7;
+    z-index: 2;
+  }
+
+  .contactsBtn {
+    font-size: 20px;
+  }
+}

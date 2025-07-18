@@ -1,0 +1,29 @@
+.message {
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08),
+    0 1.5px 6px 0 rgba(0, 0, 0, 0.04);
+  padding: 30px 50px;
+  margin: 10px;
+  border-radius: 10px;
+  width: fit-content;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  border: 0.5px solid var(--black);
+  color: #000 !important;
+}
+
+.messageMe {
+  background-color: rgba(233, 233, 233, 1);
+  color: var(--black);
+}
+
+@media (max-width: 835px) {
+}
+
+@media (max-width: 420px) {
+  .message {
+    font-size: 16px;
+    padding: 20px 30px;
+    width: fit-content;
+  }
+}

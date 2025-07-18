@@ -1,0 +1,122 @@
+.notFound {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--black);
+}
+
+.notFoundContent {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 230px;
+  width: 672px;
+  height: 100%;
+}
+
+.notFoundWatchIcon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+  width: 100%;
+  height: 100vh;
+  z-index: 20;
+}
+
+.notFoundWatchIcon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--black);
+  opacity: 0.2;
+  z-index: 30;
+}
+
+.notFoundText {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  z-index: 40;
+}
+
+.notFoundTitle {
+  font-size: 96px;
+  font-family: inherit;
+  color: var(--white);
+  text-align: center;
+}
+
+.notFoundDescription {
+  font-size: 20px;
+  font-family: "Inter", sans-serif;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.notFoundBtn {
+  width: 100%;
+}
+
+.notFound::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--black);
+  opacity: 0.3;
+  z-index: 30;
+}
+
+.notFoundBtn {
+  width: 100%;
+}
+
+.notFoundBtnBack {
+  padding: 20px 50px !important;
+  font-size: 24px !important;
+  margin-bottom: 30px;
+}
+
+.notFoundBtnBack:hover {
+  box-shadow: 2px 3px 20px 0px rgba(250, 250, 250, 0.72);
+  -webkit-box-shadow: 2px 3px 20px 0px rgba(250, 250, 250, 0.72);
+  -moz-box-shadow: 2px 3px 20px 0px rgba(250, 250, 250, 0.72);
+}
+
+.notFoundBtnChat {
+  font-size: 20px !important;
+  font-family: "Inter", sans-serif !important;
+}
+
+@media (max-width: 420px) {
+  .notFoundTitle {
+    font-size: 48px;
+  }
+
+  .notFoundContent {
+    padding-top: 120px;
+  }
+
+  .notFoundDescription {
+    font-size: 16px;
+    max-width: 357px;
+  }
+
+  .notFoundBtn {
+    width: 85%;
+    padding: 15px 20px;
+  }
+}

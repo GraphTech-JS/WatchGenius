@@ -1,0 +1,95 @@
+.navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-family: "Inter", sans-serif;
+  padding: 30px 0;
+}
+
+.navigationMenu {
+  width: 800px;
+  margin: 0;
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arrow.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  margin: 0 8px;
+}
+
+.pageNumber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 40px;
+  font-family: "Inter", sans-serif;
+  cursor: pointer;
+  font-size: 24px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  color: rgba(144, 144, 144, 1);
+}
+
+.pageNumber.active {
+  color: var(--black);
+}
+
+/* Responsive design */
+@media (max-width: 1920px) {
+  .navigationMenu {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1440px) {
+  .navigationMenu {
+    width: 800px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 835px) {
+  .navigation {
+    gap: 4px;
+    justify-content: center;
+  }
+
+  .arrow,
+  .pageNumber {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+
+  .pageNumbers {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .navigation {
+    gap: 2px;
+  }
+
+  .pageNumber {
+    font-size: 24px;
+  }
+}

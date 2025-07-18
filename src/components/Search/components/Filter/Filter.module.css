@@ -1,0 +1,36 @@
+.filter {
+  position: relative;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.filterBtn {
+  cursor: pointer;
+}
+.filterDropdown {
+  position: absolute;
+  top: 0;
+  right: 50px;
+  background-color: var(--white);
+  padding: 20px;
+  width: 823px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 50;
+  gap: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.filterDropdownOption {
+  width: 100%;
+  padding: 20px;
+  height: 100%;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+}
+
+.filterDropdownOption:hover {
+  background-color: var(--light-gray);
+}

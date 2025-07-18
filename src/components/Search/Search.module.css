@@ -1,0 +1,167 @@
+.search {
+  display: flex;
+  flex-direction: column;
+  width: 1300px;
+  height: 100%;
+  align-items: baseline;
+}
+
+.searchNoResults {
+  height: 100vh !important;
+}
+
+.searchMenu {
+  width: 1100px;
+}
+
+.catalogSearch {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  width: 95%;
+  margin: 30px 0;
+}
+
+.catalogSearchMenu {
+  justify-content: flex-start;
+  width: 75%;
+}
+
+.catalogSearchWrapper {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border: 1px solid var(--black);
+  border-radius: 5px;
+  width: 100%;
+}
+
+.catalogSearchInput {
+  width: 100%;
+  height: 50px;
+  color: rgba(115, 111, 111, 1);
+  font-size: 20px;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  padding-left: 20px;
+}
+
+.catalogSearchInput::placeholder {
+  color: rgba(115, 111, 111, 1);
+}
+
+.catalogSearchBtn {
+  cursor: pointer;
+}
+
+.catalogSearchIcon {
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+
+.catalogFilterBtn {
+  cursor: pointer;
+}
+
+@media (max-width: 1920px) {
+  .catalogSearch {
+    align-items: center;
+  }
+  .catalogSearchMenu {
+    width: 95%;
+  }
+}
+
+@media (max-width: 1440px) {
+  .catalogSearchMenu {
+    width: 62%;
+  }
+}
+
+@media (max-width: 1300px) {
+  .search {
+    margin: unset;
+    align-items: flex-start;
+    width: 100%;
+  }
+  .catalogSearch {
+    width: 95%;
+    margin: unset;
+    padding: 20px 0;
+  }
+}
+
+@media (max-width: 1200px) {
+  .catalogSearch {
+    width: 84%;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 1150px) {
+  .catalogSearch {
+    width: 82%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .catalogSearch {
+    width: 77%;
+    margin: 0 80px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .catalogSearch {
+    margin: 0 40px;
+  }
+}
+
+@media (max-width: 960px) {
+  .catalogSearch {
+    width: 66%;
+    margin: 0 80px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 900px) {
+  .catalogSearch {
+    width: 66%;
+    margin: 0 40px;
+  }
+}
+
+@media (max-width: 420px) {
+  .search {
+    width: 100%;
+    align-items: center;
+  }
+
+  .catalogSearch {
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .catalogSearchWrapper {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .catalogSearchIcon {
+    width: 27.03px;
+    height: 27.03px;
+  }
+
+  .catalogSearchInput {
+    width: 100%;
+  }
+
+  .catalogFilterBtn {
+    width: 37px;
+  }
+}

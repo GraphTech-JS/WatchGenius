@@ -1,0 +1,73 @@
+.switch {
+  display: flex;
+  border-radius: 8px;
+  width: fit-content;
+  overflow: hidden;
+}
+
+.option {
+  padding: 8px 20px;
+  border: unset;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  transition: all 0.2s ease;
+  border-radius: 5px;
+  outline: none;
+  min-width: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option:focus {
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Green variant */
+.green .onOption {
+  color: var(--black);
+  background-color: var(--white);
+  border-radius: unset;
+}
+
+.green .onOption.active {
+  background-color: rgba(51, 103, 2, 1);
+  color: white;
+}
+
+.green .offOption {
+  color: var(--black);
+  background-color: var(--white);
+  border-radius: unset;
+}
+
+.green .offOption.active {
+  background-color: rgba(24, 35, 45, 1);
+  color: var(--white);
+}
+
+/* Disabled state */
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.disabled .option {
+  cursor: not-allowed;
+}
+
+.disabled .option:hover {
+  background-color: transparent !important;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .option {
+    padding: 6px 16px;
+    font-size: 12px;
+    min-width: 40px;
+  }
+}

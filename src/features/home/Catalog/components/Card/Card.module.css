@@ -1,0 +1,197 @@
+.card {
+  width: clamp(330px, 35vw, 393px);
+  height: clamp(420px, 485px, 490px);
+  border-radius: clamp(3px, 0.5vw, 8px);
+  background-color: hsl(0, 0%, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.08),
+    0 1.5px 6px 0 rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+  aspect-ratio: 3/4;
+}
+
+.card:hover {
+  box-shadow: 0 4px 27px 0 rgba(0, 0, 0, 0.2),
+    0 1.5px 20px 0 rgba(0, 0, 0, 0.04);
+  transform: translateY(-2px);
+}
+
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(8px, 1vw, 15px);
+  width: 100%;
+  /* flex-grow: 1; */
+  justify-content: flex-start;
+}
+
+.cardText {
+  display: flex;
+  flex-direction: column;
+  /* gap: clamp(8px, 1vw, 12px); */
+  width: 100%;
+  /* flex-grow: 1; */
+}
+
+.cardTitle {
+  font-size: clamp(16px, 2vw, 20px);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardPrice {
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  text-align: center;
+  color: var(--black);
+  margin: clamp(8px, 1vw, 12px) 0;
+}
+
+.cardBtn,
+.cardLink {
+  width: 100%;
+}
+
+.cardBtn {
+  padding: clamp(8px, 1vw, 12px) clamp(16px, 2vw, 24px) !important;
+  font-size: clamp(16px, 1.5vw, 16px) !important;
+  border-radius: clamp(3px, 0.5vw, 6px) !important;
+  transition: all 0.3s ease !important;
+  white-space: nowrap !important;
+}
+
+.cardBtn:hover {
+  background-color: var(--white) !important;
+  outline: 1px solid var(--black) !important;
+  color: var(--black) !important;
+  transform: translateY(-1px) !important;
+}
+
+.cardImg {
+  width: 100%;
+  height: auto;
+  max-height: 60%;
+  object-fit: contain;
+  margin-bottom: clamp(8px, 1vw, 12px);
+}
+
+/* Modern responsive adjustments */
+@media (max-width: 1300px) {
+  .card {
+    width: 31%;
+    height: max-content;
+  }
+}
+
+@media (max-width: 1200px) {
+  .card {
+    width: 300px;
+  }
+}
+
+@media (max-width: 1150px) {
+  .card {
+    width: 45%;
+    max-height: 510px;
+    height: fit-content;
+  }
+}
+
+@media (max-width: 1100px) {
+  .card {
+    width: 38%;
+    max-height: 480px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .card {
+    height: 470px;
+  }
+}
+
+@media (max-width: 960px) {
+  .card {
+    width: 33%;
+    max-height: 440px;
+    height: fit-content;
+    padding-bottom: 10px;
+  }
+}
+
+@media (max-width: 940px) {
+  .card {
+    max-height: 430px;
+  }
+}
+
+@media (max-width: 900px) {
+  .card {
+    max-height: 420px;
+  }
+}
+
+@media (max-width: 835px) {
+  .card {
+    max-width: 100%;
+    height: fit-content;
+  }
+
+  .cardText {
+    flex-grow: unset;
+  }
+
+  .cardContent {
+    padding: clamp(8px, 1.5vw, 12px);
+  }
+
+  .cardTitle {
+    -webkit-line-clamp: 3;
+    font-size: clamp(16px, 2vw, 18px);
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    width: 351px;
+    max-height: 420px;
+    height: fit-content;
+  }
+
+  .cardContent {
+    gap: clamp(6px, 1vw, 10px);
+  }
+
+  .cardBtn {
+    padding: clamp(10px, 2vw, 14px) !important;
+    font-size: clamp(16px, 2vw, 16px) !important;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+  .card {
+    width: 340px;
+    height: 400px;
+  }
+
+  .cardTitle {
+    font-size: clamp(12px, 3vw, 16px);
+  }
+
+  .cardPrice {
+    font-size: clamp(16px, 3vw, 20px);
+  }
+}

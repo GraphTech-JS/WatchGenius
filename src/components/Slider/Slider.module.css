@@ -1,0 +1,150 @@
+.sliderContainer {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  position: relative;
+  background: transparent;
+  overflow: hidden;
+  margin: 3rem 0;
+}
+
+.sliderMenuContainer {
+  width: calc(100vw - 580px);
+}
+
+.slider {
+  position: relative;
+  width: 1300px;
+  height: 200px;
+  overflow: hidden;
+  overflow-x: scroll;
+}
+
+.sliderMenu {
+  width: 100%;
+}
+
+.slider::-webkit-scrollbar {
+  background: transparent;
+  border: 1px solid var(--black);
+  border-radius: 9px;
+}
+
+.slider::-webkit-scrollbar-thumb {
+  background-color: rgba(24, 35, 45, 1);
+  border-radius: 9px;
+}
+
+.slidesWrapper {
+  display: flex;
+  width: 400px;
+  height: 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slide {
+  width: 300px !important;
+  height: 180px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  position: relative;
+  color: #333;
+}
+
+.slideImg {
+  max-width: 120px;
+  max-height: 120px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+.slideActive {
+  background-color: rgba(24, 35, 45, 1);
+  display: flex;
+  align-items: center;
+}
+
+.slide:first-child {
+  color: white;
+}
+
+.logo {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.subtitle {
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.progressBar {
+  height: 20px;
+  border-radius: 20px;
+  background: transparent;
+  border: 1px solid var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 20px;
+  border-radius: 20px;
+  background: rgba(24, 35, 45, 1);
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive design */
+@media (max-width: 1920px) {
+  .sliderMenuContainer {
+    width: calc(100vw - 850px);
+  }
+}
+@media (max-width: 835px) {
+  .sliderContainer {
+    max-width: 750px;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .slider {
+    width: 750px;
+    height: 210px;
+    margin: 50px 0;
+  }
+
+  .logo {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .sliderContainer {
+    max-width: 351px;
+    margin: 0;
+    border-radius: 0;
+    padding: 30px 0;
+  }
+
+  .slide {
+    width: 293px !important;
+    height: 180px !important;
+  }
+
+  .slider {
+    height: 200px;
+    width: 351px;
+    margin-bottom: 5px;
+  }
+
+  .logo {
+    font-size: 2rem;
+  }
+}

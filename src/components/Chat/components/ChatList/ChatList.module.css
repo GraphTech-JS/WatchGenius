@@ -1,0 +1,25 @@
+.chatList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: 800px;
+  overflow-y: scroll;
+  align-items: flex-end;
+  margin-top: 10px;
+}
+.chatList::-webkit-scrollbar {
+  background: transparent;
+  border: 1px solid var(--black);
+  border-radius: 9px;
+}
+
+.chatList::-webkit-scrollbar-thumb {
+  background-color: rgba(24, 35, 45, 1);
+  border-radius: 9px;
+}
+
+@media (max-width: 420px) {
+  /* .chatList {
+    max-width: 400px;
+  } */
+}

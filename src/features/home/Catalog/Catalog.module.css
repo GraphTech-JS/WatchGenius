@@ -1,0 +1,143 @@
+.catalog {
+  background-color: var(--white);
+  min-height: clamp(300px, 40vh, 600px);
+  padding: clamp(40px, 8vw, 80px) 0;
+}
+
+.catalogContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
+  max-width: clamp(320px, 90vw, 1300px);
+  padding: 0 clamp(20px, 3vw, 40px);
+}
+
+.catalogMenuContainer {
+  max-width: clamp(300px, calc(100vw - 200px), calc(100vw - 300px));
+  margin-left: clamp(0px, 5vw, 72px);
+  width: 100%;
+}
+
+.catalogMenuContainer .catalogContent {
+  max-width: clamp(300px, calc(100vw - 400px), calc(100vw - 620px));
+}
+
+.catalogMenuContainer .catalogBtn {
+  margin-top: clamp(10px, 2vw, 20px);
+}
+
+.catalogText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(8px, 1vw, 15px);
+  width: 100%;
+}
+
+.catalogHeading {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1.2;
+}
+
+.catalogCards {
+  width: 100%;
+  max-width: clamp(920px, 90vw, 1300px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(clamp(350px, 30vw, 400px), 1fr)
+  );
+  gap: clamp(15px, 3vw, 25px);
+  margin-top: clamp(20px, 3vw, 30px);
+  padding: 0 clamp(10px, 2vw, 20px);
+}
+
+.catalogBtn {
+  margin: clamp(20px, 4vw, 40px) auto 0;
+  padding: clamp(8px, 1vw, 12px) clamp(20px, 4vw, 40px);
+  font-size: clamp(16px, 2vw, 24px);
+  border-radius: clamp(4px, 0.5vw, 6px);
+  transition: all 0.3s ease;
+}
+
+/* Modern responsive styles */
+@media (max-width: 768px) {
+  .catalogContainer {
+    align-items: center;
+    text-align: center;
+  }
+
+  .catalogText {
+    align-items: center;
+    width: 100%;
+  }
+
+  .catalogMenuContainer {
+    margin-left: 0;
+    max-width: 100%;
+  }
+
+  .catalogCards {
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(clamp(200px, 40vw, 280px), 1fr)
+    );
+    gap: clamp(10px, 2vw, 20px);
+    padding: 0 clamp(5px, 1vw, 15px);
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog {
+    padding: clamp(30px, 6vw, 60px) 0;
+  }
+
+  .catalogContainer {
+    padding: 0 clamp(15px, 3vw, 25px);
+  }
+
+  .catalogCards {
+    grid-template-columns: 1fr;
+    gap: clamp(15px, 3vw, 20px);
+    padding: 0;
+  }
+
+  .catalogBtn {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* Menu container responsive adjustments */
+@media (orientation: portrait) {
+  .catalogMenuContainer {
+    margin-left: 0;
+  }
+
+  .catalogMenuContainer .catalogContent {
+    max-width: 100%;
+  }
+
+  .catalogMenuContainer .catalogBtn {
+    margin-left: 0;
+  }
+}
+
+/* Card grid responsive optimization */
+@media (min-width: 1400px) {
+  .catalogCards {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 360px) {
+  .catalogCards {
+    grid-template-columns: 1fr;
+    gap: clamp(10px, 2vw, 15px);
+  }
+}

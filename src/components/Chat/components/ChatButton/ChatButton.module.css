@@ -1,0 +1,44 @@
+.chatWrapper {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  width: 42px;
+  height: 100vh;
+  z-index: 80;
+}
+
+.chatButton {
+  position: absolute;
+  right: -10px;
+  top: 32%;
+  border: none;
+  width: 120px;
+  height: 98px;
+  border-radius: 43% 0 0 43%;
+  background-color: var(--white);
+  box-shadow: 0px 4px 4px rgba(255, 230, 230, 0.5);
+  color: var(--black);
+  padding: 0.5rem 0.5rem;
+  font-size: 20px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+@media (max-width: 834px) {
+  .chatButton {
+    width: 100px;
+    right: -20px;
+  }
+  .chatWrapper {
+    background-color: transparent;
+    box-shadow: unset;
+    width: 0;
+  }
+}
+@media (max-width: 768px) {
+  .chatButton {
+    top: 75%;
+  }
+}

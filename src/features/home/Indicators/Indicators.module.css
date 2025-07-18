@@ -1,0 +1,99 @@
+.indicatorsContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: clamp(20px, 4vw, 40px) 0;
+  width: clamp(320px, 90vw, 1300px);
+  margin: 0 auto;
+  gap: clamp(20px, 4vw, 40px);
+}
+
+.indicatorsMenuContainer {
+  width: clamp(300px, calc(100vw - 600px), calc(100vw - 580px));
+  max-width: 1300px;
+}
+
+.pieChart {
+  background-color: var(--white);
+  min-height: clamp(300px, 40vh, 600px);
+  width: 301px;
+  padding: clamp(40px, 8vw, 80px) 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.indicatorsText {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: clamp(15px, 3vw, 25px);
+  max-width: clamp(300px, 45vw, 485px);
+  flex: 1;
+}
+
+.pieChartTitle {
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1.2;
+}
+
+.pieChartDescription,
+.pieChartSubtext {
+  font-size: clamp(16px, 2.5vw, 20px);
+  font-weight: 400;
+  font-family: "Inter", sans-serif;
+  max-width: clamp(300px, 70vw, 820px);
+  color: var(--black);
+  line-height: 1.5;
+}
+
+@media (max-width: 835px) {
+  .indicatorsContainer {
+    flex-direction: column;
+    gap: clamp(20px, 5vw, 30px);
+    text-align: center;
+    padding: clamp(20px, 6vw, 30px) clamp(15px, 3vw, 20px);
+  }
+
+  .indicatorsText {
+    align-items: center;
+    max-width: 100%;
+    order: 2;
+  }
+
+  .pieChartDescription,
+  .pieChartSubtext {
+    text-align: center;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .pieChart {
+    padding: clamp(30px, 6vw, 50px) clamp(15px, 3vw, 20px);
+  }
+
+  .indicatorsContainer {
+    gap: clamp(15px, 4vw, 25px);
+  }
+
+  .indicatorsText {
+    gap: clamp(10px, 2vw, 15px);
+  }
+}
+
+/* Menu container responsive adjustments */
+@media (orientation: portrait) {
+  .indicatorsMenuContainer {
+    width: clamp(300px, 95vw, 1300px);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .pieChart {
+    min-height: clamp(250px, 70vh, 400px);
+  }
+}

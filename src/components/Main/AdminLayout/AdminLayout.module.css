@@ -1,0 +1,65 @@
+.adminLayout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.adminContent {
+  display: flex;
+  flex: 1;
+  position: relative;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 0; /* Same as sidebar width */
+  min-height: calc(100vh - 160px); /* Adjust for header/footer height */
+  overflow-y: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 1920px) {
+  .mainContent {
+    margin-left: 0;
+  }
+}
+@media (max-width: 1440px) {
+  .mainContent {
+    margin-left: 0;
+  }
+}
+@media (max-width: 835px) {
+  .adminContent {
+    flex-direction: column;
+  }
+
+  .mainContent {
+    margin-left: 0;
+    padding: 1rem;
+    min-height: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .mainContent {
+    padding: 0.5rem;
+  }
+}
+
+/* Scrollbar styling for main content */
+.mainContent::-webkit-scrollbar {
+  width: 8px;
+}
+
+.mainContent::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+.mainContent::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+.mainContent::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}

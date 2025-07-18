@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+  padding: 2rem;
+  width: 307px;
+  height: 307px;
+}
+
+.chartWrapper {
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+}
+
+@media screen and (max-width: 420px) {
+  .container {
+    padding: 0;
+  }
+}
