@@ -1,12 +1,17 @@
 .catalog {
   background-color: var(--white);
 }
+.search {
+  width: 100%;
+}
 .catalogContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 70px 68px 50px 70px;
+  width: 100%;
+  max-width: 1440px;
   margin: 0 auto;
-  width: 1300px;
 }
 
 .catalogMenuContainer {
@@ -19,7 +24,6 @@
 .catalogContent {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 5px;
   margin: 0 auto;
 }
@@ -32,8 +36,8 @@
 .catalogText {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 70px;
+  gap: 20px;
+  width: 100%;
 }
 
 .catalogTitle {
@@ -47,31 +51,16 @@
   font-family: "Inter", sans-serif;
   font-weight: 400;
   color: var(--black);
-  /* max-width: 820px; */
 }
 
 .catalogMenuSubtitle {
   max-width: 820px;
   text-align: left;
 }
-@media (max-width: 1440px) {
-  .catalogContainer {
-    width: 1300px;
-  }
-}
-@media (max-width: 1300px) {
-  .search {
-    width: 1100px;
-  }
-  .catalogContainer {
-    width: 1100px;
-  }
-}
 
 @media (max-width: 1200px) {
   .catalogText {
     align-items: center;
-    width: 84%;
   }
   .catalogTitle {
     align-self: flex-start;
@@ -88,54 +77,19 @@
 @media (max-width: 1100px) {
   .catalogContent {
     align-items: flex-start;
-    margin: 0 80px;
-  }
-  .catalogText {
-    width: 77%;
   }
 }
 
-@media (max-width: 1000px) {
-  .catalogContent {
-    margin: 0 40px;
+@media (max-width: 480px) {
+  .catalogContainer {
+    padding: 40px 20px 60px 20px;
   }
-}
-
-@media (max-width: 960px) {
-  .catalogContent {
-    margin: 0 80px;
-  }
-  .catalogText {
-    width: 70%;
-  }
-}
-
-@media (max-width: 900px) {
-  .catalogContent {
-    margin: 0 40px;
-  }
-}
-
-@media (max-width: 835px) {
-  .catalogText {
-    width: 100%;
-  }
-}
-@media (max-width: 420px) {
   .catalogContent {
     margin: 0;
-  }
-  .catalogContainer {
-    width: 351px;
   }
 
   .catalogMenuContainer {
     width: 351px;
-  }
-
-  .catalogText {
-    margin-top: 20px;
-    margin-bottom: 30px;
   }
 
   .catalogTitle {
