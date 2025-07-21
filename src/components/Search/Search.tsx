@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Search.module.css";
 
 import { Filter } from "./components/Filter/Filter";
@@ -18,32 +18,46 @@ export const Search = ({
   const [searchVal, setSearchVal] = useState("");
   const [searchResults, setSearchResults] = useState<IWatch[]>(mockData);
   const [currentPage, setCurrentPage] = useState(1);
-  const [limit, setLimit] = useState({
-    min: 0,
-    max: 6,
-  });
+  const [itemsPerPage, setItemsPerPage] = useState(8);
+  const [limit, setLimit] = useState({ min: 0, max: 8 });
   const [opened, setOpened] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isMobile = window.innerWidth <= 834;
+      const newItemsPerPage = isMobile ? 4 : 8;
+      setItemsPerPage(newItemsPerPage);
+
+      setLimit({
+        min: (currentPage - 1) * newItemsPerPage,
+        max: currentPage * newItemsPerPage,
+      });
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [currentPage]);
+
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setSearchVal(e.target.value);
+    const value = e.target.value;
+    setSearchVal(value);
+
     setTimeout(() => {
-      const result = searchList.filter((item) =>
-        item.title.includes(e.target.value)
-      );
-      if (result.length > 0) {
-        setSearchResults([...result]);
-        return;
-      }
-      if (searchVal === "") {
+      const result = searchList.filter((item) => item.title.includes(value));
+
+      if (value === "") {
         setSearchResults(mockData);
         return;
       }
-      if (result.length === 0) {
-        setSearchResults([]);
-        return;
-      }
+
+      setSearchResults(result.length > 0 ? [...result] : []);
     }, 2000);
   };
+
+  const totalPages = Math.ceil(searchResults.length / itemsPerPage);
+
   return (
     <div className={styles.search}>
       {type === "catalog" && (
@@ -52,7 +66,7 @@ export const Search = ({
             <input
               type="text"
               value={searchVal}
-              className={styles.catalogSearchInput + " " + classNames}
+              className={`${styles.catalogSearchInput} ${classNames}`}
               placeholder="Пошук"
               onChange={handleSearch}
               {...props}
@@ -82,7 +96,7 @@ export const Search = ({
               {
                 label: "Матеріал",
                 value: "material",
-                options: ["золото", "серебро", "алюміній"],
+                options: ["золото", "срібло", "алюміній"],
                 id: 3,
               },
               {
@@ -100,15 +114,14 @@ export const Search = ({
       <SearchResults items={searchResults.slice(limit.min, limit.max)} />
       {searchResults.length > 0 && (
         <Navigation
-          totalPages={3}
+          totalPages={totalPages}
           initialPage={currentPage}
           onPageChange={(page) => {
-            setLimit((prev) => ({
-              ...prev,
-              min: (page - 1) * 6,
-              max: page * 6,
-            }));
             setCurrentPage(page);
+            setLimit({
+              min: (page - 1) * itemsPerPage,
+              max: page * itemsPerPage,
+            });
           }}
         />
       )}
