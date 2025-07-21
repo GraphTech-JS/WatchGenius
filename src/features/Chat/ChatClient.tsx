@@ -35,7 +35,8 @@ export default function ChatClient({
       <aside
         className={`
           fixed inset-y-0 right-0 z-50
-          bg-white shadow-lg
+          bg-white
+          overflow-y-auto 
           transform transition-transform duration-300 ease-in-out
           lg:hidden
           w-full

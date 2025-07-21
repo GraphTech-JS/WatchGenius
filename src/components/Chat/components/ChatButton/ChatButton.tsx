@@ -15,7 +15,11 @@ export const ChatButton: React.FC<IChatButton> = ({ onClick }) => (
   >
     <button
       onClick={onClick}
-      style={{ boxShadow: "-1px 4px 14px 1px rgba(255, 230, 230, 0.7)" }}
+      style={{
+        boxShadow: "-1px 4px 14px 1px rgba(255, 230, 230, 0.7)",
+        borderTopLeftRadius: 50,
+        borderBottomLeftRadius: 50,
+      }}
       className="
         absolute
         right-[-10px]
