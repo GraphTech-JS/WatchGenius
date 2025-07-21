@@ -1,10 +1,11 @@
 .chatList {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 30px;
   max-height: 800px;
-  overflow-y: scroll;
-  align-items: flex-end;
+  /* overflow-y: scroll; */
+  overflow-y: auto;
+  /* align-items: flex-end; */
   margin-top: 10px;
 }
 .chatList::-webkit-scrollbar {
