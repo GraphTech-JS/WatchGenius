@@ -1,11 +1,18 @@
 "use client";
 
-import React, { RefObject, useRef, useState, useEffect } from "react";
+import React, {
+  RefObject,
+  useRef,
+  useState,
+  useEffect,
+  useContext,
+} from "react";
 import { Button } from "../Button/Button";
 import styles from "./ChatMenu.module.css";
 import { useClickOutside } from "@/app/utils/useClickOutside";
 import Link from "next/link";
 import { Close, Robot } from "../../../public/icons";
+import { MainContext } from "@/context";
 
 interface ChatMenuProps {
   isOpen: boolean;
@@ -16,6 +23,8 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
+  const { message, messages, setMessage } = useContext(MainContext);
+
   useClickOutside(ref as RefObject<HTMLDivElement>, onClose);
 
   useEffect(() => {
@@ -25,6 +34,14 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   const handleClose = () => {
     setIsAnimating(false);
     setTimeout(onClose, 300);
+  };
+
+  const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage({
+      content: e.target.value,
+      by: "me",
+      id: messages.length + 1 + Math.random() * 1000,
+    });
   };
 
   return (
@@ -45,7 +62,12 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
         <p className={styles.chatMenuDescription}>
           Швидко, точно та без нав’язливих порад. Просто запитайте.
         </p>
-
+        <input
+          placeholder="Введіть Ваш запит"
+          value={message?.content}
+          onChange={handleMessage}
+          className={styles.chatHeaderInput}
+        />
         <h1 className=" text-[32px] text-center">Що я можу для Вас зробити?</h1>
         <div className={styles.chatMenuButtons}>
           <Button variant="outline" classNames={styles.chatMenuBtn}>

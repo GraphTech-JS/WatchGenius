@@ -1,8 +1,8 @@
-import { AdminLayout } from "@/app/layout/AdminLayout/AdminLayout";
 import styles from "../admin.module.css";
 import React from "react";
 import { SettingsDark } from "../../../../public/icons";
-import { Button } from "@/app/components/Button/Button";
+import { AdminLayout } from "@/components/Main/AdminLayout/AdminLayout";
+import { Button } from "@/components/Button/Button";
 
 const Settings = () => {
   return (

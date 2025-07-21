@@ -2,12 +2,12 @@
 import React from "react";
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
-import MockWatch from "../../../../../public/catalog-section/mock.jpg";
-import { ArrowLeftDark } from "../../../../../public/icons";
+import MockWatch from "../../../../public/catalog-section/mock.jpg";
 import { Button } from "@/components/Button/Button";
 import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
 import Link from "next/link";
 import { PieChart } from "recharts";
+import { ArrowLeftDark } from "../../../../public/icons";
 
 const Product = () => {
   const { back } = useRouter();
