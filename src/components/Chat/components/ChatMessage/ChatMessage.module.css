@@ -2,28 +2,35 @@
   box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08),
     0 1.5px 6px 0 rgba(0, 0, 0, 0.04);
   padding: 30px 50px;
-  margin: 10px;
+  /* margin: 10px; */
   border-radius: 10px;
-  width: fit-content;
+  max-width: 756px;
+  /* width: fit-content; */
   font-family: "Inter", sans-serif;
   font-weight: 400;
   font-size: 20px;
   border: 0.5px solid var(--black);
   color: #000 !important;
+  align-self: flex-start;
+  margin: 0 5px;
 }
 
 .messageMe {
   background-color: rgba(233, 233, 233, 1);
   color: var(--black);
+  align-self: flex-end;
 }
 
-@media (max-width: 835px) {
-}
-
-@media (max-width: 420px) {
+@media (max-width: 768px) {
   .message {
     font-size: 16px;
     padding: 20px 30px;
     width: fit-content;
+  }
+}
+
+@media (max-width: 420px) {
+  .message {
+    margin: 0 20px;
   }
 }

@@ -116,14 +116,14 @@ export const AiChat = ({ type }: IAiChat) => {
             />
             <Button
               type="submit"
-              variant={screenWidth <= 420 && type === "chat" ? "text" : "solid"}
+              variant={screenWidth <= 900 && type === "chat" ? "text" : "solid"}
               classNames={
-                screenWidth <= 420 && type === "chat"
+                screenWidth <= 900 && type === "chat"
                   ? styles.chatFormSendBtn
                   : styles.chatFormBtn
               }
             >
-              {screenWidth <= 420 && type === "chat" ? (
+              {screenWidth <= 900 && type === "chat" ? (
                 <img
                   src={Send.src}
                   alt="send message"
