@@ -11,29 +11,38 @@ export default function ChatClient({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const toggleMenu = () => setOpen((o) => !o);
 
   return (
-    <div className="relative flex min-h-screen">
+    <div className="relative flex h-full w-full">
+      <div className="fixed bottom-4 right-4 z-50 lg:hidden">
+        <ChatButton onClick={() => setOpen(true)} />
+      </div>
       <main
-        className={`transition-all duration-300 ease-in-out
-                    ${open ? "w-[70%]" : "w-full"}`}
+        className="transition-all duration-300 ease-in-out
+                       w-full
+                       lg:w-[calc(100%-483px)]"
       >
         {children}
       </main>
 
-      <ChatButton onClick={toggleMenu} />
+      <aside
+        className="hidden lg:block absolute  top-0 right-0 bottom-0 w-[483px] bg-white"
+        style={{ boxShadow: "0 4px 20px 2px rgba(0, 0, 0, 0.25)" }}
+      >
+        <ChatMenu isOpen onClose={() => {}} />
+      </aside>
 
       <aside
         className={`
-          fixed top-0 right-0 bottom-0 z-50
+          fixed inset-y-0 right-0 z-50
           bg-white shadow-lg
-          w-[30%]
           transform transition-transform duration-300 ease-in-out
+          lg:hidden
+          w-full
           ${open ? "translate-x-0" : "translate-x-full"}
         `}
       >
-        <ChatMenu isOpen={open} onClose={() => setOpen(false)} />
+        <ChatMenu isOpen={true} onClose={() => setOpen(false)} />
       </aside>
     </div>
   );

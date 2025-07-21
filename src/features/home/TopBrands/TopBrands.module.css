@@ -9,7 +9,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .topBrandsText {
@@ -52,12 +53,6 @@
   max-width: clamp(300px, 70vw, 820px);
   color: var(--black);
   line-height: 1.5;
-}
-
-@media (max-width: 1300px) {
-  .topBrandsContainer {
-    padding: 0 clamp(20px, 3vw, 40px);
-  }
 }
 
 @media (max-width: 1000px) {

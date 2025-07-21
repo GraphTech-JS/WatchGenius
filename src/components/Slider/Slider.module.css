@@ -14,7 +14,7 @@
 
 .slider {
   position: relative;
-  height: 200px;
+  height: 160px;
   overflow: hidden;
   overflow-x: scroll;
 }
@@ -42,8 +42,8 @@
 }
 
 .slide {
-  width: 300px !important;
-  height: 180px !important;
+  width: 200px !important;
+  height: 130px !important;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -133,12 +133,12 @@
   }
 
   .slide {
-    width: 293px !important;
-    height: 180px !important;
+    width: 168px !important;
+    height: 110px !important;
   }
 
   .slider {
-    height: 200px;
+    height: 150px;
     width: 351px;
     margin-bottom: 5px;
   }

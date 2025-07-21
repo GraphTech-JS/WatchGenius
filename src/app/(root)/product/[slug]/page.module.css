@@ -181,10 +181,9 @@
   margin-left: 40px;
 }
 
-/*Ai Agent section styles*/
 .aiAgent {
   position: relative;
-  background: url("../../../../public/ai-agent-section/bg.png") no-repeat center;
+  background: url("/ai-agent-section/bg.png") no-repeat center;
   background-size: cover;
   min-height: 319px;
   padding: 60px 0;

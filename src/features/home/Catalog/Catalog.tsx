@@ -4,7 +4,6 @@ import styles from "./Catalog.module.css";
 import { Card } from "./components/Card/Card";
 import { mockData } from "@/mock/watch";
 import { Button } from "@/components/Button/Button";
-import { Banner } from "@/components/Banner/Banner";
 
 export const Catalog = () => {
   const [limit, setLimit] = useState<number>(4);
@@ -46,7 +45,6 @@ export const Catalog = () => {
             </div>
           </div>
         </div>
-        <Banner />
       </section>
     </>
   );

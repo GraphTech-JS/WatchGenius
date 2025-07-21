@@ -3,10 +3,10 @@
   position: relative;
   margin: 0 auto;
   background: #000;
-  margin-top: 30px;
   width: 100%;
   min-height: 530px;
   margin-bottom: 70px;
+  z-index: 90;
 }
 
 .contactsTitle {
@@ -26,7 +26,7 @@
 .contactsContent {
   display: flex;
   flex-direction: column;
-  width: 1300px;
+  max-width: 1300px;
   align-items: flex-start;
   justify-content: center;
   margin: 0 auto;
@@ -48,10 +48,11 @@
 .contactsForm {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   margin-top: 42px;
   margin-bottom: 82px;
   gap: 10px;
+  max-width: 634px;
+  width: 100%;
 }
 
 .contactsTextFields {
@@ -70,7 +71,7 @@
   border-radius: 5px;
   background: transparent;
   border: 2px solid #fff;
-  width: 634px;
+  width: 100%;
 }
 
 .textField::placeholder {
@@ -119,13 +120,12 @@
   }
 
   .contactsTextFields {
-    max-width: 634px;
+    width: 100%;
     align-items: center;
     justify-content: center;
   }
 
   .textField {
-    width: 634px;
     font-size: 20px;
   }
 
@@ -184,17 +184,6 @@
     margin-top: 15px;
   }
 
-  .contactsTextFields {
-    max-width: 634px;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .textField {
-    width: 634px;
-    font-size: 20px;
-  }
-
   .textField::placeholder {
     font-size: 20px;
   }
@@ -225,7 +214,6 @@
 
 @media (max-width: 420px) {
   .contacts {
-    max-width: 360px;
     border-radius: 10px;
   }
   .contactsContent {
@@ -245,12 +233,6 @@
     font-size: 16px;
     text-align: center;
     margin-top: 15px;
-  }
-
-  .contactsTextFields {
-    max-width: 320px;
-    align-items: center;
-    justify-content: center;
   }
 
   .textField {

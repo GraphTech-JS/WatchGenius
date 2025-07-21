@@ -1,18 +1,7 @@
 .about {
   position: relative;
-  background-color: var(--white);
-  min-height: clamp(300px, 40vh, 600px);
   padding: 60px 70px;
   z-index: 2;
-}
-
-.aboutContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  margin: 0 auto;
-  max-width: clamp(320px, 85vw, 1300px);
 }
 
 .aboutText {
@@ -21,22 +10,17 @@
   align-items: flex-start;
   color: var(--black);
   gap: clamp(12px, 2vw, 20px);
-  width: 100%;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .aboutHeadingWrapper {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 80px;
   width: 100%;
   margin-bottom: clamp(20px, 3vw, 30px);
-}
-
-.aboutLine {
-  width: clamp(60%, 60vw, 60%);
-  position: absolute;
-  right: 0;
-  top: 23%;
 }
 
 .aboutHeading {
@@ -56,11 +40,27 @@
   line-height: 1.5;
 }
 
+.divider {
+  flex: 1;
+  height: 1px;
+  border-top: 1px solid #000;
+}
+
 @media (max-width: 835px) {
+  .about {
+    padding: 50px 20px;
+  }
+
   .aboutHeadingWrapper {
     flex-direction: column;
-    align-items: center;
     margin-bottom: clamp(10px, 2vw, 20px);
+    gap: 20px;
+  }
+
+  .divider {
+    order: -1;
+    flex: none;
+    width: 80%;
   }
 
   .aboutLine {
@@ -69,32 +69,22 @@
   }
 
   .aboutText {
-    align-items: center;
-    text-align: center;
     gap: clamp(10px, 2vw, 15px);
   }
 
   .aboutHeading {
     margin-top: clamp(10px, 2vw, 20px);
   }
-}
-
-@media (max-width: 480px) {
-  .about {
-    min-height: clamp(240px, 50vh, 450px);
-  }
-
-  .aboutContainer {
-    padding: 0 clamp(15px, 5vw, 20px);
-  }
-
-  .aboutLine {
-    width: 90%;
-    top: 70%;
-  }
 
   .aboutDescription {
     font-size: clamp(14px, 3vw, 18px);
     max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .aboutLine {
+    width: 90%;
+    top: 70%;
   }
 }

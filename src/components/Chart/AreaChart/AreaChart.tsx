@@ -104,12 +104,6 @@ export const CustomAreaChart = ({
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={view === "year" ? yearData : threeMonthData}
-          margin={{
-            top: 80,
-            right: 30,
-            left: 20,
-            bottom: 20,
-          }}
           className={styles.chart}
         >
           <CartesianGrid strokeLinecap="butt" stroke="#e0e0e0" />

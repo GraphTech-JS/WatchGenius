@@ -1,7 +1,4 @@
-// app/layout.tsx (или RootLayout.tsx)
 import { Header } from "@/components/Main/Header/Header";
-import ChatClient from "@/features/Chat/ChatClient";
-import { Contacts } from "@/features/home/Contacts/Contacts";
 import { Footer } from "@/components/Main/Footer/Footer";
 
 export default function RootLayout({
@@ -12,8 +9,7 @@ export default function RootLayout({
   return (
     <div>
       <Header />
-      <ChatClient>{children}</ChatClient>
-      <Contacts />
+      {children}
       <Footer />
     </div>
   );

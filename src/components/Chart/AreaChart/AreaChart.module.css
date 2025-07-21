@@ -24,10 +24,6 @@
   flex-direction: column;
 }
 
-.containerMenu {
-  width: clamp(280px, calc(100vw - 600px), 1300px);
-}
-
 .tooltip {
   background-color: rgba(24, 35, 45, 1);
   border-radius: clamp(3px, 0.5vw, 8px);
@@ -39,7 +35,6 @@
   pointer-events: none;
   z-index: 1000;
   white-space: nowrap;
-  max-width: 90vw;
   text-align: center;
 }
 
@@ -91,24 +86,11 @@
   outline: 1px solid var(--black) !important;
 }
 
-@media (max-width: 1920px) {
-  .containerMenu {
-    width: calc(100vw - 850px);
-  }
-}
-
-@media (max-width: 1000px) {
-  .container {
-    width: 820px;
-  }
-}
-
 @media (max-width: 835px) {
   .container {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    width: 760px;
     padding: 5px 5px;
   }
 }
@@ -116,16 +98,14 @@
   .container {
     display: flex;
     justify-content: center;
-    padding: 5px;
-    width: 100%;
+  }
+
+  .container,
+  .containerControls {
+    padding: 0 !important;
   }
 
   .controlBtn {
     display: none;
-  }
-
-  .chart {
-    width: 851px;
-    height: 751px;
   }
 }

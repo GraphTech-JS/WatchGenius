@@ -9,8 +9,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  margin: 0 auto;
-  max-width: clamp(320px, 90vw, 1300px);
 }
 
 .catalogMenuContainer {
@@ -43,11 +41,15 @@
 }
 
 .catalogCards {
-  width: 100%;
-  max-width: clamp(920px, 90vw, 1300px);
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: clamp(15px, 3vw, 30px);
+  margin-top: clamp(20px, 3vw, 30px);
+}
+
+.catalogCards > * {
+  flex: 1 1 clamp(351px, 25%, 393px);
+  max-width: clamp(351px, 25%, 393px);
 }
 
 .catalogBtn {
@@ -60,6 +62,10 @@
 
 /* Modern responsive styles */
 @media (max-width: 768px) {
+  .catalog {
+    padding: 55px 40px;
+  }
+
   .catalogContainer {
     align-items: center;
     text-align: center;
@@ -77,7 +83,7 @@
 
   @media (max-width: 480px) {
     .catalog {
-      padding: clamp(30px, 6vw, 60px) 0;
+      padding: 50px 20px;
     }
 
     .catalogContainer {
@@ -90,7 +96,6 @@
     }
   }
 
-  /* Menu container responsive adjustments */
   @media (orientation: portrait) {
     .catalogMenuContainer {
       margin-left: 0;

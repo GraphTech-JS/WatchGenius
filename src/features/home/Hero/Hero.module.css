@@ -1,37 +1,27 @@
 .hero {
   background-color: var(--darkblack);
   display: flex;
-
   align-items: center;
   position: relative;
   width: 100%;
-  min-height: clamp(400px, 60vh, 800px);
-  padding: clamp(20px, 3vw, 40px) 0;
-}
 
-.heroContent {
-  position: relative;
-  display: flex;
-  justify-content: start;
-  align-items: center;
-  gap: clamp(20px, 5vw, 60px);
-  width: clamp(320px, 85vw, 1300px);
-  margin-left: 70px;
+  padding-left: 70px;
 }
 
 .heroLeft {
   display: flex;
   flex-direction: column;
-  gap: clamp(8px, 1vw, 15px);
+  gap: 60px;
   align-items: flex-start;
   width: 100%;
   min-width: 490px;
   z-index: 3;
+  max-width: 1300px;
+  margin: 0 auto;
 }
 
 .heroRight {
   display: flex;
-
   align-items: center;
   width: clamp(40%, 45vw, 50%);
   min-width: 300px;
@@ -54,7 +44,6 @@
   display: flex;
   flex-direction: column;
   gap: clamp(5px, 1vw, 10px);
-  margin-bottom: clamp(30px, 5vw, 60px);
 }
 
 .heroTitle {
@@ -75,6 +64,7 @@
 
 .heroLink {
   width: 100%;
+  max-width: 346px;
 }
 
 .heroBtn {
@@ -84,7 +74,7 @@
   white-space: nowrap;
   transition: all 0.3s ease;
   max-width: 346px;
-  width: 60%;
+  width: 346px;
 }
 
 .heroBtn:hover {
@@ -110,6 +100,7 @@
   }
   .heroSubtitle {
     max-width: 350px;
+    text-align: center;
   }
   .heroContent {
     position: static;
@@ -158,10 +149,10 @@
 
   .heroBtn {
     width: 100%;
-    max-width: 300px;
   }
   .heroTitle {
     font-size: 32px;
+    text-align: center;
   }
   .hero::after {
     content: "";

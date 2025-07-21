@@ -1,23 +1,17 @@
 "use client";
-import React, { useContext } from "react";
+import React from "react";
 import styles from "./page.module.css";
 import { useRouter } from "next/navigation";
-import MockWatch from "../../../../public/catalog-section/mock.jpg";
-import { ArrowLeftDark } from "../../../../public/icons";
-import { Button } from "@/app/components/Button/Button";
+import MockWatch from "../../../../../public/catalog-section/mock.jpg";
+import { ArrowLeftDark } from "../../../../../public/icons";
+import { Button } from "@/components/Button/Button";
+import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
 import Link from "next/link";
-import PieChart from "@/app/components/Chart/PieChart/PieChart";
-import { CustomAreaChart } from "@/app/components/Chart/AreaChart/AreaChart";
-import { ChatButton } from "@/app/components/Chat/components/ChatButton/ChatButton";
-import { ChatMenu } from "@/app/components/Chat/ChatMenu";
-import { MainContext } from "@/app/context";
+import { PieChart } from "recharts";
 
 const Product = () => {
   const { back } = useRouter();
-  const { menuOpened, setMenuOpened } = useContext(MainContext);
-  const handleOpening = () => {
-    setMenuOpened(true);
-  };
+
   return (
     <>
       <div className={styles.product}>
@@ -125,8 +119,6 @@ const Product = () => {
           </div>
         </section>
       </div>
-      {menuOpened ? null : <ChatButton onClick={handleOpening} />}
-      {menuOpened && <ChatMenu />}
     </>
   );
 };

@@ -1,17 +1,7 @@
 .chatMenu {
-  position: absolute;
-  inset: 0;
   display: flex;
   flex-direction: column;
-  transform: translateX(100%);
   transition: transform 0.3s ease;
-}
-.chatMenu.open {
-  transform: translateX(0);
-}
-
-.chatMenuClose {
-  display: none;
 }
 
 .chatMenuContainer {
@@ -47,6 +37,7 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  margin-top: 40px;
 }
 
 .chatMenuBtn {
@@ -61,10 +52,10 @@
   color: var(--black) !important;
 }
 
-@media (max-width: 834px) {
+@media (max-width: 1024px) {
   .chatMenuClose {
     position: absolute;
-    top: 10px;
+    top: 80px;
     left: 10px;
     display: flex;
     justify-content: center;
@@ -75,6 +66,9 @@
     height: 60px;
     border-radius: 50px;
   }
+}
+
+@media (max-width: 834px) {
   .chatMenuContainer {
     padding: 100px 20px;
   }
