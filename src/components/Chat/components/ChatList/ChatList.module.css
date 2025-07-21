@@ -21,15 +21,6 @@
   border-radius: 9px;
 }
 
-@media (max-width: 768px) {
-  .chatList {
-    /* height: 100vh;
-    flex: 1;
-    overflow-y: auto; */
-  }
-  .chatList::-webkit-scrollbar {
-  }
-}
 @media (max-width: 420px) {
   .chatList::-webkit-scrollbar {
     display: none;
