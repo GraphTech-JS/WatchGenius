@@ -4,6 +4,7 @@ import styles from "./Hero.module.css";
 import Link from "next/link";
 
 import { Button } from "@/components/Button/Button";
+import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 export const Hero = () => {
   return (
@@ -13,7 +14,9 @@ export const Hero = () => {
     >
       <div className={styles.heroLeft}>
         <div className={styles.heroText}>
-          <h1 className={styles.heroTitle}>Обери свій годинник</h1>
+          <ThemedText type="h1" className="text-white">
+            Обери свій годинник
+          </ThemedText>
           <p className={styles.heroSubtitle}>
             Годинники від світових брендів. Якість, точність і безкомпромісна
             елегантність.

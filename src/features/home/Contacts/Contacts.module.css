@@ -1,7 +1,6 @@
 .contacts {
   display: flex;
   position: relative;
-  margin: 0 auto;
   background: #000;
   width: 100%;
   min-height: 530px;
@@ -29,7 +28,7 @@
   max-width: 1300px;
   align-items: flex-start;
   justify-content: center;
-  margin: 0 auto;
+  padding-left: 70px;
   padding-top: 52px;
   gap: 8px;
   z-index: 4;

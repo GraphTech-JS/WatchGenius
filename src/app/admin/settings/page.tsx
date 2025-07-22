@@ -8,7 +8,7 @@ const Settings = () => {
   return (
     <AdminLayout>
       <div className={styles.dashboard}>
-        <div className={styles.dashboardContent}>
+        <div className={styles.dashboardContainer}>
           <div className={styles.dashboardTitleSection}>
             <img
               src={SettingsDark.src}

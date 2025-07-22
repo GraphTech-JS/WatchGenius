@@ -1,20 +1,21 @@
 import React from "react";
 import styles from "./Indicators.module.css";
 import PieChart from "../../../components/Chart/PieChart/PieChart";
+import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 export const Indicators = () => {
   return (
     <div className={styles.indicatorsContainer}>
       <div className={styles.indicatorsText}>
-        <h3 className={styles.pieChartTitle}>Індикатор Rolex 92</h3>
-        <p className={styles.pieChartDescription}>
+        <ThemedText type="h2">Індикатор Rolex 92</ThemedText>
+        <ThemedText type="h5">
           Надійність, статус і безпеганна якість — головні причини, чому 92%
           покупців обирають Rolex.
-        </p>
-        <p className={styles.pieChartSubtext}>
+        </ThemedText>
+        <ThemedText type="h5">
           80% позитивних відгуків, лише 20% мають зауваження — здебільшого до
           ціни або очікування доставки.
-        </p>
+        </ThemedText>
       </div>
       <div className={styles.pieChartSection}>
         <PieChart />

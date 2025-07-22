@@ -4,6 +4,7 @@ import styles from "./Catalog.module.css";
 import { Card } from "./components/Card/Card";
 import { mockData } from "@/mock/watch";
 import { Button } from "@/components/Button/Button";
+import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 export const Catalog = () => {
   const [limit, setLimit] = useState<number>(4);
@@ -20,7 +21,7 @@ export const Catalog = () => {
         <div className={styles.catalogContainer}>
           <div className={styles.catalogContent}>
             <div className={styles.catalogText}>
-              <h2 className={styles.catalogHeading}>Каталог</h2>
+              <ThemedText type="h2">Каталог</ThemedText>
               <div className={styles.catalogCards}>
                 {mockData
                   .slice(0, limit)

@@ -1,6 +1,6 @@
 import React, { useState, useRef, RefObject } from "react";
 import styles from "./Select.module.css";
-import { useClickOutside } from "@/app/utils/useClickOutside";
+import { useClickOutside } from "@/utils/useClickOutside";
 
 export interface SelectOption {
   value: string;

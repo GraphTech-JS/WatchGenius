@@ -9,10 +9,11 @@ import React, {
 } from "react";
 import { Button } from "../Button/Button";
 import styles from "./ChatMenu.module.css";
-import { useClickOutside } from "@/app/utils/useClickOutside";
+import { useClickOutside } from "@/utils/useClickOutside";
 import Link from "next/link";
 import { Close, Robot } from "../../../public/icons";
 import { MainContext } from "@/context";
+import { ThemedText } from "../ThemedText/ThemedText";
 
 interface ChatMenuProps {
   isOpen: boolean;
@@ -58,7 +59,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
       </button>
       <div className={styles.chatMenuContainer}>
         <img src={Robot.src} alt="ai robot" className={styles.chatMenuIcon} />
-        <h3 className={styles.chatMenuTitle}>AI-агент</h3>
+        <ThemedText type="h1">AI-агент</ThemedText>
         <p className={styles.chatMenuDescription}>
           Швидко, точно та без нав’язливих порад. Просто запитайте.
         </p>
@@ -68,7 +69,9 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           onChange={handleMessage}
           className={styles.chatHeaderInput}
         />
-        <h1 className=" text-[32px] text-center">Що я можу для Вас зробити?</h1>
+        <ThemedText type="h2" className="text-center">
+          Що я можу для Вас зробити?
+        </ThemedText>
         <div className={styles.chatMenuButtons}>
           <Button variant="outline" classNames={styles.chatMenuBtn}>
             <Link href="/chat">Порівняти моделі</Link>

@@ -20,6 +20,7 @@ export default function ChatClient({
       <main
         className="transition-all duration-300 ease-in-out
                        w-full
+                       md:w-[calc(100%-42px)
                        lg:w-[calc(100%-483px)]"
       >
         {children}

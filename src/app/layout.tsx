@@ -2,10 +2,30 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { MainContextProvider } from "@/context";
+import { Inter } from "next/font/google";
 
-const angelicaProDisplay = localFont({
-  src: "../../public/fonts/AngleciaProDisplay-Regular.otf",
+const sfmono = localFont({
+  src: [
+    {
+      path: "fonts/SFMono-Regular.otf",
+      weight: "400",
+      style: "normal",
+    },
+  ],
+  variable: "--font-sfmono",
+});
+
+const angelica = localFont({
+  src: "fonts/AngleciaProDisplay-Regular.otf",
   display: "block",
+  weight: "400",
+  style: "normal",
+  variable: "--font-angelica",
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -19,7 +39,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${angelicaProDisplay.className}`}>
+    <html
+      lang="en"
+      className={`${sfmono.variable} ${inter.variable} ${angelica.variable}`}
+    >
       <body>
         <main>
           <MainContextProvider>{children}</MainContextProvider>

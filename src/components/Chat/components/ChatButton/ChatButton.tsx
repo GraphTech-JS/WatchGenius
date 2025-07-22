@@ -9,8 +9,7 @@ export const ChatButton: React.FC<IChatButton> = ({ onClick }) => (
     style={{ boxShadow: "0 4px 20px 2px rgba(0, 0, 0, 0.25)" }}
     className="
       fixed right-0 bottom-0
-      h-screen w-0 sm:w-[42px] bg-white
-      z-50 flex justify-center items-start
+      h-full w-0 sm:w-[42px] bg-white flex justify-center items-start
     "
   >
     <button

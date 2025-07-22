@@ -35,7 +35,7 @@
 .text {
   font-size: 24px;
   color: #000;
-  font-family: inherit;
+  font-family: var(--font-sfmono);
   background-color: transparent;
   text-decoration: underline;
 }

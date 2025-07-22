@@ -9,6 +9,7 @@ import { useScreenWidth } from "@/hooks/useScreenWidth";
 import { MainContext } from "@/context";
 import { Button } from "@/components/Button/Button";
 import { ArrowLeft, Robot, Send } from "../../../../../public/icons";
+import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 interface IAiChat {
   type: "general" | "chat";
@@ -91,7 +92,7 @@ export const AiChat = ({ type }: IAiChat) => {
             alt="ai robot"
             className={styles.chatHeaderIcon}
           />
-          <h3 className={styles.chatHeaderTitle}>AI-агент</h3>
+          <ThemedText type="h1">AI-агент</ThemedText>
           <p className={styles.chatHeaderDescription}>
             Швидко, точно та без нав’язливих порад. Просто запитайте.
           </p>
@@ -136,7 +137,7 @@ export const AiChat = ({ type }: IAiChat) => {
           </form>
         </div>
         <div className={styles.chatFooter}>
-          <h4 className={styles.chatFooterTitle}>Що я можу для Вас зробити?</h4>
+          <ThemedText type="h2">Що я можу для Вас зробити?</ThemedText>
           <div className={styles.chatFooterButtons}>
             <Button
               variant="outline"

@@ -4,17 +4,20 @@ import styles from "./Watch.module.css";
 
 import Link from "next/link";
 import { Button } from "@/components/Button/Button";
+import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 export const Watch = () => {
   return (
     <section className={styles.watch}>
       <div className={styles.watchLeft}>
         <div className={styles.watchText}>
-          <h2 className={styles.watchHeading}>Годинник, що говорить за вас</h2>
-          <p className={styles.watchSubtitle}>
+          <ThemedText type="h2" className="text-white">
+            Годинник, що говорить за вас
+          </ThemedText>
+          <ThemedText type="h5" className="text-white max-w-[530px]">
             Вибрані моделі від легендарних брендів. Стиль, точність, статус — у
             кожній деталі.
-          </p>
+          </ThemedText>
         </div>
         <Link href="/catalog" prefetch={false} className={styles.watchLink}>
           <Button

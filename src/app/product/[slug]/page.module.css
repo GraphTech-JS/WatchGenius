@@ -1,12 +1,7 @@
-.product {
-  display: flex;
-  flex-direction: column;
-  margin-top: 30px;
-}
-
 .productContainer {
-  width: 1300px;
+  max-width: 1300px;
   margin: 0 auto;
+  padding: 45px 32px 50px 70px;
 }
 
 .productBreadcrumbs {
@@ -22,27 +17,14 @@
 
 .productContent {
   display: flex;
-  justify-content: space-between;
-}
-
-.productLeft,
-.productRight {
-  width: 50%;
-}
-
-.productRight {
-  display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  margin-left: 20px;
-  gap: 10px;
 }
 
 .productText {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
+  margin-top: 25px;
 }
 
 .productTitle {
@@ -52,15 +34,8 @@
   color: var(--black);
 }
 
-.productDesc {
-  font-size: 20px;
-  font-family: "Inter", sans-serif;
-  font-weight: 400;
-  color: var(--black);
-}
-
 .productImg {
-  width: 641px;
+  width: 100%;
   height: 347px;
   object-fit: cover;
   border-radius: 5px;
@@ -68,14 +43,21 @@
 
 .productPrice {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  justify-content: space-between;
+  gap: 30px;
   width: 100%;
 }
 
 .productPriceBtn {
-  width: 60% !important;
-  padding: 15px 15px !important;
+  height: 72px;
+  width: 100%;
+}
+
+.productDescContent {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 40px;
 }
 
 .productPriceBtn:hover {
@@ -88,10 +70,11 @@
   font-size: 40px;
   font-family: inherit;
   font-weight: 400;
+  white-space: nowrap;
 }
 
 .productGraph {
-  margin-top: 37px;
+  margin-top: 70px;
 }
 
 .productGraphChart {
@@ -134,10 +117,8 @@
 }
 
 .productGraphSection {
-  display: flex;
   margin-top: 30px;
-  justify-content: space-between;
-  width: 1300px;
+  max-width: 1300px;
 }
 
 .productGraphTitle {
@@ -185,11 +166,10 @@
   position: relative;
   background: url("/ai-agent-section/bg.png") no-repeat center;
   background-size: cover;
-  min-height: 319px;
-  padding: 60px 0;
+  padding: 60px 20px;
   width: 100%;
-  margin-top: 30px;
   margin-bottom: 50px;
+  z-index: 90;
 }
 
 .aiAgent::after {
@@ -203,7 +183,7 @@
 }
 
 .aiAgentContainer {
-  width: 1300px;
+  max-width: 1300px;
   height: 100%;
   margin: 0 auto;
   display: flex;
@@ -215,31 +195,29 @@
 
 .aiAgentTitle {
   font-size: 40px;
-  font-family: inherit;
-  font-weight: 400;
   color: var(--white);
   z-index: 60;
 }
 
 .aiAgentDesc {
   font-size: 20px;
-  font-family: "Inter", sans-serif;
-  font-weight: 400;
   color: var(--white);
   margin-bottom: 60px;
   z-index: 60;
+  text-align: center;
 }
 
 .aiAgentLink,
 .aiAgentBtn {
   z-index: 60;
-  width: 440px;
+  max-width: 440px;
+  width: 100%;
 }
 
 .aiAgentBtn {
   font-family: 20px;
   background-color: aliceblue;
-  padding: 15px 15px !important;
+  height: 72px;
 }
 
 .aiAgentBtn:hover {
@@ -249,29 +227,24 @@
 }
 
 @media (max-width: 835px) {
-}
-
-@media (max-width: 420px) {
   .productContainer {
-    width: 360px;
-  }
-
-  .productGraphButtons {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    position: unset;
-    margin-bottom: 20px;
+    padding: 30px 20px 30px 20px;
   }
 
   .productPrice {
-    display: flex;
     flex-direction: column-reverse;
-    gap: 10px;
+    align-items: center;
   }
+}
 
-  .productPriceBtn {
-    width: 80% !important;
+@media (max-width: 420px) {
+  .productGraphButtons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: unset;
+    margin-bottom: 20px;
   }
 
   .productTitle {
@@ -324,12 +297,6 @@
     text-align: center;
   }
 
-  .productGraphChart {
-    display: flex;
-    align-items: center;
-    flex-direction: column-reverse;
-  }
-
   .productChartContainer {
     width: 360px !important;
   }
@@ -339,16 +306,12 @@
   }
 
   .productRight {
+    margin-top: 25px;
     width: 100%;
   }
 
   .aiAgent {
     height: 404px;
-  }
-
-  .aiAgentContainer {
-    width: 360px;
-    justify-content: flex-start;
   }
 
   .aiAgentTitle {
@@ -359,9 +322,5 @@
     font-size: 16px;
     max-width: 348px;
     text-align: center;
-  }
-
-  .aiAgentBtn {
-    width: 348px;
   }
 }

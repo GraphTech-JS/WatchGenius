@@ -1,12 +1,13 @@
 "use client";
 import React from "react";
 import styles from "./Banner.module.css";
+import { ThemedText } from "../ThemedText/ThemedText";
 
 export const Banner = () => {
   return (
     <div className={styles.banner}>
       <div className={styles.bannerContent}>
-        <h4 className={styles.bannerTitle}>Банер</h4>
+        <ThemedText type="h2">Банер</ThemedText>
       </div>
     </div>
   );
