@@ -1,4 +1,3 @@
-// app/layout.tsx (или RootLayout.tsx)
 import { Header } from "@/components/Main/Header/Header";
 import ChatClient from "@/features/Chat/ChatClient";
 import { Contacts } from "@/features/home/Contacts/Contacts";

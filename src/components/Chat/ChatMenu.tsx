@@ -1,15 +1,9 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import React, {
-  RefObject,
-  useRef,
-  useState,
-  useEffect,
-  useContext,
-} from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { Button } from "../Button/Button";
 import styles from "./ChatMenu.module.css";
-import { useClickOutside } from "@/utils/useClickOutside";
 import Link from "next/link";
 import { Close, Robot } from "../../../public/icons";
 import { MainContext } from "@/context";
@@ -25,8 +19,6 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const { message, messages, setMessage } = useContext(MainContext);
-
-  useClickOutside(ref as RefObject<HTMLDivElement>, onClose);
 
   useEffect(() => {
     if (isOpen) setIsAnimating(true);
@@ -49,6 +41,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     <div
       ref={ref}
       className={`${styles.chatMenu} ${isAnimating ? styles.open : ""}`}
+      style={{ height: "100%" }} // обеспечиваем полную высоту
     >
       <button className={styles.chatMenuClose} onClick={handleClose}>
         <img
@@ -61,7 +54,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
         <img src={Robot.src} alt="ai robot" className={styles.chatMenuIcon} />
         <ThemedText type="h1">AI-агент</ThemedText>
         <p className={styles.chatMenuDescription}>
-          Швидко, точно та без нав’язливих порад. Просто запитайте.
+          Швидко, точно та без нав'язливих порад. Просто запитайте.
         </p>
         <input
           placeholder="Введіть Ваш запит"
@@ -79,7 +72,6 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           <Button variant="outline" classNames={styles.chatMenuBtn}>
             <Link href="/chat">Підібрати годинник</Link>
           </Button>
-
           <Button variant="outline" classNames={styles.chatMenuBtn}>
             <Link href="/chat">Показати хіти продажу</Link>
           </Button>
