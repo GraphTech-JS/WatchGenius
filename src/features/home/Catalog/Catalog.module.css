@@ -42,6 +42,7 @@
 
 .catalogCards {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: clamp(15px, 3vw, 30px);
   margin-top: clamp(20px, 3vw, 30px);
@@ -58,7 +59,9 @@
   border-radius: clamp(4px, 0.5vw, 6px);
   transition: all 0.3s ease;
 }
+/* @media (min-width: 1){
 
+} */
 /* Modern responsive styles */
 @media (max-width: 768px) {
   .catalog {
@@ -71,7 +74,7 @@
   }
 
   .catalogText {
-    align-items: center;
+    /* align-items: center; */
     width: 100%;
   }
 

@@ -154,6 +154,8 @@
     font-size: 32px;
     text-align: center;
   }
+  .heroText {
+  }
   .hero::after {
     content: "";
     position: absolute;
@@ -186,8 +188,12 @@
 @media (max-width: 480px) {
   .heroText {
     margin-bottom: 0;
+    text-align: center;
+    align-items: center;
   }
-
+  .heroText > :first-child {
+    width: 98vw;
+  }
   .heroBtn {
     width: 100%;
     max-width: 350px;

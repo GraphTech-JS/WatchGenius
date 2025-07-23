@@ -4,7 +4,8 @@
   background: #000;
   width: 100%;
   min-height: 530px;
-  margin-bottom: 70px;
+  margin-bottom: 55px;
+  z-index: 90;
 }
 
 .contactsTitle {
@@ -93,7 +94,7 @@
 @media (max-width: 1000px) {
   .contacts {
     max-width: 100%;
-    border-radius: 10px;
+    margin-bottom: 48px;
   }
   .contactsContent {
     max-width: 100%;
@@ -155,65 +156,24 @@
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 768px) {
   .contacts {
-    max-width: 100%;
-    border-radius: 10px;
+    border-radius: 6px;
+    width: auto;
   }
-  .contactsContent {
-    max-width: 100%;
-    width: 100%;
-    padding: 30px 20px;
-    justify-content: center;
-    align-items: center;
-    margin-top: 40px;
-  }
-
-  .contactsTitle {
-    font-size: 36px;
-    text-align: center;
-    font-family: inherit;
-    margin: 0 auto;
-  }
-
-  .contactsSubtitle {
-    font-size: 16px;
-    text-align: center;
-    margin-top: 15px;
-  }
-
-  .textField::placeholder {
-    font-size: 20px;
-  }
-
   .contactsImg {
-    width: 511px;
-    height: 500px;
-    object-fit: cover;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
   }
+}
 
-  .contacts::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: var(--darkblack);
-    border-radius: 10px !important;
-    opacity: 0.7;
-    z-index: 2;
-  }
-
-  .contactsBtn {
-    font-size: 20px !important;
+@media (max-width: 620px) {
+  .contacts {
+    margin: 0 20px 70px 20px;
   }
 }
 
 @media (max-width: 420px) {
-  .contacts {
-    border-radius: 10px;
-  }
   .contactsContent {
     max-width: 100%;
     padding: 30px 20px;

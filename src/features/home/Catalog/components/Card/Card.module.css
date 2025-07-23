@@ -1,6 +1,5 @@
 .card {
   width: clamp(330px, 35vw, 393px);
-  /* height: clamp(420px, 485px, 490px); */
   border-radius: clamp(3px, 0.5vw, 8px);
   background-color: hsl(0, 0%, 100%);
   display: flex;
@@ -11,9 +10,28 @@
   box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.08),
     0 1.5px 6px 0 rgba(0, 0, 0, 0.04);
   transition: all 0.3s ease;
-  /* aspect-ratio: 3/4; */
+  position: relative;
 }
-
+.cardElement {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px 6px 10px;
+  margin: 32px 25px;
+  background-color: hsl(0, 0%, 100%);
+  border-radius: 5px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.cardElementStarIcon {
+  width: 21px;
+  height: 21px;
+}
+.cardElementText {
+  font-size: 14px;
+  line-height: 17px;
+}
 .card:hover {
   box-shadow: 0 4px 27px 0 rgba(0, 0, 0, 0.2),
     0 1.5px 20px 0 rgba(0, 0, 0, 0.04);
@@ -24,22 +42,18 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: clamp(8px, 1vw, 15px);
+  padding: 21px 15px;
   width: 100%;
-  /* flex-grow: 1; */
   justify-content: flex-start;
 }
 
 .cardText {
   display: flex;
   flex-direction: column;
-  /* gap: clamp(8px, 1vw, 12px); */
   width: 100%;
-  /* flex-grow: 1; */
 }
 
 .cardTitle {
-  /* font-size: clamp(16px, 2vw, 20px); */
   font-size: 20px;
   height: 50px;
   font-family: "Inter", sans-serif;
@@ -47,7 +61,6 @@
   color: var(--black);
   line-height: 1.4;
   display: -webkit-box;
-  /* -webkit-line-clamp: 2; */
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -94,6 +107,12 @@
   .cardTitle {
     font-size: 18px;
   }
+  .cardContent {
+    padding: 13px 16px;
+  }
+  .cardElement {
+    margin: 23px 27px;
+  }
 }
 
 @media (max-width: 835px) {
@@ -111,8 +130,13 @@
   }
 
   .cardTitle {
-    /* -webkit-line-clamp: 3; */
     font-size: clamp(16px, 2vw, 18px);
+  }
+  .cardContent {
+    padding: 13px 11px;
+  }
+  .cardElement {
+    margin: 23px 22px;
   }
 }
 
