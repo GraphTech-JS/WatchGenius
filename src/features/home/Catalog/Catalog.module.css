@@ -59,7 +59,9 @@
   border-radius: clamp(4px, 0.5vw, 6px);
   transition: all 0.3s ease;
 }
+/* @media (min-width: 1){
 
+} */
 /* Modern responsive styles */
 @media (max-width: 768px) {
   .catalog {

@@ -27,4 +27,5 @@ export { default as DocDark } from "./doc-dark.svg";
 export { default as DocsDark } from "./docs-dark.svg";
 export { default as SessionDark } from "./session-dark.svg";
 export { default as SettingsDark } from "./settings-dark.svg";
+export { default as StarDarkIcon } from "./star-dark.svg";
 //Add more icons in future
