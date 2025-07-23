@@ -49,13 +49,14 @@
   line-height: 1.5;
 }
 
-@media (max-width: 835px) {
+@media (max-width: 834px) {
   .indicatorsContainer {
-    flex-direction: column;
+    flex-direction: row-reverse;
     gap: clamp(20px, 5vw, 30px);
     text-align: center;
     justify-content: center;
-    padding: clamp(20px, 6vw, 30px) clamp(15px, 3vw, 20px);
+    padding: 0;
+    margin: 55px 0;
   }
 
   .indicatorsText {
@@ -70,7 +71,12 @@
     max-width: 100%;
   }
 }
-
+@media (max-width: 768px) {
+  .indicatorsContainer {
+    flex-direction: column-reverse;
+    margin: 60px 20px;
+  }
+}
 @media (max-width: 480px) {
   .pieChart {
     padding: clamp(30px, 6vw, 50px) clamp(15px, 3vw, 20px);
