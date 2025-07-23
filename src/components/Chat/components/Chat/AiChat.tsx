@@ -10,10 +10,15 @@ import { MainContext } from "@/context";
 import { Button } from "@/components/Button/Button";
 import { ArrowLeft, Robot, Send } from "../../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
+// import { useSearchParams } from "next/navigation";
 
 interface IAiChat {
   type: "general" | "chat";
 }
+
+// export const AiChat = () => {
+//   const searchParams = useSearchParams();
+//   const type = searchParams.get("type") === "chat" ? "chat" : "general";
 
 export const AiChat = ({ type }: IAiChat) => {
   const { push } = useRouter();
