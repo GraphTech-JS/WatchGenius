@@ -26,7 +26,7 @@ export const Card = ({ title, image, price, slug }: ICardProps) => {
         </div>
         <Link href={`/product/${slug}`} className={styles.cardLink}>
           <Button variant="solid" classNames={styles.cardBtn}>
-            Купити
+            Дізнатись більше
           </Button>
         </Link>
       </div>
