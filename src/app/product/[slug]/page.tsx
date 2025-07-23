@@ -10,6 +10,7 @@ import Link from "next/link";
 import { ArrowLeftDark } from "../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { Indicators } from "@/features/home/Indicators/Indicators";
+import { StarDarkIcon } from "../../../../public/icons";
 
 const Product = () => {
   const { back } = useRouter();
@@ -31,6 +32,14 @@ const Product = () => {
                 className={styles.productImg}
               />
             </picture>
+          </div>
+          <div className={styles.cardElement}>
+            <img
+              src={StarDarkIcon.src}
+              alt="star icon"
+              className={styles.cardElementStarIcon}
+            />
+            <span className={styles.cardElementText}>Надійний бренд</span>
           </div>
           <div className={styles.productRight}>
             <div className={styles.productText}>
