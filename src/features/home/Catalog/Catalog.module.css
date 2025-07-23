@@ -42,6 +42,7 @@
 
 .catalogCards {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: clamp(15px, 3vw, 30px);
   margin-top: clamp(20px, 3vw, 30px);
@@ -71,7 +72,7 @@
   }
 
   .catalogText {
-    align-items: center;
+    /* align-items: center; */
     width: 100%;
   }
 

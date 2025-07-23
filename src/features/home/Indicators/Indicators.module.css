@@ -54,6 +54,7 @@
     flex-direction: column;
     gap: clamp(20px, 5vw, 30px);
     text-align: center;
+    justify-content: center;
     padding: clamp(20px, 6vw, 30px) clamp(15px, 3vw, 20px);
   }
 
