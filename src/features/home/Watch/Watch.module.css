@@ -71,7 +71,7 @@
 @media (max-width: 768px) {
   .watch {
     padding: 50px 40px;
-    max-height: 314px;
+    /* max-height: 350px; */
   }
 
   .watchLeft,
@@ -104,6 +104,9 @@
     position: relative;
     z-index: 2;
   }
+  .watchLeft > a:first-of-type {
+    width: 100%;
+  }
 
   .watchHeading,
   .watchSubtitle {
@@ -112,8 +115,8 @@
     padding: 0 30px;
   }
 
-  .watchText {
-    gap: 15px;
+  .watchBtn {
+    width: 100%;
   }
 
   .watch::after {
