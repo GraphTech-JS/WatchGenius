@@ -78,15 +78,15 @@
   .topBrandsHeading {
     margin-bottom: clamp(10px, 2vw, 15px);
   }
+
+  .topBrands {
+    padding: 60px 22px 0 40px;
+  }
 }
 
 @media (max-width: 480px) {
   .topBrands {
-    padding: clamp(30px, 6vw, 60px) 0;
-  }
-
-  .topBrandsContainer {
-    padding: 0 clamp(15px, 4vw, 20px);
+    padding: 50px 20px 0 20px;
   }
 
   .topBrandsLine {
