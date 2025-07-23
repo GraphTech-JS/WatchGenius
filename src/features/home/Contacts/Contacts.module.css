@@ -160,12 +160,16 @@
   .contacts {
     border-radius: 6px;
     width: auto;
-
-    margin: 0 20px 70px 20px;
   }
   .contactsImg {
     border-top-right-radius: 6px;
     border-top-left-radius: 6px;
+  }
+}
+
+@media (max-width: 620px) {
+  .contacts {
+    margin: 0 20px 70px 20px;
   }
 }
 
