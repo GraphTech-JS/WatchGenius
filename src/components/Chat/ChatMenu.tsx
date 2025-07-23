@@ -41,7 +41,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     <div
       ref={ref}
       className={`${styles.chatMenu} ${isAnimating ? styles.open : ""}`}
-      style={{ height: "100%" }} // обеспечиваем полную высоту
+      style={{ height: "100%" }}
     >
       <button className={styles.chatMenuClose} onClick={handleClose}>
         <img

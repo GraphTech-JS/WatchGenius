@@ -9,10 +9,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
+    <div className="relative min-h-screen">
       <Header />
+
       <ChatClient>{children}</ChatClient>
-      <Contacts />
+
+      <section id="contacts">
+        <Contacts />
+      </section>
+
       <Footer />
     </div>
   );
