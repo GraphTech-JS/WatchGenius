@@ -1,6 +1,7 @@
 .card {
-  width: clamp(330px, 35vw, 393px);
-  border-radius: clamp(3px, 0.5vw, 8px);
+  width: calc((100% - 60px) / 3);
+
+  border-radius: 5px;
   background-color: hsl(0, 0%, 100%);
   display: flex;
   flex-direction: column;
@@ -17,7 +18,7 @@
   align-items: center;
   gap: 7px;
   padding: 5px 11px 6px 10px;
-  margin: 32px 25px;
+  margin: 32px 25px 0 0;
   background-color: hsl(0, 0%, 100%);
   border-radius: 5px;
   position: absolute;
@@ -54,8 +55,9 @@
 }
 
 .cardTitle {
-  font-size: 20px;
-  height: 50px;
+  font-size: 16px;
+  /* min-height: 86px; */
+  height: 42px;
   font-family: "Inter", sans-serif;
   font-weight: 400;
   color: var(--black);
@@ -99,22 +101,32 @@
 .cardImg {
   width: 100%;
   height: auto;
-  max-height: 60%;
+  /* max-height: 60%; */
   object-fit: contain;
   margin-bottom: clamp(8px, 1vw, 12px);
 }
-@media (max-width: 1050px) {
-  .cardTitle {
-    font-size: 18px;
+
+@media (max-width: 1536px) {
+  .card {
+    width: calc((100% - 30px) / 2);
   }
+}
+@media (max-width: 1050px) {
   .cardContent {
     padding: 13px 16px;
   }
   .cardElement {
-    margin: 23px 27px;
+    margin: 23px 27px 0 0;
   }
 }
-
+@media (max-width: 1023px) {
+  .cardElement {
+    margin-right: 40px;
+  }
+  /* .cardTitle {
+    min-height: 76px;
+  } */
+}
 @media (max-width: 835px) {
   .card {
     max-width: 100%;
@@ -129,17 +141,21 @@
     padding: clamp(8px, 1.5vw, 12px);
   }
 
-  .cardTitle {
-    font-size: clamp(16px, 2vw, 18px);
-  }
   .cardContent {
     padding: 13px 11px;
   }
   .cardElement {
-    margin: 23px 22px;
+    margin: 23px 22px 0 0;
   }
 }
-
+@media (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+  .cardTitle {
+    height: fit-content;
+  }
+}
 @media (max-width: 480px) {
   .cardPrice {
     font-size: 20px;
@@ -147,9 +163,7 @@
   .cardContent {
     gap: clamp(6px, 1vw, 10px);
   }
-  .cardTitle {
-    font-size: 16px;
-  }
+
   .cardBtn {
     padding: clamp(10px, 2vw, 14px) !important;
     font-size: clamp(16px, 2vw, 16px) !important;
@@ -157,10 +171,6 @@
 }
 
 @media (max-width: 360px) {
-  .cardTitle {
-    font-size: clamp(12px, 3vw, 16px);
-  }
-
   .cardPrice {
     font-size: clamp(16px, 3vw, 20px);
   }

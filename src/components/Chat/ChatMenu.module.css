@@ -11,13 +11,25 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  padding: 100px 56px;
+  padding: 80px 56px;
   flex: 1;
   overflow-y: auto;
   min-height: 100vh; /* Важно: контейнер должен занимать всю высоту экрана */
   box-sizing: border-box;
 }
-
+.chatMenuSandBtn {
+  background-color: #101010;
+  max-width: 600px;
+  width: 100%;
+  border-radius: 5px;
+  padding: 23px 0;
+  margin-bottom: 40px;
+}
+.chatMenuSandBtnText {
+  color: #ededed;
+  font-size: 16px;
+  line-height: 19px;
+}
 .chatMenuTitle {
   font-size: 48px;
   font-weight: 400;
@@ -41,7 +53,7 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  margin-top: 40px;
+  margin-top: 30px;
   margin-bottom: 60px; /* Добавляем отступ снизу для последнего элемента */
 }
 
@@ -62,7 +74,7 @@
   font-family: "Inter", sans-serif;
   border: 2px solid var(--black);
   border-radius: 5px;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   color: rgba(24, 35, 45, 1);
   resize: none;
   overflow-y: scroll;

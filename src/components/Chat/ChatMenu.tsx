@@ -1,7 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import React, { useRef, useState, useEffect, useContext } from "react";
+import React, { useRef, useState, useEffect, useContext, useId } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "../Button/Button";
 import styles from "./ChatMenu.module.css";
 import Link from "next/link";
@@ -15,10 +16,13 @@ interface ChatMenuProps {
 }
 
 export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
+  const id = useId();
   const [isAnimating, setIsAnimating] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
-  const { message, messages, setMessage } = useContext(MainContext);
+  const { message, messages, setMessage, setMessages } =
+    useContext(MainContext);
 
   useEffect(() => {
     if (isOpen) setIsAnimating(true);
@@ -29,7 +33,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     setTimeout(onClose, 300);
   };
 
-  const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage({
       content: e.target.value,
       by: "me",
@@ -37,6 +41,29 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     });
   };
 
+  const handleSend = () => {
+    if (!message.content.trim()) return;
+    const aiResponse =
+      "Тоді кварцовий — чудовий вибір: точний, не потребує щоденного обслуговування. Ще питання: ви надаєте перевагу шкіряним ремінцям, металевим браслетам чи можливо щось нестандартне?";
+
+    setMessages([
+      ...messages,
+      message,
+      {
+        content: aiResponse,
+        by: "ai",
+        id: messages.length + 1 + Math.random() * 1000,
+      },
+    ]);
+
+    setMessage({
+      content: "",
+      by: "me",
+      id: messages.length + 1 + Math.random() * 1000,
+    });
+
+    router.push(`/chat/${id}`);
+  };
   return (
     <div
       ref={ref}
@@ -58,10 +85,14 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
         </p>
         <input
           placeholder="Введіть Ваш запит"
-          value={message?.content}
-          onChange={handleMessage}
+          value={message.content}
+          onChange={handleChange}
           className={styles.chatHeaderInput}
+          onKeyDown={(e) => e.key === "Enter" && handleSend()}
         />
+        <button className={styles.chatMenuSandBtn} onClick={handleSend}>
+          <span className={styles.chatMenuSandBtnText}>Надіслати</span>
+        </button>
         <ThemedText type="h2" className="text-center">
           Що я можу для Вас зробити?
         </ThemedText>
