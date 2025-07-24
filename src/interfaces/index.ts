@@ -19,6 +19,7 @@ interface IWatch {
   price: number | string;
   slug: string;
   id: number;
+  changePercent: number;
 }
 
 interface ISearchProps extends React.HTMLAttributes<HTMLInputElement> {

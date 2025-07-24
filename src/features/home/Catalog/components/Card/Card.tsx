@@ -4,15 +4,34 @@ import styles from "./Card.module.css";
 import Link from "next/link";
 import { Button } from "@/components/Button/Button";
 import { StarDarkIcon } from "../../../../../../public/icons";
+import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 interface ICardProps {
   title: string;
   image: string;
   price: string | number;
   slug: string;
+  changePercent: number;
 }
 
-export const Card = ({ title, image, price, slug }: ICardProps) => {
+export const Card = ({
+  title,
+  image,
+  price,
+  slug,
+  changePercent,
+}: ICardProps) => {
+  const isPositive = changePercent !== undefined && changePercent > 0;
+  const isNegative = changePercent !== undefined && changePercent < 0;
+
+  const changeColor = isPositive
+    ? "#00D26AF4"
+    : isNegative
+    ? "#d32f2f"
+    : "#9e9e9e";
+
+  const arrow = isPositive ? "↑" : isNegative ? "↓" : "";
+
   return (
     <div className={styles.card}>
       <div className={styles.cardContent}>
@@ -31,7 +50,18 @@ export const Card = ({ title, image, price, slug }: ICardProps) => {
         </div>
         <div className={styles.cardText}>
           <h3 className={styles.cardTitle}>{title}</h3>
-          <span className={styles.cardPrice}>{price} грн</span>
+          <div className={styles.cardPriceWrapper}>
+            <span className={styles.cardPrice}>{price} грн</span>
+            {changePercent !== undefined && changePercent !== 0 && (
+              <ThemedText
+                type="empty"
+                className=" font-sfmono font-semibold text-[20px]"
+                style={{ color: changeColor }}
+              >
+                {arrow} {Math.abs(changePercent)} %
+              </ThemedText>
+            )}
+          </div>
         </div>
         <Link href={`/product/${slug}`} className={styles.cardLink}>
           <Button variant="solid" classNames={styles.cardBtn}>

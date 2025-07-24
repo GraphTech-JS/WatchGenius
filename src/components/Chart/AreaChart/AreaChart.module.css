@@ -1,5 +1,4 @@
 .container {
-  height: clamp(300px, 40vh, 500px);
   padding: clamp(16px, 2vw, 24px);
   background: #fff;
   border: 5px solid var(--black);
@@ -11,8 +10,12 @@
   width: 100%;
 }
 
+.chart {
+  transform: translateY(30px);
+}
+
 .containerControls {
-  height: clamp(350px, 45vh, 550px);
+  height: 410px;
   padding: clamp(10px, 1.5vw, 16px);
   background: #fff;
   border: 5px solid var(--black);
@@ -22,6 +25,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
+}
+
+.controlButtonsMob {
+  display: none;
 }
 
 .tooltip {
@@ -49,16 +56,6 @@
   border-left: clamp(4px, 1.5vw, 10px) solid transparent;
   border-right: clamp(4px, 1.5vw, 10px) solid transparent;
   border-top: clamp(4px, 1.5vw, 10px) solid rgba(24, 35, 45, 1);
-}
-
-.controlButtons {
-  display: flex;
-  margin-left: clamp(5px, 4vw, 50px);
-  gap: clamp(3px, 1.5vw, 15px);
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
-  margin-bottom: clamp(5px, 1vw, 10px);
 }
 
 .controlBtnActive {
@@ -94,15 +91,20 @@
     padding: 5px 5px;
   }
 }
-@media (max-width: 420px) {
+@media (max-width: 640px) {
   .container {
     display: flex;
     justify-content: center;
   }
 
+  .controlButtonsMob {
+    margin-bottom: 25px;
+    display: block;
+  }
+
   .container,
   .containerControls {
-    padding: 0 !important;
+    height: 380px;
   }
 
   .controlButtons {

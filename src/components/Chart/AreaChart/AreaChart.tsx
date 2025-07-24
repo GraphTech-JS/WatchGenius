@@ -11,7 +11,7 @@ import {
 } from "recharts";
 import styles from "./AreaChart.module.css";
 import { useState } from "react";
-import { Button } from "../../Button/Button";
+import { ToggleSwitch } from "@/components/ToggleSwitch";
 
 const yearData = [
   { date: "01/01/2020", value: 1200 },
@@ -73,70 +73,87 @@ export const CustomAreaChart = ({
   containerClassName?: string;
   controls?: boolean;
 }) => {
-  const [view, setView] = useState("year");
-  const changeView = () => {
-    setView(view === "year" ? "month" : "year");
-  };
+  const [activeView, setActiveView] = useState<"year" | "month">("year");
+
+  const data = activeView === "year" ? yearData : threeMonthData;
   return (
-    <div className={controls ? styles.containerControls : styles.container}>
+    <>
       {controls && (
-        <div className={styles.controlButtons}>
-          <Button
-            variant="solid"
-            classNames={
-              view === "year" ? styles.controlBtnActive : styles.controlBtn
-            }
-            onClick={changeView}
-          >
-            1 рік
-          </Button>
-          <Button
-            variant="solid"
-            classNames={
-              view === "month" ? styles.controlBtnActive : styles.controlBtn
-            }
-            onClick={changeView}
-          >
-            3 міс.
-          </Button>
+        <div className={styles.controlButtonsMob}>
+          <ToggleSwitch onChange={setActiveView} />
         </div>
       )}
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart
-          data={view === "year" ? yearData : threeMonthData}
-          className={styles.chart}
-        >
-          <CartesianGrid strokeLinecap="butt" stroke="#e0e0e0" />
-          <XAxis
-            dataKey="date"
-            axisLine={false}
-            tickLine={false}
-            tick={false}
-          />
-          <YAxis
-            domain={[1000, 4000]}
-            ticks={[1000, 2000, 3000, 4000]}
-            axisLine={false}
-            tickLine={false}
-            tick={{ fontSize: 12, fill: "#666" }}
-            tickFormatter={(value) => value.toLocaleString()}
-          />
-          <Tooltip
-            content={<CustomTooltip />}
-            cursor={{ stroke: "#333", strokeWidth: 1, strokeDasharray: "5,5" }}
-            isAnimationActive={false}
-            offset={-60}
-          />
-          <Area
-            type="monotone"
-            dataKey="value"
-            stroke="#333"
-            strokeWidth={2}
-            fill="#c0c0c0"
-            fillOpacity={0.8}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-    </div>
+      <div className={controls ? styles.containerControls : styles.container}>
+        {controls && (
+          <div className={styles.controlButtons}>
+            <ToggleSwitch onChange={setActiveView} />
+          </div>
+        )}
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart
+            data={data}
+            className={styles.chart}
+            margin={{
+              top: 30,
+              right: 0,
+              left: 0,
+              bottom: 0,
+            }}
+          >
+            <CartesianGrid
+              strokeLinecap="butt"
+              stroke="#e0e0e0"
+              vertical={false}
+            />
+            <XAxis
+              dataKey="date"
+              axisLine={false}
+              tickLine={false}
+              tick={false}
+            />
+            <YAxis
+              domain={[1000, 4000]}
+              ticks={[1000, 2000, 3000, 4000]}
+              axisLine={false}
+              tickLine={false}
+              width={10}
+              tick={({ x, y, payload }) => {
+                return (
+                  <text
+                    x={x + 0}
+                    y={y}
+                    dy={-4}
+                    textAnchor="start"
+                    fontSize={16}
+                    fill="#000"
+                  >
+                    {payload.value.toLocaleString()}
+                  </text>
+                );
+              }}
+            />
+
+            <Tooltip
+              content={<CustomTooltip />}
+              cursor={{
+                stroke: "#333",
+                strokeWidth: 1,
+                strokeDasharray: "5,5",
+              }}
+              isAnimationActive={false}
+              offset={-60}
+            />
+            <Area
+              type="monotone"
+              dataKey="value"
+              stroke="#00C853"
+              strokeWidth={2}
+              fill="#00C85333"
+              fillOpacity={0.8}
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+    </>
   );
 };

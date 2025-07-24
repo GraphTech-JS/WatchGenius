@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import styles from "./Header.module.css";
 import { Globe, Menu, Close } from "../../../../public/icons";
+import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
@@ -13,12 +14,9 @@ export const Header = () => {
   return (
     <header className={`${styles.header} ${open ? styles.fixedHeader : ""}`}>
       <div className={styles.headerContainer}>
-        {/* Логотип */}
         <Link href="/" className={styles.headerLogo}>
-          WatchGenius
+          <ThemedText type="h3">WatchGenius</ThemedText>
         </Link>
-
-        {/* Десктоп-меню */}
         <nav className={styles.headerRightLinks}>
           <Link href="/about-us" className={styles.headerLink} prefetch={false}>
             Про нас

@@ -14,6 +14,15 @@ import { StarDarkIcon } from "../../../../public/icons";
 
 const Product = () => {
   const { back } = useRouter();
+  const priceChangePercent: number = 7;
+  const isPositive = priceChangePercent > 0;
+  const isNegative = priceChangePercent < 0;
+  const arrow = isPositive ? "↑" : isNegative ? "↓" : "";
+  const changeColor = isPositive
+    ? "#00c853"
+    : isNegative
+    ? "#d32f2f"
+    : "#9e9e9e";
 
   return (
     <>
@@ -58,14 +67,31 @@ const Product = () => {
                 </ThemedText>
                 <ThemedText type="h4">Діаметр: 41 мм</ThemedText>
               </div>
+              <ThemedText className=" text-center underline">
+                Показати все
+              </ThemedText>
+              <ThemedText className=" text-center md:text-right underline text-[#A8A6A6]">
+                Не знайшли параметр? Напишіть в чат
+              </ThemedText>
             </div>
             <div className={styles.productPrice}>
+              <div className={styles.productPriceWrapper}>
+                <ThemedText type="h2" className="text-nowrap">
+                  19 500 грн
+                </ThemedText>
+                {priceChangePercent !== 0 && (
+                  <span
+                    className={styles.productPriceChange}
+                    style={{ color: changeColor }}
+                  >
+                    {arrow} {Math.abs(priceChangePercent)} %
+                  </span>
+                )}
+              </div>
+
               <Button variant="solid" classNames={styles.productPriceBtn}>
                 Купити в Chrono24
               </Button>
-              <ThemedText type="h2" className=" text-nowrap">
-                19 500 грн
-              </ThemedText>
             </div>
           </div>
         </div>
@@ -73,20 +99,6 @@ const Product = () => {
           <ThemedText type="h2">Графік цін</ThemedText>
           <div className={styles.productGraphSection}>
             <div className={styles.productGraphChart}>
-              <div className={styles.productGraphButtons}>
-                <Button
-                  variant="solid"
-                  classNames={styles.productGraphSwitchBtn}
-                >
-                  1 рік
-                </Button>
-                <Button
-                  variant="solid"
-                  classNames={styles.productGraphSwitchBtn}
-                >
-                  3 міс.
-                </Button>
-              </div>
               <CustomAreaChart
                 containerClassName={styles.productChartContainer}
                 controls={true}
