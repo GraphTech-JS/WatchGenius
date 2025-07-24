@@ -24,8 +24,17 @@ export const Search = ({
 
   useEffect(() => {
     const handleResize = () => {
-      const isMobile = window.innerWidth <= 834;
-      const newItemsPerPage = isMobile ? 4 : 8;
+      const width = window.innerWidth;
+
+      let newItemsPerPage;
+      if (width >= 1537) {
+        newItemsPerPage = 9;
+      } else if (width <= 834) {
+        newItemsPerPage = 4;
+      } else {
+        newItemsPerPage = 8;
+      }
+
       setItemsPerPage(newItemsPerPage);
 
       setLimit({
