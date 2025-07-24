@@ -102,18 +102,18 @@ export const Search = ({
                 options: ["до 100$", ">100$", ">500$", ">1000$"],
                 id: 2,
               },
-              {
-                label: "Матеріал",
-                value: "material",
-                options: ["золото", "срібло", "алюміній"],
-                id: 3,
-              },
-              {
-                label: "Колір",
-                value: "сolor",
-                options: ["золотий", "срібний", "чорний"],
-                id: 4,
-              },
+              // {
+              //   label: "Матеріал",
+              //   value: "material",
+              //   options: ["золото", "срібло", "алюміній"],
+              //   id: 3,
+              // },
+              // {
+              //   label: "Колір",
+              //   value: "сolor",
+              //   options: ["золотий", "срібний", "чорний"],
+              //   id: 4,
+              // },
             ]}
             opened={opened}
             setOpened={setOpened}

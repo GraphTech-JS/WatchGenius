@@ -1,7 +1,7 @@
 .select {
   position: relative;
   width: 100%;
-  max-width: 320px;
+  max-width: 333px;
 }
 
 .selectButton {
@@ -68,6 +68,7 @@
   max-height: 200px;
   overflow-y: auto;
   margin-top: 4px;
+  width: 100%;
 }
 
 .selectOption {
@@ -118,9 +119,4 @@
 
 .selectDropdown::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
-}
-@media (max-width: 980px) {
-  .select {
-    max-width: 200px;
-  }
 }

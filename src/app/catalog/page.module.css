@@ -76,17 +76,14 @@
   .catalogContent {
     align-items: flex-start;
   }
-  .catalogContainer {
-    padding: 50px 15px 50px 15px;
-  }
 }
 @media (max-width: 1023px) {
-  .catalogContainer {
-    padding: 70px 52px 50px 70px;
+  .catalog {
+    padding: 50px 20px 50px 40px;
   }
 }
 @media (max-width: 480px) {
-  .catalogContainer {
+  .catalog {
     padding: 40px 20px 60px 20px;
   }
   .catalogContent {
