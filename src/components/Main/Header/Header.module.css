@@ -3,6 +3,7 @@
   padding: 1rem 0;
   z-index: 90;
   position: relative;
+  padding: 17px 70px;
 }
 
 .headerContainer {
@@ -18,7 +19,6 @@
   color: var(--white);
   text-decoration: none;
   transition: all 0.3s ease;
-  padding: 0.5rem 1rem;
   border-radius: 8px;
 }
 
@@ -90,24 +90,6 @@
     display: flex;
     max-width: 100%;
     justify-content: space-between;
-    margin: 0 20px;
-  }
-
-  .headerMobileMenu {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 95%;
-    background-color: var(--black);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    z-index: 50;
-    overflow: hidden;
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
   }
   .headerMobileMenuWrapper {
     display: flex;
@@ -149,35 +131,17 @@
     width: 44px;
     height: 44px;
   }
-}
-
-@media (max-width: 835px) {
-  .fixedHeader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 100;
-  }
-  .headerRightLinks,
-  .headerLink,
-  .headerLangSwitchBtn {
-    display: none;
-  }
-  .headerContainer {
-    display: flex;
-    max-width: 100%;
-    justify-content: space-between;
-    margin: 0 20px;
+  .header {
+    padding: 15px 20px;
   }
 
   .headerMobileMenu {
     position: fixed;
+    top: 60px;
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 95%;
+    height: calc(100% - 60px);
     background-color: var(--black);
     display: flex;
     flex-direction: column;
@@ -188,6 +152,20 @@
     opacity: 1;
     pointer-events: auto;
   }
+}
+
+@media (max-width: 835px) {
+  .headerRightLinks,
+  .headerLink,
+  .headerLangSwitchBtn {
+    display: none;
+  }
+  .headerContainer {
+    display: flex;
+    max-width: 100%;
+    justify-content: space-between;
+  }
+
   .headerMobileMenuWrapper {
     display: flex;
     flex-direction: column;
@@ -230,14 +208,6 @@
   }
 }
 @media (max-width: 420px) {
-  .fixedHeader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 100;
-  }
   .headerRightLinks,
   .headerLink,
   .headerLangSwitchBtn {
@@ -247,7 +217,6 @@
     display: flex;
     max-width: 100%;
     justify-content: space-between;
-    margin: 0 20px;
   }
 
   .headerMobileMenu {

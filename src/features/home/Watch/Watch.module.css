@@ -1,19 +1,21 @@
 .watch {
   background-color: var(--black);
-  max-height: 350px;
+  height: 350px;
   position: relative;
   background-image: url("/watch-section/watch.png");
   background-repeat: no-repeat;
   background-position: right bottom;
-  padding: 70px 60px 52px 70px;
+  background-size: contain;
+  padding: 0 70px;
+  display: flex;
+  align-items: center;
 }
 
 .watchLeft {
+  gap: 60px;
   display: flex;
   flex-direction: column;
-  gap: 60px;
   align-items: flex-start;
-  margin: 0 auto;
   z-index: 20;
   max-width: 1300px;
 }
@@ -68,10 +70,11 @@
   transform: translateY(-2px);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 834px) {
   .watch {
-    padding: 50px 40px;
-    /* max-height: 350px; */
+    padding: 0 40px;
+    max-height: 314px;
+    background-position: calc(100% + 70px) bottom;
   }
 
   .watchLeft,
@@ -93,8 +96,9 @@
   .watch {
     max-height: 456px;
     height: 100%;
-    padding: 94px 20px;
+    padding: 0 20px;
     background-image: url("/watch-section/watch-small.png");
+    background-position: right bottom;
   }
 
   .watchLeft {

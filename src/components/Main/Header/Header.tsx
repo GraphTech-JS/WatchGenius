@@ -6,58 +6,40 @@ import { Globe, Menu, Close } from "../../../../public/icons";
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
-  const handleOpening = () => {
-    if (open) {
-      setOpen(false);
-    } else {
-      setOpen(true);
-    }
-  };
+
+  const toggleMenu = () => setOpen((prev) => !prev);
+  const closeMenu = () => setOpen(false);
+
   return (
-    <header className={`${styles.header} ${open && styles.fixedHeader}`}>
+    <header className={`${styles.header} ${open ? styles.fixedHeader : ""}`}>
       <div className={styles.headerContainer}>
-        <nav>
-          <Link href="/" className={styles.headerLogo}>
-            WatchGenius
+        {/* Логотип */}
+        <Link href="/" className={styles.headerLogo}>
+          WatchGenius
+        </Link>
+
+        {/* Десктоп-меню */}
+        <nav className={styles.headerRightLinks}>
+          <Link href="/about-us" className={styles.headerLink} prefetch={false}>
+            Про нас
+          </Link>
+          <Link href="/catalog" className={styles.headerLink} prefetch={false}>
+            Каталог
+          </Link>
+          <Link href="#contacts" className={styles.headerLink} prefetch={false}>
+            Контакти
           </Link>
         </nav>
-        <div className={styles.headerRightLinks}>
-          <nav>
-            <Link
-              href="/about-us"
-              className={styles.headerLink}
-              prefetch={false}
-            >
-              Про нас
-            </Link>
-          </nav>
-          <nav>
-            <Link
-              href="/catalog"
-              className={styles.headerLink}
-              prefetch={false}
-            >
-              Каталог
-            </Link>
-          </nav>
-          <nav>
-            <Link
-              href="#contacts"
-              className={styles.headerLink}
-              prefetch={false}
-            >
-              Контакти
-            </Link>
-          </nav>
-        </div>
+
         <button className={styles.headerLangSwitchBtn}>
-          <img
-            src={Globe.src}
-            alt="globe icon"
-            className={styles.headerLangSwitchIcon}
-          />
+          <img src={Globe.src} alt="Переключить язык" />
         </button>
-        <button className={styles.headerMobileMenuBtn} onClick={handleOpening}>
+        <button
+          className={styles.headerMobileMenuBtn}
+          onClick={toggleMenu}
+          aria-expanded={open}
+          aria-controls="mobileMenu"
+        >
           <img
             src={open ? Close.src : Menu.src}
             alt="menu icon"
@@ -68,42 +50,33 @@ export const Header = () => {
             }
           />
         </button>
+
         {open && (
-          <div className={styles.headerMobileMenu}>
+          <div id="mobileMenu" className={styles.headerMobileMenu}>
             <div className={styles.headerMobileMenuWrapper}>
-              <nav>
-                <Link
-                  href="/about-us"
-                  className={styles.headerMobileMenuLink}
-                  prefetch={false}
-                >
-                  Про нас
-                </Link>
-              </nav>
-              <nav>
-                <Link
-                  href="/catalog"
-                  className={styles.headerMobileMenuLink}
-                  prefetch={false}
-                >
-                  Каталог
-                </Link>
-              </nav>
-              <nav>
-                <Link
-                  href="#contacts"
-                  className={styles.headerMobileMenuLink}
-                  prefetch={false}
-                >
-                  Контакти
-                </Link>
-              </nav>
+              <Link
+                href="/about-us"
+                onClick={closeMenu}
+                className={styles.headerMobileMenuLink}
+              >
+                Про нас
+              </Link>
+              <Link
+                href="/catalog"
+                onClick={closeMenu}
+                className={styles.headerMobileMenuLink}
+              >
+                Каталог
+              </Link>
+              <Link
+                href="#contacts"
+                onClick={closeMenu}
+                className={styles.headerMobileMenuLink}
+              >
+                Контакти
+              </Link>
               <button className={styles.headerMobileLangSwitchBtn}>
-                <img
-                  src={Globe.src}
-                  alt="globe icon"
-                  className={styles.headerMobileLangSwitchIcon}
-                />
+                <img src={Globe.src} alt="Переключить язык" />
               </button>
             </div>
           </div>

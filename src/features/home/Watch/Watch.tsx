@@ -11,10 +11,10 @@ export const Watch = () => {
     <section className={styles.watch}>
       <div className={styles.watchLeft}>
         <div className={styles.watchText}>
-          <ThemedText type="h2" className="text-white">
+          <ThemedText type="h2" className="text-[#EDEDED]">
             Годинник, що говорить за вас
           </ThemedText>
-          <ThemedText type="h5" className="text-white max-w-[530px]">
+          <ThemedText type="h5" className="text-white max-w-[520px]">
             Вибрані моделі від легендарних брендів. Стиль, точність, статус — у
             кожній деталі.
           </ThemedText>
@@ -23,7 +23,7 @@ export const Watch = () => {
           <Button
             variant="solid"
             color="#000"
-            bgColor="#fff"
+            bgColor="#EDEDED"
             classNames={styles.watchBtn}
           >
             Переглянути каталог
