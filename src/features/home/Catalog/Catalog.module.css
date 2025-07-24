@@ -1,7 +1,7 @@
 .catalog {
   background-color: var(--white);
   min-height: clamp(300px, 40vh, 600px);
-  padding: 55px 53px 55px 70px;
+  padding: 0 53px 55px 70px;
 }
 
 .catalogContainer {
@@ -29,7 +29,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: clamp(8px, 1vw, 15px);
+  gap: 10px;
   width: 100%;
 }
 
@@ -42,15 +42,10 @@
 
 .catalogCards {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   flex-wrap: wrap;
-  gap: clamp(15px, 3vw, 30px);
-  margin-top: clamp(20px, 3vw, 30px);
-}
-
-.catalogCards > * {
-  flex: 1 1 clamp(351px, 25%, 393px);
-  max-width: clamp(351px, 25%, 393px);
+  gap: 30px;
+  margin-top: 15px;
 }
 
 .catalogBtn {
@@ -59,13 +54,15 @@
   border-radius: clamp(4px, 0.5vw, 6px);
   transition: all 0.3s ease;
 }
-/* @media (min-width: 1){
 
-} */
-/* Modern responsive styles */
+@media (max-width: 1280px) {
+  .catalog {
+    padding: 25px 22px 55px 40px;
+  }
+}
 @media (max-width: 768px) {
   .catalog {
-    padding: 55px 40px;
+    padding: 25px 40px;
   }
 
   .catalogContainer {

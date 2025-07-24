@@ -10,7 +10,16 @@
 .searchMenuResults {
   width: 1100px;
 }
-
+@media (max-width: 1100px) {
+  .searchResults {
+    gap: 16px;
+  }
+}
+@media (max-width: 1023px) {
+  .searchResults {
+    gap: 30px;
+  }
+}
 @media (max-width: 480px) {
   .searchResults {
     width: 100%;

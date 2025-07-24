@@ -107,7 +107,7 @@ export default function ChatClient({
       </div>
       <main
         id="main-content"
-        className="transition-all duration-300 ease-in-out w-full md:w-[calc(100%-42px)] lg:w-[calc(100%-483px)] min-h-screen"
+        className="transition-all duration-300 ease-in-out w-full sm:w-[calc(100%-42px)] lg:w-[calc(100%-483px)] min-h-screen"
       >
         {children}
       </main>

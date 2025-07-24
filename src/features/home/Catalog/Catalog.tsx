@@ -14,7 +14,7 @@ export const Catalog = () => {
     setIsClient(true);
 
     if (typeof window !== "undefined") {
-      const mediaQuery = window.matchMedia("(min-width: 1719px)");
+      const mediaQuery = window.matchMedia("(min-width: 1536px)");
 
       const updateLimit = () => {
         if (mediaQuery.matches) {
@@ -37,7 +37,7 @@ export const Catalog = () => {
     if (limit === 4 || limit === 6) {
       setLimit(mockData.length);
     } else if (typeof window !== "undefined") {
-      const mediaQuery = window.matchMedia("(min-width: 1719px)");
+      const mediaQuery = window.matchMedia("(min-width: 1536px)");
       setLimit(mediaQuery.matches ? 6 : 4);
     }
   };
