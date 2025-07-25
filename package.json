@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.4",
+    "@tanstack/react-query": "^5.83.0",
     "apexcharts": "^4.7.0",
+    "axios": "^1.11.0",
     "framer-motion": "^12.23.6",
     "next": "15.3.5",
     "react": "^19.0.0",

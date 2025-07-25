@@ -4,6 +4,9 @@ import "./globals.css";
 import { MainContextProvider } from "@/context";
 import { Inter } from "next/font/google";
 
+import ReactQueryProvider from "@/app/ReactQueryProvider";
+// import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 const sfmono = localFont({
   src: [
     {
@@ -38,18 +41,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
       className={`${sfmono.variable} ${inter.variable} ${angelica.variable}`}
     >
       <body>
-        <main>
+        <ReactQueryProvider>
           <MainContextProvider>{children}</MainContextProvider>
-        </main>
+        </ReactQueryProvider>
       </body>
     </html>
   );

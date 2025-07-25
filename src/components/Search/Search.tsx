@@ -3,24 +3,40 @@ import styles from "./Search.module.css";
 
 import { Filter } from "./components/Filter/Filter";
 import { SearchResults } from "./components/SearchResults/SearchResults";
-
-import Navigation from "./components/Navigation/Navigation";
-import { ISearchProps, IWatch } from "@/interfaces";
-import { mockData } from "@/mock/watch";
 import SearchIcon from "../../../public/icons/search.svg";
+import Navigation from "./components/Navigation/Navigation";
 
-export const Search = ({
+import { Watch } from "@/types";
+import { useGetWatches } from "@/hooks/useGetWatches";
+
+interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  type?: string;
+  classNames?: string;
+}
+
+export const Search: React.FC<SearchProps> = ({
   type,
   classNames,
-  searchList,
   ...props
-}: ISearchProps) => {
+}) => {
+  const { data: watches = [] } = useGetWatches();
+
   const [searchVal, setSearchVal] = useState("");
-  const [searchResults, setSearchResults] = useState<IWatch[]>(mockData);
+  const [searchResults, setSearchResults] = useState<Watch[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [limit, setLimit] = useState({ min: 0, max: 8 });
   const [opened, setOpened] = useState(false);
+
+  // useEffect(() => {
+  //   setSearchResults(watches);
+  // }, [watches]);
+
+  useEffect(() => {
+    if (watches && searchResults.length === 0) {
+      setSearchResults(watches);
+    }
+  }, [watches]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -49,22 +65,24 @@ export const Search = ({
   }, [currentPage]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
     const value = e.target.value;
     setSearchVal(value);
 
     setTimeout(() => {
-      const result = searchList.filter((item) => item.title.includes(value));
-
       if (value === "") {
-        setSearchResults(mockData);
+        setSearchResults(watches);
         return;
       }
 
-      setSearchResults(result.length > 0 ? [...result] : []);
-    }, 2000);
-  };
+      const result = watches.filter(
+        (item) =>
+          item.model?.toLowerCase().includes(value.toLowerCase()) ||
+          item.brand?.toLowerCase().includes(value.toLowerCase())
+      );
 
+      setSearchResults(result);
+    }, 200);
+  };
   const totalPages = Math.ceil(searchResults.length / itemsPerPage);
 
   return (
@@ -120,7 +138,9 @@ export const Search = ({
           />
         </div>
       )}
-      <SearchResults items={searchResults.slice(limit.min, limit.max)} />
+      {watches.length > 0 && (
+        <SearchResults items={searchResults.slice(limit.min, limit.max)} />
+      )}
       {searchResults.length > 0 && (
         <Navigation
           totalPages={totalPages}

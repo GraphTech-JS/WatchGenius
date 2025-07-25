@@ -2,14 +2,16 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Catalog.module.css";
 import { Card } from "./components/Card/Card";
-import { mockData } from "@/mock/watch";
+// import { mockData } from "@/mock/watch";
 import { Button } from "@/components/Button/Button";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
+// import { Watch } from "@/types";
+import { useGetWatches } from "@/hooks/useGetWatches";
 
 export const Catalog = () => {
   const [limit, setLimit] = useState<number>(4);
   const [isClient, setIsClient] = useState(false);
-
+  const { data: watches = [] } = useGetWatches();
   useEffect(() => {
     setIsClient(true);
 
@@ -35,7 +37,7 @@ export const Catalog = () => {
 
   const showMore = () => {
     if (limit === 4 || limit === 6) {
-      setLimit(mockData.length);
+      setLimit(watches.length);
     } else if (typeof window !== "undefined") {
       const mediaQuery = window.matchMedia("(min-width: 1536px)");
       setLimit(mediaQuery.matches ? 6 : 4);
@@ -49,18 +51,9 @@ export const Catalog = () => {
           <div className={styles.catalogText}>
             <ThemedText type="h2">Каталог</ThemedText>
             <div className={styles.catalogCards}>
-              {mockData
-                .slice(0, isClient ? limit : 4)
-                .map(({ id, title, image, price, slug, changePercent }) => (
-                  <Card
-                    key={id}
-                    title={title}
-                    image={image}
-                    price={price}
-                    slug={slug}
-                    changePercent={changePercent}
-                  />
-                ))}
+              {(isClient ? watches : []).slice(0, limit).map((item) => (
+                <Card key={item.id} item={item} />
+              ))}
             </div>
             <Button
               variant="text"

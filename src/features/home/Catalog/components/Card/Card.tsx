@@ -1,26 +1,28 @@
 import React from "react";
-import CardMock from "../../../../../../public/catalog-section/mock.jpg";
+// import CardMock from "../../../../../../public/catalog-section/mock.jpg";
 import styles from "./Card.module.css";
 import Link from "next/link";
 import { Button } from "@/components/Button/Button";
 import { StarDarkIcon } from "../../../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 
+import { Watch } from "@/types";
+
 interface ICardProps {
-  title: string;
-  image: string;
-  price: string | number;
-  slug: string;
-  changePercent: number;
+  item: Watch;
 }
 
-export const Card = ({
-  title,
-  image,
-  price,
-  slug,
-  changePercent,
-}: ICardProps) => {
+export const Card = ({ item }: ICardProps) => {
+  const { name, model, image_url, ref } = item;
+
+  // тимчасове значення, поки немає поля ціни
+  const price = "19 500";
+  const changePercent = 9 as number; // тимчасово
+
+  const title = name || model || "Невідомий годинник";
+  const image = image_url;
+  const slug = ref;
+
   const isPositive = changePercent !== undefined && changePercent > 0;
   const isNegative = changePercent !== undefined && changePercent < 0;
 
@@ -35,11 +37,7 @@ export const Card = ({
   return (
     <div className={styles.card}>
       <div className={styles.cardContent}>
-        <img
-          src={image || CardMock.src}
-          alt="card image"
-          className={styles.cardImg}
-        />
+        <img src={image} alt="card image" className={styles.cardImg} />
         <div className={styles.cardElement}>
           <img
             src={StarDarkIcon.src}
@@ -52,7 +50,7 @@ export const Card = ({
           <h3 className={styles.cardTitle}>{title}</h3>
           <div className={styles.cardPriceWrapper}>
             <span className={styles.cardPrice}>{price} грн</span>
-            {changePercent !== undefined && changePercent !== 0 && (
+            {changePercent !== 0 && (
               <ThemedText
                 type="empty"
                 className=" font-sfmono font-semibold text-[20px]"
