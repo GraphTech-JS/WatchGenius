@@ -30,7 +30,10 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "WatchGenius",
-  description: "Keep track of your favorite watches and discover new ones.",
+  description:
+    "Keep track of your favorite watches, discover new ones, and stay updated with the latest trends in the world of horology.",
+  keywords:
+    "watches, watch tracker, luxury watches, watch collection, horology, watch enthusiasts",
 };
 
 export default function RootLayout({
