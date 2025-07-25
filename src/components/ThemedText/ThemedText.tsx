@@ -15,10 +15,9 @@ export function ThemedText({
   className = "",
   ...rest
 }: ThemedTextProps) {
+  const Tag = type === "empty" ? "span" : type;
+
   return (
-    <span
-      className={cn(styles.themedText, styles[type], className)}
-      {...rest}
-    />
+    <Tag className={cn(styles.themedText, styles[type], className)} {...rest} />
   );
 }
