@@ -3,69 +3,74 @@ import styles from "./Search.module.css";
 
 import { Filter } from "./components/Filter/Filter";
 import { SearchResults } from "./components/SearchResults/SearchResults";
-
-import Navigation from "./components/Navigation/Navigation";
-import { ISearchProps, IWatch } from "@/interfaces";
-import { mockData } from "@/mock/watch";
 import SearchIcon from "../../../public/icons/search.svg";
+import Navigation from "./components/Navigation/Navigation";
 
-export const Search = ({
+import { useDebounce } from "@/hooks/useDebounce";
+import { useGetWatchesPaginated } from "@/hooks/useGetWatchesPaginated";
+
+interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  type?: string;
+  classNames?: string;
+}
+
+export const Search: React.FC<SearchProps> = ({
   type,
   classNames,
-  searchList,
   ...props
-}: ISearchProps) => {
+}) => {
   const [searchVal, setSearchVal] = useState("");
-  const [searchResults, setSearchResults] = useState<IWatch[]>(mockData);
+  const debouncedSearchVal = useDebounce(searchVal, 2000);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
-  const [limit, setLimit] = useState({ min: 0, max: 8 });
   const [opened, setOpened] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-
-      let newItemsPerPage;
-      if (width >= 1537) {
-        newItemsPerPage = 9;
-      } else if (width <= 834) {
-        newItemsPerPage = 4;
-      } else {
-        newItemsPerPage = 8;
-      }
-
-      setItemsPerPage(newItemsPerPage);
-
-      setLimit({
-        min: (currentPage - 1) * newItemsPerPage,
-        max: currentPage * newItemsPerPage,
-      });
+      if (width >= 1537) setItemsPerPage(9);
+      else if (width <= 834) setItemsPerPage(4);
+      else setItemsPerPage(8);
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [currentPage]);
+  }, []);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const value = e.target.value;
-    setSearchVal(value);
+  // Підтягуємо годинники з бекенду з урахуванням пагінації
+  const [brandFilter, setBrandFilter] = useState<string | undefined>(undefined);
+  const [priceFilter, setPriceFilter] = useState<string | undefined>(undefined);
 
-    setTimeout(() => {
-      const result = searchList.filter((item) => item.title.includes(value));
+  // Фетч годинників з усіма параметрами
+  const { data, isLoading, isError } = useGetWatchesPaginated(
+    currentPage,
+    itemsPerPage,
+    brandFilter,
+    debouncedSearchVal
+  );
 
-      if (value === "") {
-        setSearchResults(mockData);
-        return;
-      }
+  const filteredResults = data?.watches || [];
+  const totalPages = data?.pagination.totalPages || 1;
 
-      setSearchResults(result.length > 0 ? [...result] : []);
-    }, 2000);
+  // Скидаємо сторінку при зміні фільтрів або пошуку
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchVal, itemsPerPage, brandFilter, priceFilter]);
+
+  // Колбек для зміни фільтрів
+  const handleFilterChange = (filterName: string, selectedValue: string) => {
+    if (filterName === "brand") {
+      setBrandFilter(selectedValue);
+    }
+    if (filterName === "price") {
+      setPriceFilter(selectedValue);
+      // додати логіку для price range, якщо потрібна
+    }
   };
 
-  const totalPages = Math.ceil(searchResults.length / itemsPerPage);
+  if (isLoading) return <div>Завантаження...</div>;
+  if (isError) return <div>Помилка завантаження</div>;
 
   return (
     <div className={styles.search}>
@@ -77,7 +82,7 @@ export const Search = ({
               value={searchVal}
               className={`${styles.catalogSearchInput} ${classNames}`}
               placeholder="Пошук"
-              onChange={handleSearch}
+              onChange={(e) => setSearchVal(e.target.value)}
               {...props}
             />
             <button className={styles.catalogSearchBtn}>
@@ -102,37 +107,23 @@ export const Search = ({
                 options: ["до 100$", ">100$", ">500$", ">1000$"],
                 id: 2,
               },
-              // {
-              //   label: "Матеріал",
-              //   value: "material",
-              //   options: ["золото", "срібло", "алюміній"],
-              //   id: 3,
-              // },
-              // {
-              //   label: "Колір",
-              //   value: "сolor",
-              //   options: ["золотий", "срібний", "чорний"],
-              //   id: 4,
-              // },
             ]}
             opened={opened}
             setOpened={setOpened}
+            onFilterChange={handleFilterChange}
           />
         </div>
       )}
-      <SearchResults items={searchResults.slice(limit.min, limit.max)} />
-      {searchResults.length > 0 && (
-        <Navigation
-          totalPages={totalPages}
-          initialPage={currentPage}
-          onPageChange={(page) => {
-            setCurrentPage(page);
-            setLimit({
-              min: (page - 1) * itemsPerPage,
-              max: page * itemsPerPage,
-            });
-          }}
-        />
+
+      {filteredResults.length > 0 && (
+        <>
+          <SearchResults items={filteredResults} />
+          <Navigation
+            totalPages={totalPages}
+            initialPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
+        </>
       )}
     </div>
   );

@@ -1,20 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Filter.module.css";
 import { Filter as FilterIcon } from "../../../../../public/icons";
 import { Select } from "@/components/Select";
 
-interface IFilter {
-  options: {
-    label: string;
-    value: string;
-    id: number;
-    options: string[];
-  }[];
-  opened: boolean;
-  setOpened: (opened: boolean) => void;
+// Тип для одного фільтру
+interface FilterOption {
+  label: string; // Назва фільтра для placeholder (наприклад, "Бренд")
+  value: string; // Унікальний ключ (наприклад, "brand" або "price")
+  id: number; // Унікальний id фільтра
+  options: string[]; // Значення, які можна вибрати
 }
 
-export const Filter = ({ opened, setOpened, options }: IFilter) => {
+// Тип для пропсів компонента
+interface IFilter {
+  options: FilterOption[];
+  opened: boolean;
+  setOpened: (opened: boolean) => void;
+
+  // Колбек, який викликається при виборі значення в будь-якому фільтрі
+  onFilterChange?: (filterName: string, selectedValue: string) => void;
+}
+
+export const Filter = ({
+  opened,
+  setOpened,
+  options,
+  onFilterChange,
+}: IFilter) => {
+  // Локальний стан для збереження вибраних опцій по кожному фільтру
+  const [selectedValues, setSelectedValues] = useState<Record<string, string>>(
+    {}
+  );
+
+  const handleChange = (filterName: string, selectedOption: string) => {
+    setSelectedValues((prev) => ({
+      ...prev,
+      [filterName]: selectedOption,
+    }));
+
+    if (onFilterChange) {
+      onFilterChange(filterName, selectedOption);
+    }
+  };
+
+  // скинути вибір при закритті фільтрів
+  // useEffect(() => {
+  //   if (!opened) {
+  //     setSelectedValues({});
+  //   }
+  // }, [opened]);
+
   return (
     <div className={styles.filter}>
       <button className={styles.filterBtn} onClick={() => setOpened(!opened)}>
@@ -26,15 +61,16 @@ export const Filter = ({ opened, setOpened, options }: IFilter) => {
       </button>
       {opened && (
         <div className={styles.filterDropdown}>
-          {options.map(({ options, label, value, id }) => (
+          {options.map(({ options: filterOptions, label, value, id }) => (
             <Select
               key={id}
-              options={options.map((option) => ({
+              options={filterOptions.map((option) => ({
                 value: option,
                 label: option,
               }))}
-              value={value}
+              value={selectedValues[value] || ""}
               placeholder={label}
+              onChange={(selectedValue) => handleChange(value, selectedValue)}
             />
           ))}
         </div>

@@ -1,28 +1,34 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import supabase from '../lib/supabaseClient';
+// import { useEffect, useState } from "react";
+// import supabase from "../lib/supabaseClient";
 
-type Watch = {
-  id: string;
-  brand: string;
-  ref: string;
-  name: string;
-  image_url: string;
-};
+import { useGetWatches } from "@/hooks/useGetWatches";
+
+// type Watch = {
+//   id: string;
+//   brand: string;
+//   ref: string;
+//   name: string;
+//   image_url: string;
+// };
 
 export default function WatchesList() {
-  const [watches, setWatches] = useState<Watch[]>([]);
+  // const [watches, setWatches] = useState<Watch[]>([]);
+  const { data: watches = [], isLoading, error } = useGetWatches();
 
-  useEffect(() => {
-    const fetchWatches = async () => {
-      const { data, error } = await supabase.from('watches').select('*');
-      if (error) console.error('Помилка завантаження:', error);
-      else setWatches(data || []);
-    };
+  if (isLoading) return <p>Завантаження...</p>;
+  if (error) return <p>Помилка при завантаженні годинників</p>;
 
-    fetchWatches();
-  }, []);
+  // useEffect(() => {
+  //   const fetchWatches = async () => {
+  //     const { data, error } = await supabase.from("watches").select("*");
+  //     if (error) console.error("Помилка завантаження:", error);
+  //     else setWatches(data || []);
+  //   };
+
+  //   fetchWatches();
+  // }, []);
 
   return (
     <div className="p-4">
