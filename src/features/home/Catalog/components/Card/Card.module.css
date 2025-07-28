@@ -16,6 +16,7 @@
 .cardElement {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 7px;
   padding: 5px 11px 6px 10px;
   margin: 32px 25px 0 0;
@@ -24,6 +25,7 @@
   position: absolute;
   right: 0;
   top: 0;
+  width: 160px;
 }
 .cardElementStarIcon {
   width: 21px;

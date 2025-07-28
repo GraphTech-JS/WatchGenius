@@ -99,10 +99,7 @@ const Product = () => {
           <ThemedText type="h2">Графік цін</ThemedText>
           <div className={styles.productGraphSection}>
             <div className={styles.productGraphChart}>
-              <CustomAreaChart
-                containerClassName={styles.productChartContainer}
-                controls={true}
-              />
+              <CustomAreaChart controls />
             </div>
 
             <Button

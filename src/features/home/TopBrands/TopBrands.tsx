@@ -25,7 +25,7 @@ export const TopBrands = () => {
       <div className={styles.topBrandsContainer}>
         <ThemedText type="h2">Топ 5 брендів</ThemedText>
         <Slider items={brands} />
-        <CustomAreaChart />
+        <CustomAreaChart controls />
         <Indicators />
       </div>
     </section>

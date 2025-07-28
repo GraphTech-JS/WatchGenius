@@ -3,7 +3,7 @@
   padding: 1rem 0;
   z-index: 90;
   position: relative;
-  padding: 17px 70px;
+  padding: 10px 70px;
 }
 
 .headerContainer {
@@ -15,26 +15,15 @@
 }
 
 .headerLogo {
-  font-size: 24px;
-  color: var(--white);
-  text-decoration: none;
-  transition: all 0.3s ease;
-  border-radius: 8px;
-}
-
-.headerLogo:hover {
-  text-shadow: 0 0 10px rgba(250, 250, 250, 0.8);
+  width: 208px;
+  height: 40px;
 }
 
 .headerLink {
   color: var(--white);
-  font-family: "Inter", sans-serif;
-  font-size: 1.25rem;
-  margin: 0 1rem;
+  font-size: 16px;
   text-decoration: none;
   transition: all 0.3s ease;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
   position: relative;
 }
 
@@ -44,6 +33,7 @@
 
 .headerRightLinks {
   display: flex;
+  gap: 50px;
 }
 
 .headerLangSwitchBtn,

@@ -28,4 +28,6 @@ export { default as DocsDark } from "./docs-dark.svg";
 export { default as SessionDark } from "./session-dark.svg";
 export { default as SettingsDark } from "./settings-dark.svg";
 export { default as StarDarkIcon } from "./star-dark.svg";
+export { default as Discord } from "./Discord.svg";
+export { default as Telegram } from "./Telegram.svg";
 //Add more icons in future

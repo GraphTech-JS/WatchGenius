@@ -11,13 +11,10 @@ export default function RootLayout({
   return (
     <div className="relative min-h-screen">
       <Header />
-
       <ChatClient>{children}</ChatClient>
-
       <section id="contacts">
         <Contacts />
       </section>
-
       <Footer />
     </div>
   );

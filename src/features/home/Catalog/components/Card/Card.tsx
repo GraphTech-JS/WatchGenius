@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CardMock from "../../../../../../public/catalog-section/mock.jpg";
 import styles from "./Card.module.css";
 import Link from "next/link";
@@ -23,6 +23,9 @@ export const Card = ({
 }: ICardProps) => {
   const isPositive = changePercent !== undefined && changePercent > 0;
   const isNegative = changePercent !== undefined && changePercent < 0;
+  const [hovered, setHovered] = useState(false);
+  const handleMouseEnter = () => setHovered(true);
+  const handleMouseLeave = () => setHovered(false);
 
   const changeColor = isPositive
     ? "#00D26AF4"
@@ -46,7 +49,14 @@ export const Card = ({
             alt="star icon"
             className={styles.cardElementStarIcon}
           />
-          <span className={styles.cardElementText}>Надійний бренд</span>
+
+          <span
+            className={styles.cardElementText}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            {hovered ? "80-100" : "Надійний бренд"}
+          </span>
         </div>
         <div className={styles.cardText}>
           <h3 className={styles.cardTitle}>{title}</h3>
