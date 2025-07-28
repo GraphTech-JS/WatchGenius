@@ -1,19 +1,19 @@
 import React from "react";
 import styles from "./Card.module.css";
-import Link from "next/link";
 import { Button } from "@/components/Button/Button";
 import { StarDarkIcon } from "../../../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { Watch } from "@/types";
 import { useGetWatchById } from "@/hooks/useGetWatchById";
+import { useRouter } from "next/navigation";
 
 interface ICardProps {
   item: Watch;
 }
 
 export const Card = ({ item }: ICardProps) => {
-  const { name, model, image_url, ref, id } = item;
-
+  const { name, model, image_url, id } = item;
+  const router = useRouter();
   const { data: detailedWatch, isLoading } = useGetWatchById(id);
 
   const latestPrice =
@@ -44,7 +44,6 @@ export const Card = ({ item }: ICardProps) => {
 
   const title = name || model || "Невідомий годинник";
   const image = image_url?.trim() ? image_url : "/catalog-section/mock.jpg";
-  const slug = ref;
 
   const isPositive = changePercent !== undefined && changePercent > 0;
   const isNegative = changePercent !== undefined && changePercent < 0;
@@ -55,7 +54,10 @@ export const Card = ({ item }: ICardProps) => {
     : "#9e9e9e";
 
   const arrow = isPositive ? "↑" : isNegative ? "↓" : "";
-
+  // перехід на сторінку товару за ID
+  const handleClick = () => {
+    router.push(`/product/${id}`);
+  };
   return (
     <div className={styles.card}>
       <div className={styles.cardContent}>
@@ -85,11 +87,14 @@ export const Card = ({ item }: ICardProps) => {
             )}
           </div>
         </div>
-        <Link href={`/product/${slug}`} className={styles.cardLink}>
-          <Button variant="solid" classNames={styles.cardBtn}>
-            Дізнатись більше
-          </Button>
-        </Link>
+
+        <Button
+          variant="solid"
+          classNames={styles.cardBtn}
+          onClick={handleClick}
+        >
+          Дізнатись більше
+        </Button>
       </div>
     </div>
   );

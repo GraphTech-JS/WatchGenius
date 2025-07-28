@@ -20,7 +20,7 @@ export const Search: React.FC<SearchProps> = ({
   ...props
 }) => {
   const [searchVal, setSearchVal] = useState("");
-  const debouncedSearchVal = useDebounce(searchVal, 500);
+  const debouncedSearchVal = useDebounce(searchVal, 2000);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [opened, setOpened] = useState(false);
