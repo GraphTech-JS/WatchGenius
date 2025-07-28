@@ -6,6 +6,7 @@ import { Button } from "@/components/Button/Button";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { useGetWatchesPaginated } from "@/hooks/useGetWatchesPaginated";
 import { Watch } from "@/types";
+import { useExchangeRate } from "@/hooks/useExchangeRate";
 
 export const Catalog = () => {
   const [limit, setLimit] = useState<number>(4);
@@ -61,7 +62,10 @@ export const Catalog = () => {
       }
     }
   };
-
+  const { rate: usdToUah } = useExchangeRate("USD");
+  if (usdToUah === null) {
+    return <p>Завантаження</p>;
+  }
   if (isLoading) return <div>Завантаження...</div>;
   if (isError) return <div>Помилка завантаження даних</div>;
 
@@ -73,7 +77,7 @@ export const Catalog = () => {
             <ThemedText type="h2">Каталог</ThemedText>
             <div className={styles.catalogCards}>
               {(isClient ? watchesAccumulated : []).map((item) => (
-                <Card key={item.id} item={item} />
+                <Card key={item.id} item={item} exchangeRate={usdToUah} />
               ))}
             </div>
             <Button

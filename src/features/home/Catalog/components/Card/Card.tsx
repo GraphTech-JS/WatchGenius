@@ -9,12 +9,15 @@ import { useRouter } from "next/navigation";
 
 interface ICardProps {
   item: Watch;
+  exchangeRate: number;
 }
 
-export const Card = ({ item }: ICardProps) => {
+export const Card = ({ item, exchangeRate }: ICardProps) => {
   const { name, model, image_url, id } = item;
   const router = useRouter();
   const { data: detailedWatch, isLoading } = useGetWatchById(id);
+
+  // const { rate: usdToUah } = useExchangeRate("USD"); //отримуємо курс
 
   const latestPrice =
     detailedWatch?.price_history?.length &&
@@ -23,9 +26,16 @@ export const Card = ({ item }: ICardProps) => {
         new Date(b.recorded_at).getTime() - new Date(a.recorded_at).getTime()
     )[0]?.price;
 
-  const price = latestPrice
-    ? `${latestPrice.toLocaleString()} грн`
-    : "Невідомо";
+  // визначення ціни в UAH
+
+  const priceInUAH =
+    latestPrice && exchangeRate
+      ? `${Math.round(latestPrice * exchangeRate).toLocaleString()} грн`
+      : "Невідомо";
+  // визначення ціни в USD
+  // const price = latestPrice
+  //   ? `${latestPrice.toLocaleString()} USD`
+  //   : "Невідомо";
 
   const sortedPrices = detailedWatch?.price_history
     ?.slice()
@@ -74,7 +84,7 @@ export const Card = ({ item }: ICardProps) => {
           <h3 className={styles.cardTitle}>{title}</h3>
           <div className={styles.cardPriceWrapper}>
             <span className={styles.cardPrice}>
-              {isLoading ? "Завантаження..." : price}
+              {isLoading ? "Завантаження..." : priceInUAH}
             </span>
             {changePercent !== 0 && (
               <ThemedText
