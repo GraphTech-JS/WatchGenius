@@ -1,17 +1,19 @@
 import axiosWithAuth from "@/api/axios";
 import { Watch } from "@/types";
+import { WatchesResponse } from "@/types";
 
 export default class WatchService {
-  static async getWatches(): Promise<Watch[]> {
-    const res = await axiosWithAuth.get("/watches");
-    return res.data.data.watches; // повертаємо лише масив
+  static async getWatches(page = 1, limit = 8): Promise<WatchesResponse> {
+    const res = await axiosWithAuth.get("/watches", {
+      params: { page, limit },
+    });
+    return res.data.data;
   }
 
   static async getWatchById(id: string): Promise<Watch> {
-    const { data } = await axiosWithAuth.get<Watch>(`/watches/${id}`);
-    return data;
+    const response = await axiosWithAuth.get(`/watches/${id}`);
+    return response.data.data;
   }
-
   static async createWatch(payload: Partial<Watch>): Promise<Watch> {
     const { data } = await axiosWithAuth.post<Watch>("/watches", payload);
     return data;

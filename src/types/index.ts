@@ -7,4 +7,19 @@ export type Watch = {
   ref?: string;
   name?: string;
   created_at?: string;
+  price_history?: PriceHistory[];
 };
+export type PriceHistory = {
+  id: string;
+  price: number;
+  recorded_at: string;
+};
+export interface WatchesResponse {
+  watches: Watch[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}

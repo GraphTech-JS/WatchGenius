@@ -6,8 +6,7 @@ import { SearchResults } from "./components/SearchResults/SearchResults";
 import SearchIcon from "../../../public/icons/search.svg";
 import Navigation from "./components/Navigation/Navigation";
 
-import { Watch } from "@/types";
-import { useGetWatches } from "@/hooks/useGetWatches";
+import { useGetWatchesPaginated } from "@/hooks/useGetWatchesPaginated";
 
 interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: string;
@@ -19,71 +18,56 @@ export const Search: React.FC<SearchProps> = ({
   classNames,
   ...props
 }) => {
-  const { data: watches = [] } = useGetWatches();
-
   const [searchVal, setSearchVal] = useState("");
-  const [searchResults, setSearchResults] = useState<Watch[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
-  const [limit, setLimit] = useState({ min: 0, max: 8 });
   const [opened, setOpened] = useState(false);
 
-  // useEffect(() => {
-  //   setSearchResults(watches);
-  // }, [watches]);
-
-  useEffect(() => {
-    if (watches && searchResults.length === 0) {
-      setSearchResults(watches);
-    }
-  }, [watches]);
-
+  // Слухаємо розмір екрану для адаптивного itemsPerPage
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-
-      let newItemsPerPage;
-      if (width >= 1537) {
-        newItemsPerPage = 9;
-      } else if (width <= 834) {
-        newItemsPerPage = 4;
-      } else {
-        newItemsPerPage = 8;
-      }
-
-      setItemsPerPage(newItemsPerPage);
-
-      setLimit({
-        min: (currentPage - 1) * newItemsPerPage,
-        max: currentPage * newItemsPerPage,
-      });
+      if (width >= 1537) setItemsPerPage(9);
+      else if (width <= 834) setItemsPerPage(4);
+      else setItemsPerPage(8);
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [currentPage]);
+  }, []);
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchVal(value);
+  // Підтягуємо годинники з бекенду з урахуванням пагінації
+  // Для пошуку треба, щоб WatchService.getWatches підтримував параметр search (потрібно додати на бекенді)
+  const { data, isLoading, isError } = useGetWatchesPaginated(
+    currentPage,
+    itemsPerPage
+  );
 
-    setTimeout(() => {
-      if (value === "") {
-        setSearchResults(watches);
-        return;
-      }
+  // Якщо API підтримує пошук, додаємо searchVal у запит і скидаємо сторінку при зміні пошуку
+  // Якщо ні, поки працюємо з локальним пошуком по отриманих даних
 
-      const result = watches.filter(
-        (item) =>
-          item.model?.toLowerCase().includes(value.toLowerCase()) ||
-          item.brand?.toLowerCase().includes(value.toLowerCase())
-      );
+  // Поки що локальний фільтр (замість бекендового) — можна переписати пізніше
+  const filteredResults = React.useMemo(() => {
+    if (!data?.watches) return [];
+    if (!searchVal.trim()) return data.watches;
 
-      setSearchResults(result);
-    }, 200);
-  };
-  const totalPages = Math.ceil(searchResults.length / itemsPerPage);
+    return data.watches.filter(
+      (item) =>
+        item.model?.toLowerCase().includes(searchVal.toLowerCase()) ||
+        item.brand?.toLowerCase().includes(searchVal.toLowerCase())
+    );
+  }, [data?.watches, searchVal]);
+
+  const totalPages = data?.pagination.totalPages || 1;
+
+  // Якщо пошук змінився — скидаємо сторінку назад на 1
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchVal, itemsPerPage]);
+
+  if (isLoading) return <div>Завантаження...</div>;
+  if (isError) return <div>Помилка завантаження</div>;
 
   return (
     <div className={styles.search}>
@@ -95,7 +79,7 @@ export const Search: React.FC<SearchProps> = ({
               value={searchVal}
               className={`${styles.catalogSearchInput} ${classNames}`}
               placeholder="Пошук"
-              onChange={handleSearch}
+              onChange={(e) => setSearchVal(e.target.value)}
               {...props}
             />
             <button className={styles.catalogSearchBtn}>
@@ -120,39 +104,22 @@ export const Search: React.FC<SearchProps> = ({
                 options: ["до 100$", ">100$", ">500$", ">1000$"],
                 id: 2,
               },
-              // {
-              //   label: "Матеріал",
-              //   value: "material",
-              //   options: ["золото", "срібло", "алюміній"],
-              //   id: 3,
-              // },
-              // {
-              //   label: "Колір",
-              //   value: "сolor",
-              //   options: ["золотий", "срібний", "чорний"],
-              //   id: 4,
-              // },
             ]}
             opened={opened}
             setOpened={setOpened}
           />
         </div>
       )}
-      {watches.length > 0 && (
-        <SearchResults items={searchResults.slice(limit.min, limit.max)} />
-      )}
-      {searchResults.length > 0 && (
-        <Navigation
-          totalPages={totalPages}
-          initialPage={currentPage}
-          onPageChange={(page) => {
-            setCurrentPage(page);
-            setLimit({
-              min: (page - 1) * itemsPerPage,
-              max: page * itemsPerPage,
-            });
-          }}
-        />
+
+      {filteredResults.length > 0 && (
+        <>
+          <SearchResults items={filteredResults} />
+          <Navigation
+            totalPages={totalPages}
+            initialPage={currentPage}
+            onPageChange={setCurrentPage}
+          />
+        </>
       )}
     </div>
   );

@@ -2,47 +2,68 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Catalog.module.css";
 import { Card } from "./components/Card/Card";
-// import { mockData } from "@/mock/watch";
 import { Button } from "@/components/Button/Button";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
-// import { Watch } from "@/types";
-import { useGetWatches } from "@/hooks/useGetWatches";
+import { useGetWatchesPaginated } from "@/hooks/useGetWatchesPaginated";
+import { Watch } from "@/types";
 
 export const Catalog = () => {
   const [limit, setLimit] = useState<number>(4);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [watchesAccumulated, setWatchesAccumulated] = useState<Watch[]>([]);
   const [isClient, setIsClient] = useState(false);
-  const { data: watches = [] } = useGetWatches();
+
+  const { data, isLoading, isError } = useGetWatchesPaginated(
+    currentPage,
+    limit
+  );
+
   useEffect(() => {
     setIsClient(true);
 
-    if (typeof window !== "undefined") {
-      const mediaQuery = window.matchMedia("(min-width: 1536px)");
+    const mediaQuery = window.matchMedia("(min-width: 1536px)");
 
-      const updateLimit = () => {
-        if (mediaQuery.matches) {
-          setLimit(6);
-        } else {
-          setLimit(4);
-        }
-      };
+    const updateLimit = () => {
+      if (mediaQuery.matches) {
+        setLimit(6);
+      } else {
+        setLimit(4);
+      }
+      setCurrentPage(1);
+      setWatchesAccumulated([]);
+    };
 
-      updateLimit();
-      mediaQuery.addEventListener("change", updateLimit);
+    updateLimit();
+    mediaQuery.addEventListener("change", updateLimit);
 
-      return () => {
-        mediaQuery.removeEventListener("change", updateLimit);
-      };
-    }
+    return () => {
+      mediaQuery.removeEventListener("change", updateLimit);
+    };
   }, []);
 
+  useEffect(() => {
+    if (data?.watches) {
+      if (currentPage === 1) {
+        setWatchesAccumulated(data.watches);
+      } else {
+        setWatchesAccumulated((prev) => [...prev, ...data.watches]);
+      }
+    }
+  }, [data, currentPage]);
+
   const showMore = () => {
-    if (limit === 4 || limit === 6) {
-      setLimit(watches.length);
-    } else if (typeof window !== "undefined") {
-      const mediaQuery = window.matchMedia("(min-width: 1536px)");
-      setLimit(mediaQuery.matches ? 6 : 4);
+    if (data?.pagination) {
+      if (currentPage < data.pagination.totalPages) {
+        setCurrentPage((prev) => prev + 1);
+      } else {
+        setCurrentPage(1);
+        setWatchesAccumulated([]);
+      }
     }
   };
+
+  if (isLoading) return <div>Завантаження...</div>;
+  if (isError) return <div>Помилка завантаження даних</div>;
 
   return (
     <section id="catalog" className={styles.catalog}>
@@ -51,7 +72,7 @@ export const Catalog = () => {
           <div className={styles.catalogText}>
             <ThemedText type="h2">Каталог</ThemedText>
             <div className={styles.catalogCards}>
-              {(isClient ? watches : []).slice(0, limit).map((item) => (
+              {(isClient ? watchesAccumulated : []).map((item) => (
                 <Card key={item.id} item={item} />
               ))}
             </div>
@@ -61,7 +82,9 @@ export const Catalog = () => {
               classNames={styles.catalogBtn}
               onClick={showMore}
             >
-              {limit === 4 || limit === 6 ? "Більше" : "Менше"}
+              {currentPage < (data?.pagination?.totalPages || 1)
+                ? "Більше"
+                : "Менше"}
             </Button>
           </div>
         </div>

@@ -1,31 +1,53 @@
 import React from "react";
-// import CardMock from "../../../../../../public/catalog-section/mock.jpg";
 import styles from "./Card.module.css";
 import Link from "next/link";
 import { Button } from "@/components/Button/Button";
 import { StarDarkIcon } from "../../../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
-
 import { Watch } from "@/types";
+import { useGetWatchById } from "@/hooks/useGetWatchById";
 
 interface ICardProps {
   item: Watch;
 }
 
 export const Card = ({ item }: ICardProps) => {
-  const { name, model, image_url, ref } = item;
+  const { name, model, image_url, ref, id } = item;
 
-  // тимчасове значення, поки немає поля ціни
-  const price = "19 500";
-  const changePercent = 9 as number; // тимчасово
+  const { data: detailedWatch, isLoading } = useGetWatchById(id);
+
+  const latestPrice =
+    detailedWatch?.price_history?.length &&
+    [...detailedWatch.price_history].sort(
+      (a, b) =>
+        new Date(b.recorded_at).getTime() - new Date(a.recorded_at).getTime()
+    )[0]?.price;
+
+  const price = latestPrice
+    ? `${latestPrice.toLocaleString()} грн`
+    : "Невідомо";
+
+  const sortedPrices = detailedWatch?.price_history
+    ?.slice()
+    .sort(
+      (a, b) =>
+        new Date(b.recorded_at).getTime() - new Date(a.recorded_at).getTime()
+    );
+
+  const latest = sortedPrices?.[0]?.price;
+  const previous = sortedPrices?.[1]?.price;
+
+  const changePercent =
+    latest && previous
+      ? Number((((latest - previous) / previous) * 100).toFixed(2))
+      : 0;
 
   const title = name || model || "Невідомий годинник";
-  const image = image_url;
+  const image = image_url?.trim() ? image_url : "/catalog-section/mock.jpg";
   const slug = ref;
 
   const isPositive = changePercent !== undefined && changePercent > 0;
   const isNegative = changePercent !== undefined && changePercent < 0;
-
   const changeColor = isPositive
     ? "#00D26AF4"
     : isNegative
@@ -49,7 +71,9 @@ export const Card = ({ item }: ICardProps) => {
         <div className={styles.cardText}>
           <h3 className={styles.cardTitle}>{title}</h3>
           <div className={styles.cardPriceWrapper}>
-            <span className={styles.cardPrice}>{price} грн</span>
+            <span className={styles.cardPrice}>
+              {isLoading ? "Завантаження..." : price}
+            </span>
             {changePercent !== 0 && (
               <ThemedText
                 type="empty"
