@@ -1,11 +1,15 @@
 import axiosWithAuth from "@/api/axios";
 import { Watch } from "@/types";
 import { WatchesResponse } from "@/types";
+import { GetWatchesParams } from "@/types";
 
 export default class WatchService {
-  static async getWatches(page = 1, limit = 8): Promise<WatchesResponse> {
+  static async getWatches(
+    params: GetWatchesParams = {}
+  ): Promise<WatchesResponse> {
+    const { page = 1, limit = 8, brand, search } = params;
     const res = await axiosWithAuth.get("/watches", {
-      params: { page, limit },
+      params: { page, limit, brand, search },
     });
     return res.data.data;
   }

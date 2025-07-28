@@ -6,6 +6,7 @@ import { SearchResults } from "./components/SearchResults/SearchResults";
 import SearchIcon from "../../../public/icons/search.svg";
 import Navigation from "./components/Navigation/Navigation";
 
+import { useDebounce } from "@/hooks/useDebounce";
 import { useGetWatchesPaginated } from "@/hooks/useGetWatchesPaginated";
 
 interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -19,11 +20,11 @@ export const Search: React.FC<SearchProps> = ({
   ...props
 }) => {
   const [searchVal, setSearchVal] = useState("");
+  const debouncedSearchVal = useDebounce(searchVal, 500);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(8);
   const [opened, setOpened] = useState(false);
 
-  // Слухаємо розмір екрану для адаптивного itemsPerPage
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -38,33 +39,35 @@ export const Search: React.FC<SearchProps> = ({
   }, []);
 
   // Підтягуємо годинники з бекенду з урахуванням пагінації
-  // Для пошуку треба, щоб WatchService.getWatches підтримував параметр search (потрібно додати на бекенді)
+  const [brandFilter, setBrandFilter] = useState<string | undefined>(undefined);
+  const [priceFilter, setPriceFilter] = useState<string | undefined>(undefined);
+
+  // Фетч годинників з усіма параметрами
   const { data, isLoading, isError } = useGetWatchesPaginated(
     currentPage,
-    itemsPerPage
+    itemsPerPage,
+    brandFilter,
+    debouncedSearchVal
   );
 
-  // Якщо API підтримує пошук, додаємо searchVal у запит і скидаємо сторінку при зміні пошуку
-  // Якщо ні, поки працюємо з локальним пошуком по отриманих даних
-
-  // Поки що локальний фільтр (замість бекендового) — можна переписати пізніше
-  const filteredResults = React.useMemo(() => {
-    if (!data?.watches) return [];
-    if (!searchVal.trim()) return data.watches;
-
-    return data.watches.filter(
-      (item) =>
-        item.model?.toLowerCase().includes(searchVal.toLowerCase()) ||
-        item.brand?.toLowerCase().includes(searchVal.toLowerCase())
-    );
-  }, [data?.watches, searchVal]);
-
+  const filteredResults = data?.watches || [];
   const totalPages = data?.pagination.totalPages || 1;
 
-  // Якщо пошук змінився — скидаємо сторінку назад на 1
+  // Скидаємо сторінку при зміні фільтрів або пошуку
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchVal, itemsPerPage]);
+  }, [debouncedSearchVal, itemsPerPage, brandFilter, priceFilter]);
+
+  // Колбек для зміни фільтрів
+  const handleFilterChange = (filterName: string, selectedValue: string) => {
+    if (filterName === "brand") {
+      setBrandFilter(selectedValue);
+    }
+    if (filterName === "price") {
+      setPriceFilter(selectedValue);
+      // додати логіку для price range, якщо потрібна
+    }
+  };
 
   if (isLoading) return <div>Завантаження...</div>;
   if (isError) return <div>Помилка завантаження</div>;
@@ -107,6 +110,7 @@ export const Search: React.FC<SearchProps> = ({
             ]}
             opened={opened}
             setOpened={setOpened}
+            onFilterChange={handleFilterChange}
           />
         </div>
       )}

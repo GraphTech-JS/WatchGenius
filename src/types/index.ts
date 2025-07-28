@@ -14,6 +14,13 @@ export type PriceHistory = {
   price: number;
   recorded_at: string;
 };
+export type GetWatchesParams = {
+  page?: number;
+  limit?: number;
+  brand?: string;
+  search?: string;
+};
+
 export interface WatchesResponse {
   watches: Watch[];
   pagination: {
