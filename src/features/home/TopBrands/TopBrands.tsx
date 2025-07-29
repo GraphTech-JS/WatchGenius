@@ -6,6 +6,7 @@ import { Slider } from "@/components/Slider/Slider";
 import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
 import { Indicators } from "../Indicators/Indicators";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
+import { threeMonthDataMock, yearDataMock } from "@/mock/data";
 
 const brands = [
   { name: "Rolex", logo: Rolex.src, id: 1 },
@@ -25,7 +26,11 @@ export const TopBrands = () => {
       <div className={styles.topBrandsContainer}>
         <ThemedText type="h2">Топ 5 брендів</ThemedText>
         <Slider items={brands} />
-        <CustomAreaChart controls />
+        <CustomAreaChart
+          controls
+          yearData={yearDataMock}
+          threeMonthData={threeMonthDataMock}
+        />
         <Indicators />
       </div>
     </section>

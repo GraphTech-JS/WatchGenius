@@ -28,6 +28,11 @@
   flex-direction: column;
 }
 
+.controlButtons {
+  display: flex;
+  gap: 33px;
+}
+
 .controlButtonsMob {
   display: none;
 }
@@ -100,7 +105,7 @@
 
   .controlButtonsMob {
     margin-bottom: 25px;
-    display: block;
+    display: flex;
   }
 
   .container,

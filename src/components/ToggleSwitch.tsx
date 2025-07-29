@@ -1,16 +1,21 @@
-"use client";
 import React, { useState } from "react";
 
-interface ToggleSwitchProps {
-  onChange: (value: "year" | "month") => void;
+interface ToggleSwitchProps<T> {
+  options: T[];
+  onChange: (value: T) => void;
+  displayValues: string[];
 }
 
-export const ToggleSwitch = ({ onChange }: ToggleSwitchProps) => {
-  const [active, setActive] = useState<"year" | "month">("year");
+export const ToggleSwitch = <T extends string | number>({
+  options,
+  onChange,
+  displayValues,
+}: ToggleSwitchProps<T>) => {
+  const [active, setActive] = useState<T>(options[0]);
 
-  const handleChange = (val: "year" | "month") => {
+  const handleChange = (val: T) => {
     setActive(val);
-    onChange(val); // передаем наружу
+    onChange(val);
   };
 
   return (
@@ -18,28 +23,22 @@ export const ToggleSwitch = ({ onChange }: ToggleSwitchProps) => {
       <div
         className={`absolute top-0 h-full bg-black rounded-[5px] transition-all duration-300`}
         style={{
-          width: active === "year" ? "55%" : "55%",
-          left: active === "year" ? "0%" : "45%",
+          width: `${100 / options.length}%`,
+          left: `${(options.indexOf(active) / options.length) * 100}%`,
         }}
       ></div>
 
-      <button
-        onClick={() => handleChange("year")}
-        className={`flex-1 z-10 flex items-center justify-center font-medium transition-all duration-300 ${
-          active === "year" ? "text-white scale-105" : "text-black scale-95"
-        }`}
-      >
-        1 рік
-      </button>
-
-      <button
-        onClick={() => handleChange("month")}
-        className={`flex-1 z-10 flex items-center justify-center font-medium transition-all duration-300 ${
-          active === "month" ? "text-white scale-105" : "text-black scale-95"
-        }`}
-      >
-        3 м
-      </button>
+      {options.map((option, index) => (
+        <button
+          key={index}
+          onClick={() => handleChange(option)}
+          className={`flex-1 z-10 flex items-center justify-center font-medium transition-all duration-300 ${
+            active === option ? "text-white scale-105" : "text-black scale-95"
+          }`}
+        >
+          {displayValues[index]}
+        </button>
+      ))}
     </div>
   );
 };
