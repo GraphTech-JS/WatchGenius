@@ -2,7 +2,8 @@
 
 import { ChatMenu } from "@/components/Chat/ChatMenu";
 import { ChatButton } from "@/components/Chat/components/ChatButton/ChatButton";
-import React, { useState, useEffect } from "react";
+import { FloatingButton } from "@/components/FloatingButton";
+import React, { useState } from "react";
 
 export default function ChatClient({
   children,
@@ -10,100 +11,24 @@ export default function ChatClient({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const [buttonPosition, setButtonPosition] = useState({
-    bottom: "20%",
-  });
-  const [isScrolling, setIsScrolling] = useState(false);
-
-  const updateButtonPosition = () => {
-    const contacts = document.getElementById("contacts");
-    if (!contacts) return;
-
-    const contactsRect = contacts.getBoundingClientRect();
-    const viewHeight = window.innerHeight;
-    const safeOffset = 20;
-    const initialBottomPercent = 0.2;
-    const initialBottomPx = viewHeight * initialBottomPercent;
-    if (contactsRect.top > viewHeight) {
-      setButtonPosition({
-        bottom: "20%",
-      });
-      return;
-    }
-    const minBottomPosition = viewHeight - contactsRect.top + safeOffset;
-    const finalBottomPosition = Math.max(initialBottomPx, minBottomPosition);
-    setButtonPosition({
-      bottom: `${finalBottomPosition + 50}px`,
-    });
-  };
-
-  const lockScroll = () => {
-    const scrollY = window.scrollY;
-    document.body.style.cssText = `
-      overflow: hidden;
-      position: fixed;
-      top: -${scrollY}px;
-      width: 100%;
-    `;
-  };
-
-  const unlockScroll = () => {
-    const scrollY = parseInt(document.body.style.top || "0") * -1;
-    document.body.style.cssText = "";
-    if (scrollY) window.scrollTo(0, scrollY);
-  };
-
-  useEffect(() => {
-    let ticking = false;
-    let scrollTimeout: NodeJS.Timeout | undefined;
-    const handleScroll = () => {
-      setIsScrolling(true);
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-      scrollTimeout = setTimeout(() => {
-        setIsScrolling(false);
-      }, 100);
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          updateButtonPosition();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-    const handleResize = () => {
-      requestAnimationFrame(updateButtonPosition);
-    };
-    updateButtonPosition();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", handleResize, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
-      if (scrollTimeout) {
-        clearTimeout(scrollTimeout);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (open) {
-      lockScroll();
-    } else {
-      unlockScroll();
-    }
-    return () => unlockScroll();
-  }, [open]);
 
   return (
     <div className="relative flex h-full w-full">
       <div className="fixed right-4 z-[60] lg:hidden">
-        <ChatButton
-          onClick={() => setOpen(true)}
-          dynamicPosition={{ bottom: buttonPosition.bottom }}
-          isScrolling={isScrolling}
-        />
+        <FloatingButton
+          watchedIds={["contacts", "ai-agent", "footer"]}
+          safeOffset={20}
+          initialOffsetPercent={0.2}
+          extraOffset={150}
+        >
+          {({ bottom, isScrolling }) => (
+            <ChatButton
+              onClick={() => setOpen(true)}
+              dynamicPosition={{ bottom }}
+              isScrolling={isScrolling}
+            />
+          )}
+        </FloatingButton>
       </div>
       <main
         id="main-content"

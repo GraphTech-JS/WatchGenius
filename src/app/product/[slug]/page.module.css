@@ -264,15 +264,13 @@
   .productContainer {
     padding: 30px 20px 30px 20px;
   }
-  .productPrice {
-    align-items: center;
-  }
 }
 @media (max-width: 768px) {
   .cardElement {
     display: none;
   }
 }
+
 @media (max-width: 420px) {
   .productGraphButtons {
     display: flex;

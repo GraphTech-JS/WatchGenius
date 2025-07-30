@@ -96,6 +96,14 @@
     align-items: center;
     padding: 5px 5px;
   }
+  .controlButtonsMob {
+    margin-bottom: 25px;
+    display: flex;
+    gap: 14px;
+  }
+  .controlButtons {
+    display: none;
+  }
 }
 @media (max-width: 640px) {
   .container {
@@ -103,17 +111,13 @@
     justify-content: center;
   }
 
-  .controlButtonsMob {
-    margin-bottom: 25px;
-    display: flex;
-  }
-
   .container,
   .containerControls {
     height: 380px;
   }
 
-  .controlButtons {
-    display: none;
+  .controlButtonsMob {
+    flex-direction: column;
+    gap: 27px;
   }
 }

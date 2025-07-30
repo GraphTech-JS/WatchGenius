@@ -43,6 +43,7 @@ export const Button = ({
       className={`${styles.btn} ${variantClass} ${classNames || ""}`.trim()}
       ref={ref}
       style={style && props.style ? { ...style, ...props.style } : style}
+      type="button"
     >
       {children}
     </button>

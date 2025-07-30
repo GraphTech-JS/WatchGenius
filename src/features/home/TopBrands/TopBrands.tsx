@@ -30,6 +30,7 @@ export const TopBrands = () => {
           controls
           yearData={yearDataMock}
           threeMonthData={threeMonthDataMock}
+          variant="area"
         />
         <Indicators />
       </div>

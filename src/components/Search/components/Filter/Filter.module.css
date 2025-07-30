@@ -15,8 +15,7 @@
   top: -20px;
   right: -20px;
   background-color: var(--white);
-  padding: 48px 90px 48px 40px;
-  max-width: 823px;
+  max-width: 350px;
   width: 100vb;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
@@ -24,8 +23,8 @@
   column-gap: 40px;
   row-gap: 20px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  padding: 60px 20px 20px 20px;
 }
 
 .filterDropdownOption {
@@ -38,26 +37,4 @@
 
 .filterDropdownOption:hover {
   background-color: var(--light-gray);
-}
-@media (max-width: 1400px) {
-  .filterDropdown {
-    max-width: 450px;
-    flex-direction: column;
-    padding: 28px 70px 28px 20px;
-    column-gap: 30px;
-    row-gap: 10px;
-  }
-}
-@media (max-width: 748px) {
-  .filterDropdown {
-    max-width: 340px;
-    padding: 60px 20px 20px 20px;
-    column-gap: 0;
-  }
-}
-
-@media (max-width: 480px) {
-  .filterDropdown {
-    max-width: 240px;
-  }
 }

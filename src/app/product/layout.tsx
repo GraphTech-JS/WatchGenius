@@ -15,7 +15,7 @@ export default function RootLayout({
     <div>
       <Header />
       <ChatClient>{children}</ChatClient>
-      <section className={styles.aiAgent}>
+      <section className={styles.aiAgent} id="ai-agent">
         <div className={styles.aiAgentContainer}>
           <h3 className={styles.aiAgentTitle}>АІ агент</h3>
           <p className={styles.aiAgentDesc}>

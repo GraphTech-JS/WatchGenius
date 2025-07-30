@@ -17,6 +17,7 @@
 .catalogSearch {
   display: flex;
   justify-content: center;
+  flex-direction: column;
   gap: 20px;
   width: 95%;
   margin-top: 60px;

@@ -11,6 +11,9 @@ import { ArrowLeftDark } from "../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { Indicators } from "@/features/home/Indicators/Indicators";
 import { StarDarkIcon } from "../../../../public/icons";
+import { data, threeMonthDataMock, yearDataMock } from "@/mock/data";
+import ProductDetails from "@/features/product/ProductDetails";
+import { FloatingButton } from "@/components/FloatingButton";
 
 const Product = () => {
   const { back } = useRouter();
@@ -55,25 +58,12 @@ const Product = () => {
               <ThemedText type="h2">
                 Rolex Submariner Oyster Perpetual Date 41mm 126610LV-0002
               </ThemedText>
-              <div className={styles.productDescContent}>
-                <ThemedText type="h4">
-                  Корпус: Нержавіюча сталь Oystersteel (сплав 904L)
-                </ThemedText>
-                <ThemedText type="h4">
-                  Скло: Сапфірове з циклоп-лінзою над датою
-                </ThemedText>
-                <ThemedText type="h4">
-                  Категорія: Дайверський годинник
-                </ThemedText>
-                <ThemedText type="h4">Діаметр: 41 мм</ThemedText>
-              </div>
-              <ThemedText className=" text-center underline">
-                Показати все
-              </ThemedText>
-              <ThemedText className=" text-center md:text-right underline text-[#A8A6A6]">
+              <ProductDetails data={data} />
+              <ThemedText className=" text-start underline text-[#A8A6A6]">
                 Не знайшли параметр? Напишіть в чат
               </ThemedText>
             </div>
+
             <div className={styles.productPrice}>
               <div className={styles.productPriceWrapper}>
                 <ThemedText type="h2" className="text-nowrap">
@@ -89,9 +79,23 @@ const Product = () => {
                 )}
               </div>
 
-              <Button variant="solid" classNames={styles.productPriceBtn}>
-                Купити в Chrono24
-              </Button>
+              <FloatingButton
+                watchedIds={["ai-agent", "footer"]}
+                safeOffset={20}
+                initialOffsetPercent={0.02}
+                extraOffset={0}
+                staticAt="sm"
+              >
+                {({ bottom }) => (
+                  <Button
+                    variant="solid"
+                    classNames={styles.productPriceBtn}
+                    style={{ bottom }}
+                  >
+                    Купити в Chrono24
+                  </Button>
+                )}
+              </FloatingButton>
             </div>
           </div>
         </div>
@@ -99,7 +103,12 @@ const Product = () => {
           <ThemedText type="h2">Графік цін</ThemedText>
           <div className={styles.productGraphSection}>
             <div className={styles.productGraphChart}>
-              <CustomAreaChart controls />
+              <CustomAreaChart
+                controls
+                yearData={yearDataMock}
+                threeMonthData={threeMonthDataMock}
+                variant="area"
+              />
             </div>
 
             <Button

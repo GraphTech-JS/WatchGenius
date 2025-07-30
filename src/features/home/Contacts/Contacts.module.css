@@ -65,7 +65,7 @@
   font-size: 20px;
   font-weight: 400;
   font-family: "Inter", sans-serif;
-  color: rgba(109, 106, 106, 1);
+  color: var(--white);
   padding: 18px;
   border-radius: 5px;
   background: transparent;
@@ -74,7 +74,7 @@
 }
 
 .textField::placeholder {
-  color: rgba(109, 106, 106, 1);
+  color: #6d6a6a;
   font-size: 20px;
   font-weight: 400;
 }

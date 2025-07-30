@@ -10,7 +10,7 @@ export const Hero = () => {
   return (
     <section
       className={`${styles.hero} relative w-full min-h-[676px] md:min-h-[476px] lg:min-h-[557px]
-     bg-[url('/hero-section/hero.png')] bg-no-repeat bg-center bg-cover`}
+     bg-[url('/hero-section/hero.png')] bg-no-repeat bg-[left_-250px_top] md:bg-[left_200px_top] bg-cover`}
     >
       <div className={styles.heroLeft}>
         <div className={styles.heroText}>

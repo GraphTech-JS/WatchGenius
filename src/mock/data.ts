@@ -1,3 +1,5 @@
+import { SelectOption } from "@/components/Select";
+
 export type DataPoint = {
   date: string;
   price: number;
@@ -35,4 +37,48 @@ export const threeMonthDataMock: DataPoint[] = [
   { date: "28/03/2020", price: 1540, price_usd: 51 },
   { date: "29/03/2020", price: 1320, price_usd: 45 },
   { date: "30/03/2020", price: 4000, price_usd: 135 },
+];
+
+export const data = [
+  { label: "Матеріал", value: "Нержавіюча сталь Oystersteel (сплав 904L)" },
+  { label: "Калібр", value: "126610LV" },
+  { label: "Рік", value: "2000 рік" },
+  { label: "Діаметр", value: "41 мм" },
+  { label: "Стан", value: "новий" },
+];
+
+export interface FilterDefinition {
+  id: number;
+  label: string;
+  value: string;
+  options: SelectOption[];
+}
+
+export const priceOptions = [
+  { value: "cheap_to_expensive", label: "Від дешевих до дорогих" },
+  { value: "expensive_to_cheap", label: "Від дорогих до дешевих" },
+  { value: "new", label: "Новинки" },
+  { value: "best", label: "Найкращі" },
+];
+
+export const noveltyOptions = [
+  { value: "new", label: "Нові" },
+  { value: "old", label: "Старі" },
+];
+
+export const indexOptions = [
+  { value: "asc", label: "За індексом ↑" },
+  { value: "desc", label: "За індексом ↓" },
+];
+
+export const brandOptions = [
+  { value: "apple", label: "Apple" },
+  { value: "samsung", label: "Samsung" },
+  // ...
+];
+
+export const diameterOptions = [
+  { value: "38", label: "38 mm" },
+  { value: "42", label: "42 mm" },
+  // ...
 ];

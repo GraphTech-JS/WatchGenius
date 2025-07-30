@@ -91,6 +91,8 @@
 .cardBtn,
 .cardLink {
   width: 100%;
+  height: 52px;
+  margin-bottom: 17px;
 }
 
 .cardBtn {

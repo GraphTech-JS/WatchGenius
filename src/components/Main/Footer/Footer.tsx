@@ -5,7 +5,7 @@ import { Coffee, Discord, Telegram } from "../../../../public/icons";
 
 export const Footer = () => {
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} id="footer">
       <div className={styles.footerContainer}>
         <nav>
           <Link href="/" className={styles.footerLogo}>
