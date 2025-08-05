@@ -47,7 +47,7 @@
   justify-content: flex-start;
   align-items: center;
   gap: clamp(10px, 2vw, 20px);
-  padding-top: clamp(20px, 4vw, 40px);
+  padding-top: 69px;
   max-width: 100%;
   margin-bottom: clamp(15px, 3vw, 30px);
 }

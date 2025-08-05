@@ -49,11 +49,11 @@ export const CustomAreaChart: React.FC<CustomChartProps> = ({
   containerClassName = "",
 }) => {
   const [view, setView] = useState<"year" | "month">("year");
-  const [currency, setCurrency] = useState<"USD" | "UAH">("UAH");
+  const [currency, setCurrency] = useState<"EUR" | "UAH">("EUR");
   const raw = view === "year" ? yearData : threeMonthData;
   const data = raw.map((d) => ({
     date: d.date,
-    value: currency === "USD" ? d.price_usd : d.price,
+    value: currency === "EUR" ? d.price_usd : d.price,
   }));
   const displayed = data.slice(0, 5);
   const minIndex = displayed.reduce(
@@ -71,8 +71,6 @@ export const CustomAreaChart: React.FC<CustomChartProps> = ({
     return () => window.removeEventListener("resize", onResize);
   }, []);
   const isWide = width >= 1024;
-
-  // --- CHART TYPE ---
   const isMobile = width < 768;
   const useBar = variant === "bar" || (variant === "auto" && isMobile);
 
@@ -90,8 +88,8 @@ export const CustomAreaChart: React.FC<CustomChartProps> = ({
         className={card ? "w-full" : ""}
       />
       <ToggleSwitch
-        options={["USD", "UAH"]}
-        displayValues={["USD", "UAH"]}
+        options={["EUR", "UAH"]}
+        displayValues={["EUR", "UAH"]}
         onChange={setCurrency}
         size={card ? "compact" : "default"}
         className={card ? "w-full" : ""}
@@ -101,9 +99,10 @@ export const CustomAreaChart: React.FC<CustomChartProps> = ({
 
   const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
+      const unit = currency === "UAH" ? "грн" : "EUR";
       return (
         <div className={styles.tooltip}>
-          <p>{`${payload[0].value.toLocaleString()} грн ${label}`}</p>
+          <p>{`${payload[0].value.toLocaleString()} ${unit}  ${label}`}</p>
         </div>
       );
     }

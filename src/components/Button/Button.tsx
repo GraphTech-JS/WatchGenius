@@ -3,7 +3,7 @@ import styles from "./Button.module.css";
 
 interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
-  variant: "solid" | "outline" | "text" | "link";
+  variant?: "solid" | "outline" | "text" | "link";
   bgColor?: string;
   color?: string;
   classNames?: string;

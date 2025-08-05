@@ -1,5 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 "use client";
-import React, { useContext, useId } from "react";
+import React, { useContext, useRef, useEffect } from "react";
 import styles from "./AiChat.module.css";
 import Link from "next/link";
 
@@ -22,35 +23,41 @@ interface IAiChat {
 
 export const AiChat = ({ type }: IAiChat) => {
   const { push } = useRouter();
-  const id = useId();
   const screenWidth = useScreenWidth();
   const { message, messages, setMessage, setMessages } =
     useContext(MainContext);
+
+  // Создаем ref для input и для последнего сообщения
+  const inputRef = useRef<HTMLInputElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+
+  // Функция для фокуса на input и его позиционирования внизу экрана
+  const focusOnInput = () => {
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+        inputRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+          inline: "nearest",
+        });
+      }
+    }, 100);
+  };
+
+  // Эффект для фокуса на input при изменении сообщений
+  useEffect(() => {
+    if (messages.length > 0 && type === "chat") {
+      focusOnInput();
+    }
+  }, [messages.length, type]);
+
   const handleMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage({
       content: e.target.value,
       by: "me",
       id: messages.length + 1 + Math.random() * 1000,
     });
-  };
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setMessages([
-      ...messages,
-      message,
-      {
-        content:
-          "Тоді кварцовий — чудовий вибір: точний, не потребує щоденного обслуговування. Ще питання: ви надаєте перевагу шкіряним ремінцям, металевим браслетам чи можливо щось нестандартне?",
-        by: "ai",
-        id: messages.length + 1 + Math.random() * 1000,
-      },
-    ]);
-    setMessage({
-      content: "",
-      by: "me",
-      id: messages.length + 1 + Math.random() * 1000,
-    });
-    if (type === "general") push(`/chat/${id}`);
   };
 
   const onClickOnInlineBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -75,6 +82,37 @@ export const AiChat = ({ type }: IAiChat) => {
         id: Date.now() + Math.random() + 1,
       },
     ]);
+
+    // Фокусируемся на input
+    focusOnInput();
+
+    // Если мы в режиме general - переходим на новую страницу
+    if (type === "general") {
+      push(`/chat/${Date.now()}`);
+    }
+  };
+
+  const handleSend = () => {
+    if (!message.content.trim()) return;
+
+    const aiResponse =
+      "Тоді кварцовий — чудовий вибір: точний, не потребує щоденного обслуговування. Ще питання: ви надаєте перевагу шкіряним ремінцям, металевим браслетам чи можливо щось нестандартне?";
+
+    // Добавляем пользовательское сообщение и ответ AI
+    setMessages([
+      ...messages,
+      message,
+      { content: aiResponse, by: "ai", id: Date.now() + Math.random() + 1 },
+    ]);
+
+    // Очищаем инпут
+    setMessage({ content: "", by: "me", id: Date.now() + Math.random() + 2 });
+
+    // Если общий режим — переходим на новую страницу чата
+    if (type === "general") {
+      push(`/chat/${Date.now()}`);
+    }
+    // В режиме чата useEffect автоматически сделает фокус на input
   };
 
   return (
@@ -99,21 +137,24 @@ export const AiChat = ({ type }: IAiChat) => {
           />
           <ThemedText type="h1">AI-агент</ThemedText>
           <p className={styles.chatHeaderDescription}>
-            Швидко, точно та без нав’язливих порад. Просто запитайте.
+            Швидко, точно та без нав'язливих порад. Просто запитайте.
           </p>
           <div className={styles.chatContent}>
             {type === "chat" && <ChatList />}
+            {/* Невидимый элемент для скролла к последнему сообщению */}
+            {messages.length > 0 && <div ref={lastMessageRef} />}
           </div>
-          <form
+          <div
             className={`${
               type === "general" ? styles.chatForm : styles.chatAiForm
             }`}
-            onSubmit={onSubmit}
           >
             <input
+              ref={inputRef}
               placeholder="Введіть Ваш запит"
               value={message?.content}
               onChange={handleMessage}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
               className={`${
                 type === "general"
                   ? styles.chatHeaderInput
@@ -128,6 +169,7 @@ export const AiChat = ({ type }: IAiChat) => {
                   ? styles.chatFormSendBtn
                   : styles.chatFormBtn
               }
+              onClick={handleSend}
             >
               {screenWidth <= 900 && type === "chat" ? (
                 <img
@@ -139,7 +181,7 @@ export const AiChat = ({ type }: IAiChat) => {
                 "Відправити"
               )}
             </Button>
-          </form>
+          </div>
         </div>
         <div className={styles.chatFooter}>
           <ThemedText type="h2">Що я можу для Вас зробити?</ThemedText>

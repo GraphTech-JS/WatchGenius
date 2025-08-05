@@ -10,26 +10,34 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 80px 56px;
+  padding: 40px 56px;
   flex: 1;
   overflow-y: auto;
-  min-height: 100vh; /* Важно: контейнер должен занимать всю высоту экрана */
+  min-height: 100vh;
   box-sizing: border-box;
 }
+
 .chatMenuSandBtn {
-  background-color: #101010;
-  max-width: 600px;
   width: 100%;
-  border-radius: 5px;
-  padding: 23px 0;
-  margin-bottom: 40px;
+  height: 52px;
+  margin-bottom: 17px;
 }
-.chatMenuSandBtnText {
-  color: #ededed;
-  font-size: 16px;
-  line-height: 19px;
+
+.chatMenuSandBtn {
+  padding: clamp(8px, 1vw, 12px) clamp(16px, 2vw, 24px) !important;
+  font-size: clamp(16px, 1.5vw, 16px) !important;
+  border-radius: clamp(3px, 0.5vw, 6px) !important;
+  transition: all 0.3s ease !important;
+  white-space: nowrap !important;
 }
+
+.chatMenuSandBtn:hover {
+  background-color: var(--white) !important;
+  outline: 1px solid var(--black) !important;
+  color: var(--black) !important;
+  transform: translateY(-1px) !important;
+}
+
 .chatMenuTitle {
   font-size: 48px;
   font-weight: 400;
@@ -46,6 +54,7 @@
   text-align: center;
   color: var(--black);
   margin-bottom: 50px;
+  margin-top: 16px;
 }
 
 .chatMenuButtons {
@@ -54,7 +63,7 @@
   align-items: center;
   gap: 12px;
   margin-top: 30px;
-  margin-bottom: 60px; /* Добавляем отступ снизу для последнего элемента */
+  margin-bottom: 60px;
 }
 
 .chatMenuBtn {
@@ -87,19 +96,19 @@
 }
 
 .chatMenuClose {
-  display: none; /* Скрываем по умолчанию для десктопа */
+  display: none;
 }
 
 @media (max-width: 1024px) {
   .chatMenuClose {
     position: absolute;
-    top: 80px;
+    top: 30px;
     left: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--black);
-    z-index: 60; /* Увеличиваем z-index */
+    z-index: 60;
     width: 60px;
     height: 60px;
     border-radius: 50px;
@@ -115,7 +124,7 @@
 
 @media (max-width: 834px) {
   .chatMenuContainer {
-    padding: 100px 20px 80px 20px; /* Увеличиваем нижний паддинг */
+    padding: 100px 20px 80px 20px;
   }
 }
 
@@ -127,13 +136,14 @@
 
   .chatMenuContainer {
     min-height: 100vh;
-    padding: 120px 20px 100px 20px; /* Увеличиваем верхний и нижний паддинг */
-    justify-content: flex-start; /* Контент начинается сверху */
+    padding: 60px 20px 100px 20px;
+    justify-content: flex-start;
   }
 
   .chatMenuIcon {
     width: 100px;
     height: 120px;
+    margin-bottom: 40px;
   }
 
   .chatMenuTitle {
@@ -153,6 +163,6 @@
   }
 
   .chatMenuButtons {
-    margin-bottom: 100px; /* Большой отступ снизу на мобильных */
+    margin-bottom: 100px;
   }
 }

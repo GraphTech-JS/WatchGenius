@@ -14,12 +14,25 @@ interface IMainContext {
 }
 
 interface IWatch {
+  id: number;
+  slug: string;
   title: string;
   image: string;
-  price: number | string;
-  slug: string;
-  id: number;
+  brand: string;
+  price: number;
+  rating: number;
   changePercent: number;
+  createdAt: string;
+  diameter: number;
+  description: string;
+  material: string;
+  waterResistance: string;
+  movement: string;
+  releaseYear: string;
+  caseMaterial: string;
+  strapMaterial: string;
+  features: string[];
+  caliber: string;
 }
 
 interface ISearchProps extends React.HTMLAttributes<HTMLInputElement> {

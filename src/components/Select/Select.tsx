@@ -10,7 +10,7 @@ export interface SelectOption {
 interface SelectProps {
   placeholder: string;
   options: SelectOption[];
-  value?: string;
+  value: string;
   onChange?: (value: string) => void;
   className?: string;
 }
@@ -41,7 +41,8 @@ export const Select = ({
   const selectedOption = options.find(
     (option) => option.value === selectedValue
   );
-  const displayText = selectedOption ? selectedOption.label : placeholder;
+  const displayText =
+    value !== "" && selectedOption ? selectedOption.label : placeholder;
 
   return (
     <div className={`${styles.select} ${className || ""}`} ref={selectRef}>

@@ -8,11 +8,11 @@ export const Indicators = () => {
     <div className={styles.indicatorsContainer}>
       <div className={styles.indicatorsText}>
         <ThemedText type="h2">Індикатор Rolex 92</ThemedText>
-        <ThemedText type="h5">
+        <ThemedText type="h5" className=" md:text-start text-center">
           Надійність, статус і безпеганна якість — головні причини, чому 92%
           покупців обирають Rolex.
         </ThemedText>
-        <ThemedText type="h5">
+        <ThemedText type="h5" className="md:text-start text-center">
           80% позитивних відгуків, лише 20% мають зауваження — здебільшого до
           ціни або очікування доставки.
         </ThemedText>

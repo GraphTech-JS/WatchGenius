@@ -7,6 +7,7 @@
 .h1 {
   font-size: 32px;
   font-family: var(--font-sfmono), monospace;
+  font-weight: 600;
 }
 @media (min-width: 768px) {
   .h1 {

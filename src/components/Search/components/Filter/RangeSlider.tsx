@@ -1,142 +1,143 @@
-import React, { useState, useRef, useCallback } from "react";
+// src/components/RangeSliderRange.tsx
+import React, { useState, useRef, useCallback, useEffect } from "react";
 
-interface RangeSliderProps {
+interface RangeSliderRangeProps {
   min: number;
   max: number;
-  value: number;
-  onChange: (value: number) => void;
+  /** Текущее минимальное значение */
+  minValue: number;
+  /** Текущее максимальное значение */
+  maxValue: number;
+  /** Вызывается при изменении диапазона */
+  onChange: (minValue: number, maxValue: number) => void;
   step?: number;
   unit?: string;
 }
 
-export default function RangeSlider({
+export default function RangeSliderRange({
   min,
   max,
-  value,
+  minValue,
+  maxValue,
   onChange,
   step = 1000,
   unit = "грн",
-}: RangeSliderProps) {
-  const [isDragging, setIsDragging] = useState(false);
+}: RangeSliderRangeProps) {
   const sliderRef = useRef<HTMLDivElement>(null);
+  const [dragging, setDragging] = useState<"min" | "max" | null>(null);
 
-  const formatPrice = (val: number) => {
-    return val.toLocaleString("uk-UA") + ` ${unit}`;
-  };
+  const formatPrice = (val: number) => val.toLocaleString("uk-UA") + ` ${unit}`;
 
-  const getSliderPosition = () => {
-    return ((value - min) / (max - min)) * 100;
-  };
+  const getPercent = useCallback(
+    (val: number) => ((val - min) / (max - min)) * 100,
+    [min, max]
+  );
 
-  const calculateValueFromPosition = useCallback(
+  const calculateValueFromPos = useCallback(
     (clientX: number) => {
-      if (!sliderRef.current) return value;
-
-      const rect = sliderRef.current.getBoundingClientRect();
-      const percentage = Math.max(
-        0,
-        Math.min(1, (clientX - rect.left) / rect.width)
-      );
-      const rawValue = min + percentage * (max - min);
-
-      // Округляем до ближайшего step
-      const steppedValue = Math.round(rawValue / step) * step;
-      return Math.max(min, Math.min(max, steppedValue));
+      if (!sliderRef.current) return minValue;
+      const { left, width } = sliderRef.current.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (clientX - left) / width));
+      const raw = min + pct * (max - min);
+      const stepped = Math.round(raw / step) * step;
+      return Math.max(min, Math.min(max, stepped));
     },
-    [min, max, step, value]
+    [min, max, step]
   );
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
-
-    const newValue = calculateValueFromPosition(e.clientX);
-    onChange(newValue);
-  };
-
-  const handleMouseMove = useCallback(
+  const onMouseMove = useCallback(
     (e: MouseEvent) => {
-      if (!isDragging) return;
-
+      if (!dragging) return;
       e.preventDefault();
-      const newValue = calculateValueFromPosition(e.clientX);
-      onChange(newValue);
+      const newVal = calculateValueFromPos(e.clientX);
+      if (dragging === "min") {
+        onChange(Math.min(newVal, maxValue), maxValue);
+      } else {
+        onChange(minValue, Math.max(newVal, minValue));
+      }
     },
-    [isDragging, calculateValueFromPosition, onChange]
+    [dragging, calculateValueFromPos, minValue, maxValue, onChange]
   );
 
-  const handleMouseUp = useCallback(() => {
-    setIsDragging(false);
+  const onMouseUp = useCallback(() => {
+    setDragging(null);
   }, []);
 
-  // Добавляем глобальные обработчики событий при перетаскивании
-  React.useEffect(() => {
-    if (isDragging) {
-      document.addEventListener("mousemove", handleMouseMove);
-      document.addEventListener("mouseup", handleMouseUp);
-      document.body.style.userSelect = "none"; // Отключаем выделение текста
-
+  useEffect(() => {
+    if (dragging) {
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+      document.body.style.userSelect = "none";
       return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
         document.body.style.userSelect = "";
       };
     }
-  }, [isDragging, handleMouseMove, handleMouseUp]);
+  }, [dragging, onMouseMove, onMouseUp]);
 
-  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(e.target.value);
-    onChange(newValue);
+  const handleDown = (thumb: "min" | "max") => (e: React.MouseEvent) => {
+    e.preventDefault();
+    setDragging(thumb);
   };
 
+  const leftPct = getPercent(minValue);
+  const rightPct = getPercent(maxValue);
+
   return (
-    <div className="w-full mt-[15px]">
-      <div className="relative">
-        <div className="flex justify-between text-sm text-gray-600 mb-2">
-          <span>{formatPrice(min)}</span>
-          <span>{formatPrice(max)}</span>
+    <div className="w-full mt-4">
+      {/* шкала: min и max */}
+      <div className="flex justify-between text-sm text-gray-600 mb-2">
+        <span>{formatPrice(min)}</span>
+        <span>{formatPrice(max)}</span>
+      </div>
+
+      {/* трек + активная часть */}
+      <div className="relative h-2" ref={sliderRef}>
+        <div className="absolute w-full h-2 bg-gray-300 rounded-full top-0 left-0" />
+        <div
+          className="absolute h-2 bg-green-500 rounded-full top-0"
+          style={{
+            left: `${leftPct}%`,
+            width: `${rightPct - leftPct}%`,
+          }}
+        />
+
+        {/* левая ручка */}
+        <div
+          className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 cursor-grab"
+          style={{ left: `${leftPct}%`, zIndex: dragging === "min" ? 20 : 10 }}
+          onMouseDown={handleDown("min")}
+        >
+          {minValue > min && (
+            <div className="absolute bottom-[30px] mb-2 w-max px-2 py-1 text-xs text-black ">
+              {formatPrice(minValue)}
+            </div>
+          )}
+          <div
+            className={`w-5 h-5 bg-green-500 rounded-full border-2 border-white shadow ${
+              dragging === "min" ? "scale-110" : "hover:scale-105"
+            } transition-transform`}
+          />
         </div>
 
-        <div className="relative" ref={sliderRef}>
-          {/* Трек слайдера */}
-          <div
-            className="w-full h-2 bg-gray-300 rounded-full relative cursor-pointer"
-            onMouseDown={handleMouseDown}
-          >
-            <div
-              className="h-2 bg-green-500 rounded-full absolute left-0 top-0 pointer-events-none"
-              style={{ width: `${getSliderPosition()}%` }}
-            ></div>
-          </div>
-
-          {/* Скрытый input для поддержки клавиатуры */}
-          <input
-            type="range"
-            min={min}
-            max={max}
-            step={step}
-            value={value}
-            onChange={handleSliderChange}
-            className="absolute top-0 left-0 w-full h-2 opacity-0 cursor-pointer"
-          />
-
-          {/* Ползунок */}
-          <div
-            className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing"
-            style={{ left: `${getSliderPosition()}%` }}
-            onMouseDown={handleMouseDown}
-          >
-            {/* Всплывающая подсказка с ценой */}
-            <div className="absolute bottom-full mb-3 left-1/2 transform -translate-x-1/2 text-black text-xs px-2 py-1 rounded whitespace-nowrap">
-              {formatPrice(value)}
+        {/* правая ручка */}
+        <div
+          className="absolute top-1/2 transform -translate-y-1/2 -translate-x-1/2 cursor-grab"
+          style={{ left: `${rightPct}%`, zIndex: dragging === "max" ? 20 : 10 }}
+          onMouseDown={handleDown("max")}
+        >
+          {/* тултип только если макси-значение < max */}
+          {maxValue < max && (
+            <div className="absolute bottom-[30px] mb-2 w-max px-2 py-1 text-xs text-black ">
+              {formatPrice(maxValue)}
             </div>
-            {/* Сам ползунок */}
-            <div
-              className={`w-6 h-6 bg-green-500 rounded-full border-2 border-white shadow-lg transition-transform ${
-                isDragging ? "scale-110" : "hover:scale-105"
-              }`}
-            ></div>
-          </div>
+          )}
+          <div
+            className={`w-5 h-5 bg-green-500 rounded-full border-2 border-white shadow ${
+              dragging === "max" ? "scale-110" : "hover:scale-105"
+            } transition-transform`}
+          />
         </div>
       </div>
     </div>

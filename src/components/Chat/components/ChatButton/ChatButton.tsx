@@ -21,13 +21,16 @@ export const ChatButton: React.FC<IChatButton> = ({
         z-30
       "
     />
+
     <button
       onClick={onClick}
       style={{
-        boxShadow: "-1px 4px 14px 1px rgba(255, 230, 230, 0.7)",
+        filter: "drop-shadow(-1px 4px 14px rgba(255, 230, 230, 0.7))",
+        WebkitBorderTopLeftRadius: 50,
+        WebkitBorderBottomLeftRadius: 50,
         borderTopLeftRadius: 50,
         borderBottomLeftRadius: 50,
-        bottom: dynamicPosition?.bottom || "50%",
+        bottom: dynamicPosition?.bottom || "20%",
         transform: "translateY(50%)",
       }}
       className={`

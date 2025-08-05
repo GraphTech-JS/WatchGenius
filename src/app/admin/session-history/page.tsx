@@ -1,8 +1,13 @@
+"use client";
 import { AdminLayout } from "@/components/Main/AdminLayout/AdminLayout";
 import styles from "../admin.module.css";
 import { ProductsTable } from "@/components/ProductsTable/ProductsTable";
 
 export default function AdminPrompts() {
+  const handleDownload = (id: string) => {
+    console.log("Скачать товар с id =", id);
+  };
+
   return (
     <AdminLayout>
       <div className={styles.dashboard}>
@@ -39,7 +44,7 @@ export default function AdminPrompts() {
                 sessionDuration: "30 хвилин",
               },
             ]}
-            onEdit={() => {}}
+            onDownload={handleDownload}
           />
         </div>
       </div>

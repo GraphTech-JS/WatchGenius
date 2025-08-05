@@ -3,7 +3,7 @@ import styles from "./Filter.module.css";
 import { Filter as FilterIcon } from "../../../../../public/icons";
 import { Select, SelectOption } from "@/components/Select";
 import { useClickOutside } from "@/utils/useClickOutside";
-import RangeSlider from "./RangeSlider";
+import RangeSliderRange from "./RangeSlider";
 
 export type FilterDefinitionProp =
   | {
@@ -18,7 +18,7 @@ export type FilterDefinitionProp =
       id: number;
       label: string;
       type: "range";
-      value: string | number;
+      value: [number, number];
       range: { min: number; max: number; step?: number; unit?: string };
       options?: never;
     };
@@ -27,7 +27,7 @@ interface FilterProps {
   filters: FilterDefinitionProp[];
   opened: boolean;
   setOpened: (open: boolean) => void;
-  onChange: (id: number, newValue: string | number) => void;
+  onChange: (id: number, newValue: string | number | [number, number]) => void;
 }
 
 export const Filter: React.FC<FilterProps> = ({
@@ -43,7 +43,6 @@ export const Filter: React.FC<FilterProps> = ({
 
   return (
     <div className={styles.filter} ref={ref}>
-      {/* Кнопка-иконка для открытия/закрытия дропдауна */}
       <button
         type="button"
         className={styles.filterBtn}
@@ -56,7 +55,6 @@ export const Filter: React.FC<FilterProps> = ({
         />
       </button>
 
-      {/* Собственно дропдаун со всеми фильтрами */}
       {opened && (
         <div className={styles.filterDropdown}>
           {filters.map((f) => (
@@ -71,11 +69,14 @@ export const Filter: React.FC<FilterProps> = ({
               ) : (
                 <div className="border p-[12px] rounded-[5px]">
                   <label>{f.label}</label>
-                  <RangeSlider
-                    min={f.range!.min}
-                    max={f.range!.max}
-                    value={f.value as number}
-                    onChange={(newValue) => onChange(f.id, newValue)}
+                  <RangeSliderRange
+                    min={f.range.min}
+                    max={f.range.max}
+                    minValue={f.value[0]}
+                    maxValue={f.value[1]}
+                    step={f.range.step}
+                    unit={f.range.unit}
+                    onChange={(low, high) => onChange(f.id, [low, high])}
                   />
                 </div>
               )}

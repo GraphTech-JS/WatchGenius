@@ -1,11 +1,10 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import React, { useRef, useState, useEffect, useContext, useId } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "../Button/Button";
 import styles from "./ChatMenu.module.css";
-import Link from "next/link";
 import { Close, Robot } from "../../../public/icons";
 import { MainContext } from "@/context";
 import { ThemedText } from "../ThemedText/ThemedText";
@@ -16,7 +15,6 @@ interface ChatMenuProps {
 }
 
 export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
-  const id = useId();
   const [isAnimating, setIsAnimating] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -62,8 +60,29 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
       id: messages.length + 1 + Math.random() * 1000,
     });
 
-    router.push(`/chat/${id}`);
+    router.push(`/chat/${Date.now()}`);
   };
+
+  const handleInlineButtonClick = (buttonText: string) => {
+    const aiResponse =
+      "Тоді кварцовий — чудовий вибір: точний, не потребує щоденного обслуговування. Ще питання: ви надаєте перевагу шкіряним ремінцям, металевим браслетам чи можливо щось нестандартне?";
+    setMessages([
+      ...messages,
+      {
+        content: buttonText,
+        by: "me",
+        id: Date.now() + Math.random(),
+      },
+      {
+        content: aiResponse,
+        by: "ai",
+        id: Date.now() + Math.random() + 1,
+      },
+    ]);
+    handleClose();
+    router.push(`/chat/${Date.now()}`);
+  };
+
   return (
     <div
       ref={ref}
@@ -90,24 +109,44 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           className={styles.chatHeaderInput}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
         />
-        <button className={styles.chatMenuSandBtn} onClick={handleSend}>
-          <span className={styles.chatMenuSandBtnText}>Надіслати</span>
-        </button>
-        <ThemedText type="h2" className="text-center">
+        <Button
+          variant="solid"
+          classNames={styles.chatMenuSandBtn}
+          onClick={handleSend}
+        >
+          Відправити
+        </Button>
+        <ThemedText type="h2" className="text-center font-semibold">
           Що я можу для Вас зробити?
         </ThemedText>
         <div className={styles.chatMenuButtons}>
-          <Button variant="outline" classNames={styles.chatMenuBtn}>
-            <Link href="/chat">Порівняти моделі</Link>
+          <Button
+            variant="outline"
+            classNames={styles.chatMenuBtn}
+            onClick={() => handleInlineButtonClick("Порівняти моделі")}
+          >
+            Порівняти моделі
           </Button>
-          <Button variant="outline" classNames={styles.chatMenuBtn}>
-            <Link href="/chat">Підібрати годинник</Link>
+          <Button
+            variant="outline"
+            classNames={styles.chatMenuBtn}
+            onClick={() => handleInlineButtonClick("Підібрати годинник")}
+          >
+            Підібрати годинник
           </Button>
-          <Button variant="outline" classNames={styles.chatMenuBtn}>
-            <Link href="/chat">Показати хіти продажу</Link>
+          <Button
+            variant="outline"
+            classNames={styles.chatMenuBtn}
+            onClick={() => handleInlineButtonClick("Показати хіти продажу")}
+          >
+            Показати хіти продажу
           </Button>
-          <Button variant="outline" classNames={styles.chatMenuBtn}>
-            <Link href="/chat">Обрати подарунок</Link>
+          <Button
+            variant="outline"
+            classNames={styles.chatMenuBtn}
+            onClick={() => handleInlineButtonClick("Обрати подарунок")}
+          >
+            Обрати подарунок
           </Button>
         </div>
       </div>

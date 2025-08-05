@@ -8,12 +8,13 @@ import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
 import { threeMonthDataMock, yearDataMock } from "@/mock/data";
 
-interface ICardProps {
+interface CardProps {
   title: string;
   image: string;
-  price: string | number;
+  price: number;
   slug: string;
   changePercent: number;
+  rating: number;
 }
 
 export const Card = ({
@@ -22,7 +23,8 @@ export const Card = ({
   price,
   slug,
   changePercent,
-}: ICardProps) => {
+  rating,
+}: CardProps) => {
   const isPositive = changePercent !== undefined && changePercent > 0;
   const isNegative = changePercent !== undefined && changePercent < 0;
 
@@ -31,6 +33,18 @@ export const Card = ({
     : isNegative
     ? "#d32f2f"
     : "#9e9e9e";
+
+  const getRatingClass = (rating: number) => {
+    if (rating >= 70) {
+      return styles.ratingGreen;
+    }
+    if (rating >= 50) {
+      return styles.ratingOrange;
+    }
+    return styles.ratingGray;
+  };
+
+  const isTopRating = rating >= 70;
 
   const arrow = isPositive ? "↑" : isNegative ? "↓" : "";
 
@@ -43,13 +57,19 @@ export const Card = ({
           className={styles.cardImg}
         />
         <div className={styles.cardElement}>
-          <img
-            src={StarDarkIcon.src}
-            alt="star icon"
-            className={styles.cardElementStarIcon}
-          />
+          {isTopRating && (
+            <img
+              src={StarDarkIcon.src}
+              alt="star icon"
+              className={styles.cardElementStarIcon}
+            />
+          )}
 
-          <span className={styles.cardElementText}>90-100</span>
+          <span
+            className={`${styles.cardElementText} ${getRatingClass(rating)}`}
+          >
+            {rating}
+          </span>
         </div>
         <div className={styles.cardText}>
           <h3 className={styles.cardTitle}>{title}</h3>

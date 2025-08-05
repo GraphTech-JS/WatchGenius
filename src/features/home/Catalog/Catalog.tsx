@@ -51,16 +51,27 @@ export const Catalog = () => {
             <div className={styles.catalogCards}>
               {mockData
                 .slice(0, isClient ? limit : 4)
-                .map(({ id, title, image, price, slug, changePercent }) => (
-                  <Card
-                    key={id}
-                    title={title}
-                    image={image}
-                    price={price}
-                    slug={slug}
-                    changePercent={changePercent}
-                  />
-                ))}
+                .map(
+                  ({
+                    id,
+                    title,
+                    image,
+                    price,
+                    slug,
+                    changePercent,
+                    rating,
+                  }) => (
+                    <Card
+                      key={id}
+                      title={title}
+                      image={image}
+                      price={price}
+                      slug={slug}
+                      changePercent={changePercent}
+                      rating={rating}
+                    />
+                  )
+                )}
             </div>
             <Button
               variant="text"

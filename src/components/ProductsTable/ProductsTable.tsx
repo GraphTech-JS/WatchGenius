@@ -1,3 +1,6 @@
+// src/components/ProductsTable/ProductsTable.tsx
+
+"use client";
 import React from "react";
 import { Table } from "../Table/Table";
 import styles from "./ProductsTable.module.css";
@@ -7,107 +10,125 @@ import {
   DocsDark,
   SessionDark,
 } from "../../../public/icons";
-
-interface Product {
-  id: string;
-  name?: string;
-  category?: string;
-  price?: string;
-  quantity?: number;
-  description?: string;
-  lastUsage?: string;
-  session?: string;
-  sessionDate?: string;
-  sessionDuration?: string;
-  userName?: string;
-}
+import { Button } from "../Button/Button";
+import { FaPlus } from "react-icons/fa";
+import { IProduct } from "@/types/product";
 
 interface ProductsTableProps {
-  products: Product[];
+  products: IProduct[];
   type: "products" | "knowledge-base" | "prompts" | "session-history";
-  onEdit: (id: string) => void;
+  onAdd?: () => void;
+  onEdit?: (id: string) => void;
+  onDownload?: (id: string) => void;
+  onDelete?: (id: string) => void;
 }
 
 export const ProductsTable: React.FC<ProductsTableProps> = ({
   products,
   type,
+  onAdd,
+  onEdit,
+  onDownload,
+  onDelete,
 }) => {
-  const ordersColumns = ["Назва", "Категорія", "Ціна", "Кількість"];
-  const knowledgeBaseColumns = ["Назва", "Категорія", "Ціна", "Опис"];
-  const promptsColumns = ["Назва", "Категорія", "Ціна", "Останнє використання"];
-  const sessionHistoryColumns = [
-    "Дата/час",
-    "Користувач",
-    "Сесія",
-    "Тривалість",
-  ];
+  const showAdd = ["products", "knowledge-base", "prompts"].includes(type);
 
-  const ordersData = products.map((product) => ({
-    Назва: product.name,
-    Категорія: product.category,
-    Ціна: product.price,
-    Кількість: product.quantity,
-  }));
+  // Определяем колонки
+  const ordersCols = ["Назва", "Категорія", "Ціна", "Кількість"];
+  const kbCols = ["Назва", "Категорія", "Ціна", "Опис"];
+  const promptCols = ["Назва", "Категорія", "Ціна", "Останнє використання"];
+  const sessCols = ["Дата/час", "Користувач", "Сесія", "Тривалість"];
 
-  const knowledgeBaseData = products.map((product) => ({
-    Назва: product.name,
-    Категорія: product.category,
-    Ціна: product.price,
-    Опис: product.description,
+  // Мапим данные, обязательно передаём id:string
+  const ordersData = products.map((p) => ({
+    id: p.id!,
+    Назва: p.name,
+    Категорія: p.category,
+    Ціна: p.price,
+    Кількість: p.quantity,
   }));
-  const promptsData = products.map((product) => ({
-    Назва: product.name,
-    Категорія: product.category,
-    Ціна: product.price,
-    "Останнє використання": product.lastUsage,
+  const kbData = products.map((p) => ({
+    id: p.id!,
+    Назва: p.name,
+    Категорія: p.category,
+    Ціна: p.price,
+    Опис: p.description,
   }));
-
-  const sessionHistoryData = products.map((product) => ({
-    "Дата/час": product.sessionDate,
-    Користувач: product.userName,
-    Сесія: product.session,
-    Тривалість: product.sessionDuration,
+  const promptData = products.map((p) => ({
+    id: p.id!,
+    Назва: p.name,
+    Категорія: p.category,
+    Ціна: p.price,
+    "Останнє використання": p.lastUsage,
+  }));
+  const sessData = products.map((p) => ({
+    id: p.id!,
+    "Дата/час": p.sessionDate,
+    Користувач: p.userName,
+    Сесія: p.session,
+    Тривалість: p.sessionDuration,
   }));
 
   return (
     <div className={styles.container}>
-      <div className={styles.titleSection}>
+      <div className="flex justify-between items-center mb-4">
+        <div className={styles.titleSection}>
+          {type === "products" && (
+            <img src={BoxDarkIcon.src} alt="" className={styles.icon} />
+          )}
+          {type === "knowledge-base" && (
+            <img src={DocDark.src} alt="" className={styles.icon} />
+          )}
+          {type === "prompts" && (
+            <img src={DocsDark.src} alt="" className={styles.icon} />
+          )}
+          {type === "session-history" && (
+            <img src={SessionDark.src} alt="" className={styles.icon} />
+          )}
+          <h2 className={styles.title}>
+            {type === "products" && "Товари"}
+            {type === "knowledge-base" && "База знань"}
+            {type === "prompts" && "Промпти"}
+            {type === "session-history" && "Історія сесій"}
+          </h2>
+        </div>
+
+        {showAdd && onAdd && (
+          <Button onClick={onAdd}>
+            <FaPlus />
+          </Button>
+        )}
+      </div>
+
+      <div className={styles.tableContainer}>
         {type === "products" && (
-          <img src={BoxDarkIcon.src} alt="box icon" width={38} height={38} />
-        )}
-        {type === "knowledge-base" && (
-          <img src={DocDark.src} alt="doc icon" width={38} height={38} />
-        )}
-        {type === "prompts" && (
-          <img src={DocsDark.src} alt="docs icon" width={38} height={38} />
-        )}
-        {type === "session-history" && (
-          <img
-            src={SessionDark.src}
-            alt="session icon"
-            width={38}
-            height={38}
+          <Table
+            columns={ordersCols}
+            data={ordersData}
+            onEdit={onEdit}
+            onDownload={onDownload}
           />
         )}
-        <h2 className={styles.title}>
-          {type === "products" && "Товари"}
-          {type === "knowledge-base" && "База знань"}
-          {type === "prompts" && "Промпти"}
-          {type === "session-history" && "Історія сесій"}
-        </h2>
+        {type === "knowledge-base" && (
+          <Table
+            columns={kbCols}
+            data={kbData}
+            onEdit={onEdit}
+            onDownload={onDownload}
+          />
+        )}
+        {type === "prompts" && (
+          <Table
+            columns={promptCols}
+            data={promptData}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        )}
+        {type === "session-history" && (
+          <Table columns={sessCols} data={sessData} onDownload={onDownload} />
+        )}
       </div>
-      {type === "products" && (
-        <Table columns={ordersColumns} data={ordersData} />
-      )}
-      {type === "knowledge-base" && (
-        <Table columns={knowledgeBaseColumns} data={knowledgeBaseData} />
-      )}
-      {type === "prompts" && (
-        <Table columns={promptsColumns} data={promptsData} />
-      )}
-      {type === "session-history" && (
-        <Table columns={sessionHistoryColumns} data={sessionHistoryData} />
-      )}
     </div>
   );
 };

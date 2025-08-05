@@ -30,4 +30,5 @@ export { default as SettingsDark } from "./settings-dark.svg";
 export { default as StarDarkIcon } from "./star-dark.svg";
 export { default as Discord } from "./Discord.svg";
 export { default as Telegram } from "./Telegram.svg";
+export { default as Delete } from "./delete.svg";
 //Add more icons in future

@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import MockWatch from "../../../../public/catalog-section/mock.png";
-import MockWatchMobile from "../../../../public/catalog-section/mock-small.png";
 import { Button } from "@/components/Button/Button";
 import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
 import Link from "next/link";
@@ -11,13 +10,28 @@ import { ArrowLeftDark } from "../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { Indicators } from "@/features/home/Indicators/Indicators";
 import { StarDarkIcon } from "../../../../public/icons";
-import { data, threeMonthDataMock, yearDataMock } from "@/mock/data";
+import { threeMonthDataMock, yearDataMock } from "@/mock/data";
 import ProductDetails from "@/features/product/ProductDetails";
 import { FloatingButton } from "@/components/FloatingButton";
+import { mockData } from "@/mock/watch";
+import { IWatch } from "@/interfaces";
 
 const Product = () => {
   const { back } = useRouter();
-  const priceChangePercent: number = 7;
+  const params = useParams();
+  const [product, setProduct] = useState<IWatch | null>(null);
+  const productSlug = params.slug;
+  useEffect(() => {
+    const foundProduct = mockData.find((item) => item.slug === productSlug);
+    if (foundProduct) {
+      setProduct(foundProduct);
+    }
+  }, [productSlug]);
+  if (!product) {
+    return <div>Product not found</div>;
+  }
+
+  const priceChangePercent: number = product.changePercent;
   const isPositive = priceChangePercent > 0;
   const isNegative = priceChangePercent < 0;
   const arrow = isPositive ? "↑" : isNegative ? "↓" : "";
@@ -37,10 +51,10 @@ const Product = () => {
         <div className={styles.productContent}>
           <div className={styles.productLeft}>
             <picture>
-              <source media="(max-width: 640px)" srcSet={MockWatchMobile.src} />
+              <source media="(max-width: 640px)" srcSet={MockWatch.src} />
               <img
-                src={MockWatch.src}
-                alt="mock watch"
+                src={product.image}
+                alt={product.title}
                 className={styles.productImg}
               />
             </picture>
@@ -55,19 +69,32 @@ const Product = () => {
           </div>
           <div className={styles.productRight}>
             <div className={styles.productText}>
-              <ThemedText type="h2">
-                Rolex Submariner Oyster Perpetual Date 41mm 126610LV-0002
-              </ThemedText>
-              <ProductDetails data={data} />
-              <ThemedText className=" text-start underline text-[#A8A6A6]">
-                Не знайшли параметр? Напишіть в чат
-              </ThemedText>
+              <ThemedText type="h2">{product.title}</ThemedText>
+              <ProductDetails
+                data={[
+                  { label: "Матеріал", value: product.material },
+                  { label: "Калібр", value: `${product.caliber}` },
+                  { label: "Рік", value: product.releaseYear },
+                  { label: "Діаметр", value: `${product.diameter} mm` },
+                  { label: "Стан", value: `${product.diameter} mm` },
+                  {
+                    label: "Водонепроникність",
+                    value: product.waterResistance,
+                  },
+                  { label: "Механізм", value: product.movement },
+                ]}
+              />
+              <Link href="/chat" prefetch={false}>
+                <ThemedText className=" text-start underline text-[#A8A6A6]">
+                  Не знайшли параметр? Напишіть в чат
+                </ThemedText>
+              </Link>
             </div>
 
             <div className={styles.productPrice}>
               <div className={styles.productPriceWrapper}>
                 <ThemedText type="h2" className="text-nowrap">
-                  19 500 грн
+                  {product.price} грн
                 </ThemedText>
                 {priceChangePercent !== 0 && (
                   <span
@@ -84,7 +111,7 @@ const Product = () => {
                 safeOffset={20}
                 initialOffsetPercent={0.02}
                 extraOffset={0}
-                staticAt="sm"
+                className="sm:static"
               >
                 {({ bottom }) => (
                   <Button

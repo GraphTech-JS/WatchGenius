@@ -47,7 +47,8 @@
 }
 
 .editButton,
-.downloadButton {
+.downloadButton,
+.deleteButton {
   cursor: pointer;
 }
 

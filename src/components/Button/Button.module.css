@@ -23,15 +23,6 @@
   font-family: "Inter", sans-serif;
 }
 
-.outline {
-  border: 1px solid #000;
-  color: #000;
-  font-size: 24px;
-  font-weight: 400;
-  border-radius: 5px;
-  font-family: "Inter", sans-serif;
-}
-
 .text {
   font-size: 24px;
   color: #000;

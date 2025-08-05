@@ -9,7 +9,6 @@ interface FloatingButtonProps {
   extraOffset?: number;
   className?: string;
   style?: React.CSSProperties;
-  staticAt?: "sm" | "md" | "lg";
   children: (props: { bottom: string; isScrolling: boolean }) => ReactNode;
 }
 
@@ -20,7 +19,6 @@ export function FloatingButton({
   extraOffset = 50,
   className,
   style,
-  staticAt,
   children,
 }: FloatingButtonProps) {
   const [bottom, setBottom] = useState<string>(
@@ -73,11 +71,9 @@ export function FloatingButton({
     };
   }, [watchedIds.join(","), safeOffset, initialOffsetPercent, extraOffset]);
 
-  const responsiveStatic = staticAt ? `${staticAt}:static` : "";
-
   return (
     <div
-      className={`fixed left-5 right-5 z-10 ${responsiveStatic} ${className}`}
+      className={`fixed left-5 right-5 z-100  ${className}`}
       style={{ bottom, ...style }}
     >
       {children({ bottom, isScrolling })}

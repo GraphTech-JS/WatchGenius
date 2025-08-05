@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Sidebar } from "./SidebarAdmin/SidebarAdmin";
 import styles from "./AdminLayout.module.css";

@@ -25,7 +25,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  width: 160px;
+  width: 80px;
 }
 .cardElementStarIcon {
   width: 21px;
@@ -34,8 +34,20 @@
 .cardElementText {
   font-size: 14px;
   line-height: 17px;
+}
+
+.ratingGreen {
   color: #00d26af4;
 }
+
+.ratingOrange {
+  color: #d2b200f4;
+}
+
+.ratingGray {
+  color: #9e9e9ef4;
+}
+
 .card:hover {
   box-shadow: 0 4px 27px 0 rgba(0, 0, 0, 0.2),
     0 1.5px 20px 0 rgba(0, 0, 0, 0.04);
