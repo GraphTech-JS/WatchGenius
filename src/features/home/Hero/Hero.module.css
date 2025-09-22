@@ -1,5 +1,4 @@
 .hero {
-  background-color: var(--darkblack);
   display: flex;
   align-items: center;
   position: relative;
@@ -28,11 +27,6 @@
   position: absolute;
   z-index: 1;
   right: 10%;
-}
-
-.heroRightMenu {
-  width: clamp(300px, 40vw, 500px);
-  margin-right: clamp(20px, 15vw, 280px);
 }
 
 .heroImg {

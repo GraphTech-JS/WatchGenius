@@ -10,16 +10,16 @@ export const Hero = () => {
   return (
     <section
       className={`${styles.hero} relative w-full min-h-[676px] md:min-h-[476px] lg:min-h-[557px]
-     bg-[url('/hero-section/hero.png')] bg-no-repeat bg-[left_-250px_top] md:bg-[left_200px_top] bg-cover`}
+     bg-[url('/hero-section/hero.png')] bg-no-repeat bg-[bottom] md:bg-[bottom] bg-cover`}
     >
       <div className={styles.heroLeft}>
         <div className={styles.heroText}>
           <ThemedText type="h1" className="text-white">
-            Обери свій годинник
+            Зрозумілий ринок годинників з Data+ AI
           </ThemedText>
           <p className={styles.heroSubtitle}>
-            Годинники від світових брендів. Якість, точність і безкомпромісна
-            елегантність.
+            Аналітика цін та трендів для 300+ моделей. Персональний чат-асистент
+            допоможе обрати годинник та купити безпечно
           </p>
         </div>
         <Link href="/catalog" className={styles.heroLink}>

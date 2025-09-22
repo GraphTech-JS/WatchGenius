@@ -12,16 +12,6 @@ export const ChatButton: React.FC<IChatButton> = ({
   isScrolling = false,
 }) => (
   <>
-    <div
-      style={{ boxShadow: "0 4px 20px 2px rgba(0, 0, 0, 0.25)" }}
-      className="
-        fixed right-0 bottom-0
-        h-screen w-0 sm:w-[42px] bg-white 
-        flex justify-center items-start
-        z-30
-      "
-    />
-
     <button
       onClick={onClick}
       style={{

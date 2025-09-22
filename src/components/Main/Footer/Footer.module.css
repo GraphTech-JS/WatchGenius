@@ -3,6 +3,7 @@
   background-color: #222222;
   bottom: 0;
   z-index: 90;
+  color: var(--white);
 }
 
 .footerContainer {
@@ -10,12 +11,14 @@
   justify-content: space-between;
   align-items: center;
   max-width: 1300px;
-  padding: 34px 10px;
+  padding: 2.5rem 2rem;
   margin: 0 auto;
 }
-
+.logoName {
+  font-family: var(--font-akatab);
+  font-size: 16px;
+}
 .footerLink {
-  color: var(--white);
   font-size: 16px;
   text-decoration: none;
   transition: all 0.3s ease;
@@ -155,5 +158,14 @@
     align-items: center;
     margin: 0;
     gap: 0;
+  }
+}
+
+@media (width >= 48rem /* 768px */) {
+  .footerContainer {
+    padding: 2rem 6.25rem;
+  }
+  .logoName {
+    font-size: 24px;
   }
 }

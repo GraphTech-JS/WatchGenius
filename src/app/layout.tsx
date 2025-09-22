@@ -1,30 +1,42 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+// import localFont from "next/font/local";
 import "./globals.css";
 import { MainContextProvider } from "@/context";
-import { Inter } from "next/font/google";
+import { Akatab, Inter, Roboto_Flex } from "next/font/google";
 
-const sfmono = localFont({
-  src: [
-    {
-      path: "fonts/SFMono-Regular.otf",
-      weight: "400",
-      style: "normal",
-    },
-  ],
-  variable: "--font-sfmono",
-});
+// CLEAN UP
 
-const angelica = localFont({
-  src: "fonts/AngleciaProDisplay-Regular.otf",
-  display: "block",
-  weight: "400",
-  style: "normal",
-  variable: "--font-angelica",
-});
+// const sfmono = localFont({
+//   src: [
+//     {
+//       path: "fonts/SFMono-Regular.otf",
+//       weight: "400",
+//       style: "normal",
+//     },
+//   ],
+//   variable: "--font-sfmono",
+// });
+
+// const angelica = localFont({
+//   src: "fonts/AngleciaProDisplay-Regular.otf",
+//   display: "block",
+//   weight: "400",
+//   style: "normal",
+//   variable: "--font-angelica",
+// });
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const roboto = Roboto_Flex({
+  variable: "--font-roboto",
+  subsets: ["latin"],
+});
+const akatab = Akatab({
+  weight: "700",
+  variable: "--font-akatab",
   subsets: ["latin"],
 });
 
@@ -38,13 +50,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="en"
-      className={`${sfmono.variable} ${inter.variable} ${angelica.variable}`}
+      className={`${roboto.variable} ${inter.variable} ${akatab.variable}`}
     >
       <body>
         <main>
