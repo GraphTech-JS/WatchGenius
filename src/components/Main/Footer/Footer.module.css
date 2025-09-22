@@ -1,6 +1,6 @@
 .footer {
   position: relative;
-  background-color: #222222;
+  background-color: var(--dark-green);
   bottom: 0;
   z-index: 90;
   color: var(--white);
@@ -17,6 +17,11 @@
 .logoName {
   font-family: var(--font-akatab);
   font-size: 16px;
+}
+.chronoName {
+  color: #ffffff66;
+  opacity: 0.6;
+  line-height: 20px;
 }
 .footerLink {
   font-size: 16px;

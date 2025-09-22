@@ -20,8 +20,9 @@ export const Footer = () => {
               <div className={styles.logoName}>WATCHGENIUS</div>
             </Link>
           </nav>
-          <div>
-            <Image src={Chrono.src} alt="chrono24" width={200} height={40} />
+          <div className="flex flex-col items-center">
+            <Image src={Chrono.src} alt="chrono24" width={160} height={40} />
+            <div className={styles.chronoName}>Powered by Chrono 24</div>
           </div>
         </div>
         <div className={styles.footerRightLinks}>
