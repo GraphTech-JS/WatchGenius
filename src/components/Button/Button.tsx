@@ -13,7 +13,7 @@ interface IButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button = ({
   children,
   variant,
-  bgColor = "#000",
+  bgColor = "",
   color = "#fff",
   classNames,
   ref,

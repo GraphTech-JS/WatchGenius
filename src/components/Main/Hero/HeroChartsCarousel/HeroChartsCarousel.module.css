@@ -1,0 +1,32 @@
+.heroChartContainer {
+  background: rgba(227, 219, 200, 0.6);
+}
+.heroChartItem {
+  background: var(--white);
+}
+.dotsWrapper {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.activeDot {
+  background-color: #684909;
+  transform: scale(1.1);
+}
+
+.inactiveDot {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.chartGreen {
+  background: rgba(222, 251, 234, 1);
+  color: rgba(6, 123, 6, 1);
+}
