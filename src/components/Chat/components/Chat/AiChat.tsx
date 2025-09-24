@@ -9,7 +9,7 @@ import { ChatList } from "../ChatList/ChatList";
 import { useScreenWidth } from "@/hooks/useScreenWidth";
 import { MainContext } from "@/context";
 import { Button } from "@/components/Button/Button";
-import { ArrowLeft, Robot, Send } from "../../../../../public/icons";
+import { ArrowRight, Robot, SendBtn } from "../../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 // import { useSearchParams } from "next/navigation";
 
@@ -125,7 +125,7 @@ export const AiChat = ({ type }: IAiChat) => {
             className={styles.chatHeaderBack}
           >
             <img
-              src={ArrowLeft.src}
+              src={ArrowRight.src}
               alt="back navigation"
               className={styles.chatHeaderBackIcon}
             />
@@ -173,7 +173,7 @@ export const AiChat = ({ type }: IAiChat) => {
             >
               {screenWidth <= 900 && type === "chat" ? (
                 <img
-                  src={Send.src}
+                  src={SendBtn.src}
                   alt="send message"
                   className={styles.chatFormSendIcon}
                 />

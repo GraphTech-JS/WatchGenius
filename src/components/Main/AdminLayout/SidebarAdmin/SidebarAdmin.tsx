@@ -1,46 +1,46 @@
 // SidebarAdmin.tsx
 "use client";
-import React, { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
+import React from "react";
+// import Link from "next/link";
+// import Image from "next/image";
+// import { usePathname } from "next/navigation";
+// import { motion } from "framer-motion";
 import styles from "./SidebarAdmin.module.css";
-import {
-  BoxIcon,
-  DocIcon,
-  DocsIcon,
-  HistoryIcon,
-  SettingsIcon,
-  MonetizeIcon,
-} from "../../../../../public/icons";
-import { Switch } from "@/components/Switch";
+// import {
+//   BoxIcon,
+//   DocIcon,
+//   DocsIcon,
+//   HistoryIcon,
+//   SettingsIcon,
+//   MonetizeIcon,
+// } from "../../../../../public/icons";
+// import { Switch } from "@/components/Switch";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 export const Sidebar: React.FC = () => {
-  const pathname = usePathname();
-  const [isOn, setIsOn] = useState(true);
+  // const pathname = usePathname();
+  // const [isOn, setIsOn] = useState(true);
 
-  const toggle = () => setIsOn((x) => !x);
+  // const toggle = () => setIsOn((x) => !x);
 
-  const navItems = [
-    { href: "/admin/products", icon: BoxIcon, label: "Товари" },
-    { href: "/admin/knowledge-base", icon: DocIcon, label: "База знань" },
-    { href: "/admin/prompts", icon: DocsIcon, label: "Промпти" },
-    {
-      href: "/admin/session-history",
-      icon: HistoryIcon,
-      label: "Історія сесій",
-    },
-    { href: "/admin/settings", icon: SettingsIcon, label: "Налаштування" },
-  ];
+  // const navItems = [
+  //   { href: "/admin/products", icon: BoxIcon, label: "Товари" },
+  //   { href: "/admin/knowledge-base", icon: DocIcon, label: "База знань" },
+  //   { href: "/admin/prompts", icon: DocsIcon, label: "Промпти" },
+  //   {
+  //     href: "/admin/session-history",
+  //     icon: HistoryIcon,
+  //     label: "Історія сесій",
+  //   },
+  //   { href: "/admin/settings", icon: SettingsIcon, label: "Налаштування" },
+  // ];
 
   return (
     <aside className={styles.sidebar}>
       <ThemedText type="h2" className="text-white text-center">
         Адмін панель
       </ThemedText>
-      <nav className={styles.navLinks}>
+      {/* <nav className={styles.navLinks}>
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -86,7 +86,7 @@ export const Sidebar: React.FC = () => {
           </div>
           <Switch isOn={isOn} onToggle={toggle} />
         </div>
-      </nav>
+      </nav> */}
     </aside>
   );
 };

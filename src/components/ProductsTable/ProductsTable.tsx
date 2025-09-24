@@ -4,12 +4,12 @@
 import React from "react";
 import { Table } from "../Table/Table";
 import styles from "./ProductsTable.module.css";
-import {
-  BoxDarkIcon,
-  DocDark,
-  DocsDark,
-  SessionDark,
-} from "../../../public/icons";
+// import {
+//   BoxDarkIcon,
+//   DocDark,
+//   DocsDark,
+//   SessionDark,
+// } from "../../../public/icons";
 import { Button } from "../Button/Button";
 import { FaPlus } from "react-icons/fa";
 import { IProduct } from "@/types/product";
@@ -73,7 +73,7 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({
     <div className={styles.container}>
       <div className="flex justify-between items-center mb-4">
         <div className={styles.titleSection}>
-          {type === "products" && (
+          {/* {type === "products" && (
             <img src={BoxDarkIcon.src} alt="" className={styles.icon} />
           )}
           {type === "knowledge-base" && (
@@ -84,7 +84,7 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({
           )}
           {type === "session-history" && (
             <img src={SessionDark.src} alt="" className={styles.icon} />
-          )}
+          )} */}
           <h2 className={styles.title}>
             {type === "products" && "Товари"}
             {type === "knowledge-base" && "База знань"}

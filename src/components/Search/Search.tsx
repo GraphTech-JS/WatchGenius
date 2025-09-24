@@ -6,7 +6,7 @@ import styles from "./Search.module.css";
 import { SearchResults } from "./components/SearchResults/SearchResults";
 import { ISearchProps, IWatch } from "@/interfaces";
 import { mockData } from "@/mock/watch";
-import SearchIcon from "../../../public/icons/search.svg";
+import SearchNormal from "../../../public/icons/SearchNormal.svg";
 import {
   brandOptions,
   complicationOptions,
@@ -240,7 +240,7 @@ export const Search: React.FC<ISearchProps> = ({
                 {...props}
               />
               <button className={styles.catalogSearchBtn}>
-                <img src={SearchIcon.src} alt="search" />
+                <img src={SearchNormal.src} alt="search" />
               </button>
               <button
                 className={styles.resetBtn}

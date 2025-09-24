@@ -3,45 +3,42 @@
     linear-gradient(0deg, rgba(0, 0, 0, 0.27), rgba(0, 0, 0, 0.27));
   padding-top: 3.75rem;
 }
+.heroContainer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 21.5rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(165, 142, 106, 1) 0%,
+    rgba(163, 140, 103, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
 
 .heroLeft {
   z-index: 3;
-  max-width: 1300px;
-  margin: 0 auto;
-}
-
-.heroRight {
-  display: flex;
-  align-items: center;
-  width: clamp(40%, 45vw, 50%);
-  min-width: 300px;
-  position: absolute;
-  z-index: 1;
-  right: 10%;
-}
-
-.heroImg {
-  height: auto;
-  object-fit: contain;
 }
 
 .heroText {
   display: flex;
 }
 
-.heroTitle {
-  font-size: clamp(28px, 5vw, 48px);
-  font-weight: 400;
+.heroTextTitle {
   color: var(--white);
-  line-height: 1.2;
 }
 
-.heroSubtitle {
+.heroTextSubtitle {
   font-weight: 400;
   font-family: "Inter", sans-serif;
   color: var(--white);
 }
-
+.heroMenu {
+  font-size: 20px;
+}
 .heroLink {
   width: 100%;
   max-width: 346px;
@@ -68,6 +65,15 @@
 @media (width >= 48rem /* 768px */) {
   .hero {
     padding-top: 0;
+  }
+  .heroTextTitle {
+    line-height: 42px;
+  }
+  .heroContainer::before {
+    content: none;
+  }
+  .heroMenu {
+    font-size: 16px;
   }
 }
 

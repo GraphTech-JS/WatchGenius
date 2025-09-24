@@ -3,7 +3,7 @@
 
 import React from "react";
 import styles from "./Table.module.css";
-import { Delete, DownloadIcon, EditIcon } from "../../../public/icons";
+// import { Delete, DownloadIcon, EditIcon } from "../../../public/icons";
 
 interface TableProps {
   columns: string[];
@@ -61,7 +61,7 @@ export const Table: React.FC<TableProps> = ({
                               className={styles.editButton}
                               title="Редагувати"
                             >
-                              <img src={EditIcon.src} alt="edit" />
+                              {/* <img src={EditIcon.src} alt="edit" /> */}
                             </button>
                           )}
                           {onDownload && (
@@ -70,7 +70,7 @@ export const Table: React.FC<TableProps> = ({
                               className={styles.downloadButton}
                               title="Завантажити"
                             >
-                              <img src={DownloadIcon.src} alt="download" />
+                              {/* <img src={DownloadIcon.src} alt="download" /> */}
                             </button>
                           )}
                           {onDelete && (
@@ -79,7 +79,7 @@ export const Table: React.FC<TableProps> = ({
                               className={styles.deleteButton}
                               title="Видалити"
                             >
-                              <img src={Delete.src} alt="delete" />
+                              {/* <img src={Delete.src} alt="delete" /> */}
                             </button>
                           )}
                         </div>
@@ -101,7 +101,7 @@ export const Table: React.FC<TableProps> = ({
                               className={styles.downloadButton}
                               title="Завантажити"
                             >
-                              <img src={DownloadIcon.src} alt="download" />
+                              {/* <img src={DownloadIcon.src} alt="download" /> */}
                             </button>
                           )}
                           {onDelete && (
@@ -110,7 +110,7 @@ export const Table: React.FC<TableProps> = ({
                               className={styles.deleteButton}
                               title="Видалити"
                             >
-                              <img src={Delete.src} alt="delete" />
+                              {/* <img src={Delete.src} alt="delete" /> */}
                             </button>
                           )}
                         </div>

@@ -3,7 +3,7 @@ import CardMock from "../../../../../../public/catalog-section/mock.jpg";
 import styles from "./Card.module.css";
 import Link from "next/link";
 import { Button } from "@/components/Button/Button";
-import { StarDarkIcon } from "../../../../../../public/icons";
+import { Star } from "../../../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
 import { threeMonthDataMock, yearDataMock } from "@/mock/data";
@@ -59,7 +59,7 @@ export const Card = ({
         <div className={styles.cardElement}>
           {isTopRating && (
             <img
-              src={StarDarkIcon.src}
+              src={Star.src}
               alt="star icon"
               className={styles.cardElementStarIcon}
             />

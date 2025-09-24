@@ -6,10 +6,10 @@ import MockWatch from "../../../../public/catalog-section/mock.png";
 import { Button } from "@/components/Button/Button";
 import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
 import Link from "next/link";
-import { ArrowLeftDark } from "../../../../public/icons";
+import { ArrowRight } from "../../../../public/icons";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { Indicators } from "@/features/home/Indicators/Indicators";
-import { StarDarkIcon } from "../../../../public/icons";
+import { Star } from "../../../../public/icons";
 import { threeMonthDataMock, yearDataMock } from "@/mock/data";
 import ProductDetails from "@/features/product/ProductDetails";
 import { FloatingButton } from "@/components/FloatingButton";
@@ -45,7 +45,7 @@ const Product = () => {
     <>
       <div className={styles.productContainer}>
         <div className={styles.productBreadcrumbs} onClick={back}>
-          <img src={ArrowLeftDark.src} alt="back to page" />
+          <img src={ArrowRight.src} alt="back to page" />
           Назад
         </div>
         <div className={styles.productContent}>
@@ -61,7 +61,7 @@ const Product = () => {
           </div>
           <div className={styles.cardElement}>
             <img
-              src={StarDarkIcon.src}
+              src={Star.src}
               alt="star icon"
               className={styles.cardElementStarIcon}
             />

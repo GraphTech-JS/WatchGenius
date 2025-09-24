@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "./Header.module.css";
 import {
-  Search,
+  SearchNormal,
   SearchWhite,
   Logo,
   Robot,
@@ -52,7 +52,12 @@ export const Header = () => {
             <button
               className={`${styles.headerLangSwitchBtn} xl:flex lg:flex hidden shrink-0`}
             >
-              <Image src={Search.src} alt="Пошук" width={18} height={18} />
+              <Image
+                src={SearchNormal.src}
+                alt="Пошук"
+                width={18}
+                height={18}
+              />
             </button>
           </div>
           <div className="lg:hidden md:flex hidden rounded-xl border border-black pl-4 py-2">
@@ -62,7 +67,12 @@ export const Header = () => {
               placeholder="Пошук"
             />
             <button className={`${styles.headerLangSwitchBtn} shrink-0 mr-3`}>
-              <Image src={Search.src} alt="Пошук" width={18} height={18} />
+              <Image
+                src={SearchNormal.src}
+                alt="Пошук"
+                width={18}
+                height={18}
+              />
             </button>
           </div>
           <div className="hidden lg:flex gap-3">
