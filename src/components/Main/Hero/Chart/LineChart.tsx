@@ -15,7 +15,7 @@ export const LineChart: React.FC<LineChartProps> = ({
   if (data.length === 0) return null;
 
   const width = 300;
-  const height = 60;
+  const height = 80;
   const padding = 0;
 
   const base = data[0];
@@ -65,8 +65,8 @@ export const LineChart: React.FC<LineChartProps> = ({
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.9" />
-          <stop offset="60%" stopColor={color} stopOpacity="0.6" />
+          <stop offset="0%" stopColor={color} stopOpacity="0.5" />
+          <stop offset="60%" stopColor={color} stopOpacity="0.3" />
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </linearGradient>
       </defs>

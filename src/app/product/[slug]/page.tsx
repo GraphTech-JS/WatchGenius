@@ -1,49 +1,49 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import styles from "./page.module.css";
-import { useParams, useRouter } from "next/navigation";
-import MockWatch from "../../../../public/catalog-section/mock.png";
-import { Button } from "@/components/Button/Button";
-import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
-import Link from "next/link";
-import { ArrowRight } from "../../../../public/icons";
-import { ThemedText } from "@/components/ThemedText/ThemedText";
-import { Indicators } from "@/features/home/Indicators/Indicators";
-import { Star } from "../../../../public/icons";
-import { threeMonthDataMock, yearDataMock } from "@/mock/data";
-import ProductDetails from "@/features/product/ProductDetails";
-import { FloatingButton } from "@/components/FloatingButton";
-import { mockData } from "@/mock/watch";
-import { IWatch } from "@/interfaces";
+// import React, { useEffect, useState } from "react";
+// import styles from "./page.module.css";
+// import { useParams, useRouter } from "next/navigation";
+// import MockWatch from "../../../../public/catalog-section/mock.png";
+// import { Button } from "@/components/Button/Button";
+// import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
+// import Link from "next/link";
+// import { ArrowRight } from "../../../../public/icons";
+// import { ThemedText } from "@/components/ThemedText/ThemedText";
+// import { Indicators } from "@/features/home/Indicators/Indicators";
+// import { Star } from "../../../../public/icons";
+// import { threeMonthDataMock, yearDataMock } from "@/mock/data";
+// import ProductDetails from "@/features/product/ProductDetails";
+// import { FloatingButton } from "@/components/FloatingButton";
+// // import { mockData } from "@/mock/watch";
+// import { IWatch } from "@/interfaces";
 
 const Product = () => {
-  const { back } = useRouter();
-  const params = useParams();
-  const [product, setProduct] = useState<IWatch | null>(null);
-  const productSlug = params.slug;
-  useEffect(() => {
-    const foundProduct = mockData.find((item) => item.slug === productSlug);
-    if (foundProduct) {
-      setProduct(foundProduct);
-    }
-  }, [productSlug]);
-  if (!product) {
-    return <div>Product not found</div>;
-  }
+  // const { back } = useRouter();
+  // const params = useParams();
+  // const [product, setProduct] = useState<IWatch | null>(null);
+  // const productSlug = params.slug;
+  // useEffect(() => {
+  //   const foundProduct = mockData.find((item) => item.slug === productSlug);
+  //   if (foundProduct) {
+  //     setProduct(foundProduct);
+  //   }
+  // }, [productSlug]);
+  // if (!product) {
+  //   return <div>Product not found</div>;
+  // }
 
-  const priceChangePercent: number = product.changePercent;
-  const isPositive = priceChangePercent > 0;
-  const isNegative = priceChangePercent < 0;
-  const arrow = isPositive ? "↑" : isNegative ? "↓" : "";
-  const changeColor = isPositive
-    ? "#00c853"
-    : isNegative
-    ? "#d32f2f"
-    : "#9e9e9e";
+  // const priceChangePercent: number = product.changePercent;
+  // const isPositive = priceChangePercent > 0;
+  // const isNegative = priceChangePercent < 0;
+  // const arrow = isPositive ? "↑" : isNegative ? "↓" : "";
+  // const changeColor = isPositive
+  //   ? "#00c853"
+  //   : isNegative
+  //   ? "#d32f2f"
+  //   : "#9e9e9e";
 
   return (
     <>
-      <div className={styles.productContainer}>
+      {/* <div className={styles.productContainer}>
         <div className={styles.productBreadcrumbs} onClick={back}>
           <img src={ArrowRight.src} alt="back to page" />
           Назад
@@ -148,7 +148,7 @@ const Product = () => {
           </div>
         </div>
         <Indicators />
-      </div>
+      </div> */}
     </>
   );
 };

@@ -1,14 +1,14 @@
 import React from "react";
 
 import styles from "./page.module.css";
-import { About } from "@/features/home/About/About";
+import { Market } from "@/features/home/Market/Market";
 
-const AboutUs = () => {
+const MarketOverview = () => {
   return (
     <div className={styles.aboutUs}>
-      <About />
+      <Market />
     </div>
   );
 };
 
-export default AboutUs;
+export default MarketOverview;

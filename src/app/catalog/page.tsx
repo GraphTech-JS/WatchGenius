@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import styles from "./page.module.css";
-import { Search } from "@/components/Search/Search";
-import { mockData } from "@/mock/watch";
+// import { Search } from "@/components/Search/Search";
+// import { mockData } from "@/mock/watch";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 const Catalog = () => {
@@ -20,7 +20,7 @@ const Catalog = () => {
               </ThemedText>
             </div>
           </div>
-          <Search type="catalog" searchList={mockData} />
+          {/* <Search type="catalog" searchList={mockData} /> */}
         </div>
       </section>
     </>

@@ -1,6 +1,6 @@
 import React from "react";
 import { Hero } from "./Hero/Hero";
-// import { About } from "./About/About";
+import { Market } from "./Market/Market";
 // import { Watch } from "./Watch/Watch";
 // import { TopBrands } from "./TopBrands/TopBrands";
 // import { Catalog } from "./Catalog/Catalog";
@@ -10,8 +10,8 @@ const HomePage = () => {
   return (
     <>
       <Hero />
-      {/* <About />
-      <Watch />
+      <Market />
+      {/*<Watch />
       <TopBrands />
       <Catalog />
       <Banner /> */}

@@ -22,17 +22,20 @@ interface IWatch {
   price: number;
   rating: number;
   changePercent: number;
-  createdAt: string;
-  diameter: number;
-  description: string;
-  material: string;
-  waterResistance: string;
-  movement: string;
-  releaseYear: string;
-  caseMaterial: string;
-  strapMaterial: string;
-  features: string[];
-  caliber: string;
+  createdAt?: string;
+  diameter?: number;
+  description?: string;
+  material?: string;
+  waterResistance?: string;
+  movement?: string;
+  releaseYear?: string;
+  caseMaterial?: string;
+  strapMaterial?: string;
+  features?: string[];
+  chartData?: number[];
+  chartColor?: string;
+  chartId?: string;
+  caliber?: string;
 }
 
 interface ISearchProps extends React.HTMLAttributes<HTMLInputElement> {

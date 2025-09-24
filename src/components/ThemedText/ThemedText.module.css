@@ -21,12 +21,12 @@
 }
 /* H2 */
 .h2 {
-  font-size: 32px;
-  font-family: var(--font-sfmono), monospace;
+  font-size: 24px;
+  font-family: var(--font-roboto), monospace;
 }
 @media (width >= 48rem /* 768px */) {
   .h2 {
-    font-size: 30px;
+    font-size: 36px;
   }
 }
 
@@ -44,7 +44,7 @@
 .h4 {
   font-size: 16px;
 }
-@media (min-width: 1024px) {
+@media (width >= 48rem /* 768px */) {
   .h4 {
     font-size: 20px;
   }
@@ -53,6 +53,11 @@
 /* H5 */
 .h5 {
   font-size: 16px;
+}
+@media (width >= 48rem /* 768px */) {
+  .h5 {
+    font-size: 16px;
+  }
 }
 
 /* empty — без особых стилей */
