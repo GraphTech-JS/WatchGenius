@@ -68,6 +68,7 @@
 }
 .headerLangSwitchBtn {
   font-weight: 700;
+  cursor: pointer;
 }
 .headerMobileSearchInput::placeholder {
   color: var(--white);

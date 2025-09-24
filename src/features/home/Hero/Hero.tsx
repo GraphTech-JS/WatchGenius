@@ -33,14 +33,14 @@ export const Hero = () => {
           >
             <Link href="/catalog" className={styles.heroLink}>
               <button
-                className={`${styles.heroCatalogBtn} w-full py-[12px] rounded-[10px]`}
+                className={`${styles.heroCatalogBtn} w-full py-[12px] rounded-[10px] cursor-pointer`}
               >
                 <div>Каталог</div>
               </button>
             </Link>
             <Link href="/chat" className={styles.heroLink}>
               <button
-                className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px]`}
+                className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer`}
               >
                 <RobotWhiteIcon
                   className={`${styles.footerSocialLinkItem} w-8 h-8 md:text-white `}
