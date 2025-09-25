@@ -38,7 +38,7 @@ const Chart2 = () => (
 );
 
 const Chart3 = () => (
-  <div className="relative flex items-center justify-between w-[350px] lg:w-[210px] h-full rounded-[10px] px-3 lg:pt-[40px] shrink-0">
+  <div className="relative flex items-center justify-between w-[350px] lg:w-[210px] h-full rounded-[10px] px-3 lg:pt-[40px] shrink-0 ">
     <div
       className={`${styles.chartRed} absolute top-[6px] lg:top-3 flex items-center justify-center w-8 lg:w-12 h-8 lg:h-11 rounded-md font-bold`}
     >
@@ -146,7 +146,7 @@ export const HeroChartsCarousel = () => {
       className={`${styles.heroChartsCarousel} w-full flex flex-col items-center`}
     >
       <div
-        className={`${styles.heroChartContainer} w-full h-[108px] max-w-[350px] rounded-[15px] p-[6px]`}
+        className={`${styles.heroChartContainer} w-full h-[108px] max-w-[360px] rounded-[15px] p-[6px]`}
       >
         <div
           className={`${styles.heroChartItem} flex rounded-[10px] h-full w-full`}

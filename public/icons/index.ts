@@ -35,6 +35,7 @@ export { default as Shield } from "./Shield.svg";
 export { default as Star } from "./Star.svg";
 export { default as WaterDrop } from "./WaterDrop.svg";
 export { default as Wine } from "./Wine.svg";
+export { default as GreenCup } from "./GreenCup.svg";
 export { default as Instagram } from "./Instagram.svg";
 export { default as Discord } from "./Discord.svg";
 export { default as Telegram } from "./Telegram.svg";

@@ -11,3 +11,7 @@
 .cardWatchName {
   line-height: 18px;
 }
+.marketCardLink {
+  color: rgba(0, 0, 0, 0.7);
+  line-height: 19px;
+}

@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import styles from "./Market.module.css";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { mockCards } from "@/mock/watch";
-import { MarketCard } from "./MarketCard/MarketCard";
+import { MarketCard } from "@/components/Main/Market/MarketCard/MarketCard";
+import { MarketTotal } from "@/components/Main/Market/MarketCard/MarketTotal";
 
 export const Market = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -16,51 +17,61 @@ export const Market = () => {
     return () => window.removeEventListener("resize", checkSize);
   }, []);
 
-  // useEffect(() => {
-  //   if (!isDesktop) {
-  //     const interval = setInterval(() => {
-  //       setActiveIndex((prev) =>
-  //         prev === mockCards.length - 1 ? 0 : prev + 1
-  //       );
-  //     }, 4000);
-  //     return () => clearInterval(interval);
-  //   }
-  // }, [isDesktop]);
+  const allCards = [
+    ...mockCards.map((card, idx) => ({
+      type: "card" as const,
+      content: <MarketCard key={`card-${idx}`} {...card} />,
+    })),
+    {
+      type: "total" as const,
+      content: (
+        <MarketTotal
+          key="total"
+          title="Liquidity Leaders"
+          deals={120}
+          amount={12545000}
+          chartData={[7, 6, 7, 6, 7.5, 7, 8]}
+        />
+      ),
+    },
+  ];
 
   if (isDesktop) {
     return (
       <section
         id="market"
-        className={`${styles.market} px-[1.25rem] pt-6 pb-10 `}
+        className={`${styles.market} px-[1.25rem] lg:px-[6rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
       >
         <div className={`${styles.marketContainer}`}>
           <div className={`${styles.marketTitle} mb-6`}>
             <ThemedText type="h2">Market overview</ThemedText>
           </div>
           <div className={`${styles.marketContent} grid md:grid-cols-3 gap-6`}>
-            {mockCards.slice(0, 3).map((card, idx) => (
-              <MarketCard key={idx} {...card} />
-            ))}
+            {allCards.map((card) => card.content)}
           </div>
         </div>
       </section>
     );
   }
 
-  const ActiveCard = mockCards[activeIndex];
+  const ActiveCard = allCards[activeIndex];
 
   return (
-    <section id="market" className={`${styles.market} px-[1.25rem] pt-6 pb-10`}>
+    <section
+      id="market"
+      className={`${styles.market} px-[1.25rem] pt-6 lg:pt-12 pb-10`}
+    >
       <div className={`${styles.marketContainer}`}>
         <div className={`${styles.marketTitle} mb-6`}>
           <ThemedText type="h2">Market overview</ThemedText>
         </div>
+
         <div className={`${styles.marketContent} flex justify-center`}>
-          <MarketCard {...ActiveCard} />
+          {ActiveCard.content}
         </div>
 
         <div className="flex justify-center gap-2 mt-4">
-          {mockCards.map((_, idx) => (
+          {allCards.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setActiveIndex(idx)}
