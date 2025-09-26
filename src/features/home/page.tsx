@@ -3,6 +3,7 @@ import { Hero } from "./Hero/Hero";
 import { Market } from "./Market/Market";
 import { Trending } from "./Trending/Trending";
 import { BestPrice } from "./BestPrice/BestPrice";
+import { BrandSpotlight } from "./BrandSpotlight/BrandSpotlight";
 // import { TopBrands } from "./TopBrands/TopBrands";
 // import { Catalog } from "./Catalog/Catalog";
 // import { Banner } from "@/components/Banner/Banner";
@@ -14,6 +15,7 @@ const HomePage = () => {
       <Market />
       <Trending />
       <BestPrice />
+      <BrandSpotlight />
       {/*<Watch />
       <TopBrands />
       <Catalog />
