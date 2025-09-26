@@ -1,0 +1,26 @@
+.bestTitle {
+  font-weight: 600;
+}
+
+.bestTitleHighlighted {
+  color: var(--green);
+}
+
+.FormItemTitle {
+  font-size: 16px;
+}
+
+.FormItemInput {
+  border: 1px solid #0000004d;
+}
+.FormBtn {
+  background: var(--green);
+  color: #fff;
+}
+.Text {
+  color: #00000080;
+}
+.TextLink {
+  color: var(--green);
+  text-decoration: underline;
+}
