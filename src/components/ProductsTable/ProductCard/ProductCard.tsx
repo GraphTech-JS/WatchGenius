@@ -70,12 +70,12 @@ export const ProductCard: React.FC<IWatch> = ({
 
   return (
     <div
-      className={`${styles.productCard} flex flex-col rounded-2xl h-[15rem] md:h-[21rem] px-2 md:px-5 py-3 md:py-4 max-w-[30rem] justify-between`}
+      className={`${styles.productCard} flex flex-col rounded-2xl h-[15rem] md:h-[21rem] px-2 md:px-4 py-3 md:py-3 max-w-[30rem] justify-between`}
     >
       {/* header */}
-      <div className="mb-1 md:mb-4 flex w-full justify-between items-start">
+      <div className="relative mb-1 md:mb-4 flex w-full justify-center items-center">
         <div
-          className={`${styles.productCardScore} flex items-center justify-center w-8 h-8`}
+          className={`${styles.productCardScore} absolute top-0 left-0 flex items-center justify-center w-8 h-8`}
         >
           <HeartIcon
             className={`${styles.productCardHeart} w-[20px] h-[18px]`}
@@ -91,7 +91,7 @@ export const ProductCard: React.FC<IWatch> = ({
         />
 
         <div
-          className={`${styles.productCardScore} ${scoreClass} flex items-center justify-center w-8 h-8 rounded-md font-bold`}
+          className={`${styles.productCardScore} ${scoreClass} absolute top-0 right-0 flex items-center justify-center w-8 h-8 rounded-md font-bold`}
         >
           {score}
         </div>
@@ -117,7 +117,7 @@ export const ProductCard: React.FC<IWatch> = ({
       {/* footer */}
       <div className="flex gap-2 items-center w-full">
         <div className="relative text-center max-h-[54px] w-full flex flex-row justify-between">
-          <div>{price} €</div>
+          <div className={`${styles.Price}`}>{price} €</div>
           <div
             className={`${styles.marketCardHeadPercent} ${percentClass} absolute bottom-3 left-15 flex items-center gap-1 font-bold`}
           >

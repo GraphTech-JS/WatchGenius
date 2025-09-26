@@ -3,7 +3,9 @@
 }
 .marketCardHeadPercent {
 }
-
+.Price {
+  font-weight: 500;
+}
 /* Score */
 .scorePositive {
   background: rgba(222, 251, 234, 1);
