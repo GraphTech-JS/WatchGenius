@@ -1,0 +1,31 @@
+.productCard {
+  border: 1px solid #00000033;
+}
+.cardBodyName {
+  font-size: 18px;
+  line-height: 22px;
+}
+.cardBodyPrice {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+}
+.cardBodyPercentItem {
+  background: #ecfdf5;
+  font-size: 14px;
+  line-height: 18px;
+  color: #055727;
+  font-weight: 400;
+}
+@media (width >= 48rem /* 768px */) {
+  .cardBodyName {
+    font-size: 20px;
+    line-height: 24px;
+  }
+  .cardBodyPrice {
+    font-size: 20px;
+  }
+  .cardBodyPercentItem {
+    font-size: 15px;
+  }
+}

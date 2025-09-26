@@ -1,11 +1,21 @@
 .bestTitle {
   font-weight: 600;
+  line-height: 28px;
 }
-
+.bestDate {
+  font-size: 16px;
+  line-height: 18px;
+  color: #00000080;
+}
 .bestTitleHighlighted {
   color: var(--green);
 }
-
+.bestAlertTitle {
+  font-family: var(--font-roboto);
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+}
 .FormItemTitle {
   font-size: 16px;
 }
@@ -13,9 +23,18 @@
 .FormItemInput {
   border: 1px solid #0000004d;
 }
+.FormItemInputCurr {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 18px;
+  color: var(--green);
+}
 .FormBtn {
   background: var(--green);
   color: #fff;
+}
+.FormBtn:hover {
+  background: var(--dark-green);
 }
 .Text {
   color: #00000080;
@@ -23,4 +42,40 @@
 .TextLink {
   color: var(--green);
   text-decoration: underline;
+}
+
+.bestWatchesLink {
+  font-weight: 500;
+  font-size: 16px;
+}
+@media (width >= 48rem /* 768px */) {
+  .bestAlertTitle {
+    font-size: 24px;
+    line-height: 28px;
+  }
+  .bestWatchesLink {
+    font-size: 20px;
+    line-height: 24px;
+  }
+  .bestTitle {
+    line-height: 38px;
+  }
+}
+
+/* Прибираємо стандартний outline при фокусі */
+.Input:focus,
+.Input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Прибираємо стрілки у полях type="number" */
+.Input[type="number"]::-webkit-inner-spin-button,
+.Input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.Input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
 }
