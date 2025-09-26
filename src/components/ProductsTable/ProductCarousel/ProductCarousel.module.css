@@ -1,0 +1,30 @@
+.dot {
+  background: rgba(223, 223, 223, 1);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.dotActive {
+  background: var(--green);
+  transform: scale(1.1);
+}
+.desktopBar {
+  grid-template-columns: 1fr auto 1fr;
+}
+.ctaBtn {
+  background: var(--green);
+  color: #fff;
+  line-height: 19px;
+}
+.ctaBtn:hover {
+  background: var(--dark-green);
+}
+
+.pageBar {
+  background: #dfdfdf;
+  transition: background 0.3s;
+}
+.pageBarActive {
+  background: #04694f;
+}
+.arrowDisabled {
+  color: rgba(0, 0, 0, 0.3);
+}

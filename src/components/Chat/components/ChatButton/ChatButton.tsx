@@ -1,4 +1,6 @@
 import React from "react";
+import { RobotWhiteIcon } from "../../../../../public/chat/Icon";
+import styles from "./ChatButton.module.css";
 
 interface IChatButton {
   onClick: () => void;
@@ -12,34 +14,18 @@ export const ChatButton: React.FC<IChatButton> = ({
   isScrolling = false,
 }) => (
   <>
-    <div
-      style={{ boxShadow: "0 4px 20px 2px rgba(0, 0, 0, 0.25)" }}
-      className="
-        fixed right-0 bottom-0
-        h-screen w-0 sm:w-[42px] bg-white 
-        flex justify-center items-start
-        z-30
-      "
-    />
-
     <button
       onClick={onClick}
       style={{
-        filter: "drop-shadow(-1px 4px 14px rgba(255, 230, 230, 0.7))",
-        WebkitBorderTopLeftRadius: 50,
-        WebkitBorderBottomLeftRadius: 50,
-        borderTopLeftRadius: 50,
-        borderBottomLeftRadius: 50,
         bottom: dynamicPosition?.bottom || "20%",
         transform: "translateY(50%)",
       }}
       className={`
         fixed
-        right-[-10px] md:right-0
-        w-[94px] md:w-[105px]
-        h-[98px]
-        rounded-l-[50%]
-        bg-white shadow-md
+        right-[15px] lg:right-[30px]
+        w-[63px] md:w-[81px]
+        h-[63px] md:h-[81px]
+        rounded-full
         cursor-pointer
         z-40
         ${
@@ -47,17 +33,16 @@ export const ChatButton: React.FC<IChatButton> = ({
             ? "transition-none"
             : "transition-all duration-500 ease-out"
         }
+        ${styles.chatButton}
         hover:scale-105 active:scale-95
-        font-sfmono text-[20px]
         flex items-center justify-center
         select-none
         touch-manipulation
       `}
-      aria-label="Открыть AI чат"
     >
-      <span className="text-center leading-tight">
-        АІ <br /> чат
-      </span>
+      <RobotWhiteIcon
+        className={`${styles.chatButtonIcon} w-9 h-9 md:w-10 md:h-10 md:text-white `}
+      />
     </button>
   </>
 );

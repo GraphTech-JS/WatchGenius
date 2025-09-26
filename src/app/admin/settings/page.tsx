@@ -1,6 +1,6 @@
 import styles from "../admin.module.css";
 import React from "react";
-import { SettingsDark } from "../../../../public/icons";
+import { SettingsCog } from "../../../../public/icons";
 import { AdminLayout } from "@/components/Main/AdminLayout/AdminLayout";
 import { Button } from "@/components/Button/Button";
 
@@ -11,7 +11,7 @@ const Settings = () => {
         <div className={styles.dashboardContainer}>
           <div className={styles.dashboardTitleSection}>
             <img
-              src={SettingsDark.src}
+              src={SettingsCog.src}
               alt="settings icon"
               width={38}
               height={38}

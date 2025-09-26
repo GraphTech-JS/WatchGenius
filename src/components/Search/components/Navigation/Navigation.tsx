@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeftGrey, ArrowRightGrey } from "../../../../../public/icons";
+import { ArrowRight } from "../../../../../public/icons";
 import styles from "./Navigation.module.css";
 
 interface NavigationProps {
@@ -68,7 +68,7 @@ const Navigation: React.FC<NavigationProps> = ({
         disabled={currentPage === 1}
         aria-label="Previous page"
       >
-        <img src={ArrowLeftGrey.src} alt="previous page" />
+        <img src={ArrowRight.src} alt="previous page" />
       </button>
 
       <div className={styles.pageNumbers}>{renderPageNumbers()}</div>
@@ -81,7 +81,7 @@ const Navigation: React.FC<NavigationProps> = ({
         disabled={currentPage === totalPages}
         aria-label="Next page"
       >
-        <img src={ArrowRightGrey.src} alt="next page" />
+        <img src={ArrowRight.src} alt="next page" />
       </button>
     </nav>
   );

@@ -1,0 +1,41 @@
+.control {
+  border: 1px solid #0000004d;
+}
+.selectPlaceholder {
+  color: #00000066;
+}
+.selectArrow {
+  color: #00000066;
+}
+.menu {
+  top: 100%;
+  left: 0;
+  right: 0;
+  border: 1px solid #0000004d;
+  border-top: 0;
+  background: #fff;
+
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.menuOpen {
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  max-height: 262px;
+  overflow-y: auto;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.option {
+  transition: background 0.2s;
+}
+.optionDivider {
+  border-bottom: 1px solid #0000004d;
+}
+.option:hover {
+  background: #f0f0f0;
+}

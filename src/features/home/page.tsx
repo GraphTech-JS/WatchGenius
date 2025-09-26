@@ -1,20 +1,23 @@
 import React from "react";
 import { Hero } from "./Hero/Hero";
-import { About } from "./About/About";
-import { Watch } from "./Watch/Watch";
-import { TopBrands } from "./TopBrands/TopBrands";
-import { Catalog } from "./Catalog/Catalog";
-import { Banner } from "@/components/Banner/Banner";
+import { Market } from "./Market/Market";
+import { Trending } from "./Trending/Trending";
+import { BestPrice } from "./BestPrice/BestPrice";
+// import { TopBrands } from "./TopBrands/TopBrands";
+// import { Catalog } from "./Catalog/Catalog";
+// import { Banner } from "@/components/Banner/Banner";
 
 const HomePage = () => {
   return (
     <>
       <Hero />
-      <About />
-      <Watch />
+      <Market />
+      <Trending />
+      <BestPrice />
+      {/*<Watch />
       <TopBrands />
       <Catalog />
-      <Banner />
+      <Banner /> */}
     </>
   );
 };

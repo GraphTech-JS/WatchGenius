@@ -1,0 +1,46 @@
+.heroChartContainer {
+  background: rgba(227, 219, 200, 0.6);
+}
+.heroChartItem {
+  background: var(--white);
+}
+.dotsWrapper {
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.activeDot {
+  background-color: var(--green);
+  transform: scale(1.1);
+}
+
+.inactiveDot {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+.chartGreen {
+  background: rgba(222, 251, 234, 1);
+  color: rgba(6, 123, 6, 1);
+}
+.chartOrange {
+  background: rgba(255, 243, 213, 1);
+  color: rgba(206, 150, 18, 1);
+}
+.chartRed {
+  background: rgba(253, 220, 220, 1);
+  color: rgba(185, 27, 27, 0.96);
+}
+.chartOverall {
+  font-family: var(--font-roboto);
+  font-size: 36px;
+  font-weight: 600;
+}
+.chartPersent {
+  font-size: 20px;
+}

@@ -5,26 +5,25 @@ import { Footer } from "@/components/Main/Footer/Footer";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { Button } from "@/components/Button/Button";
-import { getWatchBySlug } from "@/lib/api";
+// import { getWatchBySlug } from "@/lib/api";
 import { Metadata } from "next";
 
 interface Params {
   slug: string;
 }
 
-export async function generateMetadata({
-  params,
-}: {
+export async function generateMetadata({}: // params,
+{
   params: Promise<Params>; // Changed: params is now Promise<Params>
 }): Promise<Metadata> {
-  const resolvedParams = await params; // Added: await the params
-  const watch = await getWatchBySlug(resolvedParams.slug);
+  // const resolvedParams = await params;
+  // const watch = await getWatchBySlug(resolvedParams.slug);
   return {
-    title: `${watch.title} — WatchGenius`,
-    description: watch.description,
-    alternates: {
-      canonical: `/watch/${resolvedParams.slug}`,
-    },
+    // title: `${watch.title} — WatchGenius`,
+    // description: watch.description,
+    // alternates: {
+    //   canonical: `/watch/${resolvedParams.slug}`,
+    // },
   };
 }
 export default function RootLayout({

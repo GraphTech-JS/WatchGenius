@@ -2,36 +2,57 @@
 import React from "react";
 import styles from "./Hero.module.css";
 import Link from "next/link";
+import { HeroChartsCarousel } from "@/components/Main/Hero/HeroChartsCarousel/HeroChartsCarousel";
 
-import { Button } from "@/components/Button/Button";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
+import { RobotWhiteIcon } from "../../../../public/chat/Icon";
 
 export const Hero = () => {
   return (
-    <section
-      className={`${styles.hero} relative w-full min-h-[676px] md:min-h-[476px] lg:min-h-[557px]
-     bg-[url('/hero-section/hero.png')] bg-no-repeat bg-[left_-250px_top] md:bg-[left_200px_top] bg-cover`}
-    >
-      <div className={styles.heroLeft}>
-        <div className={styles.heroText}>
-          <ThemedText type="h1" className="text-white">
-            Обери свій годинник
-          </ThemedText>
-          <p className={styles.heroSubtitle}>
-            Годинники від світових брендів. Якість, точність і безкомпромісна
-            елегантність.
-          </p>
-        </div>
-        <Link href="/catalog" className={styles.heroLink}>
-          <Button
-            variant="solid"
-            color="#000"
-            bgColor="#fff"
-            classNames={styles.heroBtn}
+    <section className={`${styles.hero}`}>
+      <div
+        className={`${styles.heroContainer} relative overflow-hidden px-5 md:px-10 lg:px-25 pt-25 md:pt-28 lg:pt-36 pb-15 lg:pb-6 flex flex-col items-center md:items-start gap-17 w-full bg-[url('/hero-section/Hero.png')] bg-no-repeat bg-[68%] md:bg-[82%] lg:bg-top bg-cover`}
+      >
+        <div
+          className={`${styles.heroLeft} w-full flex flex-col text-center md:text-start gap-17 md:max-w-[66%] md:items-start  lg:max-w-[590px] `}
+        >
+          <div className={`${styles.heroText} flex flex-col gap-6 `}>
+            <ThemedText
+              type="h1"
+              className={`${styles.heroTextTitle} flex text-white `}
+            >
+              Зрозумілий ринок годинників з Data+ AI
+            </ThemedText>
+            <p className={styles.heroTextSubtitle}>
+              Аналітика цін та трендів для 300+ моделей. Персональний
+              чат-асистент допоможе обрати годинник та купити безпечно
+            </p>
+          </div>
+          <div
+            className={`${styles.heroMenu} md:w-[90%] flex flex-col md:flex-row gap-6 items-center`}
           >
-            Каталог
-          </Button>
-        </Link>
+            <Link href="/catalog" className={styles.heroLink}>
+              <button
+                className={`${styles.heroCatalogBtn} w-full py-[12px] rounded-[10px] cursor-pointer`}
+              >
+                <div>Каталог</div>
+              </button>
+            </Link>
+            <Link href="/chat" className={styles.heroLink}>
+              <button
+                className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer`}
+              >
+                <RobotWhiteIcon
+                  className={`${styles.footerSocialLinkItem} w-8 h-8 md:text-white `}
+                />
+                <div>Geni - AI chat</div>
+              </button>
+            </Link>
+          </div>
+        </div>
+        <div className={`${styles.heroCharts} w-full`}>
+          <HeroChartsCarousel />
+        </div>
       </div>
     </section>
   );

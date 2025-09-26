@@ -1,9 +1,12 @@
 .header {
-  background-color: #222222;
-  padding: 1rem 0;
-  z-index: 90;
-  position: relative;
-  padding: 10px 70px;
+  background-color: #e3dbc8b2;
+  padding: 1.125rem 1.25rem;
+  z-index: 40;
+  position: fixed;
+}
+.logoName {
+  font-family: var(--font-akatab);
+  font-size: 16px;
 }
 
 .headerContainer {
@@ -14,255 +17,93 @@
   margin: 0 auto;
 }
 
-.headerLogo {
-  width: 208px;
-  height: 40px;
-}
-
 .headerLink {
-  color: var(--white);
-  font-size: 16px;
+  color: var(--black);
+  font-size: 20px;
   text-decoration: none;
   transition: all 0.3s ease;
   position: relative;
 }
 
-.headerLink:hover {
-  text-shadow: 0 0 8px rgba(250, 250, 250, 0.6);
+.headerMobileMenuLink {
+  font-size: 24px;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  color: var(--white);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 1rem 2rem;
+  border-radius: 8px;
 }
 
-.headerRightLinks {
-  display: flex;
-  gap: 50px;
+.headerMobileMenuLink:hover {
+  text-shadow: 0 0 10px rgba(250, 250, 250, 0.8);
 }
-
-.headerLangSwitchBtn,
-.headerMobileLangSwitchBtn {
+.headerMobileMenuBtn {
   background: transparent;
   border: none;
   cursor: pointer;
 }
 
-.headerLangSwitchIcon:hover {
-  filter: drop-shadow(0 0 10px rgba(250, 250, 250, 0.8));
-  -webkit-filter: drop-shadow(0 0 10px rgba(250, 250, 250, 0.8));
-}
-
-.headerMobileMenuBtn,
-.headerMobileMenu {
-  display: none;
+.headerMobileMenuIconClose {
+  width: 23px;
+  height: 23px;
 }
 
 .headerMobileMenu {
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateY(100%);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 90;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% - 60px);
+  background: linear-gradient(0deg, #d1c4ac, #d1c4ac),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.27), rgba(0, 0, 0, 0.27));
+  z-index: 50;
+  box-shadow: 0px 4px 19.6px 2px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  pointer-events: auto;
 }
-
-@media (max-width: 1000px) {
-  .fixedHeader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 100;
-  }
-  .headerRightLinks,
-  .headerLink,
-  .headerLangSwitchBtn {
-    display: none;
-  }
-  .headerContainer {
-    display: flex;
-    max-width: 100%;
-    justify-content: space-between;
-  }
-  .headerMobileMenuWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-  }
-  .headerMobileMenuLink {
-    font-size: 24px;
-    font-family: "Inter", sans-serif;
-    color: var(--white);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-  }
-
-  .headerMobileMenuLink:hover {
-    text-shadow: 0 0 10px rgba(250, 250, 250, 0.8);
-  }
-  .headerMobileMenuBtn {
-    display: flex;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-
-  .headerMobileMenuIconClose {
-    width: 23px;
-    height: 23px;
-  }
-
-  .headerLogo {
-    font-size: 20px;
-  }
-
-  .headerMobileLangSwitchIcon {
-    width: 44px;
-    height: 44px;
-  }
+.headerMobileLangSwitchBtn {
+  color: var(--white);
+  font-weight: 700;
+}
+.headerLangSwitchBtn {
+  font-weight: 700;
+  cursor: pointer;
+}
+.headerMobileSearchInput::placeholder {
+  color: var(--white);
+}
+.headerMobileSearchInput:focus-visible {
+  outline: none;
+}
+@media (width >= 48rem /* 768px */) {
   .header {
-    padding: 15px 20px;
+    padding: 1.25rem 2.625rem;
   }
-
+  .logoName {
+    font-size: 24px;
+  }
+  .headerMobileSearchInput::placeholder {
+    color: var(--black);
+  }
   .headerMobileMenu {
-    position: fixed;
-    top: 60px;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: calc(100% - 60px);
-    background-color: var(--black);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    z-index: 50;
+    top: 0;
+    left: auto;
+    right: 0;
+    width: 250px;
+    height: 430px;
     overflow: hidden;
-    transform: translateY(0);
-    opacity: 1;
     pointer-events: auto;
+    z-index: -1;
   }
 }
-
-@media (max-width: 835px) {
-  .headerRightLinks,
-  .headerLink,
-  .headerLangSwitchBtn {
-    display: none;
-  }
-  .headerContainer {
-    display: flex;
-    max-width: 100%;
-    justify-content: space-between;
-  }
-
-  .headerMobileMenuWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-  }
-  .headerMobileMenuLink {
-    font-size: 24px;
-    font-family: "Inter", sans-serif;
-    color: var(--white);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-  }
-
-  .headerMobileMenuLink:hover {
-    text-shadow: 0 0 10px rgba(250, 250, 250, 0.8);
-  }
-  .headerMobileMenuBtn {
-    display: flex;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-
-  .headerMobileMenuIconClose {
-    width: 23px;
-    height: 23px;
-  }
-
-  .headerLogo {
-    font-size: 20px;
-  }
-
-  .headerMobileLangSwitchIcon {
-    width: 44px;
-    height: 44px;
+@media (width >= 64rem /* 1024px */) {
+  .header {
+    padding: 1.25rem 5rem;
   }
 }
-@media (max-width: 420px) {
-  .headerRightLinks,
-  .headerLink,
-  .headerLangSwitchBtn {
-    display: none;
-  }
-  .headerContainer {
-    display: flex;
-    max-width: 100%;
-    justify-content: space-between;
-  }
-
-  .headerMobileMenu {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 94%;
-    background-color: var(--black);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    z-index: 50;
-    overflow: hidden;
-    transform: translateY(0);
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .headerMobileMenuWrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 50px;
-  }
-  .headerMobileMenuLink {
-    font-size: 24px;
-    font-family: "Inter", sans-serif;
-    color: var(--white);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    padding: 1rem 2rem;
-    border-radius: 8px;
-  }
-
-  .headerMobileMenuLink:hover {
-    text-shadow: 0 0 10px rgba(250, 250, 250, 0.8);
-  }
-  .headerMobileMenuBtn {
-    display: flex;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-
-  .headerMobileMenuIconClose {
-    width: 23px;
-    height: 23px;
-  }
-
-  .headerLogo {
-    font-size: 20px;
-  }
-
-  .headerMobileLangSwitchIcon {
-    width: 44px;
-    height: 44px;
+@media (width >= 80rem /* 1280px */) {
+  .header {
+    padding: 1.25rem 7rem;
   }
 }

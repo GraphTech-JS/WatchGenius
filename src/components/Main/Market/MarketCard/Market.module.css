@@ -1,0 +1,17 @@
+.marketCard {
+  box-shadow: 0px 4px 19.6px 2px #00000040;
+}
+.marketCardHeadName {
+  font-weight: 700;
+}
+.marketCardHeadPercent {
+  color: #05873b;
+  font-weight: 700;
+}
+.cardWatchName {
+  line-height: 18px;
+}
+.marketCardLink {
+  color: rgba(0, 0, 0, 0.7);
+  line-height: 19px;
+}

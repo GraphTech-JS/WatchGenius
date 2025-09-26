@@ -1,17 +1,17 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import styles from "./Catalog.module.css";
-import { Card } from "./components/Card/Card";
-import { mockData } from "@/mock/watch";
+// import { Card } from "./components/Card/Card";
+// import { mockData } from "@/mock/watch";
 import { Button } from "@/components/Button/Button";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 
 export const Catalog = () => {
   const [limit, setLimit] = useState<number>(4);
-  const [isClient, setIsClient] = useState(false);
+  // const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
+    // setIsClient(true);
 
     if (typeof window !== "undefined") {
       const mediaQuery = window.matchMedia("(min-width: 1536px)");
@@ -35,7 +35,7 @@ export const Catalog = () => {
 
   const showMore = () => {
     if (limit === 4 || limit === 6) {
-      setLimit(mockData.length);
+      // setLimit(mockData.length);
     } else if (typeof window !== "undefined") {
       const mediaQuery = window.matchMedia("(min-width: 1536px)");
       setLimit(mediaQuery.matches ? 6 : 4);
@@ -48,7 +48,7 @@ export const Catalog = () => {
         <div className={styles.catalogContent}>
           <div className={styles.catalogText}>
             <ThemedText type="h2">Каталог</ThemedText>
-            <div className={styles.catalogCards}>
+            {/* <div className={styles.catalogCards}>
               {mockData
                 .slice(0, isClient ? limit : 4)
                 .map(
@@ -72,7 +72,7 @@ export const Catalog = () => {
                     />
                   )
                 )}
-            </div>
+            </div> */}
             <Button
               variant="text"
               color="#000"
