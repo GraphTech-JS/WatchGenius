@@ -104,3 +104,36 @@ export const mockTrending: IWatch[] = [
     chartId: "chart6",
   },
 ];
+
+export const mockBest: IWatch[] = [
+  {
+    id: 1,
+    slug: "dsfww",
+    image: MockWatch.src,
+    title: "Top Gainers 90d",
+    brand: "Rolex Submariner Oyster Perpetual",
+    price: 19500,
+    rating: 10,
+    changePercent: 7,
+  },
+  {
+    id: 2,
+    slug: "dsfw5",
+    image: MockWatch.src,
+    title: "Stable Picks 90d",
+    brand: "Rolex Submariner Oyster Perpetual",
+    price: 19500,
+    rating: 10,
+    changePercent: 5,
+  },
+  {
+    id: 3,
+    slug: "hefw5",
+    image: MockWatch.src,
+    title: "Stable Picks 90d",
+    brand: "Rolex Submariner Oyster Perpetual",
+    price: 19500,
+    rating: 10,
+    changePercent: 8,
+  },
+];
