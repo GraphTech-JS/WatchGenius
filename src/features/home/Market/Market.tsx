@@ -40,7 +40,7 @@ export const Market = () => {
     return (
       <section
         id="market"
-        className={`${styles.market} px-[1.25rem] lg:px-[6rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
+        className={`${styles.market} max-w-[90rem] mx-auto px-[1.25rem] lg:px-[6rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
       >
         <div className={`${styles.marketContainer}`}>
           <div className={`${styles.marketTitle} mb-6`}>

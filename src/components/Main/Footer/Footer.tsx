@@ -128,7 +128,7 @@ export const Footer = () => {
         </nav>
       </div>
       <div
-        className={`${styles.footerBottom} flex md:flex-row flex-col-reverse md:justify-between text-center gap-6`}
+        className={`${styles.footerBottom} mx-auto max-w-[90rem] px-[2rem] md:px-[2.5rem] lg:px-[6.25rem] flex md:flex-row flex-col-reverse md:justify-between text-center gap-6`}
       >
         <div>© 2025 WatchGenius. Всі права захищено</div>
         <div className=" flex md:flex-row flex-col-reverse gap-6">

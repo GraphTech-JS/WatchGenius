@@ -69,7 +69,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
         <ArrowIcon
           className={`${
             styles.selectArrow
-          } w-[14px] h-[26px] transform rotate-90 transition-transform ${
+          } w-[14px] h-[26px] transform rotate-90 transition-transform cursor-pointer ${
             isOpen ? "rotate-270" : ""
           }`}
         />

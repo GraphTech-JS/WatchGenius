@@ -78,7 +78,7 @@ export const ProductCard: React.FC<IWatch> = ({
           className={`${styles.productCardScore} absolute top-0 left-0 flex items-center justify-center w-8 h-8`}
         >
           <HeartIcon
-            className={`${styles.productCardHeart} w-[20px] h-[18px]`}
+            className={`${styles.productCardHeart} w-[20px] h-[18px] cursor-pointer`}
           />
         </div>
 
@@ -124,7 +124,9 @@ export const ProductCard: React.FC<IWatch> = ({
             {ArrowIcon && <ArrowIcon />}
             {changePercent}%
           </div>
-          <BellIcon className={`${styles.productCardBell} w-[21px] h-[22px]`} />
+          <BellIcon
+            className={`${styles.productCardBell} w-[21px] h-[22px] cursor-pointer`}
+          />
         </div>
       </div>
     </div>

@@ -29,6 +29,9 @@
   line-height: 18px;
   color: var(--green);
 }
+.FormItemInputCurr:hover {
+  color: var(--dark-green);
+}
 .FormBtn {
   background: var(--green);
   color: #fff;
