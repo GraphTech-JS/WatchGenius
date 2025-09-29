@@ -126,7 +126,7 @@ export const HowTo = () => {
           <Link
             href="/guide"
             prefetch={false}
-            className={`${styles.howToLink} w-full lg:max-w-[22%]`}
+            className={`${styles.howToLink} w-full lg:max-w-[24%]`}
           >
             <button
               className={`${styles.howToGuideBtn} w-full py-[22px] lg:py-[18px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
@@ -138,7 +138,7 @@ export const HowTo = () => {
           <Link
             href="/chat"
             prefetch={false}
-            className={`${styles.howToLink} w-full lg:max-w-[22%]`}
+            className={`${styles.howToLink} w-full lg:max-w-[24%]`}
           >
             <button
               className={`${styles.howToChatBtn} w-full py-[22px] lg:py-[18px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
