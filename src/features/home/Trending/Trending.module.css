@@ -2,3 +2,12 @@
   font-weight: 600;
   font-size: 24px;
 }
+.trendingSettings {
+  background: rgba(238, 238, 238, 1);
+  font-size: 16px;
+  font-weight: 400;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.trendingSettingsItem {
+  border-color: rgba(0, 0, 0, 0.2);
+}

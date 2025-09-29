@@ -14,9 +14,9 @@ export const Hero = () => {
         className={`${styles.heroContainer} w-full relative bg-[url('/hero-section/Hero.png')] bg-no-repeat bg-[68%] md:bg-[82%] lg:bg-top bg-cover`}
       >
         <div
-          className={`${styles.heroWrap} max-w-[90rem] mx-auto w-full  overflow-hidden px-5 md:px-10 
-        lg:px-25 pt-25 md:pt-28 lg:pt-36 pb-15 lg:pb-6 flex flex-col items-center 
-        md:items-start gap-17 md:gap-18 lg:gap-12`}
+          className={`${styles.heroWrap} max-w-[90rem] mx-auto w-full overflow-hidden px-5 md:px-10 lg:px-25
+          pt-25 md:pt-28 lg:pt-36 pb-15 lg:pb-6 flex flex-col items-center 
+          md:items-start gap-17 md:gap-18 lg:gap-12`}
         >
           <div
             className={`${styles.heroLeft} w-full flex flex-col text-center md:text-start gap-17 md:max-w-[66%] md:items-start  lg:max-w-[590px] `}

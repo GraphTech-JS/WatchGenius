@@ -1,0 +1,69 @@
+/* .howToTitle {
+  
+} */
+.howToTitleText {
+  font-family: var(--font-roboto);
+  font-size: 24px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.howToTitleHighlighted {
+  color: var(--green);
+}
+.howToText {
+  line-height: 18px;
+  color: #00000080;
+  font-weight: 400;
+}
+.howToAdviceItem {
+  border: 1px solid #0000001a;
+  transition: box-shadow 0.3s ease-in-out;
+}
+.howToAdviceItem:hover {
+  box-shadow: 0px 4px 18.1px 5px rgba(0, 0, 0, 0.4);
+}
+.howToAdviceItemIcon {
+  border: 1px solid #0000001a;
+}
+.Icon {
+  color: #378c6f;
+}
+.IconColor {
+  color: #d8a91c;
+}
+.howToAdviceItemTitle {
+  font-weight: 600;
+  line-height: 18px;
+}
+.howToAdviceItemText {
+  font-size: 15px;
+  line-height: 18px;
+  color: #17141480;
+}
+.howToGuideBtn {
+  color: white;
+  background: var(--green);
+}
+.howToGuideBtn:hover {
+  background: var(--dark-green);
+}
+.howToChatBtn {
+  color: var(--green);
+  background: none;
+  box-shadow: inset 0 0 0 1px #04694f;
+  font-weight: 600;
+}
+.howToChatBtn:hover {
+  background: var(--button-active-bg);
+  color: white;
+}
+@media (width >= 64rem /* 1024px */) {
+  .howToTitleText {
+    font-size: 32px;
+    line-height: 38px;
+  }
+  .howToAdviceItemTitle {
+    font-size: 20px;
+    line-height: 24px;
+  }
+}

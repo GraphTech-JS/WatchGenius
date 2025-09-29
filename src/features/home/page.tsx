@@ -4,9 +4,8 @@ import { Market } from "./Market/Market";
 import { Trending } from "./Trending/Trending";
 import { BestPrice } from "./BestPrice/BestPrice";
 import { BrandSpotlight } from "./BrandSpotlight/BrandSpotlight";
-// import { TopBrands } from "./TopBrands/TopBrands";
-// import { Catalog } from "./Catalog/Catalog";
-// import { Banner } from "@/components/Banner/Banner";
+import { HowTo } from "./HowTo/Howto";
+import { Dealers } from "./Dealers/Dealers";
 
 const HomePage = () => {
   return (
@@ -16,10 +15,8 @@ const HomePage = () => {
       <Trending />
       <BestPrice />
       <BrandSpotlight />
-      {/*<Watch />
-      <TopBrands />
-      <Catalog />
-      <Banner /> */}
+      <HowTo />
+      <Dealers />
     </>
   );
 };

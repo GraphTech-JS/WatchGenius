@@ -1,6 +1,6 @@
 .dot {
   background: rgba(223, 223, 223, 1);
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform 0.4s ease, background 0.4s ease;
 }
 .dotActive {
   background: var(--green);
