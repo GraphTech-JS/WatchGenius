@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useRef, useState, useId } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
+import styles from './SortDropdown.module.css';
 
 interface SortDropdownProps {
   value?: string;
@@ -16,7 +17,6 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
   const listId = useId();
 
   const options = [
-    'За замовчуванням',
     'По тренду (90 днів)',
     'По ціні (зростання)',
     'По ціні (спадання)',
@@ -65,14 +65,14 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
           relative
           w-full h-[51px]
           bg-white 
-          border border-[rgba(23,20,20,0.3)]
+          border border-[rgba(23, 20, 20, 0.3)]
           rounded-[15px]
           px-[20px] pr-[50px] py-[11px]
-          font-[var(--font-inter)] font-medium text-[16px] text-black
+          font-medium text-[#000]
           flex items-center
-          hover:bg-gray-50
-          focus:outline-none focus:ring-2 focus:ring-[#04694f]/20
-          transition-colors
+          cursor-pointer
+          ${styles.sortDropdownButton}
+
           ${isOpen ? 'rounded-b-none border-b-0' : ''}
         `}
       >
@@ -94,12 +94,12 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
         className={`
           absolute top-full left-0 right-0 z-50
           bg-white
-          border-x border-b border-t border-[rgba(23,20,20,0.3)]
+          ${styles.dropdownList}
           rounded-b-[15px]
-          shadow-lg
           overflow-hidden
-          divide-y divide-[rgba(23,20,20,0.3)]
+          divide-y divide-[var(--text-dark)]
           transform origin-top transition-all duration-150
+          cursor-pointer
           ${
             isOpen
               ? 'opacity-100 scale-y-100 translate-y-0 visible pointer-events-auto'
@@ -117,15 +117,10 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
             className={`
               w-full text-left
               px-[20px] py-[12px]
-              font-[var(--font-inter)] font-medium text-[16px]
+              font-medium text-[16px]
               transition-colors
-              ${
-                option === value
-                  ? 'bg-gray-50 text-black'
-                  : 'bg-white text-black'
-              }
-              hover:bg-gray-50
-              focus:outline-none focus-visible:bg-gray-100
+              cursor-pointer
+              ${styles.sortDropdownButton}
             `}
           >
             {option}

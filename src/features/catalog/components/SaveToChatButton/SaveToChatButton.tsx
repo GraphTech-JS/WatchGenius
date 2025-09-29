@@ -1,6 +1,8 @@
 'use client';
-import React from 'react';
-import { FaRegStar } from 'react-icons/fa';
+import React, { useState } from 'react';
+import styles from './SaveToChatButton.module.css';
+import { StarIcon, StarIconHover } from '../../../../../public/catalogPage';
+import Image from 'next/image';
 
 interface SaveToChatButtonProps {
   onClick: () => void;
@@ -9,20 +11,20 @@ interface SaveToChatButtonProps {
 export const SaveToChatButton: React.FC<SaveToChatButtonProps> = ({
   onClick,
 }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <button
       onClick={onClick}
-      className='w-[250px] h-[51px] 
-                 border border-[var(--zeleniy)] 
-                 rounded-[15px] 
-                 px-[21px] py-[16px] pr-[19px]
-                 bg-white 
-                 flex items-center gap-[8px]
-                 font-[var(--font-inter)] font-medium text-[16px] text-[#04694f]
-                 hover:bg-[#f8f8f8] transition-colors
-                 focus:outline-none focus:ring-2 focus:ring-[#04694f] focus:ring-opacity-20'
+      className={`${styles.saveToChatButton} flex items-center gap-2 cursor-pointer`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <FaRegStar className='w-4 h-4 text-[#04694f]' />
+      <Image
+        src={isHovered ? StarIconHover : StarIcon}
+        alt='StarIcon'
+        className={styles.starIcon}
+      />
       Зберегти пошук в чат
     </button>
   );

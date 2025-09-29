@@ -1,0 +1,25 @@
+.saveToChatButton {
+  width: 250px;
+  height: 51px;
+  border: 1px solid var(--green-primary);
+  border-radius: 15px;
+  padding: 21px 19px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Inter';
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--green-primary);
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: rgba(0, 82, 61, 0.4);
+    color: white;
+  }
+}
+
+.starIcon {
+  width: 18px;
+  height: 18px;
+}

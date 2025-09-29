@@ -1,0 +1,23 @@
+.sortButtons {
+  width: 51px;
+  height: 51px;
+  border: 1px solid rgba(23, 20, 20, 0.3);
+  border-radius: 15px;
+  padding: 21px 19px;
+  background-color: white;
+
+  font-family: 'Inter';
+  font-size: 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--green-primary);
+    color: white;
+  }
+  &:focus {
+    outline: none;
+    background-color: var(--green-primary);
+    color: white;
+  }
+}
