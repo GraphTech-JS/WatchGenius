@@ -4,13 +4,13 @@
   bottom: 0;
   z-index: 90;
   color: var(--white);
-  padding: 2.5rem 2rem;
 }
 
 .footerContainer {
-  max-width: 1300px;
-  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  max-width: 1440px;
   margin-bottom: 1.875rem;
+  margin: 0 auto;
 }
 
 .logoName {
@@ -56,14 +56,12 @@
 } */
 
 @media (width >= 48rem /* 768px */) {
-  .footer {
-    padding: 2rem 2.5rem;
-  }
   .logoName {
     font-size: 24px;
   }
   .footerContainer {
     margin-bottom: 3.5rem;
+    padding: 2rem 2.5rem;
   }
   .footerLinkTitle {
     font-size: 32px;
@@ -80,7 +78,7 @@
   }
 }
 @media (width >= 64rem /* 1024px */) {
-  .footer {
+  .footerContainer {
     padding: 2rem 6.25rem;
   }
 }

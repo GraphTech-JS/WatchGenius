@@ -1,0 +1,39 @@
+.dealerCard {
+  background: white;
+  box-shadow: 0px 4px 19.6px 2px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.3s ease-in-out;
+}
+.dealerCard:hover {
+  box-shadow: 0px 4px 18.1px 5px rgba(0, 0, 0, 0.4);
+}
+.CardDescTitle {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 24px;
+}
+.CardDescText {
+  color: rgba(23, 20, 20, 0.6);
+  line-height: 19px;
+}
+.CardInfoItem {
+  background: rgba(238, 238, 238, 1);
+  color: rgba(23, 20, 20, 0.6);
+}
+.dealerBtn {
+  background: var(--green);
+  color: white;
+  font-weight: 600;
+}
+.dealerBtn:hover {
+  background: var(--dark-green);
+}
+.priceBtn {
+  background: none;
+  box-shadow: inset 0 0 0 1px #04694f;
+  color: var(--green);
+  font-weight: 600;
+}
+.priceBtn:hover {
+  background: var(--button-active-bg);
+  color: white;
+}

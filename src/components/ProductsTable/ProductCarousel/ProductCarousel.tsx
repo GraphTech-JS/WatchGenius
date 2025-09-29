@@ -123,7 +123,7 @@ export const ProductCarousel: React.FC<Props> = ({
                   page === 0 ? styles.arrowDisabled : styles.arrowActive
                 }
               >
-                <ArrowIcon className=" w-[14px] h-[26px] transform rotate-180" />
+                <ArrowIcon className=" w-[14px] h-[26px] transform rotate-180 cursor-pointer" />
               </button>
               <button
                 onClick={next}
@@ -135,7 +135,7 @@ export const ProductCarousel: React.FC<Props> = ({
                     : styles.arrowActive
                 }
               >
-                <ArrowIcon className="w-[14px] h-[26px]" />
+                <ArrowIcon className="w-[14px] h-[26px] cursor-pointer" />
               </button>
             </div>
           </div>

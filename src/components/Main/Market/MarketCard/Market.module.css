@@ -1,5 +1,9 @@
 .marketCard {
   box-shadow: 0px 4px 19.6px 2px #00000040;
+  transition: box-shadow 0.3s ease-in-out;
+}
+.marketCard:hover {
+  box-shadow: 0px 4px 18.1px 5px rgba(0, 0, 0, 0.4);
 }
 .marketCardHeadName {
   font-weight: 700;
