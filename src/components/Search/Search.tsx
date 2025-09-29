@@ -296,10 +296,10 @@
 //       <SearchResults items={visibleItems} />
 
 //       {visibleRows < totalRows && (
-//         <div className="text-center mt-6 mx-auto">
+//         <div className="mx-auto mt-6 text-center">
 //           <button
 //             onClick={() => setVisibleRows((r) => r + 2)}
-//             className="px-6 py-3  transition"
+//             className="px-6 py-3 transition"
 //           >
 //             <ThemedText
 //               type="h3"
