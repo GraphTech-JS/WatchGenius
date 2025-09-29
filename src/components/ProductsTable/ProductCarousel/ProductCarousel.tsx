@@ -62,17 +62,25 @@ export const ProductCarousel: React.FC<Props> = ({
 
       <div className={`${styles.controls} flex justify-center mt-6`}>
         {(isMobile || isTablet) && (
-          <div className={`${styles.dots} flex justify-center gap-2`}>
-            {Array.from({ length: totalPages }).map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setPage(i)}
-                aria-label={`Сторінка ${i + 1}`}
-                className={`${styles.dot} ${
-                  i === page ? styles.dotActive : ""
-                } w-2 h-2 rounded-full`}
-              />
-            ))}
+          <div className="flex flex-col gap-5.5">
+            <div className={`${styles.dots} flex justify-center gap-2`}>
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setPage(i)}
+                  aria-label={`Сторінка ${i + 1}`}
+                  className={`${styles.dot} ${
+                    i === page ? styles.dotActive : ""
+                  } w-2 h-2 rounded-full`}
+                />
+              ))}
+            </div>
+            <Link
+              href={ctaHref}
+              className={`${styles.ctaBtn} inline-flex justify-self-start py-3.5 px-14 rounded-xl items-center`}
+            >
+              {ctaLabel}
+            </Link>
           </div>
         )}
 

@@ -4,6 +4,8 @@ import styles from "./BestPrice.module.css";
 import Link from "next/link";
 import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { CustomSelect } from "@/components/CustomSelect/CustomSelect";
+import { mockBest } from "@/mock/watch";
+import { ProductBest } from "@/components/ProductsTable/ProductBest/ProductBest";
 
 export const BestPrice = () => {
   const brands = [
@@ -17,10 +19,12 @@ export const BestPrice = () => {
   return (
     <section
       id="bestPrice"
-      className={`${styles.best} px-[1.25rem] lg:px-[6rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
+      className={`${styles.best} px-[1.25rem] md:pl-[50px] md:pr-[32px] lg:px-[6rem] pb-12 md:pb-15`}
     >
       <div className={`${styles.bestContainer} w-full`}>
-        <div className={`${styles.bestTitle} mb-6`}>
+        <div
+          className={`${styles.bestTitle} flex justify-between items-end mb-6 w-full md:w-[54%]`}
+        >
           <ThemedText type="h2">
             {" "}
             <span className={`${styles.bestTitleHighlighted} mb-6`}>
@@ -28,12 +32,15 @@ export const BestPrice = () => {
             </span>{" "}
             price today
           </ThemedText>
+          <div className={`${styles.bestDate} hidden md:flex`}>08.08.2025</div>
         </div>
-        <div className={`${styles.bestModules} flex flex-col gap-6`}>
+        <div
+          className={`${styles.bestModules} flex flex-col md:flex-row-reverse gap-6`}
+        >
           <div
             className={`${styles.bestAlert} flex flex-col items-center gap-4`}
           >
-            <div className={`${styles.bestAlertTitle}`}>Set price alert</div>
+            <div className={`${styles.bestAlertTitle} `}>Set price alert</div>
             <div
               className={`${styles.bestAlertForm} flex flex-col gap-6 w-full`}
             >
@@ -58,10 +65,16 @@ export const BestPrice = () => {
                   className={`${styles.FormItemInput} flex items-center justify-center w-full h-12 rounded-xl px-4 py-3.5`}
                 >
                   <input
+                    id="cost"
                     type="number"
                     placeholder="50 000"
-                    className="w-full"
+                    className={`${styles.Input} w-full`}
                   />
+                  <div
+                    className={`${styles.FormItemInputCurr} hidden md:flex `}
+                  >
+                    EUR
+                  </div>
                 </div>
               </div>
               <div
@@ -74,16 +87,17 @@ export const BestPrice = () => {
                   className={`${styles.FormItemInput} flex items-center justify-center w-full h-12 rounded-xl px-4 py-3.5 `}
                 >
                   <input
+                    id="userMail"
                     type="email"
                     placeholder="xxxxxxxx@gmail.com"
-                    className="w-full"
+                    className={`${styles.Input} w-full`}
                   />
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 w-full">
               <button
-                className={`${styles.FormBtn} flex items-center justify-center py-3.5 rounded-xl `}
+                className={`${styles.FormBtn} flex items-center justify-center py-3.5 rounded-xl cursor-pointer `}
               >
                 <div>Отимувати сповіщення</div>
               </button>
@@ -98,7 +112,19 @@ export const BestPrice = () => {
               </div>
             </div>
           </div>
-          <div className={`${styles.bestWatches}`}></div>
+          <div
+            className={`${styles.bestWatches} flex flex-col justify-center w-full md:min-w-[54%]`}
+          >
+            <div className={`${styles.bestWatchesContainer}`}>
+              <ProductBest items={mockBest} />
+            </div>
+            <Link
+              href="./"
+              className={`${styles.bestWatchesLink} cursor-pointer`}
+            >
+              Найкращі пропозиції дня →
+            </Link>
+          </div>
         </div>
       </div>
     </section>
