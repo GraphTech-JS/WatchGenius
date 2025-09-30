@@ -62,8 +62,8 @@ export function Accordion<K extends string = string>({
               aria-expanded={isOpen}
               aria-controls={id}
               className='w-full flex items-center justify-between py-3
-                         text-[20px] font-medium font-[var(--font-inter)] text-[var(--text-dark)]
-                         cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#04694f]/20 rounded-[8px]
+                         text-[20px] font-normal font-[var(--font-inter)] text-[var(--text-dark)]
+                         cursor-pointer  rounded-[8px]
                          transition-colors duration-200'
             >
               <span>{it.title}</span>
@@ -88,7 +88,7 @@ export function Accordion<K extends string = string>({
             </div>
 
             {idx < items.length - 1 && (
-              <div className='h-px bg-[rgba(23,20,20,0.1)] mx-2' />
+              <div className='h-px bg-[rgba(23,20,20,0.1)] ' />
             )}
           </div>
         );

@@ -7,6 +7,7 @@ import {
 } from '@/hooks/useCatalogFilters';
 import { FilterAccordion } from '@/features/catalog/components/FilterAccordion/FilterAccordion';
 import { FaSearch } from 'react-icons/fa';
+import styles from './CatalogSidebar.module.css';
 
 interface CatalogSidebarProps {
   title?: string;
@@ -34,13 +35,13 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
 
   return (
     <div
-      className='rounded-[20px] p-[20px_21px_42px] shadow-sm sticky top-5'
+      className={`${styles.sidebar} rounded-[20px] p-[20px_21px_42px] shadow-sm sticky top-5`}
       style={{
         background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
         width: `${widthPx}px`,
       }}
     >
-      <h3 className='text-[16px] font-medium font-[var(--font-inter)] text-[var(--text-dark)] mb-6'>
+      <h3 className={`${styles.sidebarTitle} text-[16px] font-medium  pb-1 text-[var(--text-dark)] mb-6`}>
         {title}
       </h3>
 
@@ -52,7 +53,7 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
           placeholder='Пошук бренду'
           className='w-[269px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[15px] pl-[40px] pr-[10px]
                      bg-white text-[14px] text-[var(--text-dark)]
-                     focus:outline-none focus:ring-2 focus:ring-[#04694f]/20 placeholder:text-[#8b8b8b]'
+                      placeholder:text-[#8b8b8b]'
         />
         <span className='absolute left-[15px] top-1/2 -translate-y-1/2 w-4 h-4 text-[#8b8b8b]'>
           <FaSearch />

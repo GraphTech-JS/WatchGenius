@@ -1,12 +1,18 @@
 .catalogSearch {
-    font-family: var(--font-inter);
-    font-size: 16px;
-    font-weight: 400;
-    &:focus {
-        outline: none;
-        border: 1px solid rgba(109, 109, 109, 0.3);
-    }
-    &:placeholder {
-        color: #8b8b8b;
-    }
+  font-family: var(--font-inter);
+  font-size: 16px;
+  font-weight: 400;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.catalogSearch:focus {
+  outline: none;
+  border: 1px solid rgba(109, 109, 109, 0.3);
+}
+
+.catalogSearch::placeholder {
+  color: #8b8b8b;
+  text-overflow: ellipsis;
 }

@@ -54,7 +54,10 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
   };
 
   return (
-    <div className='relative inline-block w-[252px]' ref={dropdownRef}>
+    <div
+      className='relative inline-block w-full md:w-[194px] lg:w-[252px]'
+      ref={dropdownRef}
+    >
       <button
         type='button'
         aria-haspopup='listbox'
