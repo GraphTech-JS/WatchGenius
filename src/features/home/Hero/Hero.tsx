@@ -11,7 +11,7 @@ export const Hero = () => {
   return (
     <section className={`${styles.hero}`}>
       <div
-        className={`${styles.heroContainer} w-full relative bg-[url('/hero-section/Hero.png')] bg-no-repeat bg-[68%] md:bg-[82%] lg:bg-top bg-cover`}
+        className={`${styles.heroContainer} w-full relative bg-[url('/hero-section/HeroBG.png')] bg-no-repeat bg-[68%] md:bg-[82%] lg:bg-top bg-cover`}
       >
         <div
           className={`${styles.heroWrap} max-w-[90rem] mx-auto w-full overflow-hidden px-5 md:px-10 lg:px-25
