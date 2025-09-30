@@ -64,3 +64,17 @@ export const RobotWhiteIcon = (props: Props) => (
     </defs>
   </svg>
 );
+
+export const CloseIcon = (props: Props) => (
+  <svg
+    viewBox="0 0 37 38"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M33.645 38L18.5119 22.4434L3.37878 38L0 34.5321L15.1569 19L0 3.46787L3.37878 0L18.5119 15.5566L33.645 0.0244222L37 3.46787L21.8669 19L37 34.5321L33.645 38Z"
+      fill="#currentColor"
+    />
+  </svg>
+);

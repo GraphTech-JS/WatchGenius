@@ -22,7 +22,7 @@ export const ChatButton: React.FC<IChatButton> = ({
       }}
       className={`
         fixed
-        right-[15px] lg:right-[30px]
+        right-[15px] lg:right-[30px] 
         w-[63px] md:w-[81px]
         h-[63px] md:h-[81px]
         rounded-full
