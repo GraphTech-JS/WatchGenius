@@ -37,3 +37,10 @@
   background: var(--button-active-bg);
   color: white;
 }
+@media (width >= 64rem /* 1024px */) {
+  .dealerBtn,
+  .priceBtn {
+    font-size: 16px;
+    line-height: 19px;
+  }
+}

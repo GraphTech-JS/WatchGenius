@@ -96,7 +96,7 @@ export const Dealers = () => {
               direction ? styles[`slide-${direction}`] : ""
             }`}
             style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-            onAnimationEnd={() => setDirection(null)} // після анімації скидаємо
+            onAnimationEnd={() => setDirection(null)}
           >
             {slice.map((dealer) => (
               <DealerCard key={dealer.id} dealer={dealer} />
