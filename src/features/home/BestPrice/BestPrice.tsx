@@ -19,7 +19,7 @@ export const BestPrice = () => {
   return (
     <section
       id="bestPrice"
-      className={`${styles.best} px-[1.25rem] md:pl-[50px] md:pr-[32px] lg:px-[6rem] pb-12 md:pb-15`}
+      className={`${styles.best} max-w-[90rem] mx-auto px-[1.25rem] md:pl-[50px] md:pr-[32px] lg:px-[6rem] pb-12 md:pb-15`}
     >
       <div className={`${styles.bestContainer} w-full`}>
         <div
@@ -71,7 +71,7 @@ export const BestPrice = () => {
                     className={`${styles.Input} w-full`}
                   />
                   <div
-                    className={`${styles.FormItemInputCurr} hidden md:flex `}
+                    className={`${styles.FormItemInputCurr} hidden md:flex cursor-pointer`}
                   >
                     EUR
                   </div>
