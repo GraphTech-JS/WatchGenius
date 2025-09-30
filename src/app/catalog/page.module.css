@@ -1,8 +1,8 @@
 .catalog {
   background-color: var(--white);
-  padding: 70px 52px 50px 70px;
+  padding: 60px 52px 50px 60px;
 }
-.search {
+/* .search {
   width: 100%;
 }
 .catalogContainer {
@@ -57,7 +57,7 @@
 .catalogMenuSubtitle {
   max-width: 820px;
   text-align: left;
-}
+} */
 
 @media (max-width: 1200px) {
   .catalogText {

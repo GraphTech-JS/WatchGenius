@@ -1,0 +1,35 @@
+
+
+.catalogHeader {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.catalogTitle {
+  font-size: 48px;
+  font-family: var(--font-roboto);
+  font-weight: 600;
+  color: var(--black);
+  margin: 0;
+}
+
+.catalogSubtitle {
+  font-size: 14px;
+  font-family: var(--font-inter);
+  font-weight: 400;
+  color: rgba(23, 20, 20, 0.5);
+  margin: 0;
+}
+
+
+@media (max-width: 1023.98px) {
+  .catalogTitle {
+    font-size: 24px;
+  }
+}
+@media (max-width: 767.98px) {
+  .catalogTitle {
+    font-size: 24px;
+  }
+}
