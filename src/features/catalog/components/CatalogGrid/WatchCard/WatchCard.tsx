@@ -29,11 +29,11 @@ export const WatchCard: React.FC<Props> = ({ item, liked, onToggleLike }) => {
 
   return (
     <div
-      className={`${styles.watchCard}  border border-[rgba(23,20,20,0.15)] bg-white p-3 `}
+      className={`${styles.watchCard} border border-[rgba(23,20,20,0.15)] bg-white p-3`}
     >
       <div className='flex justify-between items-center'>
         <span
-          className={`inline-flex items-center justify-center  rounded-[5px] ${
+          className={`inline-flex items-center justify-center rounded-[5px] ${
             styles.badge
           } ${indexBadgeClass(item.index)}`}
           title={`Індекс ${item.index}`}
@@ -54,12 +54,12 @@ export const WatchCard: React.FC<Props> = ({ item, liked, onToggleLike }) => {
         </button>
       </div>
 
-      <div className='relative w-full h-full'>
+      <div className='relative h-[111px] md:h-[124px] xl:h-[123px] w-full'>
         <Image
           src={item.image}
           alt={item.title}
           fill
-          sizes='(max-width: 768px) 50vw, 25vw'
+          sizes='(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
           className={styles.watchImage}
           style={{
             padding: item.variant === 'brand' ? '0 20px 0 20px' : '0',
@@ -67,23 +67,21 @@ export const WatchCard: React.FC<Props> = ({ item, liked, onToggleLike }) => {
           priority={false}
         />
       </div>
-      <h4
-        className={`${styles.watchTitle} mt-2 mb-[8px] line-clamp-2 min-h-[40px]`}
-      >
-        {item.title}
-      </h4>
 
-      <div className='flex justify-between items-center'>
+      <h4 className={`${styles.watchTitle} mt-[8px] mb-[8px]`}>{item.title}</h4>
+
+      <div className='flex flex-col items-center gap-[9px] sm:flex-row sm:justify-between'>
         <div className='text-[16px] font-medium text-[var(--text-dark,#171414)]'>
           {item.price.toLocaleString('uk-UA')} {item.currency}
         </div>
 
-        <div className='flex items-center gap-1 text-[14px]'>
+        <div className='flex items-center gap-1 text-[14px] '>
           {isFlat ? (
             <span
               className={`${styles.trendBadge} ${styles.trendValue} ${styles.trendValueZero}`}
             >
-              0% <span className={styles.trendPeriod}>{item.trend.period}</span>
+              0 %{' '}
+              <span className={styles.trendPeriod}>{item.trend.period}</span>
             </span>
           ) : (
             <span
@@ -95,7 +93,7 @@ export const WatchCard: React.FC<Props> = ({ item, liked, onToggleLike }) => {
               }`}
             >
               {isUp ? <FaArrowUp /> : <FaArrowDown />}
-              {Math.abs(item.trend.value)}%{' '}
+              {Math.abs(item.trend.value)} %{' '}
               <span className={styles.trendPeriod}>{item.trend.period}</span>
             </span>
           )}

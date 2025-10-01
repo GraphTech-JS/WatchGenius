@@ -16,7 +16,10 @@ export const SortButtons: React.FC<SortButtonsProps> = ({ onButtonClick }) => {
           key={button}
           type='button'
           onClick={() => onButtonClick?.(button)}
-          className={`${styles.sortButtons} flex items-center justify-center gap-2 text-[var(--text-dark)]  transition-colors`}
+          className={`${styles.sortButtons} 
+                      flex items-center justify-center 
+                      text-[var(--text-dark)] 
+                      transition-colors`}
         >
           {button}
         </button>
