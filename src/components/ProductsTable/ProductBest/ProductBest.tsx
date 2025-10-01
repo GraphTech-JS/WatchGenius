@@ -11,7 +11,9 @@ type Props = {
 export const ProductBest: React.FC<Props> = ({ items }) => {
   return (
     <div className={`${styles.section} mb-6`}>
-      <div className={`${styles.col} flex flex-col gap-4 items-center`}>
+      <div
+        className={`${styles.col} flex flex-col gap-4 md:items-start items-center`}
+      >
         {items.map((card, i) => (
           <BestProductCard key={i} {...card} />
         ))}

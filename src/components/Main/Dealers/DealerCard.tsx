@@ -9,7 +9,7 @@ import { DealerData } from "@/types/dealers";
 export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
   return (
     <div
-      className={`${styles.dealerCard} flex flex-col lg:flex-row items-center px-4 py-7 rounded-[20px] gap-7`}
+      className={`${styles.dealerCard} flex flex-col lg:flex-row items-center px-4 lg:px-11.5 py-7 rounded-[20px] gap-7`}
     >
       <Image
         src={dealer.image}

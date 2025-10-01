@@ -12,7 +12,6 @@ export const Trending = () => {
 
   const toggleMenu = () => setOpen((prev) => !prev);
 
-  // Закриваємо при кліку поза меню
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -25,11 +24,11 @@ export const Trending = () => {
   return (
     <section
       id="trending"
-      className={`${styles.trending} max-w-[90rem] mx-auto px-[1.25rem] lg:px-[6rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
+      className={`${styles.trending} max-w-[90rem] mx-auto px-[1.25rem] lg:px-[6.25rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
     >
       <div className={styles.trendingContainer}>
         <div
-          className={`${styles.trendingTitle} relative flex mb-6 justify-between items-center`}
+          className={`${styles.trendingTitle} relative flex mb-6 lg:mb-[30xp] justify-between items-center`}
         >
           <ThemedText type="h2">Trending now</ThemedText>
           <div ref={menuRef} className="relative">

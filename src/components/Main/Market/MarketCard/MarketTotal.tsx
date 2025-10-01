@@ -18,8 +18,8 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
   amount,
   chartData,
 }) => {
-  const color = "#22c55e";
-
+  const color = "#D2F7D0";
+  const percentColor = "#009C05";
   const [chartHeight, setChartHeight] = useState(70);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
           <div className={`${styles.marketCardHeadName}`}>{title}</div>
           <div
             className={`${styles.marketCardHeadPercent} flex items-center gap-1 font-bold`}
-            style={{ color }}
+            style={{ color: percentColor }}
           >
             €{amount.toLocaleString()}
           </div>

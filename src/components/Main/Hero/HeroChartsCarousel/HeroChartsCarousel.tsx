@@ -12,7 +12,7 @@ const Chart1 = () => (
     </div>
     <LineChart
       data={[2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7]}
-      color="#22c55e"
+      color="#D2F7D0"
       id="chart1"
     />
     <div className="absolute top-[6px] lg:top-3 right-[15px] flex flex-row items-center text-right text-sm gap-2">

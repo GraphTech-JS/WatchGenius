@@ -2,7 +2,6 @@
 import React from "react";
 import styles from "./BestPrice.module.css";
 import Link from "next/link";
-import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { CustomSelect } from "@/components/CustomSelect/CustomSelect";
 import { mockBest } from "@/mock/watch";
 import { ProductBest } from "@/components/ProductsTable/ProductBest/ProductBest";
@@ -23,15 +22,15 @@ export const BestPrice = () => {
     >
       <div className={`${styles.bestContainer} w-full`}>
         <div
-          className={`${styles.bestTitle} flex justify-between items-end mb-6 w-full md:w-[54%]`}
+          className={`${styles.bestTitle} flex justify-between items-end mb-6 w-full md:w-[54%] md:max-w-[38.75rem]`}
         >
-          <ThemedText type="h2">
+          <div className={`${styles.bestSectionTitle}`}>
             {" "}
             <span className={`${styles.bestTitleHighlighted} mb-6`}>
               Best
             </span>{" "}
             price today
-          </ThemedText>
+          </div>
           <div className={`${styles.bestDate} hidden md:flex`}>08.08.2025</div>
         </div>
         <div

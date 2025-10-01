@@ -7,21 +7,32 @@ import { IWatch } from "@/interfaces";
 import { HeartIcon, BellIcon } from "../../../../public/social/Icon";
 
 const ArrowUp = () => (
-  <svg width="10" height="10" viewBox="0 0 12 14" fill="none">
+  <svg width="16" height="14" viewBox="0 0 16 14" fill="none">
     <path
-      d="M6 15 V1 M6 1 L2 5 M6 1 L10 5"
+      d="
+      M8 0 V13
+      M8 1 L13 7
+      M8 1 L3 7
+      "
       stroke="currentColor"
       strokeWidth="2"
+      strokeLinecap="butt"
+      strokeLinejoin="miter"
     />
   </svg>
 );
 
 const ArrowDown = () => (
-  <svg width="10" height="10" viewBox="0 0 12 14" fill="none">
+  <svg width="16" height="14" viewBox="0 0 16 14" fill="none">
     <path
-      d="M6 1 V15 M6 15 L2 11 M6 15 L10 11"
+      d="
+      M8 13 V1 
+      M8 12 L13 7 
+      M8 12 L3 7"
       stroke="currentColor"
       strokeWidth="2"
+      strokeLinecap="butt"
+      strokeLinejoin="miter"
     />
   </svg>
 );
@@ -119,7 +130,7 @@ export const ProductCard: React.FC<IWatch> = ({
         <div className="relative text-center max-h-[54px] w-full flex flex-row justify-between">
           <div className={`${styles.Price}`}>{price} €</div>
           <div
-            className={`${styles.marketCardHeadPercent} ${percentClass} absolute bottom-3 left-15 flex items-center gap-1 font-bold`}
+            className={`${styles.marketCardHeadPercent} ${percentClass} absolute bottom-3 left-16 flex items-center gap-1 font-bold`}
           >
             {ArrowIcon && <ArrowIcon />}
             {changePercent}%

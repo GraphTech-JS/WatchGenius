@@ -66,8 +66,8 @@ export const LineChart: React.FC<LineChartProps> = ({
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.6" />
-          <stop offset="60%" stopColor={color} stopOpacity="0.3" />
+          <stop offset="0%" stopColor={color} stopOpacity="1" />
+          <stop offset="60%" stopColor={color} stopOpacity="0.4" />
           <stop offset="90%" stopColor={color} stopOpacity="0.1" />
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </linearGradient>

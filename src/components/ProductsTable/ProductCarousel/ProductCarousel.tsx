@@ -50,7 +50,7 @@ export const ProductCarousel: React.FC<Props> = ({
   const isDesktop = cols === 4;
 
   return (
-    <div className={styles.section}>
+    <div className={`${styles.section} lg:ml-1.5`}>
       <div
         className={`${styles.row} grid gap-10`}
         style={{ gridTemplateColumns: `repeat(${cols}, minmax(0,1fr))` }}
@@ -60,7 +60,7 @@ export const ProductCarousel: React.FC<Props> = ({
         ))}
       </div>
 
-      <div className={`${styles.controls} flex justify-center mt-6`}>
+      <div className={`${styles.controls} flex justify-center mt-10 lg:ml-2`}>
         {(isMobile || isTablet) && (
           <div className="flex flex-col gap-5.5">
             <div className={`${styles.dots} flex justify-center gap-2`}>
@@ -86,7 +86,7 @@ export const ProductCarousel: React.FC<Props> = ({
 
         {isDesktop && (
           <div
-            className={`${styles.desktopBar} mt-9 w-full grid items-center gap-4`}
+            className={`${styles.desktopBar}  w-full grid items-center gap-4`}
           >
             <Link
               href={ctaHref}
