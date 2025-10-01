@@ -35,13 +35,15 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
 
   return (
     <div
-      className={`${styles.sidebar} rounded-[20px] p-[20px_21px_42px] shadow-sm sticky top-5`}
+      className={`${styles.sidebar} rounded-[20px] p-[20px_21px_42px] sticky top-5`}
       style={{
         background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
         width: `${widthPx}px`,
       }}
     >
-      <h3 className={`${styles.sidebarTitle} text-[16px] font-medium  pb-1 text-[var(--text-dark)] mb-6`}>
+      <h3
+        className={`${styles.sidebarTitle} text-[16px] font-medium  pb-1 text-[var(--text-dark)] mb-6`}
+      >
         {title}
       </h3>
 
@@ -50,6 +52,7 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
           type='text'
           value={searchTerm}
           onChange={(e) => setSearchTerm?.(e.target.value)}
+          data-sidebar-search='true'
           placeholder='Пошук бренду'
           className='w-[269px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[15px] pl-[40px] pr-[10px]
                      bg-white text-[14px] text-[var(--text-dark)]

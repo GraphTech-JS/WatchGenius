@@ -17,7 +17,6 @@ interface Props {
   onToggle: (value: string) => void;
   showAllConfig?: ShowAllConfig;
 }
-
 export const ChecklistSection: React.FC<Props> = ({
   options,
   selected,
