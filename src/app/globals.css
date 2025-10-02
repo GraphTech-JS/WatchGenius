@@ -7,6 +7,7 @@
   --darkblack: #010101;
   --light-green: rgba(180, 225, 199, 1);
   --green: rgba(4, 105, 79, 1);
+  --green-primary: #04694f;
   --dark-green: #004534;
   --dark-green-bg: #001a14;
   --button-active-bg: rgba(0, 82, 61, 0.3);
@@ -19,6 +20,7 @@
   --yellow: rgba(216, 169, 28, 1);
   --active-buttons: rgba(0, 82, 61, 1);
   --pink: rgba(253, 220, 220, 1);
+  --text-dark: #171414;
   --chart: linear-gradient(
     180deg,
     #d2f7d0 11.06%,
