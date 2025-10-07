@@ -1,5 +1,6 @@
 .saveToChatButton {
   height: 51px;
+  min-width: 252px;
   border: 1px solid var(--green-primary);
   border-radius: 15px;
   padding: 16px 21px;
@@ -22,8 +23,17 @@
   color: white;
 }
 
+.saveToChatButton.saved {
+background-color: var(--green-primary);
+  color: white;
+  cursor: not-allowed;
+}
+
+
+
 @media (max-width: 1023px) {
   .saveToChatButton {
+    min-width: 194px;
     padding: 12px 10px;
     gap: 6px;
     font-size: 13px;
