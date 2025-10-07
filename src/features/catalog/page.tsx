@@ -72,7 +72,7 @@ const CatalogPage = () => {
         </div>
 
         <div className='flex items-center gap-3 flex-col md:flex-row md:gap-[15px] w-full md:w-auto'>
-          <div className='flex  '>
+          <div className='flex'>
             <SortButtons />
           </div>
           <div className='flex-1 w-full md:flex-none md:w-auto'>
@@ -81,7 +81,7 @@ const CatalogPage = () => {
         </div>
       </div>
 
-      <div ref={sectionRef} className='flex relative gap-8 items-start'>
+      <div ref={sectionRef} className='flex relative gap-[20px] items-start'>
         <FixedSidebar
           containerRef={sectionRef as React.RefObject<HTMLElement>}
           width={320}

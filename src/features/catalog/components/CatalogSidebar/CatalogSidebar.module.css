@@ -1,6 +1,14 @@
 .sidebar {
    font-family: 'Inter';
-  
+   max-height: calc(100vh - 120px);
+   overflow-y: auto;
+   overflow-x: hidden;
+   scrollbar-width: none; 
+   -ms-overflow-style: none;
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none; 
 }
 
 .sidebarTitle {

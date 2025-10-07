@@ -49,3 +49,26 @@
     font-size: 16px;
   }
 }
+
+@media (max-width: 375px) {
+  .sortButtons {
+    width: 100px;
+    height: 47px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .sortButtons {
+    width: 90px;
+    height: 47px;
+    font-size: 16px;
+  }
+}
+@media (max-width: 320px) {
+  .sortButtons {
+    width: 83px;
+    height: 47px;
+    font-size: 16px;
+  }
+}
