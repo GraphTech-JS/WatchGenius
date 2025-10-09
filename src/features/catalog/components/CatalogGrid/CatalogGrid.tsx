@@ -2,14 +2,24 @@
 
 import React, { useMemo, useState } from 'react';
 import { WatchCard } from '@/features/catalog/components/CatalogGrid/WatchCard/WatchCard';
+import { EmptyState } from '@/features/catalog/components/CatalogGrid/EmptyState/EmptyState';
 import type { WatchItem } from '@/mock/watches';
 
 type Props = {
   items: WatchItem[];
   initialCount?: number;
+  onResetFilters?: () => void;
+  onAskGeni?: () => void;
+  onOpenFeedback?: (watchTitle: string) => void;
 };
 
-export const CatalogGrid: React.FC<Props> = ({ items, initialCount = 24 }) => {
+export const CatalogGrid: React.FC<Props> = ({
+  items,
+  initialCount = 24,
+  onResetFilters,
+  onAskGeni,
+  onOpenFeedback,
+}) => {
   const [showAll, setShowAll] = useState(false);
   const [liked, setLiked] = useState<Set<string>>(new Set());
 
@@ -31,6 +41,15 @@ export const CatalogGrid: React.FC<Props> = ({ items, initialCount = 24 }) => {
 
   const canToggle = items.length > initialCount;
 
+  if (items.length === 0) {
+    return (
+      <EmptyState
+        onResetFilters={onResetFilters || (() => {})}
+        onAskGeni={onAskGeni || (() => {})}
+      />
+    );
+  }
+
   return (
     <>
       <div className='grid max-[375px]:gap-[9px] gap-[17px]  grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4'>
@@ -40,6 +59,7 @@ export const CatalogGrid: React.FC<Props> = ({ items, initialCount = 24 }) => {
             item={item}
             liked={liked.has(item.id)}
             onToggleLike={toggleLike}
+            onOpenFeedback={onOpenFeedback}
           />
         ))}
       </div>

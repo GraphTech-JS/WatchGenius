@@ -1,0 +1,203 @@
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 40px 20px;
+  margin-top: 40px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 584px;
+  width: 100%;
+}
+
+.title {
+  font-family: var(--font-roboto);
+  font-size: 24px;
+  font-weight: 500;
+  color: #ae0000; 
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.description {
+  font-size: 16px;
+  font-weight: 400;
+  color: #6b7280;
+  margin: 0 0 32px 0;
+  text-align: center;
+
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+}
+
+.resetButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--green-primary); 
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding-block: 9px;
+  width: 277px;
+  height: 55px;
+  font-family: var(--font-inter);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.resetButton:hover {
+  background-color: var(--dark-green); 
+}
+
+.resetButton:active {
+  background-color: var(--dark-green-bg); 
+}
+
+.askButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: white;
+  color: #04694f; 
+  border: 2px solid #04694f;
+  border-radius: 10px;
+  padding-block: 9px;
+  width: 277px;
+  height: 55px;
+  font-family: var(--font-inter);
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.askButton:hover {
+  background-color: rgba(0, 82, 61, 0.4);
+  color: white;
+  border-color: rgba(0, 82, 61, 0.4);
+}
+
+.askButton:active {
+  background-color: #dcfce7; 
+}
+
+.filterIcon {
+  width: 20px;
+  height: 20px;
+  filter: brightness(0) invert(1); 
+}
+
+.robotIcon {
+  width: 20px;
+  height: 20px;
+  transition: all 0.3s ease;
+}
+
+
+@media (min-width: 768px) {
+  .actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .resetButton,
+  .askButton {
+    width: 350px;
+  }
+  
+  .description {
+    width: 506px;
+  }
+}
+
+@media (max-width: 767px) {
+  .actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 24px;
+  }
+  
+  .description {
+    font-size: 16px;
+  width: 506px;
+  }
+  
+  .resetButton,
+  .askButton {
+    width: 350px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .emptyState {
+    min-height: 500px;
+  }
+  
+  .title {
+    font-size: 24px;
+  }
+  
+  .description {
+  width: 506px;
+  }
+  
+  .resetButton,
+  .askButton {
+    width: 277px;
+  }
+}
+
+@media (min-width: 390px) and (max-width: 639px) {
+  .description {
+    width: 356px;
+  }
+  
+  .resetButton,
+  .askButton {
+    width: 350px;
+  }
+}
+
+@media (max-width: 389px) {
+  .description {
+    width: 100%;
+    max-width: 356px;
+  }
+  
+  .resetButton,
+  .askButton {
+    width: 100%;
+    max-width: 350px;
+    min-width: 280px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .resetButton,
+  .askButton {
+    width: 350px;
+  }
+}
+

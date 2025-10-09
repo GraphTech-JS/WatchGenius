@@ -10,6 +10,7 @@ type Props = {
   item: WatchItem;
   liked: boolean;
   onToggleLike: (id: string) => void;
+  onOpenFeedback?: (watchTitle: string) => void;
 };
 
 const indexBadgeClass = (idx: WatchItem['index']) => {
@@ -23,7 +24,12 @@ const indexBadgeClass = (idx: WatchItem['index']) => {
   }
 };
 
-export const WatchCard: React.FC<Props> = ({ item, liked, onToggleLike }) => {
+export const WatchCard: React.FC<Props> = ({
+  item,
+  liked,
+  onToggleLike,
+  onOpenFeedback,
+}) => {
   const isUp = item.trend.value > 0;
   const isFlat = item.trend.value === 0;
 
@@ -100,7 +106,10 @@ export const WatchCard: React.FC<Props> = ({ item, liked, onToggleLike }) => {
         </div>
       </div>
 
-      <button className={`${styles.buyButton} mt-[27px]`}>
+      <button
+        className={`${styles.buyButton} mt-[27px]`}
+        onClick={() => onOpenFeedback?.(item.title)}
+      >
         {item.buttonLabel}
       </button>
     </div>

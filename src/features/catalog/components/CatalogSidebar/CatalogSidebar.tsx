@@ -12,8 +12,6 @@ import styles from './CatalogSidebar.module.css';
 interface CatalogSidebarProps {
   title?: string;
   widthPx?: number;
-  searchTerm?: string;
-  setSearchTerm?: (value: string) => void;
   onApply?: (filters: UseCatalogFiltersReturn) => void;
   onReset?: () => void;
 }
@@ -21,8 +19,6 @@ interface CatalogSidebarProps {
 export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
   title = 'Фільтр',
   widthPx = 311,
-  searchTerm,
-  setSearchTerm,
   onApply,
   onReset,
 }) => {
@@ -50,8 +46,8 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
       <div className='relative mb-6'>
         <input
           type='text'
-          value={searchTerm}
-          onChange={(e) => setSearchTerm?.(e.target.value)}
+          value={filters.searchTerm}
+          onChange={(e) => filters.setSearchTerm(e.target.value)}
           data-sidebar-search='true'
           placeholder='Пошук бренду'
           className='w-[269px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[15px] pl-[40px] pr-[10px]
