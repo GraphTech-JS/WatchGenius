@@ -52,7 +52,7 @@ export const CatalogGrid: React.FC<Props> = ({
 
   return (
     <>
-      <div className='grid max-[375px]:gap-[9px] gap-[17px]  grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4'>
+      <div className='grid max-[375px]:gap-y-[17px] max-[375px]:gap-[17px] gap-[17px] gap-y-[25px] grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4'>
         {visible.map((item) => (
           <WatchCard
             key={item.id}
