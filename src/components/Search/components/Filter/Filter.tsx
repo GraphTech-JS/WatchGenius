@@ -1,15 +1,16 @@
-import React, { useRef } from "react";
-import styles from "./Filter.module.css";
-import { Filter as FilterIcon } from "../../../../../public/icons";
-import { Select, SelectOption } from "@/components/Select";
-import { useClickOutside } from "@/utils/useClickOutside";
-import RangeSliderRange from "./RangeSlider";
+import React, { useRef } from 'react';
+import Image from 'next/image';
+import styles from './Filter.module.css';
+import { Filter as FilterIcon } from '../../../../../public/icons';
+import { Select, SelectOption } from '@/components/Select';
+import { useClickOutside } from '@/utils/useClickOutside';
+import RangeSliderRange from './RangeSlider';
 
 export type FilterDefinitionProp =
   | {
       id: number;
       label: string;
-      type: "select";
+      type: 'select';
       value: string | number;
       options: SelectOption[];
       range?: never;
@@ -17,7 +18,7 @@ export type FilterDefinitionProp =
   | {
       id: number;
       label: string;
-      type: "range";
+      type: 'range';
       value: [number, number];
       range: { min: number; max: number; step?: number; unit?: string };
       options?: never;
@@ -44,14 +45,16 @@ export const Filter: React.FC<FilterProps> = ({
   return (
     <div className={styles.filter} ref={ref}>
       <button
-        type="button"
+        type='button'
         className={styles.filterBtn}
         onClick={() => setOpened(!opened)}
       >
-        <img
-          src={FilterIcon.src}
-          alt="filter dropdown icon"
+        <Image
+          src={FilterIcon}
+          alt='filter dropdown icon'
           className={styles.filterIcon}
+          width={20}
+          height={20}
         />
       </button>
 
@@ -59,7 +62,7 @@ export const Filter: React.FC<FilterProps> = ({
         <div className={styles.filterDropdown}>
           {filters.map((f) => (
             <div key={f.id} className={styles.filterItem}>
-              {f.type === "select" ? (
+              {f.type === 'select' ? (
                 <Select
                   placeholder={f.label}
                   options={f.options!}
@@ -67,7 +70,7 @@ export const Filter: React.FC<FilterProps> = ({
                   onChange={(val) => onChange(f.id, val)}
                 />
               ) : (
-                <div className="border p-[12px] rounded-[5px]">
+                <div className='border p-[12px] rounded-[5px]'>
                   <label>{f.label}</label>
                   <RangeSliderRange
                     min={f.range.min}

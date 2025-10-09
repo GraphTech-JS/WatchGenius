@@ -45,8 +45,7 @@ interface ISearchProps extends React.HTMLAttributes<HTMLInputElement> {
 }
 
 
-interface SortButtonsProps{
-  selectedIndex?: string | null;
-  onButtonClick?: (button: string | null) => void;
-}
-export type { Message, IMainContext, IWatch, ISearchProps, SortButtonsProps };
+
+export * from './catalog';
+
+export type { Message, IMainContext, IWatch, ISearchProps};

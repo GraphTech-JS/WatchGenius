@@ -28,7 +28,11 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
 
   return (
     <div className={styles.formContainer}>
-      <h2 className={styles.formTitle}>Форма зворотнього зв&apos;язку</h2>
+      <h2 className={styles.formTitle}>
+        <span>Форма зворотнього</span>
+        <br />
+        <span style={{ marginLeft: '20px' }}>зв&apos;язку</span>
+      </h2>
 
       <p className={styles.interestText}>
         Ви цікавитесь <span className={styles.watchName}>{watchTitle}</span>

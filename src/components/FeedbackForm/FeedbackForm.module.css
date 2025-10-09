@@ -6,9 +6,11 @@
   font-size: 36px;
   font-weight: 600;
   color: #171414;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   font-family: var(--font-roboto), sans-serif;
+  line-height: 1.2;
 }
+
 
 .interestText {
   font-size: 16px;
@@ -143,6 +145,10 @@
   .formTitle {
     font-size: 28px;
   }
+  
+  .formTitle span:last-child {
+    margin-left: 15px !important;
+  }
 
   .interestText {
     font-size: 14px;
@@ -152,6 +158,7 @@
     width: 100%;
     max-width: 400px;
     margin: 0 auto;
+    padding: 12px 20px;
   }
 
   .textarea,
@@ -176,15 +183,41 @@
 @media (max-width: 480px) {
   .formTitle {
     font-size: 24px;
+    margin-bottom: 15px;
+  }
+  
+  .formTitle span:last-child {
+    margin-left: 10px !important;
   }
 
   .interestText {
     font-size: 13px;
+    margin-bottom: 20px;
+  }
+
+  .form {
+    gap: 15px;
   }
 
   .input,
   .textarea,
   .submitButton {
     max-width: 100%;
+  }
+
+  .input {
+    padding: 10px 15px;
+    height: 45px;
+  }
+
+  .textarea {
+    padding: 10px 15px;
+    height: 70px;
+  }
+
+  .submitButton {
+    height: 40px;
+    font-size: 14px;
+    padding: 10px 15px;
   }
 }

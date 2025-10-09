@@ -35,20 +35,16 @@ export const Modal: React.FC<ModalProps> = ({
 
   return ReactDOM.createPortal(
     <div
-      className="fixed inset-0 bg-black/70 flex items-center justify-center z-50"
+      className="flex fixed inset-0 z-50 justify-center items-center bg-black/70"
       aria-modal="true"
       role="dialog"
     >
       <div
         ref={ref}
-        className={`
-          bg-white rounded-lg shadow-xl 
-          w-full max-w-lg max-h-[90vh] overflow-y-auto
-          ${className}
-        `}
+        className={`overflow-y-auto w-full max-w-lg bg-white rounded-lg shadow-xl max-h-[90vh] ${className}`}
       >
         {(title || showCloseButton) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div className="flex justify-between items-center px-6 py-4 border-b border-gray-200">
             {title && (
               <h2 className="text-lg font-medium text-gray-900">{title}</h2>
             )}
@@ -61,7 +57,7 @@ export const Modal: React.FC<ModalProps> = ({
                 {/* крестик */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
+                  className="w-6 h-6"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
