@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, useEffect } from 'react';
 import { filterData, type IndexButton } from '../mock/filterData';
 import { toggleInArray } from '../utils/array';
 
@@ -8,7 +8,7 @@ type Currency = '€' | '$' | '₴';
 
 export const useCatalogFilters = () => {
   const [searchTerm, setSearchTerm] = useState('');
-
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [showAllBrands, setShowAllBrands] = useState(false);
 
@@ -67,12 +67,26 @@ export const useCatalogFilters = () => {
     []
   );
 
+  useEffect(() => {
+    const isOpenBrands = 
+    searchTerm.trim().length > 0 &&
+    filteredBrands.length > 0 &&
+    filteredBrands.length < filterData.brands.length;
+
+    if(isOpenBrands){
+      setOpenKeys( prev => prev.includes('Бренд') ? prev : [...prev,'Бренд']);
+    }else{
+      setOpenKeys(prev => prev.filter(key => key !== 'Бренд'))
+    }
+  }, [searchTerm, filteredBrands]);
+
   const reset = useCallback(() => {
     setSelectedBrands([]);
     setShowAllBrands(false);
 
     setSelectedConditions([]);
     setSelectedMechanisms([]);
+    setOpenKeys([]);
     setMechanismShowAll(false);
 
     setSelectedMaterials([]);
@@ -89,10 +103,10 @@ export const useCatalogFilters = () => {
   }, []);
 
   return {
-    // state
     searchTerm,
     selectedBrands,
     showAllBrands,
+    openKeys,
     selectedConditions,
     selectedMechanisms,
     mechanismShowAll,
@@ -111,6 +125,7 @@ export const useCatalogFilters = () => {
 
     setSearchTerm,
     setShowAllBrands,
+    setOpenKeys,
     toggleBrand,
     toggleCondition,
     toggleMechanism,

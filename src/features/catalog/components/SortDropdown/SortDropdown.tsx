@@ -2,37 +2,36 @@
 import React, { useEffect, useRef, useState, useId, useMemo } from 'react';
 import { FaChevronDown } from 'react-icons/fa';
 import styles from './SortDropdown.module.css';
+import { SortOption } from '@/types/sorting';
 
 interface SortDropdownProps {
-  value?: string;
-  onChange?: (value: string) => void;
+  value?: SortOption;
+  onChange?: (value: SortOption) => void;
 }
 
-const DEFAULT_LABEL = 'За замовчуванням';
-
 export const SortDropdown: React.FC<SortDropdownProps> = ({
-  value = DEFAULT_LABEL,
+  value = SortOption.DEFAULT,
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const listId = useId();
 
-  const baseOptions = [
-    'По тренду (90 днів)',
-    'По ціні (зростання)',
-    'По ціні (спадання)',
-    'По новизні',
-    'По назві',
-    'За індексом (зростання)',
-    'За індексом (спадання)',
-  ];
+  const optionsToRender = useMemo(() => {
+    const baseOptions = [
+      SortOption.TREND_90_DAYS,
+      SortOption.PRICE_ASC,
+      SortOption.PRICE_DESC,
+      SortOption.NEWEST,
+      SortOption.NAME,
+      SortOption.INDEX_ASC,
+      SortOption.INDEX_DESC,
+    ];
 
-  const optionsToRender = useMemo(
-    () =>
-      value === DEFAULT_LABEL ? baseOptions : [DEFAULT_LABEL, ...baseOptions],
-    [value]
-  );
+    return value === SortOption.DEFAULT
+      ? baseOptions
+      : [SortOption.DEFAULT, ...baseOptions];
+  }, [value]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -55,7 +54,7 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
     };
   }, []);
 
-  const handleOptionClick = (option: string) => {
+  const handleOptionClick = (option: SortOption) => {
     onChange?.(option);
     setIsOpen(false);
   };

@@ -39,5 +39,6 @@ export { default as GreenCup } from "./GreenCup.svg";
 export { default as Instagram } from "./Instagram.svg";
 export { default as Discord } from "./Discord.svg";
 export { default as Telegram } from "./Telegram.svg";
-
+export { default as FilterCatalog } from "./FilterCatalog.svg";
+export { default as RobotCatalog } from "./RobotCatalog.svg";
 //Add more icons in future
