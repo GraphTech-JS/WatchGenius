@@ -52,26 +52,40 @@
 }
 
 .indexBadgeA {
-  background: #b4e1c7;
-  color: #067b06;
+  background: #dcfce7;
+  color: #16a34a;
 }
 
 .indexBadgeB {
-  background: #fef9c3;
-  color: #eab308;
+  background: #fef3c7;
+  color: #d97706;
 }
 
 .indexBadgeC {
-  background: #fddcdc;
-  color: #b91b1b;
+  background: #fecaca;
+  color: #dc2626;
 }
 
 .comparisonIcon {
   position: absolute;
   top: 12px;
   right: 11px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.comparisonIcon img {
   width: 20px;
   height: 20px;
+  filter: opacity(0.5);
+}
+
+.comparisonText {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .watchImage {

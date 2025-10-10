@@ -32,9 +32,7 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
   const parseTrend = (trend: string) => {
     const isPositive = trend.includes('+') || trend.includes('↑');
     const value = trend.replace(/[↑↓+%]/g, '');
-    const period = trend.includes('d')
-      ? trend.split('d')[0].split('%')[1] + 'd'
-      : '90d';
+    const period = '90d';
     return { isPositive, value, period };
   };
 
@@ -66,7 +64,7 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                   alt='Порівняти'
                   width={20}
                   height={20}
-                  style={{ fill: 'rgba(0, 0, 0, 0.5)' }}
+                  unoptimized
                 />
               </div>
 
@@ -107,9 +105,7 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
         })}
       </div>
 
-      <button  className={styles.compareButton}>
-        Порівняти моделі
-      </button>
+      <button className={styles.compareButton}>Порівняти моделі</button>
     </div>
   );
 };
