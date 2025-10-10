@@ -1,0 +1,61 @@
+/* Стилі для хлібних крихт */
+.breadcrumbsContainer {
+  border-radius: 10px;
+  padding: 5px 20px;
+  width: 428px;
+  height: 34px;
+  background: #f7f7f7;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.breadcrumbItem {
+  font-weight: 400;
+  font-size: 20px;
+  color: #898989;
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumbItem:hover {
+  color: #666;
+}
+
+.breadcrumbItem.active {
+  color: #898989;
+  cursor: default;
+}
+
+.breadcrumbSeparator {
+  font-weight: 400;
+  font-size: 20px;
+  color: #898989;
+  font-family: 'Inter', sans-serif;
+  margin: 0 4px;
+}
+
+@media (max-width: 768px) {
+  .breadcrumbsContainer {
+    width: 100%;
+    max-width: 428px;
+    padding: 5px 15px;
+  }
+  
+  .breadcrumbItem,
+  .breadcrumbSeparator {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .breadcrumbsContainer {
+    padding: 5px 10px;
+  }
+  
+  .breadcrumbItem,
+  .breadcrumbSeparator {
+    font-size: 16px;
+  }
+}

@@ -1,0 +1,144 @@
+.actionButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border-radius: 10px;
+  background: rgba(217, 217, 217, 0.26);
+  width: 294px;
+  height: 44px;
+  padding: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.actionButton:hover {
+  background: #04694f;
+}
+
+.actionButton:hover .actionButtonText {
+  color: white;
+}
+
+.actionButton:hover .actionButtonIcon {
+  filter: brightness(0) invert(1);
+}
+
+.actionButtonText {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: black;
+  transition: color 0.3s ease;
+}
+
+.actionButtonIcon {
+  width: 24px;
+  height: 24px;
+  transition: filter 0.3s ease;
+}
+
+.mainButton {
+  border-radius: 10px;
+  background: #04694f;
+  width: 605px;
+  height: 55px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.mainButton:hover {
+  box-shadow: 0 4px 12px rgba(4, 105, 79, 0.3);
+}
+
+.secondaryButton {
+  border-radius: 10px;
+  border: 1px solid #04694f;
+  width: 605px;
+  height: 55px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  cursor: pointer;
+}
+
+.secondaryButtonText {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #04694f;
+}
+
+.shareInputContainer {
+  grid-column: 1 / -1;
+  border-radius: 16px;
+  padding: 19px 27px;
+  width: 100%;
+  height: 51px;
+  box-shadow: 0 4px 20px 2px rgba(0, 0, 0, 0.25);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  animation: slideDown 0.3s ease-out;
+}
+
+.shareInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: rgba(23, 20, 20, 0.6);
+}
+
+.shareInput::placeholder {
+  color: rgba(23, 20, 20, 0.6);
+}
+
+.shareIconsContainer {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.shareIconButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.shareIconButton:hover {
+  opacity: 0.7;
+}
+
+.shareIcon {
+  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(2000%) hue-rotate(140deg) brightness(0.8) contrast(1.2);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

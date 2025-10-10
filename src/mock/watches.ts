@@ -6,6 +6,7 @@ export type Currency = '€' | '$' | '₴';
 
 export type WatchItem = {
   id: string;
+  slug: string;
   title: string;
   price: number;
   currency: Currency;
@@ -16,7 +17,6 @@ export type WatchItem = {
   trend: { value: number; period: string }; 
   variant?: 'product' | 'brand';
   
-  // Фільтри сайдбару
   brand: string;
   condition: string;
   mechanism: string;
@@ -33,7 +33,7 @@ const createWatches = (): WatchItem[] => {
   const materials = ['Золото', 'Срібло', 'Титан', 'Кераміка'];
   const documents = ['Тільки з документами і коробкою'];
   const locations = ['Європа', 'Азія', 'Америка'];
-  const years = [2000, 2001, 2002, 2003, 2004, 2005]; // Роки з макету
+  const years = [2000, 2001, 2002, 2003, 2004, 2005];
   const indices: WatchIndex[] = ['A', 'B', 'C'];
   
   const items: WatchItem[] = [];
@@ -52,10 +52,11 @@ const createWatches = (): WatchItem[] => {
     const image = isBrandCard ? RolexBrand : RolexCatalog;
     const buttonLabel = index === 'B' ? 'Get Quote' : 'Buy on Chrono24';
     const trendValue = index === 'B' ? 0 : 7;
-    const price = 15000 + (i * 1000); // Різні ціни
+    const price = 15000 + (i * 1000);
 
     items.push({
       id: `w-${i + 1}`,
+      slug: `${brand.toLowerCase().replace(' ', '-')}-submariner-${i + 1}`,
       title: `${brand} Submariner Oyster Perpetual`,
       price,
       currency: '€',

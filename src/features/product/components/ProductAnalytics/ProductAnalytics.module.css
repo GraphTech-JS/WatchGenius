@@ -1,0 +1,691 @@
+.analyticsContainer {
+  width: 603px;
+  background: white;
+  border-radius: 10px;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.tabsContainer {
+  display: flex;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+  margin-bottom: 0;
+  padding: 0;
+  width: 603px;
+}
+
+.tabButton {
+  flex: 1;
+  padding: 16px 0;
+  background: none;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  text-align: left;
+}
+
+.tabButton:hover {
+  color: #000;
+}
+
+.tabButton.active {
+  color: #000;
+  font-weight: 600;
+}
+
+.tabButton.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  width: 125px;
+  background: #04694f;
+  border-radius: 1.5px 1.5px 0 0;
+}
+
+.tabButton:first-child.active::after {
+  left: 0;
+  right: auto;
+  width: 125px;
+}
+
+.tabButton:last-child.active::after {
+  left: auto;
+  right: 0;
+  width: 125px;
+}
+
+.tabButton:nth-child(2).active::after,
+.tabButton:nth-child(3).active::after {
+  left: 42%;
+  right: auto;
+  transform: translateX(-56%);
+  width: 125px;
+}
+
+.sectionTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #171414;
+  margin-bottom: 16px;
+}
+
+.sectionSubtitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #6b7280;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.metricCard {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.metricIcon {
+  width: 24px;
+  height: 24px;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.metricIcon svg {
+  fill: rgba(0, 0, 0, 0.4);
+}
+
+.metricLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.metricValue {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #171414;
+}
+
+.trendGauge {
+  text-align: center;
+}
+
+.gaugeContainer {
+  position: relative;
+  width: 200px;
+  height: 100px;
+  margin: 0 auto 16px;
+}
+
+.gaugeSvg {
+  width: 100%;
+  height: 100%;
+}
+
+.gaugeValue {
+  font-family: 'Inter', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: #171414;
+  margin-bottom: 8px;
+}
+
+.gaugeLabels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.gaugeLabelLow {
+  color: #ef4444;
+}
+
+.gaugeLabelHigh {
+  color: #04694f;
+}
+
+.priceChart {
+  width: 597px;
+  height: 344px;
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 15px;
+  margin-top: 13px;
+}
+
+.chartPlaceholder {
+  text-align: center;
+  padding: 40px;
+  color: #6b7280;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+}
+
+.chartControls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.chartButton {
+  border-radius: 10px;
+  width: 68px;
+  height: 28px;
+  background: #f5f5f5;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 13px 2px rgba(0, 0, 0, 0.1);
+}
+
+.chartButton.active {
+  background: #04694f;
+  color: #fff;
+  box-shadow: none;
+}
+
+.priceMetrics {
+  display: flex;
+  gap: 19px;
+  margin-bottom: 15px;
+}
+
+.priceMetricCard {
+  border-radius: 20px;
+  padding: 12px 15px;
+  width: 186px;
+  height: 76px;
+  background: #f1f1f1;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  position: relative;
+}
+
+.priceMetricIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.priceMetricIcon svg {
+  fill: rgba(0, 0, 0, 0.4);
+}
+
+.priceMetricContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.priceMetricLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.4);
+  margin: 0;
+}
+
+.priceMetricValue {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+  margin: 0;
+}
+
+.volatilityTooltip {
+  border-radius: 20px;
+  width: 186px;
+  height: 76px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px 18px;
+  box-sizing: border-box;
+}
+
+.trendTitle {
+  font-family: 'Roboto Flex', sans-serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: #04694f;
+  margin-bottom: 6px;
+}
+
+.trendContent {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  line-height: 1.6;
+}
+
+.trendMetrics {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+  margin-top: 30px;
+}
+
+.trendCard {
+  border-radius: 20px;
+  padding: 14px 6px 14px 9px;
+  width: 146px;
+  height: 76px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trendIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.trendIcon svg {
+  fill: rgba(0, 0, 0, 0.4);
+}
+
+.trendContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.trendLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.4);
+  margin: 0;
+}
+
+.trendValue {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  color: #000;
+  margin: 0;
+}
+
+.trendTooltip {
+  background: #fff;
+  border: 1px solid #f1f1f1;
+  border-radius: 20px;
+  padding: 14px 6px 14px 6px;
+  width: 146px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.trendGauge {
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.gaugeContainer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gaugeArc {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gaugeArcImage {
+  width: 371px !important;
+  height: 338px !important;
+  max-width: none !important;
+  object-fit: contain;
+  color: inherit;
+}
+
+.gaugeNeedle {
+  position: absolute;
+  top: 35%;
+  left: 53%;
+  transform: translate(-50%, -50%) rotate(2deg);
+  z-index: 3;
+}
+
+.gaugeNeedleImage {
+  width: 58px !important;
+  height: 111px !important;
+  max-width: none !important;
+  color: inherit;
+}
+
+.gaugeCenter {
+  position: absolute;
+  top: 47%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+}
+
+.gaugeCenterImage {
+  width: 29px !important;
+  height: 29px !important;
+  max-width: none !important;
+  color: inherit;
+}
+
+.gaugeValue {
+  position: absolute;
+  top: 52%;
+  left: 51%;
+  transform: translateX(-50%);
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #04694f;
+  z-index: 2;
+}
+
+.gaugeLabels {
+  position: absolute;
+  bottom: 161px;
+  left: 80px;
+  right: 82px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 2;
+}
+
+.gaugeLabelLow,
+.gaugeLabelHigh {
+  font-family: 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+}
+
+.lastUpdated {
+  position: absolute;
+  bottom: 21%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
+.monthlyReport {
+  border-radius: 20px;
+  padding: 10px 20px;
+  width: 603px;
+  height: 75px;
+  background: #f1f1f1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.reportTitle {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.4);
+  margin: 0;
+}
+
+.reportItems {
+  display: flex;
+  gap: 7px;
+}
+
+.reportItem {
+  display: flex;
+  gap: 7px;
+}
+
+.reportItemLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.4);
+  margin: 0;
+}
+
+.reportItemValue {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.reportItemValueGreen {
+  color: #04694f;
+}
+
+.parametersContainer {
+  background: #f5f5f5;
+  border-radius: 20px;
+  padding: 41px 19px;
+  width: 603px;
+  height: 228px;
+  margin-top: 16px;
+}
+
+.parametersGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 21px;
+  height: 100%;
+}
+
+.parameterItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0;
+  background: none;
+  border-radius: 0;
+}
+
+.parameterIcon {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.parameterIcon svg {
+  fill: rgba(122, 122, 122, 0.6);
+}
+
+.parameterContent {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.parameterLabel {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.parameterValue {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: #000;
+  margin: 0;
+}
+
+.brandContent {
+  position: relative;
+}
+
+.brandBackground {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 592px;
+  height: 329px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.brandBackgroundImage {
+  width: 592px;
+  height: 329px;
+  opacity: 0.04;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.brandTitle {
+  font-family: 'Roboto Flex', sans-serif;
+  font-size: 36px;
+  font-weight: 600;
+  color: #04694f;
+}
+
+.brandText {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #171414;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+
+.brandTextContent {
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+}
+
+.lastUpdated {
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #9ca3af;
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .analyticsContainer {
+    width: 100%;
+    max-width: 603px;
+  }
+
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .priceMetrics {
+    grid-template-columns: 1fr;
+  }
+
+  .parametersGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .reportItems {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tabsContainer {
+    flex-wrap: wrap;
+  }
+
+  .tabButton {
+    flex: 1 1 50%;
+    padding: 12px 8px;
+    font-size: 14px;
+  }
+
+  .contentContainer {
+    padding: 16px;
+  }
+
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,156 +1,159 @@
-"use client";
-// import React, { useEffect, useState } from "react";
-// import styles from "./page.module.css";
-// import { useParams, useRouter } from "next/navigation";
-// import MockWatch from "../../../../public/catalog-section/mock.png";
-// import { Button } from "@/components/Button/Button";
-// import { CustomAreaChart } from "@/components/Chart/AreaChart/AreaChart";
-// import Link from "next/link";
-// import { ArrowRight } from "../../../../public/icons";
-// import { ThemedText } from "@/components/ThemedText/ThemedText";
-// import { Indicators } from "@/features/home/Indicators/Indicators";
-// import { Star } from "../../../../public/icons";
-// import { threeMonthDataMock, yearDataMock } from "@/mock/data";
-// import ProductDetails from "@/features/product/ProductDetails";
-// import { FloatingButton } from "@/components/FloatingButton";
-// // import { mockData } from "@/mock/watch";
-// import { IWatch } from "@/interfaces";
+'use client';
 
-const Product = () => {
-  // const { back } = useRouter();
-  // const params = useParams();
-  // const [product, setProduct] = useState<IWatch | null>(null);
-  // const productSlug = params.slug;
-  // useEffect(() => {
-  //   const foundProduct = mockData.find((item) => item.slug === productSlug);
-  //   if (foundProduct) {
-  //     setProduct(foundProduct);
-  //   }
-  // }, [productSlug]);
-  // if (!product) {
-  //   return <div>Product not found</div>;
-  // }
+import React from 'react';
+import ProductPage from '@/features/product/ProductPage';
+import { Product } from '@/interfaces/product';
 
-  // const priceChangePercent: number = product.changePercent;
-  // const isPositive = priceChangePercent > 0;
-  // const isNegative = priceChangePercent < 0;
-  // const arrow = isPositive ? "↑" : isNegative ? "↓" : "";
-  // const changeColor = isPositive
-  //   ? "#00c853"
-  //   : isNegative
-  //   ? "#d32f2f"
-  //   : "#9e9e9e";
-
-  return (
-    <>
-      {/* <div className={styles.productContainer}>
-        <div className={styles.productBreadcrumbs} onClick={back}>
-          <img src={ArrowRight.src} alt="back to page" />
-          Назад
-        </div>
-        <div className={styles.productContent}>
-          <div className={styles.productLeft}>
-            <picture>
-              <source media="(max-width: 640px)" srcSet={MockWatch.src} />
-              <img
-                src={product.image}
-                alt={product.title}
-                className={styles.productImg}
-              />
-            </picture>
-          </div>
-          <div className={styles.cardElement}>
-            <img
-              src={Star.src}
-              alt="star icon"
-              className={styles.cardElementStarIcon}
-            />
-            <span className={styles.cardElementText}>Надійний бренд</span>
-          </div>
-          <div className={styles.productRight}>
-            <div className={styles.productText}>
-              <ThemedText type="h2">{product.title}</ThemedText>
-              <ProductDetails
-                data={[
-                  { label: "Матеріал", value: product.material },
-                  { label: "Калібр", value: `${product.caliber}` },
-                  { label: "Рік", value: product.releaseYear },
-                  { label: "Діаметр", value: `${product.diameter} mm` },
-                  { label: "Стан", value: `${product.diameter} mm` },
-                  {
-                    label: "Водонепроникність",
-                    value: product.waterResistance,
-                  },
-                  { label: "Механізм", value: product.movement },
-                ]}
-              />
-              <Link href="/chat" prefetch={false}>
-                <ThemedText className=" text-start underline text-[#A8A6A6]">
-                  Не знайшли параметр? Напишіть в чат
-                </ThemedText>
-              </Link>
-            </div>
-
-            <div className={styles.productPrice}>
-              <div className={styles.productPriceWrapper}>
-                <ThemedText type="h2" className="text-nowrap">
-                  {product.price} грн
-                </ThemedText>
-                {priceChangePercent !== 0 && (
-                  <span
-                    className={styles.productPriceChange}
-                    style={{ color: changeColor }}
-                  >
-                    {arrow} {Math.abs(priceChangePercent)} %
-                  </span>
-                )}
-              </div>
-
-              <FloatingButton
-                watchedIds={["ai-agent", "footer"]}
-                safeOffset={20}
-                initialOffsetPercent={0.02}
-                extraOffset={0}
-                className="sm:static"
-              >
-                {({ bottom }) => (
-                  <Button
-                    variant="solid"
-                    classNames={styles.productPriceBtn}
-                    style={{ bottom }}
-                  >
-                    Купити в Chrono24
-                  </Button>
-                )}
-              </FloatingButton>
-            </div>
-          </div>
-        </div>
-        <div className={styles.productGraph}>
-          <ThemedText type="h2">Графік цін</ThemedText>
-          <div className={styles.productGraphSection}>
-            <div className={styles.productGraphChart}>
-              <CustomAreaChart
-                controls
-                yearData={yearDataMock}
-                threeMonthData={threeMonthDataMock}
-                variant="area"
-              />
-            </div>
-
-            <Button
-              variant="text"
-              color="#000"
-              classNames={styles.productPDFBtn}
-            >
-              <Link href="#">Завантажити PDF-гайд</Link>
-            </Button>
-          </div>
-        </div>
-        <Indicators />
-      </div> */}
-    </>
-  );
+// Mock data для демонстрації
+const mockProduct: Product = {
+  id: '1',
+  slug: 'rolex-submariner-date',
+  title: 'ROLEX Submariner Date',
+  brand: 'ROLEX',
+  model: 'Submariner Date',
+  reference: '210.30.42.20.01.00101',
+  price: {
+    min: 19500,
+    max: 20000,
+    currency: '€',
+  },
+  priceTrend: {
+    value: 4.7,
+    period: '30 днів',
+    isPositive: true,
+  },
+  image: '/watch/RolexCatalog.png',
+  thumbnails: [
+    '/watch/RolexCatalog.png',
+    '/watch/RolexCatalog.png',
+    '/watch/RolexCatalog.png',
+    '/watch/RolexCatalog.png',
+    '/watch/RolexCatalog.png',
+  ],
+  description: 'Класичний підводний годинник Rolex Submariner Date',
+  details: [
+    { label: 'Матеріал', value: 'Сталь' },
+    { label: 'Калібр', value: '3235' },
+    { label: 'Рік', value: '2023' },
+    { label: 'Діаметр', value: '42 mm' },
+    { label: 'Стан', value: 'Новий' },
+    { label: 'Водонепроникність', value: '300m' },
+    { label: 'Механізм', value: 'Автоматичний' },
+  ],
+  analytics: {
+    demand: 65,
+    liquidity: 72,
+    dynamics: 12,
+    ads: 'За 3 дні',
+    trendGauge: 65,
+    lastUpdated: 'вересень 2025 року',
+  },
+  similarModels: [
+    {
+      id: '2',
+      title: 'Omega Seamaster',
+      price: '19 500 €',
+      priceTrend: '+7%',
+      image: '/watch/RolexCatalog.png',
+      index: 'A',
+    },
+    {
+      id: '3',
+      title: 'Tudor Black Bay',
+      price: '18 200 €',
+      priceTrend: '+3%',
+      image: '/watch/RolexCatalog.png',
+      index: 'B',
+    },
+    {
+      id: '4',
+      title: 'Breitling Superocean',
+      price: '17 800 €',
+      priceTrend: '+5%',
+      image: '/watch/RolexCatalog.png',
+      index: 'A',
+    },
+    {
+      id: '5',
+      title: 'Tag Heuer Aquaracer',
+      price: '16 500 €',
+      priceTrend: '+2%',
+      image: '/watch/RolexCatalog.png',
+      index: 'C',
+    },
+    {
+      id: '6',
+      title: 'Seiko Prospex',
+      price: '15 200 €',
+      priceTrend: '+4%',
+      image: '/watch/RolexCatalog.png',
+      index: 'B',
+    },
+    {
+      id: '7',
+      title: 'Citizen Promaster',
+      price: '14 800 €',
+      priceTrend: '+1%',
+      image: '/watch/RolexCatalog.png',
+      index: 'A',
+    },
+  ],
+  sellerOffers: [
+    {
+      id: '1',
+      sellerName: 'Crown&Caliber',
+      rating: 4.3,
+      reviewsCount: 180,
+      location: 'США, Атланта',
+      details: '3 документами з упаковкою',
+      shipping: 'Доставка від €50',
+      price: '17 200',
+      currency: '€',
+    },
+    {
+      id: '2',
+      sellerName: 'Crown&Caliber',
+      rating: 4.3,
+      reviewsCount: 180,
+      location: 'США, Атланта',
+      details: '3 документами з упаковкою',
+      shipping: 'Доставка від €50',
+      price: '17 200',
+      currency: '€',
+    },
+    {
+      id: '3',
+      sellerName: 'Crown&Caliber',
+      rating: 4.3,
+      reviewsCount: 180,
+      location: 'США, Атланта',
+      details: '3 документами з упаковкою',
+      shipping: 'Доставка від €50',
+      price: '17 200',
+      currency: '€',
+    },
+    {
+      id: '4',
+      sellerName: 'Crown&Caliber',
+      rating: 4.3,
+      reviewsCount: 180,
+      location: 'США, Атланта',
+      details: '3 документами з упаковкою',
+      shipping: 'Доставка від €50',
+      price: '17 200',
+      currency: '€',
+    },
+  ],
 };
 
-export default Product;
+const ProductPageWrapper = () => {
+  // const params = useParams();
+  // const slug = params.slug as string;
+
+  // Тут буде логіка отримання продукту за slug
+  // const product = await getProductBySlug(slug);
+
+  return <ProductPage product={mockProduct} />;
+};
+
+export default ProductPageWrapper;
