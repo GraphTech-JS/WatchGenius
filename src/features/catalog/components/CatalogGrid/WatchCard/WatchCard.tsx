@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { FaHeart, FaRegHeart, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import type { WatchItem } from '@/mock/watches';
 import styles from './WatchCard.module.css';
@@ -30,12 +31,18 @@ export const WatchCard: React.FC<Props> = ({
   onToggleLike,
   onOpenFeedback,
 }) => {
+  const router = useRouter();
   const isUp = item.trend.value > 0;
   const isFlat = item.trend.value === 0;
+
+  const handleCardClick = () => {
+    router.push(`/product/${item.slug}`);
+  };
 
   return (
     <div
       className={`${styles.watchCard} border border-[rgba(23,20,20,0.15)] bg-white p-3`}
+      onClick={handleCardClick}
     >
       <div className='flex justify-between items-center'>
         <span
@@ -49,7 +56,10 @@ export const WatchCard: React.FC<Props> = ({
 
         <button
           aria-label={liked ? 'Прибрати з обраного' : 'Додати в обране'}
-          onClick={() => onToggleLike(item.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleLike(item.id);
+          }}
           className='text-[18px] cursor-pointer z-2'
         >
           {liked ? (
@@ -108,7 +118,10 @@ export const WatchCard: React.FC<Props> = ({
 
       <button
         className={`${styles.buyButton} mt-[27px]`}
-        onClick={() => onOpenFeedback?.(item.title)}
+        onClick={(e) => {
+          e.stopPropagation();
+          onOpenFeedback?.(item.title);
+        }}
       >
         {item.buttonLabel}
       </button>

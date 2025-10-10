@@ -1,0 +1,102 @@
+import type { StaticImageData } from 'next/image';
+
+// Основні типи для продукту
+export interface Product {
+  id: string;
+  slug: string;
+  title: string;
+  brand: string;
+  model: string;
+  reference: string;
+  price: {
+    min: number;
+    max: number;
+    currency: '€' | '$' | '₴';
+  };
+  priceTrend: {
+    value: number;
+    period: string;
+    isPositive: boolean;
+  };
+  image: string | StaticImageData;
+  thumbnails: (string | StaticImageData)[];
+  description?: string;
+  
+  // Деталі продукту
+  details: ProductDetail[];
+  
+  // Аналітика
+  analytics: ProductAnalytics;
+  
+  // Схожі моделі
+  similarModels: SimilarModel[];
+  
+  // Пропозиції продавців
+  sellerOffers: SellerOffer[];
+}
+
+export interface ProductDetail {
+  label: string;
+  value: string;
+}
+
+export interface ProductAnalytics {
+  demand: number;
+  liquidity: number;
+  dynamics: number;
+  ads: string;
+  trendGauge: number;
+  lastUpdated: string;
+}
+
+export interface SimilarModel {
+  id: string;
+  title: string;
+  price: string;
+  priceTrend: string;
+  image: string | StaticImageData;
+  index: 'A' | 'B' | 'C';
+}
+
+export interface SellerOffer {
+  id: string;
+  sellerName: string;
+  sellerLogo?: string | StaticImageData;
+  rating: number;
+  reviewsCount: number;
+  location: string;
+  details: string;
+  shipping: string;
+  price: string;
+  currency: '€' | '$' | '₴';
+}
+
+// Пропси для компонентів
+export interface ProductHeroProps {
+  product: Product;
+  onSave: () => void;
+  onCompare: () => void;
+  onPriceNotification: () => void;
+  onShare: () => void;
+  onBuy: () => void;
+  onGetQuote: () => void;
+}
+
+export interface ProductAnalyticsProps {
+  analytics: ProductAnalytics;
+  activeTab: 'parameters' | 'brand' | 'price' | 'trend';
+  onTabChange: (tab: 'parameters' | 'brand' | 'price' | 'trend') => void;
+}
+
+export interface SimilarModelsProps {
+  models: SimilarModel[];
+  onCompare: () => void;
+}
+
+export interface SellerOffersProps {
+  offers: SellerOffer[];
+  onSortChange: (sort: string) => void;
+  onRegionChange: (region: string) => void;
+  onConditionChange: (condition: string) => void;
+  onPurchase: (offerId: string) => void;
+}

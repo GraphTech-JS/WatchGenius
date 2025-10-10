@@ -8,6 +8,7 @@ export type Currency = '€' | '$' | '₴';
 
 export interface WatchItem {
   id: string;
+  slug: string;
   title: string;
   price: number;
   currency: Currency;

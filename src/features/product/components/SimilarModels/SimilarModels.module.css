@@ -1,0 +1,186 @@
+.section {
+  margin-bottom: 2rem;
+  width: 578px;
+}
+
+.sectionTitle {
+  font-family: 'Roboto Flex', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: #171414;
+  
+}
+
+.sectionSubtitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: rgba(23, 20, 20, 0.5);
+  margin-bottom: 19px;
+}
+
+
+
+.watchCard {
+  position: relative;
+  background: white;
+  border: 0.86px solid rgba(0, 0, 0, 0.2);
+  border-radius: 9px;
+  width: 187px;
+  height: 203px;
+  padding: 12px 11px 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.indexBadge {
+  position: absolute;
+  top: 12px;
+  left: 11px;
+  border-radius: 4px;
+  padding: 5px 7px 6px 6px;
+  width: 29px;
+  height: 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  text-align: center;
+}
+
+.indexBadgeA {
+  background: #b4e1c7;
+  color: #067b06;
+}
+
+.indexBadgeB {
+  background: #fef9c3;
+  color: #eab308;
+}
+
+.indexBadgeC {
+  background: #fddcdc;
+  color: #b91b1b;
+}
+
+.comparisonIcon {
+  position: absolute;
+  top: 12px;
+  right: 11px;
+  width: 20px;
+  height: 20px;
+}
+
+.watchImage {
+  position: relative;
+  height: 120px !important; 
+  width: 100% !important;
+  top: -6px !important;
+  margin-top: 4px; 
+  margin-bottom: 2px; 
+}
+
+.watchImage img {
+  object-fit: contain;
+}
+
+.watchTitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  text-align: center;
+  color: #171414;
+  margin-bottom: 8px;
+}
+
+.priceAndTrend {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: #171414;
+}
+
+.trendContainer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.trendBadge {
+  border-radius: 20px;
+  padding: 1px 0px;
+  width: 86px;
+  height: 17px;
+  background: rgba(4, 105, 79, 0.07);
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.trendValue {
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  color: #05873b;
+}
+
+.trendValueNegative {
+  color: #C73D3D;
+  background: #FEECEC;
+}
+
+.trendPeriod {
+  font-weight: 400;
+  font-size: 12px;
+  color: #b9b9b9;
+  margin-top: 3px;
+}
+
+
+.compareButton {
+  border-radius: 10px;
+  background-color: #04694f;
+  padding: 6px 69px;
+  width: 578px;
+  height: 65px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+  color: white;
+}
+
+.compareButton:hover {
+  background-color: #035a3f;
+}
+
+@media (max-width: 768px) {
+  .watchCard {
+    width: 100%;
+    max-width: 183px;
+  }
+}
+
+@media (max-width: 480px) {
+  .watchCard {
+    width: 100%;
+    max-width: 183px;
+    margin: 0 auto;
+  }
+}
