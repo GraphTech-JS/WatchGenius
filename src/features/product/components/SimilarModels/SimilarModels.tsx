@@ -5,7 +5,7 @@ import Image from 'next/image';
 // import { useRouter } from 'next/navigation';
 import { SimilarModelsProps } from '@/interfaces/product';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
-import ScalesIcon from '../../../../../public/product-icons/scales.svg';
+import { ScalesIcon } from '../../../../../public/product-icons';
 import styles from './SimilarModels.module.css';
 
 const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {

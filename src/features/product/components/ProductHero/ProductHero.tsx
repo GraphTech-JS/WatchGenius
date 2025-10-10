@@ -3,11 +3,13 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { ProductHeroProps } from '@/interfaces/product';
-import LinkIcon from '../../../../../public/product-icons/link.svg';
-import ScalesIcon from '../../../../../public/product-icons/scales.svg';
-import BellIcon from '../../../../../public/product-icons/bell.svg';
-import CopyIcon from '../../../../../public/product-icons/modals/copy.svg';
-import ShareIcon from '../../../../../public/product-icons/modals/share.svg';
+import {
+  LinkIcon,
+  ScalesIcon,
+  BellIcon,
+  CopyIcon,
+  ShareIcon,
+} from '../../../../../public/product-icons';
 import HeartIcon from '/public/icons/Heart.svg';
 import styles from './ProductHero.module.css';
 import { ComparisonModal } from '../../index';
