@@ -38,7 +38,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
       await navigator.clipboard.writeText(
         `${window.location.origin}/product/${product.slug}`
       );
-      setShowShareModal(false); // Закриваємо інпут після копіювання
+      setShowShareModal(false); 
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
@@ -52,12 +52,12 @@ const ProductHero: React.FC<ProductHeroProps> = ({
           text: 'Check out this watch!',
           url: `${window.location.origin}/product/${product.slug}`,
         });
-        setShowShareModal(false); // Закриваємо інпут після поширення
+        setShowShareModal(false); 
       } catch (err) {
         console.error('Error sharing: ', err);
       }
     } else {
-      handleCopy(); // handleCopy вже закриває інпут
+      handleCopy(); 
     }
   };
 
