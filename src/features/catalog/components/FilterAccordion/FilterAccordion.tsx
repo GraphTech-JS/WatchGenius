@@ -15,7 +15,6 @@ type Props = {
 
 export const FilterAccordion: React.FC<Props> = ({ filters }) => {
   const {
-
     visibleBrands,
     filteredBrands,
     selectedBrands,
@@ -31,6 +30,8 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
 
     indexValue,
     setIndexValue,
+    openKeys,
+    setOpenKeys,
 
     yearFrom,
     yearTo,
@@ -63,8 +64,6 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
       <>
         {section === 'Бренд' && (
           <>
-           
-
             <div className='space-y-3'>
               {visibleBrands.map((brand) => (
                 <FilterCheckbox
@@ -111,8 +110,10 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
               className='w-[84px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
                          text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20'
             />
-            <div className='w-[40px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                            text-[14px] text-[var(--text-dark)] flex items-center justify-center select-none'>
+            <div
+              className='w-[40px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                            text-[14px] text-[var(--text-dark)] flex items-center justify-center select-none'
+            >
               {currency}
             </div>
           </div>
@@ -220,5 +221,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
     ),
   }));
 
-  return <Accordion items={items} />;
+ return (
+   <Accordion items={items} openKeys={openKeys} onOpenChange={setOpenKeys} />
+ );
 };

@@ -12,23 +12,36 @@ export const SaveToChatButton: React.FC<SaveToChatButtonProps> = ({
   onClick,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  const handleClick = () => {
+    setIsSaved(true);
+    onClick();
+
+    setTimeout(() => {
+      setIsSaved(false);
+    }, 2000);
+  };
 
   return (
     <button
-      onClick={onClick}
-      className={`${styles.saveToChatButton} w-full md:w-[194px] lg:w-[252px]`}
+      onClick={handleClick}
+      className={`${styles.saveToChatButton} w-full md:w-[194px] lg:w-[252px] ${
+        isSaved ? styles.saved : ''
+      }`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      disabled={isSaved}
     >
       <Image
-        src={isHovered ? StarIconHover : StarIcon}
+        src={isSaved ? StarIconHover : isHovered ? StarIconHover : StarIcon}
         alt='StarIcon'
         width={18}
         height={18}
         className='w-[18px] h-[18px] md:w-4 md:h-4 lg:w-[18px] lg:h-[18px] flex-shrink-0'
       />
       <span className='text-[16px] md:text-[13px] lg:text-[16px] leading-tight'>
-        Зберегти пошук в чат
+        {isSaved ? 'Збережено!' : 'Зберегти пошук в чат'}
       </span>
     </button>
   );

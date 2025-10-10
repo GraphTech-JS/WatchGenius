@@ -1,58 +1,48 @@
 'use client';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { CatalogSearch } from './components/CatalogSearch/CatalogSearch';
-import { SaveToChatButton } from './components/SaveToChatButton/SaveToChatButton';
-import { SortButtons } from './components/SortButtons/SortButtons';
-import { SortDropdown } from './components/SortDropdown/SortDropdown';
+import React from 'react';
+
 import { CatalogSidebar } from '@/features/catalog/components/CatalogSidebar/CatalogSidebar';
 import { FixedSidebar } from '@/features/catalog/components/FixedSidebar/FixedSidebar';
 import { CatalogGrid } from '@/features/catalog/components/CatalogGrid/CatalogGrid';
 import { TabletSidebar } from '@/features/catalog/components/TabletSidebar/TabletSidebar';
+import { CatalogControls } from '@/features/catalog/components/CatalogControls/CatalogControls';
+import { FeedbackModal } from '@/components/FeedbackModal/FeedbackModal';
+import { useFeedbackModal } from '@/hooks/useFeedbackModal';
 
-import { watchesMock } from '@/mock/watches';
 import styles from './page.module.css';
+import { useCatalogSearch } from '@/hooks/useCatalogSearch';
+import { useSidebarPosition } from '@/hooks/useSidebarPosition';
+import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
 
 const CatalogPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortValue, setSortValue] = useState('За замовчуванням');
+  const search = useCatalogSearch();
+  const sidebar = useSidebarPosition();
+  const feedbackModal = useFeedbackModal();
 
-  const handleSaveToChat = () =>
-    console.log('Збереження пошуку в чат:', searchTerm);
-  const handleApplyFilters = () => console.log('Застосування фільтрів');
-  const handleResetFilters = () => console.log('Скидання фільтрів');
+  const handleSaveToChat = () => {
+    // TODO: Implement save to chat functionality
+  };
 
-  const filteredItems = useMemo(() => {
-    const term = searchTerm.trim().toLowerCase();
-    if (!term) return watchesMock;
-    return watchesMock.filter((w) => w.title.toLowerCase().includes(term));
-  }, [searchTerm]);
+  const handleApplyFilters = (filters: UseCatalogFiltersReturn) => {
+    search.applySidebarFilters(filters);
+  };
 
-  const sectionRef = useRef<HTMLDivElement | null>(null);
-  const [sidebarTopOffset, setSidebarTopOffset] = useState<number>(0);
+  const handleResetFilters = () => {
+    search.setSearchTerm('');
+    search.setQuickIndexFilter(null);
+    search.clearSidebarFilters();
+  };
 
-  useEffect(() => {
-    const measure = () => {
-      const el = sectionRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const pageTop = Math.round(rect.top + window.scrollY);
-      setSidebarTopOffset(Math.max(0, pageTop));
-    };
-    requestAnimationFrame(measure);
-    window.addEventListener('resize', measure);
-    window.addEventListener('scroll', measure);
-    return () => {
-      window.removeEventListener('resize', measure);
-      window.removeEventListener('scroll', measure);
-    };
-  }, []);
+  const handleAskGeni = () => {
+    // TODO: Implement ask Geni functionality
+  };
 
   return (
-    <div className='bg-white py-[60px] min-h-screen mx-auto '>
+    <div className='bg-white py-[60px] min-h-screen mx-auto'>
       <div className='flex flex-col mb-[15px]'>
         <h1 className={styles.catalogTitle}>Каталог годинників</h1>
         <p className={styles.catalogSubtitle}>
-          Знайдено {filteredItems.length} моделей
+          Знайдено {search.filteredItems.length} моделей
         </p>
       </div>
 
@@ -60,30 +50,27 @@ const CatalogPage = () => {
         className='block lg:hidden'
         width={321}
         zIndex={5}
-        containerRef={sectionRef as React.RefObject<HTMLElement>}
+        containerRef={sidebar.sectionRef as React.RefObject<HTMLElement>}
         onReset={handleResetFilters}
-        topOffset={sidebarTopOffset}
+        topOffset={sidebar.sidebarTopOffset}
       />
 
-      <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-[15px] mb-5 md:mb-8'>
-        <div className='flex flex-col md:flex-row items-stretch sm:items-center gap-3 sm:gap-[15px] w-full md:w-auto'>
-          <CatalogSearch value={searchTerm} onChange={setSearchTerm} />
-          <SaveToChatButton onClick={handleSaveToChat} />
-        </div>
+      <CatalogControls
+        searchTerm={search.searchTerm}
+        onSearchChange={search.setSearchTerm}
+        selectedIndex={search.quickIndexFilter}
+        onIndexChange={search.toggleIndex}
+        sortValue={search.sortOption}
+        onSortChange={search.setSortOption}
+        onSaveToChat={handleSaveToChat}
+      />
 
-        <div className='flex items-center gap-3 flex-col md:flex-row md:gap-[15px] w-full md:w-auto'>
-          <div className='flex  '>
-            <SortButtons />
-          </div>
-          <div className='flex-1 w-full md:flex-none md:w-auto'>
-            <SortDropdown value={sortValue} onChange={setSortValue} />
-          </div>
-        </div>
-      </div>
-
-      <div ref={sectionRef} className='flex relative gap-8 items-start'>
+      <div
+        ref={sidebar.sectionRef}
+        className='flex relative gap-[20px] items-start'
+      >
         <FixedSidebar
-          containerRef={sectionRef as React.RefObject<HTMLElement>}
+          containerRef={sidebar.sectionRef as React.RefObject<HTMLElement>}
           width={320}
           top={96}
           className='hidden lg:block'
@@ -95,9 +82,21 @@ const CatalogPage = () => {
         </FixedSidebar>
 
         <div className='flex-1 min-w-0'>
-          <CatalogGrid items={filteredItems} initialCount={12} />
+          <CatalogGrid
+            items={search.filteredItems}
+            initialCount={12}
+            onResetFilters={handleResetFilters}
+            onAskGeni={handleAskGeni}
+            onOpenFeedback={feedbackModal.openModal}
+          />
         </div>
       </div>
+
+      <FeedbackModal
+        isOpen={feedbackModal.isOpen}
+        onClose={feedbackModal.closeModal}
+        watchTitle={feedbackModal.watchTitle}
+      />
     </div>
   );
 };

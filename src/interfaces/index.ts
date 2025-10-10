@@ -44,4 +44,8 @@ interface ISearchProps extends React.HTMLAttributes<HTMLInputElement> {
   searchList: IWatch[];
 }
 
-export type { Message, IMainContext, IWatch, ISearchProps };
+
+
+export * from './catalog';
+
+export type { Message, IMainContext, IWatch, ISearchProps};

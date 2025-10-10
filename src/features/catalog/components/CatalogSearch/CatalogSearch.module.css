@@ -28,6 +28,65 @@
 .catalogSearch::placeholder {
   color: #8b8b8b;
   text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.catalogSearch:focus::placeholder {
+  opacity: 1;
+}
+
+@media (max-width: 1023px) and (min-width: 768px) {
+  .searchWrapper {
+    width: 194px;
+    flex-shrink: 0;
+  }
+
+  .catalogSearch {
+    font-size: 14px;
+    padding-left: 52px;
+    padding-right: 12px;
+  }
+
+  .catalogSearch::placeholder {
+    font-size: 13px;
+  }
+
+  .iconWrapper {
+    left: 16px;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1299px) {
+  .searchWrapper {
+    width: 100%;
+  }
+
+  .catalogSearch {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1300px) {
+  .searchWrapper {
+    width: 426px;
+    flex-shrink: 0;
+  }
+
+  .catalogSearch {
+    width: 426px;
+  }
+}
+
+@media (max-width: 767px) {
+  .catalogSearch {
+    font-size: 16px;
+  }
 }
 
 .iconWrapper {
@@ -42,43 +101,4 @@
   width: 20px;
   height: 20px;
   color: #8b8b8b;
-}
-
-@media (max-width: 1023px) and (min-width: 768px) {
-  .searchWrapper {
-    width: 194px;
-    flex-shrink: 0;
-  }
-  
-  .catalogSearch {
-    font-size: 14px;
-    padding-left: 52px;
-    padding-right: 12px;
-  }
-  
-  .catalogSearch::placeholder {
-    font-size: 13px;
-  }
-  
-  .iconWrapper {
-    left: 16px;
-  }
-  
-  .icon {
-    width: 16px;
-    height: 16px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .searchWrapper {
-    width: 426px;
-    flex-shrink: 0;
-  }
-}
-
-@media (max-width: 767px) {
-  .catalogSearch {
-    font-size: 16px;
-  }
 }

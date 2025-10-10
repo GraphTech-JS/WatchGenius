@@ -16,15 +16,27 @@
 }
 
 .sortButtons:hover {
-  background-color: var(--green-primary);
-  color: white;
+  background-color: var(--green-primary) !important;
+  color: white !important;
 }
 
 .sortButtons:focus {
   outline: none;
-  background-color: var(--green-primary);
-  color: white;
 }
+
+.sortButtons.active {
+  background-color: #04694f !important;
+  color: white !important;
+  border-color: #04694f !important;
+}
+
+.sortButtons.active:hover {
+  background-color: #04694f !important;
+  color: white !important;
+  border-color: #04694f !important;
+}
+
+
 
 @media (max-width: 1023px) {
   .sortButtons {
@@ -46,6 +58,29 @@
   .sortButtons {
     width: 109px;
     height: 44px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 375px) {
+  .sortButtons {
+    width: 100px;
+    height: 47px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .sortButtons {
+    width: 90px;
+    height: 47px;
+    font-size: 16px;
+  }
+}
+@media (max-width: 320px) {
+  .sortButtons {
+    width: 83px;
+    height: 47px;
     font-size: 16px;
   }
 }
