@@ -3,13 +3,11 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { ProductHeroProps } from '@/interfaces/product';
-import {
-  LinkIcon,
-  ScalesIcon,
-  BellIcon,
-  CopyIcon,
-  ShareIcon,
-} from '../../../../../public/product-icons';
+import LinkIcon from '../../../../../public/product-icons/link.svg';
+import ScalesIcon from '../../../../../public/product-icons/scales.svg';
+import BellIcon from '../../../../../public/product-icons/bell.svg';
+import CopyIcon from '../../../../../public/product-icons/modals/copy.svg';
+import ShareIcon from '../../../../../public/product-icons/modals/share.svg';
 import HeartIcon from '/public/icons/Heart.svg';
 import styles from './ProductHero.module.css';
 import { ComparisonModal } from '../../index';
@@ -38,7 +36,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
       await navigator.clipboard.writeText(
         `${window.location.origin}/product/${product.slug}`
       );
-      setShowShareModal(false); 
+      setShowShareModal(false);
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
@@ -52,12 +50,12 @@ const ProductHero: React.FC<ProductHeroProps> = ({
           text: 'Check out this watch!',
           url: `${window.location.origin}/product/${product.slug}`,
         });
-        setShowShareModal(false); 
+        setShowShareModal(false);
       } catch (err) {
         console.error('Error sharing: ', err);
       }
     } else {
-      handleCopy(); 
+      handleCopy();
     }
   };
 

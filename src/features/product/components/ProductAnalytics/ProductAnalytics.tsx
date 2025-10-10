@@ -5,25 +5,23 @@ import Image from 'next/image';
 import { ProductAnalyticsProps } from '@/interfaces/product';
 import styles from './ProductAnalytics.module.css';
 
-import {
-  MechanismIcon,
-  MaterialIcon,
-  StanIcon,
-  WaterIcon,
-  YearIcon,
-  DiameterIcon,
-  StrapIcon,
-  ChronographIcon,
-  FluentArrowGrowthIcon,
-  StarIcon,
-  ZipIcon,
-  AdsIcon,
-  DinamicIcon,
-  TrendWaterIcon,
-  DugaIcon,
-  PolygonIcon,
-  EllipseIcon,
-} from '../../../../../public/product-icons';
+import MechanismIcon from '../../../../../public/product-icons/tabs/parameters/mechanism.svg';
+import MaterialIcon from '../../../../../public/product-icons/tabs/parameters/material.svg';
+import StanIcon from '../../../../../public/product-icons/tabs/parameters/stan.svg';
+import WaterIcon from '../../../../../public/product-icons/tabs/parameters/water.svg';
+import YearIcon from '../../../../../public/product-icons/tabs/parameters/year.svg';
+import DiameterIcon from '../../../../../public/product-icons/tabs/parameters/diameter.svg';
+import StrapIcon from '../../../../../public/product-icons/tabs/parameters/strap.svg';
+import ChronographIcon from '../../../../../public/product-icons/tabs/parameters/chronograph.svg';
+import FluentArrowGrowthIcon from '../../../../../public/product-icons/tabs/price analytics/fluent_arrow-growth.svg';
+import StarIcon from '../../../../../public/product-icons/tabs/price analytics/star.svg';
+import ZipIcon from '../../../../../public/product-icons/tabs/price analytics/zip.svg';
+import AdsIcon from '../../../../../public/product-icons/tabs/trend analytics/ads.svg';
+import DinamicIcon from '../../../../../public/product-icons/tabs/trend analytics/dinamic.svg';
+import TrendWaterIcon from '../../../../../public/product-icons/tabs/trend analytics/water.svg';
+import DugaIcon from '../../../../../public/product-icons/tabs/Duga.svg';
+import PolygonIcon from '../../../../../public/product-icons/tabs/polygon.svg';
+import EllipseIcon from '../../../../../public/product-icons/tabs/ellipse.svg';
 
 const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   analytics,
