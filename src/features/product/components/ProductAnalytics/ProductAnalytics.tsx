@@ -23,7 +23,7 @@ import {
   DugaIcon,
   PolygonIcon,
   EllipseIcon,
-} from '../../../../../public/product-icons';
+} from '@/product-icons';
 
 const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   analytics,

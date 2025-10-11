@@ -9,7 +9,7 @@ import {
   StarFillIcon,
   BxMapIcon,
   QuillLinkOutIcon,
-} from '../../../../../public/product-icons';
+} from '@/product-icons';
 import styles from './SellerOffers.module.css';
 
 const SellerOffers: React.FC<SellerOffersProps> = ({
@@ -47,7 +47,7 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
     setOpenDropdown(null);
   };
 
-  // Закрити дропдаун при кліку поза ним
+ 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (!(event.target as Element).closest('.filterDropdown')) {
@@ -61,7 +61,7 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
     };
   }, []);
 
-  // Компонент кастомного дропдауна
+
   const CustomDropdown: React.FC<{
     name: string;
     value: string;

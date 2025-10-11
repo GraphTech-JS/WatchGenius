@@ -9,7 +9,7 @@ import {
   BellIcon,
   CopyIcon,
   ShareIcon,
-} from '../../../../../public/product-icons';
+} from '@/product-icons';
 import HeartIcon from '/public/icons/Heart.svg';
 import styles from './ProductHero.module.css';
 import { ComparisonModal } from '../../index';
