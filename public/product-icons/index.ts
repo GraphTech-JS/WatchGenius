@@ -1,10 +1,10 @@
-export { default as BellIcon } from './bell.svg';
+export { default as BellIcon } from '../icons/Bell.svg';
 export { default as BxMapIcon } from './bx_map.svg';
 export { default as HearthIcon } from './hearth.svg';
 export { default as LinkIcon } from './link.svg';
 export { default as QuillLinkOutIcon } from './quill_link-out.svg';
 export { default as SafetyIcon } from './safety.svg';
-export { default as ScalesIcon } from './scales.svg';
+export { default as ScalesIcon } from '../icons/Scales.svg';
 export { default as StarFillIcon } from './Star-fill.svg';
 
 export { default as CopyIcon } from './modals/copy.svg';
