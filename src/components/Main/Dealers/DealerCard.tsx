@@ -9,7 +9,7 @@ import { DealerData } from "@/types/dealers";
 export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
   return (
     <div
-      className={`${styles.dealerCard} flex flex-col lg:flex-row items-center px-4 py-7 rounded-[20px] gap-7`}
+      className={`${styles.dealerCard} flex flex-col lg:flex-row items-center px-4 lg:px-11.5 py-7 rounded-[20px] gap-7`}
     >
       <Image
         src={dealer.image}
@@ -55,7 +55,7 @@ export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
             className={`${styles.dealerCardLink} w-full `}
           >
             <button
-              className={`${styles.dealerBtn} w-full py-4 lg:py-[18px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
+              className={`${styles.dealerBtn} w-full py-4 lg:py-[16px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
             >
               <DetailsIcon className={`${styles.DealerIcon} w-4 h-4`} />
               <div>Перейти на сайт</div>
@@ -67,7 +67,7 @@ export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
             className={`${styles.dealerCardLink} w-full `}
           >
             <button
-              className={`${styles.priceBtn} w-full py-4 lg:py-[18px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
+              className={`${styles.priceBtn} w-full py-4 lg:py-[16px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
             >
               <LetterIcon className={`${styles.BookIcon} w-5.5 h-5.5`} />
               <div>Запит ціни</div>

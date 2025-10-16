@@ -30,6 +30,10 @@
   font-size: 15px;
 }
 @media (width >= 64rem /* 1024px */) {
+  .brandTitle {
+    font-size: 32px;
+    line-height: 38px;
+  }
   .BrandName {
     font-size: 36px;
     line-height: 48px;

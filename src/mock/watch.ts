@@ -1,5 +1,6 @@
 import { IWatch } from "@/interfaces";
 import MockWatch from "../../public/watch/Rolex.png";
+import MockWatchLong from "../../public/watch/RolexLong.png";
 
 export const mockCards: IWatch[] = [
   {
@@ -34,7 +35,7 @@ export const mockTrending: IWatch[] = [
   {
     id: 1,
     slug: "dsfww",
-    image: MockWatch.src,
+    image: MockWatchLong.src,
     brand: "Rolex Submariner Oyster Perpetual",
     price: 19500,
     rating: 6,
@@ -46,7 +47,7 @@ export const mockTrending: IWatch[] = [
   {
     id: 2,
     slug: "dsfw5",
-    image: MockWatch.src,
+    image: MockWatchLong.src,
     brand: "Rolex Submariner Oyster Perpetual",
     price: 19500,
     rating: 8,
@@ -58,7 +59,7 @@ export const mockTrending: IWatch[] = [
   {
     id: 3,
     slug: "dsfw4",
-    image: MockWatch.src,
+    image: MockWatchLong.src,
     brand: "Rolex Submariner Oyster Perpetual",
     price: 19500,
     rating: 10,
@@ -70,7 +71,7 @@ export const mockTrending: IWatch[] = [
   {
     id: 4,
     slug: "ds1w5",
-    image: MockWatch.src,
+    image: MockWatchLong.src,
     brand: "Rolex Submariner Oyster Perpetual",
     price: 19500,
     rating: 10,
@@ -82,7 +83,7 @@ export const mockTrending: IWatch[] = [
   {
     id: 5,
     slug: "d2fw5",
-    image: MockWatch.src,
+    image: MockWatchLong.src,
     brand: "Rolex Submariner Oyster Perpetual",
     price: 19500,
     rating: 10,
@@ -94,7 +95,7 @@ export const mockTrending: IWatch[] = [
   {
     id: 6,
     slug: "dstf5",
-    image: MockWatch.src,
+    image: MockWatchLong.src,
     brand: "Rolex Submariner Oyster Perpetual",
     price: 19500,
     rating: 8,
@@ -109,7 +110,7 @@ export const mockBest: IWatch[] = [
   {
     id: 1,
     slug: "dsfww",
-    image: MockWatch.src,
+    image: MockWatchLong.src,
     title: "Top Gainers 90d",
     brand: "Rolex Submariner Oyster Perpetual",
     price: 19500,
@@ -119,7 +120,7 @@ export const mockBest: IWatch[] = [
   {
     id: 2,
     slug: "dsfw5",
-    image: MockWatch.src,
+    image: MockWatchLong.src,
     title: "Stable Picks 90d",
     brand: "Rolex Submariner Oyster Perpetual",
     price: 19500,
@@ -129,7 +130,7 @@ export const mockBest: IWatch[] = [
   {
     id: 3,
     slug: "hefw5",
-    image: MockWatch.src,
+    image: MockWatchLong.src,
     title: "Stable Picks 90d",
     brand: "Rolex Submariner Oyster Perpetual",
     price: 19500,

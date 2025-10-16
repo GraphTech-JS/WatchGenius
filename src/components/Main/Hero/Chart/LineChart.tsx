@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 
-interface LineChartProps {
+export interface LineChartProps {
   data: number[];
-  color?: string;
+  variant?: "green" | "orange" | "red" | "overall";
   id?: string;
   height?: number;
   width?: number;
@@ -11,7 +11,7 @@ interface LineChartProps {
 
 export const LineChart: React.FC<LineChartProps> = ({
   data,
-  color = "#D2F7D0",
+  variant = "green",
   id = "chartGradient",
   height = 80,
   width = 300,
@@ -19,22 +19,31 @@ export const LineChart: React.FC<LineChartProps> = ({
   if (data.length === 0) return null;
   const padding = 0;
 
-  const base = data[0];
-  const normalized = data.map((d) => d - base);
+  const colorSchemes = {
+    green: { fill: "#D2F7D0", line: "#B4E1C7" },
+    orange: { fill: "#EED09D", line: "#E3C980" },
+    red: { fill: "#F4CBC7", line: "#FFD0D0" },
+    overall: { fill: "#D2F7D0", line: "#B4E1C7" },
+  };
 
-  const max = Math.max(...normalized);
-  const min = Math.min(...normalized);
+  const { fill: fillColor, line: lineColor } = colorSchemes[variant];
+
+  // const base = data[0];
+  // const normalized = data.map((d) => d - base);
+
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+
+  const topPadding = 0.05;
+  const bottomPadding = 0.6;
 
   const range = max - min || 1;
-  const top = max + range * 0.3;
-  const bottom = min - range * 0.3;
+  const top = max + range * topPadding;
+  const bottom = min - range * bottomPadding;
 
-  const points = normalized.map((d, i) => {
-    const x = (i / (normalized.length - 1)) * (width - padding * 2) + padding;
-    const y =
-      height -
-      padding -
-      ((d - bottom) / (top - bottom)) * (height - padding * 2);
+  const points = data.map((d, i) => {
+    const x = (i / (data.length - 1)) * (width - padding * 2) + padding;
+    const y = height - ((d - bottom) / (top - bottom)) * (height - padding * 2);
     return [x, y];
   });
 
@@ -53,10 +62,11 @@ export const LineChart: React.FC<LineChartProps> = ({
 
   const fillPath =
     path +
-    ` L${points[points.length - 1][0]},${height - padding}` +
-    ` L${points[0][0]},${height - padding} Z`;
+    ` L${points[points.length - 1][0]},${height}` +
+    ` L${points[0][0]},${height} Z`;
 
-  const gradientId = `${id}-${color.replace("#", "")}`;
+  const gradientId = `${id}-${variant}`;
+
   return (
     <svg
       width="100%"
@@ -66,14 +76,23 @@ export const LineChart: React.FC<LineChartProps> = ({
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.6" />
-          <stop offset="60%" stopColor={color} stopOpacity="0.3" />
-          <stop offset="90%" stopColor={color} stopOpacity="0.1" />
-          <stop offset="100%" stopColor={color} stopOpacity="0" />
+          <stop offset="0%" stopColor={fillColor} stopOpacity="1" />
+          <stop offset="50%" stopColor={fillColor} stopOpacity="0.8" />
+          <stop offset="80%" stopColor={fillColor} stopOpacity="0.2" />
+          <stop offset="100%" stopColor={fillColor} stopOpacity="0" />
         </linearGradient>
       </defs>
 
       <path d={fillPath} fill={`url(#${gradientId})`} />
+
+      <path
+        d={path}
+        fill="none"
+        stroke={lineColor}
+        strokeWidth="2"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      />
     </svg>
   );
 };

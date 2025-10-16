@@ -15,7 +15,7 @@ interface FloatingButtonProps {
 export function FloatingButton({
   watchedIds,
   safeOffset = 20,
-  initialOffsetPercent = 0.2,
+  initialOffsetPercent = 0.4,
   extraOffset = 50,
   className,
   style,
@@ -30,6 +30,13 @@ export function FloatingButton({
     let scrollTimeout: NodeJS.Timeout;
     const updatePosition = () => {
       const vh = window.innerHeight;
+      const vw = window.innerWidth;
+
+      if (vw < 768) {
+        setBottom("80px");
+        return;
+      }
+
       const basePx = vh * initialOffsetPercent;
 
       let minTop = Infinity;
@@ -39,6 +46,7 @@ export function FloatingButton({
           minTop = Math.min(minTop, el.getBoundingClientRect().top);
         }
       });
+
       if (minTop === Infinity || minTop > vh) {
         setBottom(`${initialOffsetPercent * 100}%`);
       } else {
@@ -46,8 +54,6 @@ export function FloatingButton({
         const finalPx = Math.round(Math.max(basePx, minBottom) + extraOffset);
         setBottom(`${finalPx}px`);
       }
-
-      ticking = false;
     };
 
     const onScroll = () => {

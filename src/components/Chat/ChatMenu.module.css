@@ -1,20 +1,23 @@
 .chatMenu {
-  display: flex;
-  flex-direction: column;
   transition: transform 0.3s ease;
-  height: 100%;
-  min-height: 100vh; /* Обеспечиваем минимальную высоту на весь экран */
 }
-
-.chatMenuContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 56px;
-  flex: 1;
+.chatMenuHeader {
+  background: rgba(251, 250, 249, 1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.chatMenuHeaderRobotIcon {
+  background: var(--green);
+}
+.chatMenuHeaderNameTitle {
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 500;
+}
+.CloseIcon {
+  color: rgba(0, 0, 0, 0.5);
+}
+/* .chatMenuContainer {
   overflow-y: auto;
-  min-height: 100vh;
-  box-sizing: border-box;
 }
 
 .chatMenuSandBtn {
@@ -55,21 +58,18 @@
   color: var(--black);
   margin-bottom: 50px;
   margin-top: 16px;
-}
+} */
 
 .chatMenuButtons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin-top: 30px;
-  margin-bottom: 60px;
+  background: rgba(251, 250, 249, 1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .chatMenuBtn {
-  font-size: 20px !important;
-  padding: 20px 60px !important;
-  width: 100% !important;
+  color: rgba(23, 20, 20, 0.5);
+}
+.chatMenuBtnIcon {
+  color: black;
 }
 
 .chatHeaderInput {
@@ -96,24 +96,10 @@
 }
 
 .chatMenuClose {
-  display: none;
 }
 
 @media (max-width: 1024px) {
   .chatMenuClose {
-    position: absolute;
-    top: 30px;
-    left: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--black);
-    z-index: 60;
-    width: 60px;
-    height: 60px;
-    border-radius: 50px;
-    border: none;
-    cursor: pointer;
   }
 
   .chatMenuCloseIcon {

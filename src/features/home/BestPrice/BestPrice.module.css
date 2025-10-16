@@ -6,6 +6,11 @@
   font-size: 16px;
   line-height: 18px;
   color: #00000080;
+  font-weight: 400;
+}
+.bestSectionTitle {
+  font-size: 24px;
+  line-height: 28px;
 }
 .bestTitleHighlighted {
   color: var(--green);
@@ -65,14 +70,12 @@
   }
 }
 
-/* Прибираємо стандартний outline при фокусі */
 .Input:focus,
 .Input:focus-visible {
   outline: none;
   box-shadow: none;
 }
 
-/* Прибираємо стрілки у полях type="number" */
 .Input[type="number"]::-webkit-inner-spin-button,
 .Input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -81,4 +84,10 @@
 
 .Input[type="number"] {
   -moz-appearance: textfield; /* Firefox */
+}
+@media (width >= 64rem /* 1024px */) {
+  .bestSectionTitle {
+    font-size: 32px;
+    line-height: 38px;
+  }
 }

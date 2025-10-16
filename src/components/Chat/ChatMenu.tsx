@@ -5,9 +5,9 @@ import React, { useRef, useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "../Button/Button";
 import styles from "./ChatMenu.module.css";
-import { Close, Robot } from "../../../public/icons";
+import { RobotWhiteIcon, CloseIcon } from "../../../public/chat/Icon";
 import { MainContext } from "@/context";
-import { ThemedText } from "../ThemedText/ThemedText";
+// import { ThemedText } from "../ThemedText/ThemedText";
 
 interface ChatMenuProps {
   isOpen: boolean;
@@ -86,22 +86,86 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   return (
     <div
       ref={ref}
-      className={`${styles.chatMenu} ${isAnimating ? styles.open : ""}`}
+      className={`${styles.chatMenu} ${
+        isAnimating ? styles.open : ""
+      } flex flex-col h-full min-h-screen`}
       style={{ height: "100%" }}
     >
-      <button className={styles.chatMenuClose} onClick={handleClose}>
-        <img
-          src={Close.src}
-          alt="close menu button"
-          className={styles.chatMenuCloseIcon}
-        />
-      </button>
-      <div className={styles.chatMenuContainer}>
-        <img src={Robot.src} alt="ai robot" className={styles.chatMenuIcon} />
-        <ThemedText type="h1">AI-агент</ThemedText>
+      <div
+        className={`${styles.chatMenuHeader} w-full flex justify-between px-4.5 pt-2 pb-3`}
+      >
+        <div
+          className={`${styles.chatMenuHeaderName} flex w-full items-center gap-5`}
+        >
+          <div
+            className={`${styles.chatMenuHeaderRobotIcon} flex items-center justify-center w-11.5 h-11.5 rounded-full`}
+          >
+            <RobotWhiteIcon
+              className={`${styles.RobotIcon} w-7 h-7 md:text-white `}
+            />
+          </div>
+
+          <div className={`${styles.chatMenuHeaderNameTitle} `}>
+            Geni - ваш AI-асистент
+          </div>
+        </div>
+
+        <button
+          className={`${styles.chatMenuClose} flex items-center justify-center`}
+          onClick={handleClose}
+        >
+          <CloseIcon className={`${styles.CloseIcon} w-4 h-4 `} />
+        </button>
+      </div>
+
+      <div className={`${styles.chatMenuContainer} flex flex-col items-center`}>
+        {/* <ThemedText type="h1">AI-агент</ThemedText>
         <p className={styles.chatMenuDescription}>
           Швидко, точно та без нав'язливих порад. Просто запитайте.
-        </p>
+        </p> */}
+
+        {/* <ThemedText type="h2" className="text-center font-semibold">
+          Що я можу для Вас зробити?
+        </ThemedText> */}
+
+        <div
+          className={`${styles.chatMenuButtons} w-full flex flex-col gap-2.5 px-5 py-3.5`}
+        >
+          <Button
+            variant="outline"
+            classNames={styles.chatMenuBtn}
+            onClick={() => handleInlineButtonClick("Порівняти моделі")}
+          >
+            <span className={`${styles.chatMenuBtnIcon}`}>🔍 </span>
+            Порівняти моделі
+          </Button>
+          <Button
+            variant="outline"
+            classNames={styles.chatMenuBtn}
+            onClick={() => handleInlineButtonClick("Показати тренди ринку")}
+          >
+            <span className={`${styles.chatMenuBtnIcon}`}>📈 </span>
+            Показати тренди ринку
+          </Button>
+          <Button
+            variant="outline"
+            classNames={styles.chatMenuBtn}
+            onClick={() =>
+              handleInlineButtonClick("Знайти годинник по бюджету")
+            }
+          >
+            <span className={`${styles.chatMenuBtnIcon}`}>💰 </span>
+            Знайти годинник по бюджету
+          </Button>
+          <Button
+            variant="outline"
+            classNames={styles.chatMenuBtn}
+            onClick={() => handleInlineButtonClick("Як перевірити справжність")}
+          >
+            <span className={`${styles.chatMenuBtnIcon}`}>✅ </span>
+            Як перевірити справжність?
+          </Button>
+        </div>
         <input
           placeholder="Введіть Ваш запит"
           value={message.content}
@@ -116,39 +180,6 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
         >
           Відправити
         </Button>
-        <ThemedText type="h2" className="text-center font-semibold">
-          Що я можу для Вас зробити?
-        </ThemedText>
-        <div className={styles.chatMenuButtons}>
-          <Button
-            variant="outline"
-            classNames={styles.chatMenuBtn}
-            onClick={() => handleInlineButtonClick("Порівняти моделі")}
-          >
-            Порівняти моделі
-          </Button>
-          <Button
-            variant="outline"
-            classNames={styles.chatMenuBtn}
-            onClick={() => handleInlineButtonClick("Підібрати годинник")}
-          >
-            Підібрати годинник
-          </Button>
-          <Button
-            variant="outline"
-            classNames={styles.chatMenuBtn}
-            onClick={() => handleInlineButtonClick("Показати хіти продажу")}
-          >
-            Показати хіти продажу
-          </Button>
-          <Button
-            variant="outline"
-            classNames={styles.chatMenuBtn}
-            onClick={() => handleInlineButtonClick("Обрати подарунок")}
-          >
-            Обрати подарунок
-          </Button>
-        </div>
       </div>
     </div>
   );

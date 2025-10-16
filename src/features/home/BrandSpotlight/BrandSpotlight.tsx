@@ -10,7 +10,7 @@ export const BrandSpotlight = () => {
   return (
     <section id="brand" className={`${styles.brand} flex justify-center`}>
       <div
-        className={`${styles.brandWrap} max-w-[90rem] flex flex-col items-center px-5 md:px-10 lg:px-15 xl:px-25 py-9`}
+        className={`${styles.brandWrap} max-w-[90rem] flex flex-col items-center px-5 md:px-10 lg:px-15 xl:px-25 py-9 md:py-6 lg:py-5.5`}
       >
         <div
           className={`${styles.brandTitle} flex justify-center w-full mb-6 lg:mb-0`}

@@ -45,7 +45,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
       <div
         className={`${styles.control} ${
           isOpen ? "rounded-t-xl" : "rounded-xl"
-        } flex items-center justify-between px-4 py-3.5`}
+        } flex items-center justify-between px-4 py-3.5 lg:px-5.5 lg:py-4.5`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? (

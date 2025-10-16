@@ -33,14 +33,20 @@ export const MarketCard: React.FC<IWatch> = ({
   chartData,
   chartId,
 }) => {
-  let color = "#EED09D";
+  let percentColor = "#BA790F";
+  let variant: "green" | "orange" | "red" | "overall" = "green";
   let ArrowIcon: React.FC | null = null;
 
   if (changePercent > 0) {
-    color = "#22c55e";
+    percentColor = "#05873B";
+    variant = "green";
     ArrowIcon = ArrowUp;
-  } else if (changePercent < 0) {
-    color = "#F4CBC7";
+  } else if (changePercent === 0) {
+    percentColor = "#BA790F";
+    variant = "orange";
+  } else {
+    percentColor = "#B91B1BF4";
+    variant = "red";
     ArrowIcon = ArrowDown;
   }
 
@@ -76,7 +82,7 @@ export const MarketCard: React.FC<IWatch> = ({
         <div className={`${styles.marketCardHeadName}`}>{title}</div>
         <div
           className={`${styles.marketCardHeadPercent} flex items-center gap-1 font-bold`}
-          style={{ color }}
+          style={{ color: percentColor }}
         >
           {ArrowIcon && <ArrowIcon />}
           {changePercent}%
@@ -96,7 +102,7 @@ export const MarketCard: React.FC<IWatch> = ({
           </div>
           <LineChart
             data={chartData || []}
-            color={color}
+            variant={variant}
             id={chartId}
             height={chartHeight}
           />

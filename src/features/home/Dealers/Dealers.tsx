@@ -54,12 +54,12 @@ export const Dealers = () => {
   return (
     <section id="dealers" className={styles.dealers}>
       <div
-        className={`${styles.dealersContainer} w-full flex flex-col gap-6 max-w-[90rem] mx-auto px-5 md:px-10 lg:px-25 py-7 lg:py-9`}
+        className={`${styles.dealersContainer} w-full flex flex-col gap-6 max-w-[90rem] mx-auto px-5 md:px-10 lg:px-25 py-7 lg:py-9 mb-12.5 md:mb-12 lg:mb-15`}
       >
         <div
-          className={`${styles.dealersHead} relative flex items-start justify-center`}
+          className={`${styles.dealersHead} relative flex items-center justify-center`}
         >
-          <div className={styles.dealersTitle}>Featured dealer</div>
+          <div className={`${styles.dealersTitle} mb-2.5`}>Featured dealer</div>
           {isDesktop && (
             <div
               className={`${styles.dealersSlider} absolute right-0 flex items-center`}
@@ -96,7 +96,7 @@ export const Dealers = () => {
               direction ? styles[`slide-${direction}`] : ""
             }`}
             style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
-            onAnimationEnd={() => setDirection(null)} // після анімації скидаємо
+            onAnimationEnd={() => setDirection(null)}
           >
             {slice.map((dealer) => (
               <DealerCard key={dealer.id} dealer={dealer} />
@@ -104,7 +104,7 @@ export const Dealers = () => {
           </div>
 
           {!isDesktop && (
-            <div className={`${styles.dots} flex justify-center gap-2 mt-4`}>
+            <div className={`${styles.dots} flex justify-center gap-2 mt-11.5`}>
               {Array.from({ length: totalPages }).map((_, i) => (
                 <button
                   key={i}
