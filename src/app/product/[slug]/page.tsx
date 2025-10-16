@@ -4,7 +4,6 @@ import React from 'react';
 import ProductPage from '@/features/product/ProductPage';
 import { Product } from '@/interfaces/product';
 
-// Mock data для демонстрації
 const mockProduct: Product = {
   id: '1',
   slug: 'rolex-submariner-date',
@@ -102,57 +101,79 @@ const mockProduct: Product = {
     {
       id: '1',
       sellerName: 'Crown&Caliber',
-      rating: 4.3,
+      rating: 4.9,
       reviewsCount: 180,
       location: 'США, Атланта',
       details: '3 документами з упаковкою',
       shipping: 'Доставка від €50',
       price: '17 200',
       currency: '€',
+      isSecure: true,
     },
     {
       id: '2',
-      sellerName: 'Crown&Caliber',
-      rating: 4.3,
-      reviewsCount: 180,
-      location: 'США, Атланта',
-      details: '3 документами з упаковкою',
-      shipping: 'Доставка від €50',
-      price: '17 200',
+      sellerName: 'Chrono24 Premium',
+      rating: 4.7,
+      reviewsCount: 245,
+      location: 'Німеччина, Мюнхен',
+      details: 'Новий з гарантією',
+      shipping: 'Безкоштовна доставка',
+      price: '18 500',
       currency: '€',
+      isSecure: true,
     },
     {
       id: '3',
-      sellerName: 'Crown&Caliber',
-      rating: 4.3,
-      reviewsCount: 180,
-      location: 'США, Атланта',
-      details: '3 документами з упаковкою',
-      shipping: 'Доставка від €50',
-      price: '17 200',
+      sellerName: 'WatchBox',
+      rating: 4.5,
+      reviewsCount: 156,
+      location: 'США, Нью-Йорк',
+      details: 'Відмінний стан, Б/У',
+      shipping: 'Доставка від €75',
+      price: '16 800',
       currency: '€',
+      isSecure: false,
     },
     {
       id: '4',
-      sellerName: 'Crown&Caliber',
-      rating: 4.3,
-      reviewsCount: 180,
-      location: 'США, Атланта',
-      details: '3 документами з упаковкою',
-      shipping: 'Доставка від €50',
-      price: '17 200',
+      sellerName: 'Swiss Watches',
+      rating: 4.8,
+      reviewsCount: 320,
+      location: 'Швейцарія, Цюрих',
+      details: 'Новий з сертифікатом',
+      shipping: 'Доставка від €100',
+      price: '19 200',
       currency: '€',
+      isSecure: true,
+    },
+    {
+      id: '5',
+      sellerName: 'Tokyo Time',
+      rating: 4.2,
+      reviewsCount: 89,
+      location: 'Японія, Токіо',
+      details: 'Відновлений, Б/У',
+      shipping: 'Доставка від €120',
+      price: '15 500',
+      currency: '€',
+      isSecure: false,
+    },
+    {
+      id: '6',
+      sellerName: 'Paris Luxury',
+      rating: 4.6,
+      reviewsCount: 198,
+      location: 'Франція, Париж',
+      details: 'Новий з документами',
+      shipping: 'Безкоштовна доставка',
+      price: '18 000',
+      currency: '€',
+      isSecure: true,
     },
   ],
 };
 
 const ProductPageWrapper = () => {
-  // const params = useParams();
-  // const slug = params.slug as string;
-
-  // Тут буде логіка отримання продукту за slug
-  // const product = await getProductBySlug(slug);
-
   return <ProductPage product={mockProduct} />;
 };
 

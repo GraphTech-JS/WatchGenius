@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ProductAnalyticsProps } from '@/interfaces/product';
 import styles from './ProductAnalytics.module.css';
+import { useScreenWidth } from '@/hooks/useScreenWidth';
 
 import {
   MechanismIcon,
@@ -24,6 +25,7 @@ import {
   PolygonIcon,
   EllipseIcon,
 } from '@/product-icons';
+import PriceChart from './components/PriceChart';
 
 const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   analytics,
@@ -33,6 +35,10 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   const [activeChartPeriod, setActiveChartPeriod] = useState<'3M' | '1P'>('3M');
   const [isVolatilityHovered, setIsVolatilityHovered] = useState(false);
   const [isDemandHovered, setIsDemandHovered] = useState(false);
+  const screenWidth = useScreenWidth();
+
+  const demandPercentage = 65; 
+  const rotationAngle = (demandPercentage / 100) * 180 - 90; 
 
   const tabs = [
     { id: 'parameters', label: 'Параметри' },
@@ -41,10 +47,15 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
     { id: 'trend', label: 'Аналітика тренду' },
   ] as const;
 
+  const visibleTabs =
+    screenWidth && screenWidth < 1279
+      ? tabs.filter((t) => t.id !== 'parameters')
+      : tabs;
+
   return (
     <div className={styles.analyticsContainer}>
       <div className={styles.tabsContainer}>
-        {tabs.map((tab) => (
+        {visibleTabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
@@ -61,7 +72,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
         {activeTab === 'trend' && (
           <div>
             <h3 className={styles.trendTitle}>Rolex</h3>
-            <p className={styles.trendContent}>
+            <p
+              className={`${styles.trendContent} text-[12px] font-normal text-black leading-relaxed `}
+            >
               Цей екран відображає аналітику тренду, щоб ви могли швидко оцінити
               поточну ситуацію. Ви бачите загальний стан бренду, його попит
               серед споживачів, ліквідність та динаміку росту бренду.
@@ -85,9 +98,11 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   <div className={styles.trendIcon}>
                     <Image src={ZipIcon} alt='Попит' width={32} height={28} />
                   </div>
-                  <div className={styles.trendContent}>
-                    <div className={styles.trendLabel}>Попит</div>
-                    <div className={styles.trendValue}>{analytics.demand}%</div>
+                  <div className={`${styles.trendContent} flex flex-col`}>
+                    <span className={styles.trendLabel}>Попит</span>
+                    <span className={styles.trendValue}>
+                      {analytics.demand}%
+                    </span>
                   </div>
                 </div>
               )}
@@ -101,11 +116,11 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     height={36}
                   />
                 </div>
-                <div className={styles.trendContent}>
-                  <div className={styles.trendLabel}>Ліквідність</div>
-                  <div className={styles.trendValue}>
+                <div className={`${styles.trendContent} flex flex-col`}>
+                  <span className={styles.trendLabel}>Ліквідність</span>
+                  <span className={styles.trendValue}>
                     {analytics.liquidity}%
-                  </div>
+                  </span>
                 </div>
               </div>
 
@@ -118,11 +133,11 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     height={30}
                   />
                 </div>
-                <div className={styles.trendContent}>
-                  <div className={styles.trendLabel}>Динаміка</div>
-                  <div className={styles.trendValue}>
+                <div className={`${styles.trendContent} flex flex-col`}>
+                  <span className={styles.trendLabel}>Динаміка</span>
+                  <span className={styles.trendValue}>
                     +{analytics.dynamics}%
-                  </div>
+                  </span>
                 </div>
               </div>
 
@@ -130,9 +145,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                 <div className={styles.trendIcon}>
                   <Image src={AdsIcon} alt='ADS' width={30} height={30} />
                 </div>
-                <div className={styles.trendContent}>
-                  <div className={styles.trendLabel}>ADS</div>
-                  <div className={styles.trendValue}>{analytics.ads}</div>
+                <div className={`${styles.trendContent} flex flex-col`}>
+                  <span className={styles.trendLabel}>ADS</span>
+                  <span className={styles.trendValue}>{analytics.ads}</span>
                 </div>
               </div>
             </div>
@@ -143,30 +158,30 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   <Image
                     src={DugaIcon}
                     alt='Gauge Arc'
-                    width={600}
-                    height={400}
-                    className={styles.gaugeArcImage}
+                    fill
+                    className={styles.gaugeImage}
                   />
                 </div>
-                <div className={styles.gaugeNeedle}>
+                <div
+                  className={styles.gaugeNeedle}
+                  style={{ transform: `rotate(${rotationAngle}deg)` }}
+                >
                   <Image
                     src={PolygonIcon}
                     alt='Gauge Needle'
-                    width={70}
-                    height={135}
-                    className={styles.gaugeNeedleImage}
+                    fill
+                    className={styles.gaugeImage}
                   />
                 </div>
                 <div className={styles.gaugeCenter}>
                   <Image
                     src={EllipseIcon}
                     alt='Gauge Center'
-                    width={35}
-                    height={35}
-                    className={styles.gaugeCenterImage}
+                    fill
+                    className={styles.gaugeImage}
                   />
                 </div>
-                <div className={styles.gaugeValue}>65%</div>
+                <div className={styles.gaugeValue}>{demandPercentage}%</div>
                 <div className={styles.gaugeLabels}>
                   <span className={styles.gaugeLabelLow}>Low</span>
                   <span className={styles.gaugeLabelHigh}>Hight</span>
@@ -206,7 +221,6 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     <div className={styles.parameterValue}>2021</div>
                   </div>
                 </div>
-
                 <div className={styles.parameterItem}>
                   <div className={styles.parameterIcon}>
                     <Image
@@ -221,7 +235,6 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     <div className={styles.parameterValue}>Сталь</div>
                   </div>
                 </div>
-
                 <div className={styles.parameterItem}>
                   <div className={styles.parameterIcon}>
                     <Image
@@ -236,7 +249,6 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     <div className={styles.parameterValue}>41мм</div>
                   </div>
                 </div>
-
                 <div className={styles.parameterItem}>
                   <div className={styles.parameterIcon}>
                     <Image src={StanIcon} alt='Стан' width={25} height={25} />
@@ -246,7 +258,6 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     <div className={styles.parameterValue}>Новий</div>
                   </div>
                 </div>
-
                 <div className={styles.parameterItem}>
                   <div className={styles.parameterIcon}>
                     <Image
@@ -261,7 +272,6 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     <div className={styles.parameterValue}>Залізо</div>
                   </div>
                 </div>
-
                 <div className={styles.parameterItem}>
                   <div className={styles.parameterIcon}>
                     <Image
@@ -329,28 +339,10 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
 
         {activeTab === 'price' && (
           <div>
-            <div className={styles.priceChart}>
-              <div className={styles.chartControls}>
-                <button className={`${styles.chartButton} ${styles.active}`}>
-                  3M
-                </button>
-                <button
-                  className={`${styles.chartButton} ${
-                    activeChartPeriod === '1P' ? styles.active : ''
-                  }`}
-                  onClick={() =>
-                    setActiveChartPeriod(
-                      activeChartPeriod === '1P' ? '3M' : '1P'
-                    )
-                  }
-                >
-                  1P
-                </button>
-              </div>
-              <div className={styles.chartPlaceholder}>
-                тут повинен бути графік
-              </div>
-            </div>
+            <PriceChart
+              period={activeChartPeriod}
+              onPeriodChange={setActiveChartPeriod}
+            />
 
             <div className={styles.priceMetrics}>
               {!isVolatilityHovered ? (
@@ -395,7 +387,10 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   <div className={styles.priceMetricValue}>Висока</div>
                 </div>
               </div>
-              <div className={styles.priceMetricCard}>
+
+              <div
+                className={`${styles.priceMetricCard} ${styles.priceMetricCardLong}`}
+              >
                 <div className={styles.priceMetricIcon}>
                   <Image
                     src={StarIcon}

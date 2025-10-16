@@ -1,63 +1,45 @@
 'use client';
 
-import React from 'react';
-import { CompareProduct, CompareAnalytics } from '@/interfaces/compare';
-import CompareCard from './components/CompareCard/CompareCard';
-import CompareAnalyticsComponent from './components/CompareAnalytics/CompareAnalytics';
-import { Button } from '@/components/Button/Button';
-import { ThemedText } from '@/components/ThemedText/ThemedText';
+import React, { useState } from 'react';
+import { CompareProduct } from '@/interfaces/compare';
+import ProductHero from '../product/components/ProductHero/ProductHero';
+import ProductAnalytics from '../product/components/ProductAnalytics/ProductAnalytics';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
+import styles from './ComparePage.module.css';
 
 interface ComparePageProps {
   products: CompareProduct[];
-  onRemoveProduct: (productId: string) => void;
-  onAddProduct: () => void;
   onBackToCatalog: () => void;
 }
 
 const ComparePage: React.FC<ComparePageProps> = ({
   products,
-  onRemoveProduct,
-  onAddProduct,
   onBackToCatalog,
 }) => {
-  const calculateAnalytics = (): CompareAnalytics => {
-    const prices = products.map((p) => p.price.min);
-    const demands = products.map((p) => p.analytics.demand);
-    const liquidities = products.map((p) => p.analytics.liquidity);
-    const dynamics = products.map((p) => p.analytics.dynamics);
+  const [activeTab1, setActiveTab1] = useState<
+    'parameters' | 'brand' | 'price' | 'trend'
+  >('price');
 
-    return {
-      priceComparison: {
-        min: Math.min(...prices),
-        max: Math.max(...prices),
-        average: Math.round(prices.reduce((a, b) => a + b, 0) / prices.length),
-        trend: 'up' as const,
-      },
-      demandComparison: {
-        highest: Math.max(...demands),
-        lowest: Math.min(...demands),
-        average: Math.round(
-          demands.reduce((a, b) => a + b, 0) / demands.length
-        ),
-      },
-      liquidityComparison: {
-        highest: Math.max(...liquidities),
-        lowest: Math.min(...liquidities),
-        average: Math.round(
-          liquidities.reduce((a, b) => a + b, 0) / liquidities.length
-        ),
-      },
-      dynamicsComparison: {
-        highest: Math.max(...dynamics),
-        lowest: Math.min(...dynamics),
-        average: Math.round(
-          dynamics.reduce((a, b) => a + b, 0) / dynamics.length
-        ),
-      },
-    };
-  };
+  const [activeTab2, setActiveTab2] = useState<
+    'parameters' | 'brand' | 'price' | 'trend'
+  >('price');
 
-  const analytics = calculateAnalytics();
+  const breadcrumbItems =
+    products.length > 0
+      ? [
+          { label: 'Каталог', href: '/catalog' },
+          {
+            label: products[0].brand,
+            href: `/catalog?brand=${products[0].brand}`,
+          },
+          {
+            label: products[0].model.split(' ')[0],
+            href: `/catalog?model=${products[0].model.split(' ')[0]}`,
+          },
+          { label: 'Модель', href: `/product/${products[0].slug}` },
+          { label: 'Порівняння' },
+        ]
+      : [{ label: 'Каталог', href: '/catalog' }, { label: 'Порівняння' }];
 
   const handleSave = (productId: string) => {
     console.log('Зберегти продукт:', productId);
@@ -67,139 +49,77 @@ const ComparePage: React.FC<ComparePageProps> = ({
     console.log('Сповіщення про ціну:', productId);
   };
 
-  const handleShare = (productId: string) => {
-    console.log('Поділитися продуктом:', productId);
-  };
-
   const handleBuy = (productId: string) => {
     console.log('Купити продукт:', productId);
   };
 
-  const handleGetQuote = (productId: string) => {
-    console.log('Отримати пропозицію:', productId);
-  };
-
-  if (products.length === 0) {
-    return (
-      <div className='min-h-screen bg-white'>
-        <div className='px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8'>
-          <div className='py-12 text-center'>
-            <ThemedText
-              type='h1'
-              className='mb-4 text-3xl font-bold text-gray-900'
-            >
-              Немає товарів для порівняння
-            </ThemedText>
-            <p className='mb-8 text-gray-600'>
-              Додайте товари для порівняння з каталогу
-            </p>
-            <Button
-              variant='solid'
-              onClick={onBackToCatalog}
-              className='px-6 py-3 text-white bg-green-600 hover:bg-green-700'
-            >
-              Повернутись в каталог
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className='min-h-screen bg-white'>
-      <div className='px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8'>
-        <nav className='flex items-center mb-8 space-x-2 text-sm text-gray-600'>
-          <button
-            onClick={onBackToCatalog}
-            className='flex items-center space-x-2 transition-colors hover:text-gray-900'
-          >
-            <svg
-              className='w-4 h-4 transform rotate-180'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth={2}
-                d='M9 5l7 7-7 7'
-              />
-            </svg>
-            <span>Назад</span>
-          </button>
+    <div
+      className={`${styles.container} bg-white pt-[27px] pb-[90px] min-h-screen mx-auto mt-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16`}
+    >
+      <div className={styles.content}>
+        <Breadcrumbs items={breadcrumbItems} width={564} />
 
-          <span className='text-gray-400'>/</span>
-          <span className='font-medium text-gray-900'>Порівняння</span>
-        </nav>
-
-        <div className='mb-8'>
-          <ThemedText
-            type='h1'
-            className='mb-2 text-3xl font-bold text-gray-900'
-          >
-            Порівняння товарів
-          </ThemedText>
-          <p className='text-gray-600'>
-            Порівняйте {products.length} товарів за різними параметрами
-          </p>
-        </div>
-
-        <div className='grid grid-cols-1 gap-6 mb-8 md:grid-cols-2 lg:grid-cols-3'>
-          {products.map((product) => (
-            <CompareCard
-              key={product.id}
-              product={product}
-              onRemove={() => onRemoveProduct(product.id)}
-              onSave={() => handleSave(product.id)}
-              onPriceNotification={() => handlePriceNotification(product.id)}
-              onShare={() => handleShare(product.id)}
-              onBuy={() => handleBuy(product.id)}
-              onGetQuote={() => handleGetQuote(product.id)}
-            />
-          ))}
-
-          {products.length < 3 && (
+        <div
+          className={`${styles.productsGrid} flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row md:gap-[60px]`}
+        >
+          {products[0] && (
             <div
-              className='flex justify-center items-center p-6 rounded-lg border-2 border-gray-300 border-dashed transition-colors cursor-pointer hover:border-gray-400'
-              onClick={onAddProduct}
+              className={`${styles.productColumn} w-full md:w-[calc(50%-30px)]`}
             >
-              <div className='text-center'>
-                <svg
-                  className='mx-auto mb-4 w-12 h-12 text-gray-400'
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M12 6v6m0 0v6m0-6h6m-6 0H6'
-                  />
-                </svg>
-                <p className='font-medium text-gray-600'>Додати товар</p>
-                <p className='text-sm text-gray-500'>Максимум 3 товари</p>
+              <ProductHero
+                product={products[0]}
+                layout='vertical'
+                onSave={() => handleSave(products[0].id)}
+                onCompare={() => {}}
+                onPriceNotification={() =>
+                  handlePriceNotification(products[0].id)
+                }
+                onShare={() => {}}
+                onBuy={() => handleBuy(products[0].id)}
+                onGetQuote={() => handleBuy(products[0].id)}
+              />
+              <div className={styles.analyticsWrapper}>
+                <ProductAnalytics
+                  analytics={products[0].analytics}
+                  activeTab={activeTab1}
+                  onTabChange={setActiveTab1}
+                />
+              </div>
+            </div>
+          )}
+
+          {products[1] && (
+            <div
+              className={`${styles.productColumn} w-full md:w-[calc(50%-30px)]`}
+            >
+              <ProductHero
+                product={products[1]}
+                layout='vertical'
+                onSave={() => handleSave(products[1].id)}
+                onCompare={() => {}}
+                onPriceNotification={() =>
+                  handlePriceNotification(products[1].id)
+                }
+                onShare={() => {}}
+                onBuy={() => handleBuy(products[1].id)}
+                onGetQuote={() => handleBuy(products[1].id)}
+              />
+              <div className={styles.analyticsWrapper}>
+                <ProductAnalytics
+                  analytics={products[1].analytics}
+                  activeTab={activeTab2}
+                  onTabChange={setActiveTab2}
+                />
               </div>
             </div>
           )}
         </div>
 
-        {products.length > 1 && (
-          <CompareAnalyticsComponent
-            products={products}
-            analytics={analytics}
-          />
-        )}
-        <div className='mt-8 text-center'>
-          <Button
-            variant='outline'
-            onClick={onBackToCatalog}
-            className='px-6 py-3 text-gray-700 border-gray-300 hover:bg-gray-50'
-          >
+        <div className={styles.backButtonContainer}>
+          <button onClick={onBackToCatalog} className={styles.backButton}>
             Повернутись в каталог
-          </Button>
+          </button>
         </div>
       </div>
     </div>

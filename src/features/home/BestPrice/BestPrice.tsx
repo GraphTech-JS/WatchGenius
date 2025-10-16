@@ -36,9 +36,7 @@ export const BestPrice = () => {
         <div
           className={`${styles.bestModules} flex flex-col md:flex-row-reverse gap-6`}
         >
-          <div
-            className={`${styles.bestAlert} flex flex-col items-center gap-4`}
-          >
+          <div className={`${styles.bestAlert} flex flex-col items-center gap-4`}>
             <div className={`${styles.bestAlertTitle} `}>Set price alert</div>
             <div
               className={`${styles.bestAlertForm} flex flex-col gap-6 w-full`}

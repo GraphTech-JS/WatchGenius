@@ -1,0 +1,130 @@
+.container {
+  min-height: 100vh;
+  background: white;
+}
+
+.content {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .content {
+    padding-inline: 20px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .content {
+    padding-inline: 20px;
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+}
+
+.emptyTitle {
+  font-size: 32px;
+  font-weight: 700;
+  color: #171414;
+  margin-bottom: 16px;
+}
+
+.emptyText {
+  font-size: 16px;
+  color: rgba(23, 20, 20, 0.6);
+  margin-bottom: 32px;
+}
+
+.emptyButton {
+  padding: 12px 24px;
+  background: #04694f;
+  color: white;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.emptyButton:hover {
+  background: #035a41;
+  box-shadow: 0 4px 12px rgba(4, 105, 79, 0.3);
+}
+
+.productsGrid {
+  display: flex;
+  gap: clamp(60px, 7vw, 109px);
+  margin-bottom: 60px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.productColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.analyticsWrapper {
+  width: 100%;
+}
+
+.backButtonContainer {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.backButton {
+  border-radius: 9px;
+  padding: 5px 64px;
+  width: 563px;
+  height: 60px;
+  background: #04694f;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.backButton:hover {
+  box-shadow: 0 4px 12px rgba(4, 105, 79, 0.3);
+}
+
+@media (max-width: 639px) {
+  .productsGrid {
+    align-items: center;
+    gap: 30px;
+  }
+
+  .backButton {
+    padding: 5px 32px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .emptyTitle {
+    font-size: 24px;
+  }
+
+  .emptyText {
+    font-size: 14px;
+  }
+}
+
+/* --- ДОДАТКОВІ НАЛАШТУВАННЯ ДЛЯ ВЕЛИКИХ ЕКРАНІВ --- */
+@media (min-width: 1400px) {
+  .productsGrid {
+    gap: 109px;
+  }
+}

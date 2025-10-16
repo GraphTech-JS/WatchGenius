@@ -69,6 +69,7 @@ export interface SellerOffer {
   shipping: string;
   price: string;
   currency: '€' | '$' | '₴';
+  isSecure: boolean; // Додаємо поле для безпеки
 }
 
 // Пропси для компонентів
@@ -80,6 +81,7 @@ export interface ProductHeroProps {
   onShare: () => void;
   onBuy: () => void;
   onGetQuote: () => void;
+  layout?: 'horizontal' | 'vertical'; // Новий пропс для контролю layout'у
 }
 
 export interface ProductAnalyticsProps {
