@@ -58,7 +58,7 @@ export const HeroChartsCarousel = () => {
         setActiveIndex((prevIndex) =>
           prevIndex === charts.length - 1 ? 0 : prevIndex + 1
         );
-      }, 4000000);
+      }, 40000);
       return () => clearInterval(interval);
     }
   }, [isDesktop]);

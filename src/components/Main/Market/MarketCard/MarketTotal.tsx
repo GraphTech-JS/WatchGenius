@@ -18,7 +18,7 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
   amount,
   chartData,
 }) => {
-  const color = "#D2F7D0";
+  const variant = "green";
   const percentColor = "#009C05";
   const [chartHeight, setChartHeight] = useState(70);
 
@@ -77,7 +77,7 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
       <div className="flex flex-col flex-1 justify-between w-full">
         <LineChart
           data={chartData || []}
-          color={color}
+          variant={variant}
           height={chartHeight}
           width={500}
         />
