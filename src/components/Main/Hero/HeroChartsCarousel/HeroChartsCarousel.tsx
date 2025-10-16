@@ -1,74 +1,44 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./HeroChartsCarousel.module.css";
-import { LineChart } from "@/components/Main/Hero/Chart/LineChart";
+import { HeroChartItem } from "./HeroChartItem";
+import { HeroChartItemProps } from "./HeroChartItem";
 
-const Chart1 = () => (
-  <div className="relative flex items-center justify-between w-[350px] lg:w-[210px] h-full rounded-[10px] px-3 lg:pt-[40px] shrink-0">
-    <div
-      className={`${styles.chartGreen} absolute top-[6px] lg:top-3 flex items-center justify-center w-8 lg:w-12 h-8 lg:h-11 rounded-md font-bold`}
-    >
-      A
-    </div>
-    <LineChart
-      data={[2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7]}
-      color="#D2F7D0"
-      id="chart1"
-    />
-    <div className="absolute top-[6px] lg:top-3 right-[15px] flex flex-row items-center text-right text-sm gap-2">
-      <span className={`${styles.chartPersent} font-bold text-black`}>+7%</span>
-      <span className="text-gray-500">за 90 днів</span>
-    </div>
-  </div>
-);
-
-const Chart2 = () => (
-  <div className="relative flex items-center justify-between w-[350px] lg:w-[210px] h-full rounded-[10px] px-3 lg:pt-[40px] shrink-0">
-    <div
-      className={`${styles.chartOrange} absolute top-[6px] lg:top-3 flex items-center justify-center w-8 lg:w-12 h-8 lg:h-11 rounded-md font-bold`}
-    >
-      B
-    </div>
-    <LineChart data={[7, 6, 7, 6, 7.5, 7, 8]} color="#EED09D" id="chart2" />
-    <div className="absolute top-[6px] lg:top-3 right-[15px] flex flex-row items-center text-right text-sm gap-2">
-      <span className={`${styles.chartPersent} font-bold text-black`}>+0%</span>
-      <span className="text-gray-500">за 90 днів</span>
-    </div>
-  </div>
-);
-
-const Chart3 = () => (
-  <div className="relative flex items-center justify-between w-[350px] lg:w-[210px] h-full rounded-[10px] px-3 lg:pt-[40px] shrink-0 ">
-    <div
-      className={`${styles.chartRed} absolute top-[6px] lg:top-3 flex items-center justify-center w-8 lg:w-12 h-8 lg:h-11 rounded-md font-bold`}
-    >
-      C
-    </div>
-    <LineChart data={[5, 6, 7, 6, 7.5, 7, 8]} color="#F4CBC7" id="chart3" />
-    <div className="absolute top-[6px] lg:top-3 right-[15px] flex flex-row items-center text-right text-sm gap-2">
-      <span className={`${styles.chartPersent} font-bold text-black`}>-7%</span>
-      <span className="text-gray-500">за 90 днів</span>
-    </div>
-  </div>
-);
-const Chart4 = () => (
-  <div className="relative flex items-center justify-between w-[350px] lg:w-[210px] h-full rounded-[10px] px-3 lg:pt-[40px] shrink-0">
-    <div
-      className={`${styles.chartOverall} absolute top-[0px] left-[8px] flex items-center justify-center rounded-md font-bold`}
-    >
-      Overall
-    </div>
-    <LineChart data={[5, 6, 7, 6, 7.5, 7, 8]} color="#22c55e" id="chart4" />
-    <div className="absolute top-[6px] right-[15px] flex flex-row lg:flex-col items-center lg:items-end text-right text-sm gap-2 lg:gap-0">
-      <span className={`${styles.chartPersent} font-bold text-black`}>
-        + 1,2%
-      </span>
-      <span className="text-gray-500">за 90 днів</span>
-    </div>
-  </div>
-);
-
-const charts = [Chart1, Chart2, Chart3, Chart4];
+const charts: HeroChartItemProps[] = [
+  {
+    id: "chart1",
+    label: "A",
+    data: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
+    variant: "green",
+    percent: "+7%",
+    period: "за 90 днів",
+  },
+  {
+    id: "chart2",
+    label: "B",
+    data: [7, 6, 7, 6, 7.5, 7, 8],
+    variant: "orange",
+    percent: "+0%",
+    period: "за 90 днів",
+  },
+  {
+    id: "chart3",
+    label: "C",
+    data: [5, 6, 7, 6, 7.5, 7, 8],
+    variant: "red",
+    percent: "-7%",
+    period: "за 90 днів",
+  },
+  {
+    id: "chart4",
+    label: "Overall",
+    data: [5, 6, 7, 6, 7.5, 7, 8],
+    variant: "overall",
+    percent: "+1,2%",
+    period: "за 90 днів",
+    isSpecial: true,
+  },
+];
 
 export const HeroChartsCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -88,7 +58,7 @@ export const HeroChartsCarousel = () => {
         setActiveIndex((prevIndex) =>
           prevIndex === charts.length - 1 ? 0 : prevIndex + 1
         );
-      }, 4000);
+      }, 4000000);
       return () => clearInterval(interval);
     }
   }, [isDesktop]);
@@ -106,19 +76,17 @@ export const HeroChartsCarousel = () => {
 
   if (isDesktop) {
     return (
-      <div
-        className={`${styles.heroChartsCarousel} flex lg:w-fit flex-col gap-3`}
-      >
+      <div className={`${styles.heroChartsCarousel} flex lg:w-fit flex-col`}>
         <div
           ref={containerRef}
-          className={`${styles.heroChartContainer} flex gap-4 h-[108px] lg:h-[160px] rounded-[15px] p-[6px] overflow-hidden`}
+          className={`${styles.heroChartContainer} flex gap-4 h-[108px] lg:h-[160px] rounded-[15px] p-[6px] lg:p-[15px] overflow-hidden`}
         >
-          {charts.map((Chart, idx) => (
+          {charts.map((chart) => (
             <div
-              key={idx}
+              key={chart.id}
               className={`${styles.heroChartItem} flex rounded-[10px]`}
             >
-              <Chart />
+              <HeroChartItem {...chart} />
             </div>
           ))}
         </div>
@@ -140,7 +108,7 @@ export const HeroChartsCarousel = () => {
     );
   }
 
-  const ActiveChart = charts[activeIndex];
+  const activeChart = charts[activeIndex];
   return (
     <div
       className={`${styles.heroChartsCarousel} w-full flex flex-col items-center`}
@@ -151,7 +119,7 @@ export const HeroChartsCarousel = () => {
         <div
           className={`${styles.heroChartItem} flex rounded-[10px] h-full w-full`}
         >
-          <ActiveChart />
+          <HeroChartItem {...activeChart} />
         </div>
       </div>
       <div className={`${styles.dotsWrapper}  flex justify-center gap-2`}>

@@ -3,31 +3,31 @@ import React from "react";
 import styles from "./Hero.module.css";
 import Link from "next/link";
 import { HeroChartsCarousel } from "@/components/Main/Hero/HeroChartsCarousel/HeroChartsCarousel";
-
-import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { RobotWhiteIcon } from "../../../../public/chat/Icon";
 
 export const Hero = () => {
   return (
-    <section className={`${styles.hero}`}>
+    <section className={`${styles.hero} `}>
       <div
-        className={`${styles.heroContainer} w-full relative bg-[url('/hero-section/HeroBG.png')] bg-no-repeat bg-[68%] md:bg-[82%] lg:bg-top bg-cover`}
+        className={`${styles.heroContainer} 
+        w-full relative 
+        bg-[url('/hero-section/HeroBgBig.png')] md:bg-[url('/hero-section/HeroBgBig.png')] lg:bg-[url('/hero-section/HeroBgBig.png')] 
+        bg-position-[center_right_-230px] sm:bg-position-[center_right_-200px] md:bg-position-[top_-70px_right_-120px] lg:bg-position-[center_left_204px]
+        bg-no-repeat bg-cover md:bg-size-[auto_620px] lg:bg-cover `}
       >
+        <div className="absolute inset-0 z-0 backdrop-blur-xs md:hidden" />
         <div
-          className={`${styles.heroWrap} max-w-[90rem] mx-auto w-full overflow-hidden px-5 md:px-10 lg:px-25
-          pt-25 md:pt-28 lg:pt-36 pb-15 lg:pb-6 flex flex-col items-center 
-          md:items-start gap-17 md:gap-18 lg:gap-12`}
+          className={`${styles.heroWrap} relative z-[2] max-w-[90rem] mx-auto w-full overflow-hidden px-3.5 md:pl-10 md:pr-0 pb-6 md:pb-4 lg:px-25
+          pt-24 md:pt-28 lg:pt-36 lg:pb-6 flex flex-col items-center 
+          md:items-start gap-17 lg:gap-12`}
         >
           <div
-            className={`${styles.heroLeft} w-full flex flex-col text-center md:text-start gap-17 md:max-w-[66%] md:items-start  lg:max-w-[590px] `}
+            className={`${styles.heroLeft} w-full flex flex-col text-center md:text-start gap-22 md:gap-7.5 lg:gap-17 md:max-w-[63%] md:items-start  lg:max-w-[590px] `}
           >
-            <div className={`${styles.heroText} flex flex-col gap-6 `}>
-              <ThemedText
-                type="h1"
-                className={`${styles.heroTextTitle} flex text-white `}
-              >
+            <div className={`${styles.heroText} flex flex-col gap-6 md:gap-1 `}>
+              <h1 className={`${styles.heroTextTitle} flex text-white `}>
                 Зрозумілий ринок годинників з Data+ AI
-              </ThemedText>
+              </h1>
               <p className={styles.heroTextSubtitle}>
                 Аналітика цін та трендів для 300+ моделей. Персональний
                 чат-асистент допоможе обрати годинник та купити безпечно
@@ -55,7 +55,7 @@ export const Hero = () => {
               </Link>
             </div>
           </div>
-          <div className={`${styles.heroCharts} w-full`}>
+          <div className={`${styles.heroCharts} w-full z-10`}>
             <HeroChartsCarousel />
           </div>
         </div>

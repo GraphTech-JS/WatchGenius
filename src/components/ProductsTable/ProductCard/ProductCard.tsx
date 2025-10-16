@@ -45,20 +45,20 @@ export const ProductCard: React.FC<IWatch> = ({
   chartData,
   chartId,
 }) => {
-  let chartColor = "#EED09D";
+  let variant: "green" | "orange" | "red" | "overall" = "orange";
   let percentClass = styles.percentNeutral;
   let score = "B";
   let scoreClass = styles.scoreNeutral;
   let ArrowIcon: React.FC | null = null;
 
   if (changePercent > 0) {
-    chartColor = "#22c55e";
+    variant = "green";
     percentClass = styles.percentPositive;
     score = "A";
     scoreClass = styles.scorePositive;
     ArrowIcon = ArrowUp;
   } else if (changePercent < 0) {
-    chartColor = "#F4CBC7";
+    variant = "red";
     percentClass = styles.percentNegative;
     score = "C";
     scoreClass = styles.scoreNegative;
@@ -118,7 +118,7 @@ export const ProductCard: React.FC<IWatch> = ({
           </div>
           <LineChart
             data={chartData || []}
-            color={chartColor}
+            variant={variant}
             id={chartId}
             height={chartHeight}
           />
@@ -130,10 +130,10 @@ export const ProductCard: React.FC<IWatch> = ({
         <div className="relative text-center max-h-[54px] w-full flex flex-row justify-between">
           <div className={`${styles.Price}`}>{price} €</div>
           <div
-            className={`${styles.marketCardHeadPercent} ${percentClass} absolute bottom-3 left-16 flex items-center gap-1 font-bold`}
+            className={`${styles.marketCardHeadPercent} ${percentClass} absolute bottom-3 left-16 flex items-center justify-center gap-1 min-w-14  font-bold`}
           >
             {ArrowIcon && <ArrowIcon />}
-            {changePercent}%
+            {changePercent} %
           </div>
           <BellIcon
             className={`${styles.productCardBell} w-[21px] h-[22px] cursor-pointer`}

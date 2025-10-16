@@ -23,7 +23,14 @@ export const Header = () => {
     <header className={`${styles.header} w-full`}>
       <div className={styles.headerContainer}>
         <Link href="/" className={`flex items-center gap-[4px]`}>
-          <img src={Logo.src} alt="logo" className="w-5 h-5 md:w-10 md:h-10" />
+          <Image
+            src={Logo.src}
+            className={`${styles.headerLogoIcon}`}
+            alt="logo"
+            width={40}
+            height={40}
+          />
+
           <div className={styles.logoName}>WATCHGENIUS</div>
         </Link>
 
@@ -89,14 +96,14 @@ export const Header = () => {
               />
             </button>
           </div>
-          <div className="lg:hidden flex ml-4">
+          <div className="lg:hidden flex ml-4 w-8">
             <button
               className={styles.headerMobileMenuBtn}
               onClick={toggleMenu}
               aria-expanded={open}
               aria-controls="mobileMenu"
             >
-              <img
+              <Image
                 src={open ? Close.src : Menu.src}
                 alt="menu icon"
                 className={
@@ -104,6 +111,8 @@ export const Header = () => {
                     ? styles.headerMobileMenuIconClose
                     : styles.headerMobileMenuIcon
                 }
+                width={32}
+                height={14}
               />
             </button>
           </div>
