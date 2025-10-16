@@ -84,7 +84,9 @@ export const WatchCard: React.FC<Props> = ({
         />
       </div>
 
-      <h4 className={`${styles.watchTitle} mt-[8px] mb-[8px]`}>{item.title}</h4>
+      <h4 className={`${styles.watchTitle} mt-[8px] mb-[8px]`}>
+        {item.title}
+      </h4>
 
       <div className='flex flex-col items-center gap-[9px] sm:flex-row sm:justify-between'>
         <div className='text-[16px] font-medium text-[var(--text-dark,#171414)]'>

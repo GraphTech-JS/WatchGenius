@@ -11,9 +11,9 @@ import {
 
 export const Footer = () => {
   return (
-    <footer className={`${styles.footer}`} id="footer">
+    <footer className={`${styles.footer} pb-[49px] md:pb-[30px]`} id="footer">
       <div
-        className={`${styles.footerContainer} flex flex-col md:flex-row md:justify-between items-center gap-7`}
+        className={`${styles.footerContainer} flex flex-col md:flex-row md:justify-between items-center gap-[30px]`}
       >
         <div
           className={`${styles.footerLeft} flex flex-col lg:gap-12 md:gap-20 gap-12 items-center justify-start p-1 `}
