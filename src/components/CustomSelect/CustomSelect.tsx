@@ -1,7 +1,7 @@
-"use client";
-import React, { useState, useRef, useEffect } from "react";
-import styles from "./CustomSelect.module.css";
-import { ArrowIcon } from "../../../public/social/Icon";
+'use client';
+import React, { useState, useRef, useEffect } from 'react';
+import styles from './CustomSelect.module.css';
+import { ArrowIcon } from '../../../public/social/Icon';
 
 interface CustomSelectProps {
   options: string[];
@@ -11,18 +11,18 @@ interface CustomSelectProps {
 
 export const CustomSelect: React.FC<CustomSelectProps> = ({
   options,
-  placeholder = "Оберіть...",
+  placeholder = 'Оберіть...',
   onChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
   const handleSelect = (option: string) => {
     setSelected(option);
     setIsOpen(false);
-    setSearch("");
+    setSearch('');
     if (onChange) onChange(option);
   };
 
@@ -32,8 +32,8 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const filteredOptions = options.filter((opt) =>
@@ -44,22 +44,22 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
     <div ref={ref} className={`${styles.wrapper} relative w-full`}>
       <div
         className={`${styles.control} ${
-          isOpen ? "rounded-t-xl" : "rounded-xl"
+          isOpen ? 'rounded-t-xl' : 'rounded-xl'
         } flex items-center justify-between px-4 py-3.5 lg:px-5.5 lg:py-4.5`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {isOpen ? (
           <input
-            type="text"
+            type='text'
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder={placeholder}
-            className="flex-1 outline-none bg-transparent text-base"
+            className='flex-1 text-base bg-transparent outline-none'
             onClick={(e) => e.stopPropagation()}
             autoFocus
           />
         ) : (
-          <span className="truncate">
+          <span className='truncate'>
             {selected || (
               <span className={styles.selectPlaceholder}>{placeholder}</span>
             )}
@@ -70,7 +70,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
           className={`${
             styles.selectArrow
           } w-[14px] h-[26px] transform rotate-90 transition-transform cursor-pointer ${
-            isOpen ? "rotate-270" : ""
+            isOpen ? 'rotate-270' : ''
           }`}
         />
       </div>
@@ -89,7 +89,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
               className={`
                 ${styles.option}
                 cursor-pointer px-4 py-3.5
-                ${i !== filteredOptions.length - 1 ? styles.optionDivider : ""}
+                ${i !== filteredOptions.length - 1 ? styles.optionDivider : ''}
               `}
               onClick={() => handleSelect(opt)}
             >
@@ -97,7 +97,7 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
             </div>
           ))
         ) : (
-          <div className="px-4 py-3.5 text-gray-400 text-sm">
+          <div className='px-4 py-3.5 text-gray-400 text-sm'>
             Нічого не знайдено
           </div>
         )}

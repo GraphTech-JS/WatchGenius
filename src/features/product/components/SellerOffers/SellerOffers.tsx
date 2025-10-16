@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import { FaChevronDown } from 'react-icons/fa';
 import { SellerOffersProps } from '@/interfaces/product';
@@ -23,6 +23,7 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
   const [region, setRegion] = useState('all');
   const [condition, setCondition] = useState('all');
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [filteredOffers, setFilteredOffers] = useState(offers);
 
   const handleSortChange = (value: string) => {
     setSortBy(value);
@@ -39,6 +40,97 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
     onConditionChange(value);
   };
 
+  const filterAndSortOffers = useCallback(() => {
+    let filtered = [...offers];
+
+    if (region !== 'all') {
+      filtered = filtered.filter((offer) => {
+        const offerRegion = offer.location.toLowerCase();
+        switch (region) {
+          case 'europe':
+            return (
+              offerRegion.includes('європа') ||
+              offerRegion.includes('europe') ||
+              offerRegion.includes('німеччина') ||
+              offerRegion.includes('франція') ||
+              offerRegion.includes('італія') ||
+              offerRegion.includes('швейцарія') ||
+              offerRegion.includes('мюнхен') ||
+              offerRegion.includes('париж') ||
+              offerRegion.includes('цюрих')
+            );
+          case 'usa':
+            return (
+              offerRegion.includes('сша') ||
+              offerRegion.includes('usa') ||
+              offerRegion.includes('америка') ||
+              offerRegion.includes('атланта') ||
+              offerRegion.includes('нью-йорк')
+            );
+          case 'asia':
+            return (
+              offerRegion.includes('азія') ||
+              offerRegion.includes('asia') ||
+              offerRegion.includes('японія') ||
+              offerRegion.includes('сингапур') ||
+              offerRegion.includes('токіо')
+            );
+          default:
+            return true;
+        }
+      });
+    }
+
+    if (condition !== 'all') {
+      filtered = filtered.filter((offer) => {
+        const offerCondition = offer.details.toLowerCase();
+        switch (condition) {
+          case 'new':
+            return (
+              offerCondition.includes('новий') ||
+              offerCondition.includes('new') ||
+              offerCondition.includes('гарантією') ||
+              offerCondition.includes('сертифікатом') ||
+              offerCondition.includes('документами')
+            );
+          case 'used':
+            return (
+              offerCondition.includes('відмінний') ||
+              offerCondition.includes('excellent')
+            );
+          case 'refurbished':
+            return (
+              offerCondition.includes('б/у') ||
+              offerCondition.includes('used') ||
+              offerCondition.includes('відновлений')
+            );
+          default:
+            return true;
+        }
+      });
+    }
+
+    filtered.sort((a, b) => {
+      const priceA = parseFloat(a.price.replace(/[^\d]/g, ''));
+      const priceB = parseFloat(b.price.replace(/[^\d]/g, ''));
+
+      switch (sortBy) {
+        case 'price':
+          return priceA - priceB;
+        case 'price-desc':
+          return priceB - priceA;
+        case 'rating':
+          return b.rating - a.rating;
+        case 'reviews':
+          return b.reviewsCount - a.reviewsCount;
+        default:
+          return 0;
+      }
+    });
+
+    setFilteredOffers(filtered);
+  }, [offers, sortBy, region, condition]);
+
   const toggleDropdown = (dropdownName: string) => {
     setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
   };
@@ -47,7 +139,6 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
     setOpenDropdown(null);
   };
 
- 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (!(event.target as Element).closest('.filterDropdown')) {
@@ -61,6 +152,9 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    filterAndSortOffers();
+  }, [filterAndSortOffers]);
 
   const CustomDropdown: React.FC<{
     name: string;
@@ -114,30 +208,20 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
   };
 
   return (
-    <div className='p-6 bg-white rounded-lg'>
+    <div className='bg-white rounded-lg'>
       <div className='mb-6'>
         <h3
-          className='mb-2 font-semibold text-gray-900'
-          style={{
-            fontFamily: 'Roboto Flex, sans-serif',
-            fontSize: '36px',
-            fontWeight: 600,
-            color: '#171414',
-          }}
+          className={`${styles.titleFont} mb-2 font-semibold text-gray-900 text-[20px] xl:text-[36px]`}
         >
-          Пропозиції продавців ({offers.length}шт.)
+          Пропозиції продавців (
+          {filteredOffers.filter((offer) => offer.isSecure).length}шт.)
         </h3>
       </div>
 
-      <div className='flex items-center mb-6' style={{ gap: '35px' }}>
-        <div className='flex items-center' style={{ gap: '26px' }}>
+      <div className='flex flex-col sm:flex-row items-center sm:w-full sm:items-center mb-6 gap-[12px] xl:gap-[35px] w-full mx-auto'>
+        <div className='flex flex-row justify-between sm:flex-row items-center sm:items-center gap-2 xl:gap-[26px] w-full sm:w-auto'>
           <label
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '20px',
-              fontWeight: 500,
-              color: 'rgba(0, 0, 0, 0.4)',
-            }}
+            className={`${styles.labelFont} text-base font-medium text-gray-500 text-[16px] sm:text-[15px] xl:text-[20px]`}
           >
             Сортувати:
           </label>
@@ -151,21 +235,20 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
                 label: 'Ціна: по зростанню',
                 displayLabel: 'Ціна: по...',
               },
-              { value: 'price-desc', label: 'Ціна: по спаданню' },
+              {
+                value: 'price-desc',
+                label: 'Ціна: по спаданню',
+                displayLabel: 'Ціна: по...',
+              },
               { value: 'rating', label: 'Рейтинг' },
               { value: 'reviews', label: 'Кількість відгуків' },
             ]}
           />
         </div>
 
-        <div className='flex items-center' style={{ gap: '26px' }}>
+        <div className='flex flex-row justify-between  sm:flex-row items-center sm:items-center gap-2 xl:gap-[26px] w-full sm:w-auto'>
           <label
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '20px',
-              fontWeight: 500,
-              color: 'rgba(0, 0, 0, 0.4)',
-            }}
+            className={`${styles.labelFont} text-base font-medium text-gray-500 text-[16px] xl:text-[20px]`}
           >
             Регіон:
           </label>
@@ -182,14 +265,9 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
           />
         </div>
 
-        <div className='flex items-center' style={{ gap: '26px' }}>
+        <div className='flex flex-row justify-between  sm:flex-row items-center sm:items-center gap-2 xl:gap-[26px] w-full sm:w-auto'>
           <label
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontSize: '20px',
-              fontWeight: 500,
-              color: 'rgba(0, 0, 0, 0.4)',
-            }}
+            className={`${styles.labelFont} text-base font-medium text-gray-500 xl:text-[20px]`}
           >
             Стан:
           </label>
@@ -200,23 +278,14 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
             options={[
               { value: 'all', label: 'Всі' },
               { value: 'new', label: 'Новий' },
-              { value: 'used', label: 'Вживаний' },
-              { value: 'refurbished', label: 'Відновлений' },
+              { value: 'used', label: 'Відмінний' },
+              { value: 'refurbished', label: 'Б/У' },
             ]}
           />
         </div>
       </div>
 
-      <div
-        className='flex items-center mb-6'
-        style={{
-          borderRadius: '15px',
-          padding: '16px 25px',
-          width: '1240px',
-          height: '67px',
-          background: '#eeeff1',
-        }}
-      >
+      <div className={styles.safetyBlock}>
         <Image
           src={SafetyIcon}
           alt='Safety'
@@ -225,170 +294,147 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
           className='mr-3'
         />
         <p
-          style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '16px',
-            fontWeight: 400,
-            color: 'rgba(0, 0, 0, 0.6)',
-          }}
+          className={`${styles.textFont} text-sm font-normal text-gray-600 sm:text-[15px] lg:text-[16px]`}
         >
           Використовуйте безпечну угоду. Не переводьте гроші напряму невідомому
           продавцю без гарантії
         </p>
       </div>
 
-      <div className='grid grid-cols-1 gap-6 md:grid-cols-2'>
-        {offers.map((offer) => (
-          <div
-            key={offer.id}
-            style={{
-              border: '1px solid rgba(0, 0, 0, 0.2)',
-              borderRadius: '16px',
-              padding: '15px 13px',
-              width: '609px',
-              height: '180px',
-              position: 'relative',
-            }}
-          >
-            <div className='flex justify-between items-start'>
-              <div className='flex items-center'>
-                <h4
-                  className='mr-2'
-                  style={{
-                    fontFamily: 'Inter, sans-serif',
-                    fontSize: '20px',
-                    fontWeight: 600,
-                    color: '#000',
-                  }}
-                >
-                  {offer.sellerName}
-                </h4>
+      {filteredOffers.filter((offer) => offer.isSecure).length > 0 ? (
+        <div className='grid grid-cols-1 gap-[18px] xl:gap-[21px] md:grid-cols-2'>
+          {filteredOffers.map((offer) => (
+            <div key={offer.id} className={styles.sellerCard}>
+              <div className={styles.sellerCardContent}>
+                <div className={styles.sellerCardHeader}>
+                  <h4
+                    className={`${styles.textFont} text-[20px] font-semibold text-black`}
+                  >
+                    {offer.sellerName}
+                  </h4>
+                  {offer.isSecure && (
+                    <div
+                      style={{
+                        borderRadius: '15px',
+                        width: '36px',
+                        height: '34px',
+                        backgroundColor: '#dceae6',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <Image
+                        src={SafetyIcon}
+                        alt='Safety'
+                        width={18}
+                        height={18}
+                      />
+                    </div>
+                  )}
+                  <div
+                    className={styles.sellerCardPriceDesktop}
+                    style={{
+                      color: offer.isSecure ? '#4cba9e' : '#f25454',
+                    }}
+                  >
+                    {offer.price} {offer.currency}
+                  </div>
+                </div>
+
+                <div className='flex items-center'>
+                  <Image
+                    src={StarFillIcon}
+                    alt='Star'
+                    width={26}
+                    height={26}
+                    className={`lg:w-[26px] lg:h-[26px] w-[22px] h-[22px] ${styles.starIcon}`}
+                  />
+                  <span
+                    className={`${styles.textFont} text-[15px] font-normal text-gray-600 mr-4`}
+                  >
+                    {offer.rating}/5 ({offer.reviewsCount} відгуків)
+                  </span>
+                  <Image
+                    src={BxMapIcon}
+                    alt='Location'
+                    width={24}
+                    height={24}
+                    style={{ marginRight: '8px' }}
+                  />
+                  <span
+                    className={`${styles.textFont} text-[15px] font-normal text-gray-600`}
+                  >
+                    {offer.location}
+                  </span>
+                </div>
+
                 <div
-                  style={{
-                    borderRadius: '15px',
-                    width: '36px',
-                    height: '34px',
-                    backgroundColor: '#dceae6',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
+                  className={`${styles.textFont} mb-2 text-[15px] font-normal text-gray-600`}
                 >
-                  <Image src={SafetyIcon} alt='Safety' width={18} height={18} />
+                  {offer.details}
+                </div>
+
+                <div
+                  className={`${styles.textFont} mb-4 text-[15px] font-normal text-gray-600`}
+                >
+                  {offer.shipping}
+                </div>
+
+                <div className={styles.sellerCardFooter}>
+                  <div
+                    className={styles.sellerCardPriceMobile}
+                    style={{
+                      color: offer.isSecure ? '#4cba9e' : '#f25454',
+                    }}
+                  >
+                    {offer.price} {offer.currency}
+                  </div>
+                  <button
+                    onClick={() => onPurchase(offer.id)}
+                    className={styles.sellerCardButton}
+                  >
+                    <Image
+                      src={QuillLinkOutIcon}
+                      alt='Link'
+                      width={16}
+                      height={16}
+                    />
+                    Перейти до покупки
+                  </button>
+                  <button
+                    onClick={() => onPurchase(offer.id)}
+                    className={styles.sellerCardButtonDesktop}
+                  >
+                    <Image
+                      src={QuillLinkOutIcon}
+                      alt='Link'
+                      width={16}
+                      height={16}
+                    />
+                    Перейти до покупки
+                  </button>
                 </div>
               </div>
-              <div
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '32px',
-                  fontWeight: 600,
-                  color:
-                    offer.id === '1'
-                      ? '#4cba9e'
-                      : offer.id === '2'
-                      ? '#f25454'
-                      : '#000',
-                }}
-              >
-                {offer.price} {offer.currency}
-              </div>
             </div>
-
-            <div className='flex items-center mb-2'>
-              <Image
-                src={StarFillIcon}
-                alt='Star'
-                width={26}
-                height={26}
-                style={{ marginRight: '8px' }}
-              />
-              <span
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '15px',
-                  fontWeight: 400,
-                  color: 'rgba(0, 0, 0, 0.6)',
-                  marginRight: '16px',
-                }}
-              >
-                {offer.rating}/5 ({offer.reviewsCount} відгуків)
-              </span>
-              <Image
-                src={BxMapIcon}
-                alt='Location'
-                width={24}
-                height={24}
-                style={{ marginRight: '8px' }}
-              />
-              <span
-                style={{
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '15px',
-                  fontWeight: 400,
-                  color: 'rgba(0, 0, 0, 0.6)',
-                }}
-              >
-                {offer.location}
-              </span>
-            </div>
-
-            <div
-              className='mb-2'
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '15px',
-                fontWeight: 400,
-                color: 'rgba(0, 0, 0, 0.6)',
-              }}
-            >
-              {offer.details}
-            </div>
-
-            <div
-              className='mb-4'
-              style={{
-                fontFamily: 'Inter, sans-serif',
-                fontSize: '15px',
-                fontWeight: 400,
-                color: 'rgba(0, 0, 0, 0.6)',
-              }}
-            >
-              {offer.shipping}
-            </div>
-
-            <div className='absolute right-4 bottom-4'>
-              <button
-                onClick={() => onPurchase(offer.id)}
-                style={{
-                  borderRadius: '10px',
-                  padding: '11px',
-                  width: '214px',
-                  height: '40px',
-                  backgroundColor: '#04694f',
-                  fontFamily: 'Inter, sans-serif',
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  color: '#fff',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Image
-                  src={QuillLinkOutIcon}
-                  alt='Link'
-                  width={16}
-                  height={16}
-                  style={{ marginRight: '8px' }}
-                />
-                Перейти до покупки
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className={styles.emptyOffersContainer}>
+          <p className={styles.emptyOffersText}>
+            Нажаль на цей час немає активних пропозицій від диллерів
+          </p>
+          <button className={styles.requestOfferButton}>
+            <Image
+              src={QuillLinkOutIcon}
+              alt='Request'
+              width={16}
+              height={16}
+            />
+            Запросити пропозицію
+          </button>
+        </div>
+      )}
     </div>
   );
 };

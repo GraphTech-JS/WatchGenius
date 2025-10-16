@@ -20,7 +20,6 @@ const CatalogPage = () => {
   const feedbackModal = useFeedbackModal();
 
   const handleSaveToChat = () => {
-    // TODO: Implement save to chat functionality
   };
 
   const handleApplyFilters = (filters: UseCatalogFiltersReturn) => {
@@ -34,7 +33,6 @@ const CatalogPage = () => {
   };
 
   const handleAskGeni = () => {
-    // TODO: Implement ask Geni functionality
   };
 
   return (

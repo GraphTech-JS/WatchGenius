@@ -1,5 +1,4 @@
-/* Стилі для хлібних крихт */
-.breadcrumbsContainer {
+.breadcrumbs {
   border-radius: 10px;
   padding: 5px 20px;
   width: 428px;
@@ -10,7 +9,7 @@
   margin-bottom: 2rem;
 }
 
-.breadcrumbItem {
+.link {
   font-weight: 400;
   font-size: 20px;
   color: #898989;
@@ -19,16 +18,19 @@
   transition: color 0.2s ease;
 }
 
-.breadcrumbItem:hover {
+.link:hover {
   color: #666;
 }
 
-.breadcrumbItem.active {
+.current {
+  font-weight: 400;
+  font-size: 20px;
   color: #898989;
+  font-family: 'Inter', sans-serif;
   cursor: default;
 }
 
-.breadcrumbSeparator {
+.separator {
   font-weight: 400;
   font-size: 20px;
   color: #898989;
@@ -36,26 +38,35 @@
   margin: 0 4px;
 }
 
+@media (max-width: 1279px) {
+  .breadcrumbs {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
-  .breadcrumbsContainer {
+  .breadcrumbs {
     width: 100%;
     max-width: 428px;
     padding: 5px 15px;
   }
   
-  .breadcrumbItem,
-  .breadcrumbSeparator {
+  .link,
+  .separator,
+  .current {
     font-size: 18px;
   }
 }
 
 @media (max-width: 480px) {
-  .breadcrumbsContainer {
+  .breadcrumbs {
     padding: 5px 10px;
   }
   
-  .breadcrumbItem,
-  .breadcrumbSeparator {
+  .link,
+  .separator,
+  .current {
     font-size: 16px;
   }
 }
+

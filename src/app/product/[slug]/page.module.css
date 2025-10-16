@@ -1,52 +1,94 @@
-/* Стилі для сторінки продукту */
-
-/* Контейнер сторінки */
 .productPage {
   background-color: var(--white);
-  /* padding: 0 40px; */
   max-width: 1300px;
   margin: 0 auto;
+  padding: 0 16px;
 }
 
-/* Breadcrumbs */
 .breadcrumbs {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
-/* Основна секція продукту */
 .productHero {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
-/* Секції */
 .section {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .section:last-child {
   margin-bottom: 0;
 }
 
-/* Адаптивні стилі */
-@media (max-width: 1200px) {
+@media (min-width: 640px) {
   .productPage {
-    padding: 0 20px;
+    padding: 0 24px;
+  }
+
+  .breadcrumbs {
+    margin-bottom: 2rem;
+  }
+
+  .productHero {
+    margin-bottom: 2.5rem;
+  }
+
+  .section {
+    margin-bottom: 2rem;
   }
 }
 
-@media (max-width: 1023px) {
+@media (min-width: 640px) and (max-width: 767px) {
   .productPage {
-    padding: 0 20px;
+    padding: 0 24px;
+  }
+
+  .breadcrumbs {
+    margin-bottom: 2rem;
+  }
+
+  .productHero {
+    margin-bottom: 2.5rem;
+  }
+
+  .section {
+    margin-bottom: 2rem;
   }
 }
 
-@media (max-width: 480px) {
+@media (min-width: 768px) and (max-width: 1023px) {
   .productPage {
     padding: 0 20px;
   }
+
+  .breadcrumbs {
+    margin-bottom: 2.5rem;
+  }
+
+  .productHero {
+    margin-bottom: 3rem;
+  }
+
+  .section {
+    margin-bottom: 2.5rem;
+  }
 }
 
-/* Спеціальні ефекти */
+@media (min-width: 1024px) {
+  .productPage {
+    padding: 0 20px;
+  }
+
+  .productHero {
+    margin-bottom: 3rem;
+  }
+
+  .section {
+    margin-bottom: 2.5rem;
+  }
+}
+
 .fadeIn {
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -62,7 +104,6 @@
   }
 }
 
-/* Hover ефекти для карток */
 .cardHover {
   transition: all 0.2s ease-in-out;
 }
@@ -72,14 +113,12 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
-/* Стилі для графіків */
 .chartContainer {
   position: relative;
   width: 100%;
   height: 200px;
 }
 
-/* Стилі для табів */
 .tabContainer {
   border-bottom: 1px solid #e5e7eb;
 }
@@ -105,7 +144,6 @@
   transform: scaleX(1);
 }
 
-/* Стилі для кнопок */
 .buttonPrimary {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   transition: all 0.2s ease-in-out;
@@ -129,7 +167,6 @@
   transform: translateY(-1px);
 }
 
-/* Стилі для зображень */
 .imageContainer {
   position: relative;
   overflow: hidden;
@@ -152,7 +189,6 @@
   transform: translateX(100%);
 }
 
-/* Стилі для модалок */
 .modalOverlay {
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
@@ -176,7 +212,6 @@
   }
 }
 
-/* Стилі для завантаження */
 .loadingSpinner {
   animation: spin 1s linear infinite;
 }
@@ -190,7 +225,6 @@
   }
 }
 
-/* Стилі для повідомлень */
 .notification {
   position: fixed;
   top: 1rem;
@@ -210,7 +244,6 @@
   }
 }
 
-/* Стилі для фільтрів */
 .filterContainer {
   background: #f9fafb;
   border-radius: 0.5rem;
@@ -226,7 +259,6 @@
   transform: translateX(4px);
 }
 
-/* Стилі для рейтингів */
 .starRating {
   display: flex;
   gap: 0.125rem;
@@ -240,7 +272,6 @@
   transform: scale(1.1);
 }
 
-/* Стилі для цін */
 .priceContainer {
   position: relative;
 }
@@ -265,7 +296,6 @@
   color: #dc2626;
 }
 
-/* Стилі для статусів */
 .statusBadge {
   display: inline-flex;
   align-items: center;

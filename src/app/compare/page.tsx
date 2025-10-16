@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 import ComparePage from '@/features/compare/ComparePage';
 import { CompareProduct } from '@/interfaces/compare';
@@ -24,8 +24,13 @@ const mockProducts: CompareProduct[] = [
       period: '30 днів',
       isPositive: true,
     },
-    image: '/watch/Rolex.png',
-    thumbnails: ['/watch/Rolex.png'],
+    image: '/watch/RolexCatalog.png',
+    thumbnails: [
+      '/watch/RolexCatalog.png',
+      '/watch/RolexCatalog.png',
+      '/watch/RolexCatalog.png',
+      '/watch/RolexCatalog.png',
+    ],
     description: 'Класичний підводний годинник Rolex Submariner Date',
     details: [
       { label: 'Матеріал', value: 'Сталь' },
@@ -65,8 +70,13 @@ const mockProducts: CompareProduct[] = [
       period: '30 днів',
       isPositive: true,
     },
-    image: '/watch/Rolex.png',
-    thumbnails: ['/watch/Rolex.png'],
+    image: '/watch/RolexCatalog.png',
+    thumbnails: [
+      '/watch/RolexCatalog.png',
+      '/watch/RolexCatalog.png',
+      '/watch/RolexCatalog.png',
+      '/watch/RolexCatalog.png',
+    ],
     description: 'Класичний підводний годинник Omega Seamaster',
     details: [
       { label: 'Матеріал', value: 'Сталь' },
@@ -93,29 +103,14 @@ const mockProducts: CompareProduct[] = [
 
 const ComparePageWrapper = () => {
   const router = useRouter();
-  const [products, setProducts] = useState<CompareProduct[]>(mockProducts);
-
-  const handleRemoveProduct = (productId: string) => {
-    setProducts(products.filter((p) => p.id !== productId));
-  };
-
-  const handleAddProduct = () => {
-    // Тут буде логіка додавання товару з каталогу
-    console.log('Додати товар');
-    router.push('/catalog');
-  };
+  const products = mockProducts;
 
   const handleBackToCatalog = () => {
     router.push('/catalog');
   };
 
   return (
-    <ComparePage
-      products={products}
-      onRemoveProduct={handleRemoveProduct}
-      onAddProduct={handleAddProduct}
-      onBackToCatalog={handleBackToCatalog}
-    />
+    <ComparePage products={products} onBackToCatalog={handleBackToCatalog} />
   );
 };
 
