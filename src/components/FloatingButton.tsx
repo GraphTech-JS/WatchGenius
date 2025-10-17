@@ -62,8 +62,11 @@ export function FloatingButton({
       scrollTimeout = setTimeout(() => setIsScrolling(false), 100);
 
       if (!ticking) {
-        requestAnimationFrame(updatePosition);
         ticking = true;
+        requestAnimationFrame(() => {
+          updatePosition();
+          ticking = false;
+        });
       }
     };
     updatePosition();

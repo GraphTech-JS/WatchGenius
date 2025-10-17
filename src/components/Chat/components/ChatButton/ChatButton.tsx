@@ -15,10 +15,12 @@ export const ChatButton: React.FC<IChatButton> = ({
 }) => (
   <>
     <button
+      type="button"
+      aria-label="Open chat"
       onClick={onClick}
       style={{
-        bottom: dynamicPosition?.bottom || "20%",
-        transform: "translateY(50%)",
+        // Respect dynamic bottom plus mobile safe area inset
+        bottom: `calc(${dynamicPosition?.bottom || "20%"} + env(safe-area-inset-bottom))`,
       }}
       className={`
         fixed
@@ -27,13 +29,14 @@ export const ChatButton: React.FC<IChatButton> = ({
         h-[63px] md:h-[81px]
         rounded-full
         cursor-pointer
-        z-40
+        z-[120]
         ${
           isScrolling
             ? "transition-none"
             : "transition-all duration-500 ease-out"
         }
         ${styles.chatButton}
+        ${styles.chatButtonEnter}
         hover:scale-105 active:scale-95
         flex items-center justify-center
         select-none

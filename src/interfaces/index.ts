@@ -2,6 +2,7 @@ interface Message {
   content: string;
   by: "me" | "ai";
   id: number;
+  time?: string;
 }
 
 interface IMainContext {

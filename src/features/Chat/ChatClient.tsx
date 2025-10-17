@@ -14,30 +14,24 @@ export default function ChatClient({
 
   return (
     <div className="relative flex h-full w-full">
-      <div className="fixed right-4 z-[60] ">
-        <FloatingButton
-          watchedIds={[
-            // "trending",
-            // "bestPrice",
-            // "brand",
-            // "howTo",
-            // "dealers",
-            "ai-agent",
-            "footer",
-          ]}
-          safeOffset={20}
-          initialOffsetPercent={0.4}
-          extraOffset={100}
-        >
-          {({ bottom, isScrolling }) => (
-            <ChatButton
-              onClick={() => setOpen(true)}
-              dynamicPosition={{ bottom }}
-              isScrolling={isScrolling}
-            />
-          )}
-        </FloatingButton>
-      </div>
+      {!open && (
+        <div className="fixed right-4 z-[200] ">
+          <FloatingButton
+            watchedIds={["footer"]}
+            safeOffset={16}
+            initialOffsetPercent={0.4}
+            extraOffset={0}
+          >
+            {({ bottom, isScrolling }) => (
+              <ChatButton
+                onClick={() => setOpen(true)}
+                dynamicPosition={{ bottom }}
+                isScrolling={isScrolling}
+              />
+            )}
+          </FloatingButton>
+        </div>
+      )}
       <main
         id="main-content"
         className="transition-all duration-300 ease-in-out w-full min-h-screen"
@@ -47,10 +41,10 @@ export default function ChatClient({
 
       {open && (
         <aside
-          className="fixed w-100 z-[100] bg-white transform transition-transform duration-300 ease-in-out translate-x-full"
+          className="fixed inset-0 z-[150]"
           style={{ height: "100vh", overflow: "hidden" }}
         >
-          <div className="h-full overflow-y-auto">
+          <div className="h-full">
             <ChatMenu isOpen={true} onClose={() => setOpen(false)} />
           </div>
         </aside>

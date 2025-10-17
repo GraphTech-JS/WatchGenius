@@ -1,37 +1,78 @@
 .message {
-  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.08),
-    0 1.5px 6px 0 rgba(0, 0, 0, 0.04);
-  padding: 30px 50px;
-  /* margin: 10px; */
-  border-radius: 10px;
-  max-width: 756px;
-  /* width: fit-content; */
+  padding: 12px 14px;
+  border-radius: 12px;
+  max-width: 720px;
   font-family: "Inter", sans-serif;
   font-weight: 400;
-  font-size: 20px;
-  border: 0.5px solid var(--black);
-  color: #000 !important;
+  font-size: 16px;
+  color: #111827;
   align-self: flex-start;
-  margin: 0 5px;
+  margin: 0 12px;
   overflow-wrap: break-word;
+  background: #f3f4f6;
 }
 
 .messageMe {
-  background-color: rgba(233, 233, 233, 1);
-  color: var(--black);
+  background-color: var(--green);
+  color: #fff;
   align-self: flex-end;
+}
+
+.messageAi {
+  /* inherits base grey bubble */
+}
+
+.time {
+  display: block;
+  font-size: 12px;
+  opacity: 0.6;
+  text-align: right;
+  margin-top: 6px;
+}
+
+.feedbackRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.feedbackBtn {
+  width: 20px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 2px solid #e5e7eb;
+  background: #fff;
+  font-size: 10px; 
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.feedbackBtn:hover {
+  background: #f9fafb;
+}
+
+.feedbackUpActive {
+  border-color: var(--green);
+}
+
+.feedbackDownActive {
+  border-color: #ef4444;
 }
 
 @media (max-width: 768px) {
   .message {
-    font-size: 16px;
-    padding: 20px 30px;
-    width: fit-content;
+    font-size: 15px;
+    padding: 10px 12px;
+    width: auto;
   }
 }
 
 @media (max-width: 420px) {
   .message {
-    margin: 0 20px;
+    margin: 0 12px;
   }
 }
