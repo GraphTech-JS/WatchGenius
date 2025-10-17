@@ -2,7 +2,6 @@ import type { StaticImageData } from 'next/image';
 import { SortOption } from '@/types/sorting';
 import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
 
-// Типи для годинників
 export type WatchIndex = 'A' | 'B' | 'C';
 export type Currency = '€' | '$' | '₴';
 
@@ -19,7 +18,6 @@ export interface WatchItem {
   trend: { value: number; period: string }; 
   variant?: 'product' | 'brand';
   
-  // Фільтри сайдбару
   brand: string;
   condition: string;
   mechanism: string;
@@ -29,7 +27,6 @@ export interface WatchItem {
   year: number;
 }
 
-// Інтерфейси для компонентів каталогу
 export interface CatalogControlsProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;

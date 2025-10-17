@@ -13,6 +13,16 @@ import {
 import HeartIcon from '/public/icons/Heart.svg';
 import styles from './ProductHero.module.css';
 import { ComparisonModal } from '../../index';
+import { PriceAlertModal, GetQuoteModal } from '../ProductModals';
+import { FeedbackModal } from '@/components/FeedbackModal/FeedbackModal';
+import { useScreenWidth } from '@/hooks/useScreenWidth';
+
+const mainButtonTextStyle = {
+  background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
+  backgroundClip: 'text',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+};
 
 const ProductHero: React.FC<ProductHeroProps> = ({
   product,
@@ -20,17 +30,47 @@ const ProductHero: React.FC<ProductHeroProps> = ({
   onPriceNotification,
   onBuy,
   onGetQuote,
+  layout = 'horizontal',
 }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [showComparisonModal, setShowComparisonModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showPriceAlertModal, setShowPriceAlertModal] = useState(false);
+  const [showGetQuoteModal, setShowGetQuoteModal] = useState(false);
+  const [showBuyModal, setShowBuyModal] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isInComparison, setIsInComparison] = useState(false);
+  const screenWidth = useScreenWidth();
+
+  const thumbnailsToRender =
+    screenWidth && screenWidth < 1150
+      ? product.thumbnails.slice(0, 3)
+      : product.thumbnails.slice(0, 4);
 
   const handleCompare = () => {
+    setIsInComparison(!isInComparison);
     setShowComparisonModal(true);
   };
+  const handleShare = () => setShowShareModal(true);
 
-  const handleShare = () => {
-    setShowShareModal(true);
+  const handleSave = () => {
+    setIsSaved(!isSaved);
+    onSave();
+  };
+
+  const handlePriceNotification = () => {
+    setShowPriceAlertModal(true);
+    onPriceNotification();
+  };
+
+  const handleGetQuote = () => {
+    setShowGetQuoteModal(true);
+    onGetQuote();
+  };
+
+  const handleBuy = () => {
+    setShowBuyModal(true);
+    onBuy();
   };
 
   const handleCopy = async () => {
@@ -70,9 +110,21 @@ const ProductHero: React.FC<ProductHeroProps> = ({
   };
 
   return (
-    <div className='flex gap-[60px] mb-[20px]'>
-      <div className='flex flex-col gap-4 w-[577px]'>
-        <div className='relative bg-white border border-[rgba(0,0,0,0.1)] rounded-[5px] w-[577px] h-[345px] overflow-hidden flex items-center justify-center'>
+    <div
+      className={`flex ${
+        layout === 'vertical'
+          ? 'flex-col'
+          : 'flex-col md:flex-row lg:flex-row xl:flex-row'
+      } gap-[20px] md:gap-[60px] lg:gap-[60px] xl:gap-[60px] mb-[20px]`}
+    >
+      <div
+        className={`flex flex-col gap-4 w-full ${
+          layout === 'vertical'
+            ? 'sm:w-full lg:w-full xl:w-full'
+            : 'sm:w-full md:w-[calc(50%-30px)] lg:w-[calc(50%-30px)] xl:w-[577px]'
+        }`}
+      >
+        <div className='relative bg-white border border-[rgba(0,0,0,0.1)] rounded-[5px] w-[350px] max-[479px]:w-full min-[480px]:w-full md:w-full lg:w-full xl:w-[577px] h-[250px] max-[479px]:h-[250px] min-[480px]:h-[300px] md:h-[345px] overflow-hidden flex items-center justify-center'>
           <Image
             src={product.image}
             alt={product.title}
@@ -81,7 +133,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             priority
           />
           <div
-            className='absolute top-4 right-4 rounded-[5px] bg-[#b4e1c7] flex items-center justify-center w-[45px] h-[45px] shadow-sm'
+            className='absolute top-4 right-4 rounded-[5px] bg-[#b4e1c7] flex items-center justify-center w-[44px] h-[44px]'
             style={{ padding: '6px 9px 7px 8px' }}
           >
             <span
@@ -93,7 +145,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
           </div>
         </div>
         <div
-          className='flex gap-[36px] overflow-hidden relative cursor-grab active:cursor-grabbing'
+          className='flex gap-[21px] max-[479px]:gap-[21px] min-[480px]:justify-center min-[480px]:gap-[24px] md:gap-[21px] lg:gap-[36px] xl:gap-[36px] overflow-hidden relative cursor-grab active:cursor-grabbing'
           onTouchStart={(e) => {
             const startX = e.touches[0].clientX;
             const container = e.currentTarget;
@@ -136,11 +188,11 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             document.addEventListener('mouseup', handleMouseUp);
           }}
         >
-          {product.thumbnails.map((thumbnail, index) => (
+          {thumbnailsToRender.map((thumbnail, index) => (
             <button
               key={index}
               onClick={() => setSelectedImage(index)}
-              className={`relative w-[117px] h-[102px] bg-[#f7f7f7] rounded-[5px] overflow-hidden border-2 transition-all duration-200 flex-shrink-0 ${
+              className={`relative w-[102px] h-[88px] max-[479px]:w-[102px] max-[479px]:h-[88px] min-[480px]:w-[188px] min-[480px]:h-[104px] md:w-[123px] md:h-[88px] lg:w-[122px] lg:h-[102px] xl:w-[117px] xl:h-[102px] bg-[#f7f7f7] rounded-[5px] overflow-hidden border-2 transition-all duration-200 flex-shrink-0 ${
                 selectedImage === index
                   ? 'border-blue-500 shadow-md'
                   : 'border-transparent hover:border-gray-300 hover:shadow-sm'
@@ -157,60 +209,93 @@ const ProductHero: React.FC<ProductHeroProps> = ({
         </div>
       </div>
 
-      <div className='flex flex-col gap-[20px] w-[605px]'>
-        <div className='flex flex-col  border-b border-[rgba(0,0,0,0.3)] pb-4'>
-          <div className='font-roboto text-[24px] font-extrabold uppercase text-[#04694f] '>
+      <div
+        className={`flex flex-col gap-[20px] w-full ${
+          layout === 'vertical'
+            ? 'md:w-full lg:w-full xl:w-full'
+            : 'md:w-[calc(50%-30px)] lg:w-[calc(50%-30px)] xl:w-[605px]'
+        }`}
+      >
+        <div className='flex flex-col border-b border-[rgba(0,0,0,0.3)] pb-4'>
+          <div className='font-roboto text-[20px] md:text-[24px] lg:text-[24px] xl:text-[24px] font-extrabold uppercase text-[#04694f]'>
             {product.brand}
           </div>
-          <div className='font-inter text-[36px] font-semibold text-[#171414] '>
+          <div className='font-inter text-[32px] md:text-[36px] lg:text-[36px] xl:text-[36px] font-semibold text-[#171414]'>
             {product.model}
           </div>
-          <div className='font-inter text-[16px] font-medium text-[rgba(23,20,20,0.5)]'>
+          <div className='font-inter text-[14px] md:text-[15px] lg:text-[16px]    xl:text-[16px] font-medium text-[rgba(23,20,20,0.5)]'>
             (Ref.: {product.reference})
           </div>
         </div>
-
-        <div className='flex justify-between items-center'>
-          <div className='font-inter text-[40px] font-medium text-black'>
+        <div className='flex flex-col gap-2 justify-center items-center text-center sm:flex-row sm:justify-between sm:items-center sm:text-left'>
+          <div className='font-inter text-[24px]  lg:text-[24px] xl:text-[40px] font-medium text-black'>
             {formatPrice()}
           </div>
           <div className='flex items-center space-x-1'>
-            <span className='font-inter text-[20px] font-semibold text-center text-[#05873b]'>
+            <span className='font-inter text-[20px] sm:text-[16px] lg:text-[16px] xl:text-[24px] font-semibold text-center text-[#05873b]'>
               ↑ {Math.abs(product.priceTrend.value)}%
             </span>
-            <span className='font-inter text-[15px] font-normal text-[#05873b]'>
+            <span className='font-inter text-[15px] sm:text-[14px] lg:text-[14px] xl:text-[16px] font-normal text-[#05873b]'>
               за {product.priceTrend.period}
             </span>
           </div>
         </div>
-        <div className='grid grid-cols-2 gap-[17px]'>
-          <button onClick={onSave} className={styles.actionButton}>
-            <Image
-              src={HeartIcon}
-              alt='Зберегти'
-              width={24}
-              height={24}
-              className={styles.actionButtonIcon}
-            />
-            <span className={styles.actionButtonText}>Зберегти</span>
-          </button>
+        <div className='flex flex-col md:grid md:grid-cols-2 xl:grid-cols-2 gap-[17px]'>
+          <div className='md:col-span-2 md:order-1 xl:col-span-1 xl:order-1'>
+            <button
+              onClick={handleSave}
+              className={`${styles.actionButton} ${
+                isSaved ? styles.saved : ''
+              } group`}
+            >
+              <Image
+                src={HeartIcon}
+                alt='Зберегти'
+                width={24}
+                height={24}
+                className={`${styles.actionButtonIcon} ${
+                  isSaved ? styles.savedIcon : ''
+                }`}
+              />
+              <span
+                className={`${styles.actionButtonText} ${
+                  isSaved ? styles.savedText : ''
+                }`}
+              >
+                {isSaved ? 'Збережено' : 'Зберегти'}
+              </span>
+            </button>
+          </div>
 
-          <button onClick={handleCompare} className={styles.actionButton}>
-            <Image
-              src={ScalesIcon}
-              alt='Порівняти'
-              width={24}
-              height={24}
-              className={styles.actionButtonIcon}
-            />
-            <span className={styles.actionButtonText}>Порівняти</span>
-          </button>
+          <div className='md:col-span-2 md:order-2 xl:col-span-1 xl:order-3'>
+            <button
+              onClick={handlePriceNotification}
+              className={`${styles.actionButton} group`}
+            >
+              <Image
+                src={BellIcon}
+                alt='Сповіщення про ціну'
+                width={24}
+                height={24}
+                className={styles.actionButtonIcon}
+              />
+              <span className={styles.actionButtonText}>
+                Сповіщення про ціну
+              </span>
+            </button>
+          </div>
 
           {showShareModal ? (
-            <div className={styles.shareInputContainer}>
+            <div
+              className={`${styles.shareInputContainer} md:col-span-2 md:order-3 xl:col-span-2 xl:order-4`}
+            >
               <input
                 type='text'
-                value=''
+                value={`${
+                  typeof window !== 'undefined'
+                    ? `${window.location.origin}/product/${product.slug}`
+                    : ''
+                }`}
                 readOnly
                 className={styles.shareInput}
                 placeholder='Link'
@@ -241,51 +326,61 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             </div>
           ) : (
             <>
-              <button
-                onClick={onPriceNotification}
-                className={styles.actionButton}
-              >
-                <Image
-                  src={BellIcon}
-                  alt='Сповіщення про ціну'
-                  width={24}
-                  height={24}
-                  className={styles.actionButtonIcon}
-                />
-                <span className={styles.actionButtonText}>
-                  Сповіщення про ціну
-                </span>
-              </button>
+              <div className='md:col-span-1 md:order-3 xl:col-span-1 xl:order-2'>
+                <button
+                  onClick={handleCompare}
+                  className={`${styles.actionButtonNarrow} ${
+                    isInComparison ? styles.addedToCompare : ''
+                  } group`}
+                >
+                  <Image
+                    src={ScalesIcon}
+                    alt='Порівняти'
+                    width={24}
+                    height={24}
+                    className={`${styles.actionButtonIcon} ${
+                      isInComparison ? styles.addedToCompareIcon : ''
+                    }`}
+                  />
+                  <span
+                    className={`${styles.actionButtonText} ${
+                      isInComparison ? styles.addedToCompareText : ''
+                    }`}
+                  >
+                    {isInComparison ? 'Прибрати з порівняння' : 'Порівняти'}
+                  </span>
+                </button>
+              </div>
 
-              <button onClick={handleShare} className={styles.actionButton}>
-                <Image
-                  src={LinkIcon}
-                  alt='Поширити'
-                  width={24}
-                  height={24}
-                  className={styles.actionButtonIcon}
-                />
-                <span className={styles.actionButtonText}>Поширити</span>
-              </button>
+              <div className='md:col-span-1 md:order-4 xl:col-span-1 xl:order-4'>
+                <button
+                  onClick={handleShare}
+                  className={`${styles.actionButtonNarrow} group`}
+                >
+                  <Image
+                    src={LinkIcon}
+                    alt='Поширити'
+                    width={24}
+                    height={24}
+                    className={styles.actionButtonIcon}
+                  />
+                  <span className={styles.actionButtonText}>Поширити</span>
+                </button>
+              </div>
             </>
           )}
         </div>
-        <div className='space-y-[20px]'>
-          <button onClick={onBuy} className={styles.mainButton}>
+        <div className='flex flex-col gap-[17px] xl:gap-[13px]'>
+          <button onClick={handleBuy} className={styles.mainButton}>
             <span
               className='font-inter text-[16px] font-bold'
-              style={{
-                background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
+              style={mainButtonTextStyle}
             >
               Купити в Chrono24
             </span>
           </button>
 
-          <button onClick={onGetQuote} className={styles.secondaryButton}>
+          <button onClick={handleGetQuote} className={styles.secondaryButton}>
             <span className={styles.secondaryButtonText}>Get Quote</span>
           </button>
         </div>
@@ -294,6 +389,25 @@ const ProductHero: React.FC<ProductHeroProps> = ({
       <ComparisonModal
         isVisible={showComparisonModal}
         onClose={() => setShowComparisonModal(false)}
+        isAdded={isInComparison}
+      />
+
+      <PriceAlertModal
+        isOpen={showPriceAlertModal}
+        onClose={() => setShowPriceAlertModal(false)}
+        productTitle={`${product.brand} ${product.model}`}
+      />
+
+      <GetQuoteModal
+        isOpen={showGetQuoteModal}
+        onClose={() => setShowGetQuoteModal(false)}
+        productTitle={`${product.brand} ${product.model}`}
+      />
+
+      <FeedbackModal
+        isOpen={showBuyModal}
+        onClose={() => setShowBuyModal(false)}
+        watchTitle={`${product.brand} ${product.model}`}
       />
     </div>
   );

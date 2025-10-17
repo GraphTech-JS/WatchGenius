@@ -6,11 +6,13 @@ import styles from './ComparisonModal.module.css';
 interface ComparisonModalProps {
   isVisible: boolean;
   onClose: () => void;
+  isAdded: boolean;
 }
 
 const ComparisonModal: React.FC<ComparisonModalProps> = ({
   isVisible,
   onClose,
+  isAdded,
 }) => {
   useEffect(() => {
     if (isVisible) {
@@ -27,7 +29,9 @@ const ComparisonModal: React.FC<ComparisonModalProps> = ({
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
-        <span className={styles.modalText}>Додано до порівняння</span>
+        <span className={styles.modalText}>
+          {isAdded ? 'Додано до порівняння' : 'Прибрано з порівняння'}
+        </span>
       </div>
     </div>
   );

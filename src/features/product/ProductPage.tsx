@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import { Product } from '@/interfaces/product';
 import {
-  ProductBreadcrumbs,
   ProductHero,
   ProductAnalytics,
   SimilarModels,
   SellerOffers,
 } from './index';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import styles from '@/app/product/[slug]/page.module.css';
 
 interface ProductPageProps {
@@ -71,9 +71,11 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
   };
 
   return (
-    <div className='bg-white pt-[27px] pb-[90px] min-h-screen mx-auto mt-[80px]'>
+    <div className='bg-white pt-[27px] pb-[60px] xl:pb-[90px] min-h-screen mx-auto mt-[80px]'>
       <div className={styles.productPage}>
-        <ProductBreadcrumbs items={breadcrumbItems} />
+        <div className='hidden sm:block'>
+          <Breadcrumbs items={breadcrumbItems} width={428} />
+        </div>
 
         <ProductHero
           product={product}
@@ -85,15 +87,15 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
           onGetQuote={handleGetQuote}
         />
 
-        <div className='flex gap-[60px] mb-8'>
-          <div>
+        <div className='flex flex-col-reverse sm:flex-col-reverse md:flex-row lg:flex-row xl:flex-row gap-[20px] sm:gap-[25px] md:gap-[60px] lg:gap-[60px] xl:gap-[60px] mb-8'>
+          <div className='w-full sm:w-full md:w-[calc(50%-30px)] lg:w-[calc(50%-30px)] xl:w-auto'>
             <SimilarModels
               models={product.similarModels}
               onCompare={handleCompare}
             />
           </div>
 
-          <div>
+          <div className='h-[750px] sm:h-auto  md:h-[640px] lg:h-auto w-full sm:w-full md:w-[calc(50%-30px)] lg:w-[calc(50%-30px)] xl:w-[603px]'>
             <ProductAnalytics
               analytics={product.analytics}
               activeTab={activeTab}

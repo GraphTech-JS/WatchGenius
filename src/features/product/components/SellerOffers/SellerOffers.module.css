@@ -1,7 +1,6 @@
 .filterDropdown {
   position: relative;
   width: 211px;
-  height: 56px;
 }
 
 .filterDropdownButton {
@@ -102,4 +101,452 @@
 .filterDropdownOption:focus {
   outline: none;
   background: #e8e9ea;
+}
+
+.sellerCard {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 15px 13px;
+  width: 100%;
+  position: relative;
+  background: white;
+}
+
+.sellerCardContent {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sellerCardHeader {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 12px;
+  width: 100%;
+  gap: 8px;
+}
+
+.sellerCardPriceDesktop {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+  display: block;
+}
+
+.sellerCardPriceMobile {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #000;
+  text-align: center;
+}
+
+.sellerCardFooter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: auto;
+  gap: 8px;
+}
+
+.sellerCardButton {
+  border-radius: 10px;
+  padding: 11px 43px;
+  width: 326px;
+  height: 50px;
+  background-color: #04694f;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.sellerCardButton:hover {
+  background-color: #00523d;
+}
+
+.sellerCardButtonDesktop {
+  border-radius: 8px;
+  padding: 8px;
+  width: 214px;
+  height: 36px;
+  background-color: #04694f;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.sellerCardButtonDesktop:hover {
+  background-color: #00523d;
+}
+
+.starIcon {
+  margin-right: 8px;
+  margin-bottom: 0;
+}
+
+.safetyBlock {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-radius: 15px;
+  padding: 12px 16px;
+  width: 100%;
+  background: #eeeff1;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 639px) {
+  .sellerCard {
+    height: 272px;
+    margin: 0 auto;
+  }
+  
+  .sellerCardPriceDesktop {
+    display: none;
+  }
+  
+  .sellerCardPriceMobile {
+    display: block;
+  }
+  
+  .sellerCardButton {
+    width: 326px;
+    display: flex;
+  }
+  
+  .sellerCardButtonDesktop {
+    display: none;
+  }
+  
+  .safetyBlock {
+    padding: 16px 25px 16px 10px;
+    width: 350px;
+    height: 109px;
+    font-size: 16px;
+  }
+  
+  .filterDropdown {
+    width: 235px;
+  }
+  
+  .starIcon {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .sellerCardHeader {
+    justify-content: space-between;
+    gap: 0;
+  }
+  
+  .sellerCardHeader .flex {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .sellerCard {
+    width: 100%;
+    height: 272px;
+    margin: 0 auto;
+  }
+  
+  .sellerCardPriceDesktop {
+    display: none;
+  }
+  
+  .sellerCardPriceMobile {
+    display: block;
+  }
+  
+  .sellerCardButton {
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+  }
+  
+  .sellerCardButtonDesktop {
+    display: none;
+  }
+  
+  .safetyBlock {
+    padding: 16px 25px 16px 10px;
+    width: 100%;
+    height: 109px;
+    font-size: 16px;
+  }
+  
+  .filterDropdown {
+    width: 100%;
+    max-width: 250px;
+  }
+  
+  .starIcon {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .sellerCardHeader {
+    justify-content: space-between;
+    gap: 0;
+  }
+  
+  .sellerCardHeader .flex {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .filterDropdown {
+    width: 155px; 
+  }
+  
+  .filterDropdownButton {
+    width: 155px; 
+    height: 48px;
+    padding: 14px 25px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .sellerCard {
+    width: 100%;
+    max-width: 450px;
+    height: 272px;
+    margin: 0 auto;
+  }
+  
+  .sellerCardPriceDesktop {
+    display: none;
+  }
+  
+  .sellerCardPriceMobile {
+    display: block;
+  }
+  
+  .sellerCardButton {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+  }
+  
+  .sellerCardButtonDesktop {
+    display: none;
+  }
+  
+  .safetyBlock {
+    padding: 14px 30px 14px 15px;
+    width: 100%;
+    height: 67px;
+    font-size: 17px;
+  }
+  
+  .filterDropdown {
+   width: 165px;
+  }
+  
+  .filterDropdownButton {
+        width: 165px; 
+    height: 48px; 
+    padding: 14px 25px; 
+  }
+  
+  .starIcon {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  
+  .sellerCardHeader {
+    justify-content: space-between;
+    gap: 0;
+  }
+  
+  .sellerCardHeader .flex {
+    flex-direction: row;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .sellerCardHeader {
+    position: relative;
+  }
+  
+  .filterDropdown {
+    width: 165px !important;
+  }
+  
+  .sellerCardPriceDesktop {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  
+  .sellerCardPriceMobile {
+    display: none;
+  }
+  
+  .sellerCardFooter {
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-top: 0;
+    position: absolute;
+    bottom: 15px;
+    right: 13px;
+  }
+  
+  .sellerCardButton {
+    display: none;
+  }
+  
+  .sellerCardButtonDesktop {
+    display: flex;
+  }
+}
+
+@media (min-width: 1280px) {
+  .sellerCardHeader {
+    position: relative;
+  }
+  
+  .filterDropdown {
+    width: 211px !important;
+  }
+  
+  .filterDropdownButton {
+    width: 211px; 
+  }
+  
+  .sellerCardPriceDesktop {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+  }
+  
+  .sellerCardPriceMobile {
+    display: none;
+  }
+  
+  .sellerCardFooter {
+    justify-content: flex-end;
+    align-items: flex-end;
+    padding-top: 0;
+    position: absolute;
+    bottom: 15px;
+    right: 13px;
+  }
+  
+  .sellerCardButton {
+    display: none;
+  }
+  
+  .sellerCardButtonDesktop {
+    display: flex;
+  }
+}
+    
+.labelFont {
+  font-family: 'Inter', sans-serif;
+}
+
+.titleFont {
+  font-family: 'Roboto Flex', sans-serif;
+}
+
+.textFont {
+  font-family: 'Inter', sans-serif;
+}
+
+.emptyOffersContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  gap: 24px;
+}
+
+.emptyOffersText {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 20px;
+  color: #000;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.requestOfferButton {
+  border-radius: 10px;
+  padding: 11px 43px;
+  width: 465px;
+  height: 40px;
+  background: #04694f;
+  font-weight: 600;
+  font-size: 16px;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.requestOfferButton:hover {
+  background: #00523d;
+}
+
+@media (max-width: 768px) {
+  .emptyOffersContainer {
+    padding: 30px 16px;
+    gap: 20px;
+  }
+  
+  .emptyOffersText {
+    font-size: 18px;
+  }
+  
+  .requestOfferButton {
+    width: 100%;
+    max-width: 350px;
+    height: 44px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .emptyOffersText {
+    font-size: 16px;
+  }
+  
+  .requestOfferButton {
+    width: 100%;
+    max-width: 300px;
+    height: 40px;
+    font-size: 14px;
+    padding: 10px 20px;
+  }
 }

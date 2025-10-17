@@ -1,20 +1,33 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { SimilarModelsProps } from '@/interfaces/product';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { ScalesIcon } from '@/product-icons';
 import styles from './SimilarModels.module.css';
 
 const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
-  // const router = useRouter();
+  const router = useRouter();
+  const [selectedModels, setSelectedModels] = useState<Set<string>>(new Set());
 
-  // const handleCompareModels = () => {
-  //   const modelIds = models.map((model) => model.id).join(',');
-  //   router.push(`/compare?models=${modelIds}`);
-  // };
+  const handleCompareModels = () => {
+    const modelIds = models.map((model) => model.id).join(',');
+    router.push(`/compare?models=${modelIds}`);
+  };
+
+  const handleModelSelect = (modelId: string) => {
+    setSelectedModels((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(modelId)) {
+        newSet.delete(modelId);
+      } else {
+        newSet.add(modelId);
+      }
+      return newSet;
+    });
+  };
 
   const getIndexBadgeClass = (index: string) => {
     switch (index) {
@@ -39,17 +52,23 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
   return (
     <div className={styles.section}>
       <div>
-        <h3 className={styles.sectionTitle}>Схожі моделі</h3>
-        <p className={styles.sectionSubtitle}>
+        <h3
+          className={`${styles.sectionTitle} font-semibold text-[24px]md:text-[20px] lg:text-[24px] xl:text-[24px] text-gray-900`}
+        >
+          Схожі моделі
+        </h3>
+        <p
+          className={`${styles.sectionSubtitle} font-normal text-base text-gray-500 mb-[19px]`}
+        >
           Моделі обираються по ціновому сегменту, бренду та популярності
         </p>
       </div>
 
-      <div className='grid grid-cols-3 gap-[12px] mb-6'>
+      <div className={styles.similarGrid}>
         {models.map((model) => {
           const trend = parseTrend(model.priceTrend);
           return (
-            <div key={model.id} className={styles.watchCard}>
+            <div key={model.id} className={styles.similarCard}>
               <div
                 className={`${styles.indexBadge} ${getIndexBadgeClass(
                   model.index
@@ -58,7 +77,14 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                 {model.index}
               </div>
 
-              <div className={styles.comparisonIcon}>
+              <div
+                className={`${styles.comparisonIcon} ${
+                  selectedModels.has(model.id)
+                    ? styles.comparisonIconSelected
+                    : ''
+                }`}
+                onClick={() => handleModelSelect(model.id)}
+              >
                 <Image
                   src={ScalesIcon}
                   alt='Порівняти'
@@ -68,26 +94,26 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                 />
               </div>
 
-              <div className={styles.watchImage}>
+              <div className={styles.similarImage}>
                 <Image
                   src={model.image}
                   alt={model.title}
                   fill
-                  className={styles.watchImage}
+                  className={styles.similarImage}
                 />
               </div>
 
-              <h4 className={styles.watchTitle}>{model.title}</h4>
+              <h4 className={styles.similarTitle}>{model.title}</h4>
 
-              <div className={styles.priceAndTrend}>
-                <div className={styles.price}>{model.price}</div>
+              <div className={styles.similarPriceAndTrend}>
+                <div className={styles.similarPrice}>{model.price}</div>
 
-                <div className={styles.trendContainer}>
+                <div className={styles.similarTrendContainer}>
                   <span
-                    className={`${styles.trendBadge} ${
+                    className={`${styles.similarTrendBadge} ${
                       trend.isPositive
-                        ? styles.trendValue
-                        : styles.trendValueNegative
+                        ? styles.similarTrendValue
+                        : styles.similarTrendValueNegative
                     }`}
                   >
                     {trend.isPositive ? (
@@ -96,7 +122,9 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                       <FaArrowDown className='text-[12px]' />
                     )}
                     {trend.value}%
-                    <span className={styles.trendPeriod}>{trend.period}</span>
+                    <span className={styles.similarTrendPeriod}>
+                      {trend.period}
+                    </span>
                   </span>
                 </div>
               </div>
@@ -105,7 +133,9 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
         })}
       </div>
 
-      <button className={styles.compareButton}>Порівняти моделі</button>
+      <button onClick={handleCompareModels} className={styles.compareButton}>
+        Порівняти моделі
+      </button>
     </div>
   );
 };
