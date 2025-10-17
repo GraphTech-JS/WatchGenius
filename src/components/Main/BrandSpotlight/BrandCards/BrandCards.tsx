@@ -9,10 +9,12 @@ interface BrandCardsProps {
 
 export const BrandCards: React.FC<BrandCardsProps> = ({ items }) => {
   const [cols, setCols] = useState<2 | 3 | 4>(2);
+  const [isLt1024, setIsLt1024] = useState<boolean>(true);
 
   useEffect(() => {
     const updateCols = () => {
       const width = window.innerWidth;
+      setIsLt1024(width < 1024);
       if (width >= 1024) setCols(3);
       else if (width >= 768) setCols(4);
       else setCols(2);
@@ -31,7 +33,12 @@ export const BrandCards: React.FC<BrandCardsProps> = ({ items }) => {
       style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
     >
       {visibleItems.map((watch) => (
-        <ProductCard key={watch.id} {...watch} />
+        <ProductCard
+          key={watch.id}
+          {...watch}
+          height={isLt1024 ? 240 : undefined}
+          dense={isLt1024}
+        />
       ))}
     </div>
   );
