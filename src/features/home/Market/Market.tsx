@@ -124,7 +124,6 @@ export const Market = () => {
     );
   }
 
-  const ActiveCard = allCards[activeIndex];
 
   return (
     <section

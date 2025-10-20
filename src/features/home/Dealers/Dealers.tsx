@@ -9,7 +9,8 @@ export const Dealers = () => {
   const [cols, setCols] = useState<1 | 2>(1);
   const [page, setPage] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
-  const [direction, setDirection] = useState<"next" | "prev" | null>(null);
+  // Only need the setter; value is not read
+  const [, setDirection] = useState<"next" | "prev" | null>(null);
   const swipeRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
