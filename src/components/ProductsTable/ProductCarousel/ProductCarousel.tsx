@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import styles from "./ProductCarousel.module.css";
 import { ProductCard } from "@/components/ProductsTable/ProductCard/ProductCard";
@@ -15,10 +15,11 @@ type Props = {
 export const ProductCarousel: React.FC<Props> = ({
   items,
   ctaHref = "/catalog",
-  ctaLabel = "Переглянути всі тренди",
+  ctaLabel = "Перейти до каталогу",
 }) => {
   const [cols, setCols] = useState<2 | 3 | 4>(2);
   const [page, setPage] = useState(0);
+  const swipeRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const onResize = () => {
@@ -38,26 +39,110 @@ export const ProductCarousel: React.FC<Props> = ({
     setPage((p) => Math.min(p, totalPages - 1));
   }, [totalPages]);
 
-  const slice = useMemo(() => {
-    const start = page * cols;
-    return items.slice(start, start + cols);
-  }, [items, page, cols]);
+  const scrollToPage = (idx: number) => {
+    const el = swipeRef.current;
+    if (!el) return;
+    const viewport = el.clientWidth;
+    el.scrollTo({ left: idx * viewport, behavior: "smooth" });
+  };
 
-  const next = () => setPage((p) => Math.min(p + 1, totalPages - 1));
-  const prev = () => setPage((p) => Math.max(p - 1, 0));
+  const next = () => setPage((p) => {
+    const np = Math.min(p + 1, totalPages - 1);
+    scrollToPage(np);
+    return np;
+  });
+  const prev = () => setPage((p) => {
+    const np = Math.max(p - 1, 0);
+    scrollToPage(np);
+    return np;
+  });
+
   const isMobile = cols === 2;
   const isTablet = cols === 3;
   const isDesktop = cols === 4;
 
+  // Pointer drag with live move and snap to pages
+  useEffect(() => {
+    const el = swipeRef.current;
+    if (!el) return;
+    let isDown = false;
+    let startX = 0;
+    let startScroll = 0;
+    let pointerId: number | null = null;
+    const onDown = (e: PointerEvent) => {
+      isDown = true;
+      startX = e.clientX;
+      startScroll = el.scrollLeft;
+      pointerId = e.pointerId;
+      (e.target as Element).setPointerCapture?.(e.pointerId);
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!isDown) return;
+      el.scrollLeft = startScroll - (e.clientX - startX);
+    };
+    const onUp = (e: PointerEvent) => {
+      if (!isDown) return;
+      isDown = false;
+      if (pointerId !== null) {
+        try { (e.target as Element).releasePointerCapture?.(pointerId); } catch {}
+        pointerId = null;
+      }
+      const viewport = el.clientWidth;
+      const idx = Math.round(el.scrollLeft / viewport);
+      setPage(idx);
+      scrollToPage(idx);
+    };
+    el.addEventListener("pointerdown", onDown);
+    el.addEventListener("pointermove", onMove);
+    el.addEventListener("pointerup", onUp);
+    el.addEventListener("pointercancel", onUp);
+    return () => {
+      el.removeEventListener("pointerdown", onDown);
+      el.removeEventListener("pointermove", onMove);
+      el.removeEventListener("pointerup", onUp);
+      el.removeEventListener("pointercancel", onUp);
+    };
+  }, [cols, totalPages]);
+
+  // Keep pagination in sync while scrolling
+  useEffect(() => {
+    const el = swipeRef.current;
+    if (!el) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const viewport = el.clientWidth;
+        const idx = Math.round(el.scrollLeft / viewport);
+        if (idx !== page) setPage(idx);
+      });
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [page]);
+
   return (
     <div className={`${styles.section} lg:ml-1.5`}>
       <div
-        className={`${styles.row} grid gap-10`}
-        style={{ gridTemplateColumns: `repeat(${cols}, minmax(0,1fr))` }}
+        ref={swipeRef}
+        className={`flex gap-10 overflow-x-auto snap-x snap-mandatory scroll-smooth ${styles.swipe} ${styles.noScrollbar}`}
       >
-        {slice.map((card, i) => (
-          <ProductCard key={`${page}-${i}-${card.brand}`} {...card} />
-        ))}
+        {items.map((card) => {
+          const gap = "2.5rem"; // matches gap-10
+          const basis = `calc((100% - ${gap} * ${cols - 1}) / ${cols})`;
+          return (
+          <div
+            key={`${card.id}-${card.brand}`}
+            className="snap-start shrink-0"
+            style={{ flex: `0 0 ${basis}`, maxWidth: basis }}
+          >
+            <ProductCard {...card} />
+          </div>
+          );
+        })}
       </div>
 
       <div className={`${styles.controls} flex justify-center mt-10 lg:ml-2`}>
@@ -67,7 +152,7 @@ export const ProductCarousel: React.FC<Props> = ({
               {Array.from({ length: totalPages }).map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setPage(i)}
+                  onClick={() => scrollToPage(i)}
                   aria-label={`Сторінка ${i + 1}`}
                   className={`${styles.dot} ${
                     i === page ? styles.dotActive : ""
@@ -102,7 +187,7 @@ export const ProductCarousel: React.FC<Props> = ({
               {Array.from({ length: totalPages }).map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => setPage(i)}
+                  onClick={() => scrollToPage(i)}
                   aria-label={`Сторінка ${i + 1}`}
                   className={`${styles.pageBar} ${
                     i === page ? styles.pageBarActive : ""
@@ -118,7 +203,7 @@ export const ProductCarousel: React.FC<Props> = ({
               <button
                 onClick={prev}
                 disabled={page === 0}
-                aria-label="Попередня"
+                aria-label="Назад"
                 className={
                   page === 0 ? styles.arrowDisabled : styles.arrowActive
                 }
@@ -128,7 +213,7 @@ export const ProductCarousel: React.FC<Props> = ({
               <button
                 onClick={next}
                 disabled={page === totalPages - 1}
-                aria-label="Наступна"
+                aria-label="Вперед"
                 className={
                   page === totalPages - 1
                     ? styles.arrowDisabled

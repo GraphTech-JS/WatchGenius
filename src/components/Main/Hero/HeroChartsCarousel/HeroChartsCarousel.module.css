@@ -44,3 +44,15 @@
 .chartPersent {
   font-size: 20px;
 }
+
+/* Swipe helpers for mobile */
+.noScrollbar::-webkit-scrollbar { display: none; }
+.noScrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.swipe {
+  outline: none;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  padding: 6px 8px;
+  scroll-padding-inline: 8px;
+}
