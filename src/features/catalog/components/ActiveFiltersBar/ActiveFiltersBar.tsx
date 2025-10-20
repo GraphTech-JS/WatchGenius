@@ -16,8 +16,7 @@ export const ActiveFiltersBar = React.forwardRef<
   return (
     <div
       ref={ref}
-      className='max-md:hidden absolute left-0 right-0 z-[5] flex flex-wrap gap-2 items-center pointer-events-none'
-      style={{ top: -10, transform: 'translateY(-100%)' }}
+      className='flex flex-wrap gap-2 items-center mb-5 pointer-events-none max-md:hidden'
     >
       <button
         type='button'

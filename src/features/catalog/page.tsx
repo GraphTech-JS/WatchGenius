@@ -61,6 +61,19 @@ const CatalogPage = () => {
         onSortChange={search.setSortOption}
         onSaveToChat={handleSaveToChat}
       />
+      <ActiveFiltersBar
+        ref={search.chipsRef as React.RefObject<HTMLDivElement>}
+        chips={search.activeFilters.map((c) => ({
+          id: c.id,
+          label: c.label,
+        }))}
+        onRemove={(id) => {
+          const chip = search.activeFilters.find((c) => c.id === id);
+          if (chip)
+            search.removeFilter({ group: chip.group, value: chip.value });
+        }}
+        onClearAll={search.clearAllFilters}
+      />
 
       <div
         ref={sidebar.sectionRef}
@@ -79,19 +92,6 @@ const CatalogPage = () => {
         </FixedSidebar>
 
         <div className='relative flex-1 min-w-0'>
-          <ActiveFiltersBar
-            ref={search.chipsRef as React.RefObject<HTMLDivElement>}
-            chips={search.activeFilters.map((c) => ({
-              id: c.id,
-              label: c.label,
-            }))}
-            onRemove={(id) => {
-              const chip = search.activeFilters.find((c) => c.id === id);
-              if (chip)
-                search.removeFilter({ group: chip.group, value: chip.value });
-            }}
-            onClearAll={search.clearAllFilters}
-          />
           <CatalogGrid
             items={search.filteredItems}
             initialCount={12}

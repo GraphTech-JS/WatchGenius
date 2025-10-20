@@ -4,7 +4,6 @@ import { SortButtons } from '../SortButtons/SortButtons';
 import { SortDropdown } from '../SortDropdown/SortDropdown';
 import { CatalogControlsProps } from '@/interfaces';
 
-
 export const CatalogControls: React.FC<CatalogControlsProps> = ({
   searchTerm,
   onSearchChange,
@@ -15,7 +14,7 @@ export const CatalogControls: React.FC<CatalogControlsProps> = ({
   onSaveToChat,
 }) => {
   return (
-    <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-[15px] mb-5 md:mb-[56px]'>
+    <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-[15px] mb-5 md:mb-[38px]'>
       <div className='flex flex-col md:flex-row items-stretch sm:items-center gap-3 sm:gap-[15px] w-full md:w-auto'>
         <CatalogSearch value={searchTerm} onChange={onSearchChange} />
         <SaveToChatButton onClick={onSaveToChat} />
