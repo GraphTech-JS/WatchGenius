@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "./Dealers.module.css";
 import { ArrowIcon } from "../../../../public/social/Icon";
 import { DealerCard } from "@/components/Main/Dealers/DealerCard";
@@ -10,6 +10,7 @@ export const Dealers = () => {
   const [page, setPage] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const [direction, setDirection] = useState<"next" | "prev" | null>(null);
+  const swipeRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const onResize = () => {
@@ -33,23 +34,92 @@ export const Dealers = () => {
 
   const totalPages = Math.max(1, Math.ceil(mockDealers.length / cols));
 
-  const slice = useMemo(() => {
-    const start = page * cols;
-    return mockDealers.slice(start, start + cols);
-  }, [page, cols]);
+  const scrollToPage = (idx: number) => {
+    const el = swipeRef.current;
+    if (!el) return;
+    const viewport = el.clientWidth;
+    el.scrollTo({ left: idx * viewport, behavior: "smooth" });
+  };
 
   const next = () => {
     if (page < totalPages - 1) {
       setDirection("next");
-      setPage((p) => p + 1);
+      scrollToPage(page + 1);
     }
   };
   const prev = () => {
     if (page > 0) {
       setDirection("prev");
-      setPage((p) => p - 1);
+      scrollToPage(page - 1);
     }
   };
+
+  // Enable mouse drag / touch swipe to change page with smooth dragging
+  useEffect(() => {
+    const el = swipeRef.current;
+    if (!el) return;
+    let startX = 0;
+    let isDown = false;
+    let pointerId: number | null = null;
+    let startScroll = 0;
+    const onPointerDown = (e: PointerEvent) => {
+      isDown = true;
+      startX = e.clientX;
+      startScroll = el.scrollLeft;
+      pointerId = e.pointerId;
+      (e.target as Element).setPointerCapture?.(e.pointerId);
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!isDown) return;
+      const dx = e.clientX - startX;
+      el.scrollLeft = startScroll - dx;
+    };
+    const onPointerUp = (e: PointerEvent) => {
+      if (!isDown) return;
+      isDown = false;
+      if (pointerId !== null) {
+        try {
+          (e.target as Element).releasePointerCapture?.(pointerId);
+        } catch {}
+        pointerId = null;
+      }
+      // snap to nearest page
+      const viewport = el.clientWidth;
+      const newPage = Math.round(el.scrollLeft / viewport);
+      setPage(newPage);
+      scrollToPage(newPage);
+    };
+    el.addEventListener("pointerdown", onPointerDown);
+    el.addEventListener("pointermove", onPointerMove);
+    el.addEventListener("pointerup", onPointerUp);
+    el.addEventListener("pointercancel", onPointerUp);
+    return () => {
+      el.removeEventListener("pointerdown", onPointerDown);
+      el.removeEventListener("pointermove", onPointerMove);
+      el.removeEventListener("pointerup", onPointerUp);
+      el.removeEventListener("pointercancel", onPointerUp);
+    };
+  }, [page, totalPages]);
+
+  // Track scroll to update pagination state
+  useEffect(() => {
+    const el = swipeRef.current;
+    if (!el) return;
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const viewport = el.clientWidth;
+        const idx = Math.round(el.scrollLeft / viewport);
+        if (idx !== page) setPage(idx);
+      });
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [page]);
 
   return (
     <section id="dealers" className={styles.dealers}>
@@ -92,15 +162,23 @@ export const Dealers = () => {
 
         <div className={styles.dealersBody}>
           <div
-            className={`grid gap-6 ${
-              direction ? styles[`slide-${direction}`] : ""
-            }`}
-            style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
+            ref={swipeRef}
+            className={`flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar ${styles.swipe}`}
             onAnimationEnd={() => setDirection(null)}
           >
-            {slice.map((dealer) => (
-              <DealerCard key={dealer.id} dealer={dealer} />
-            ))}
+            {mockDealers.map((dealer) => {
+              const gap = "1.5rem"; // Tailwind gap-6
+              const basis = `calc((100% - ${gap} * ${cols - 1}) / ${cols})`;
+              return (
+                <div
+                  key={dealer.id}
+                  className="snap-start shrink-0"
+                  style={{ flex: `0 0 ${basis}`, maxWidth: basis }}
+                >
+                  <DealerCard dealer={dealer} />
+                </div>
+              );
+            })}
           </div>
 
           {!isDesktop && (
@@ -108,10 +186,7 @@ export const Dealers = () => {
               {Array.from({ length: totalPages }).map((_, i) => (
                 <button
                   key={i}
-                  onClick={() => {
-                    setDirection(i > page ? "next" : "prev");
-                    setPage(i);
-                  }}
+                  onClick={() => scrollToPage(i)}
                   aria-label={`Сторінка ${i + 1}`}
                   className={`${styles.dot} ${
                     i === page ? styles.dotActive : ""

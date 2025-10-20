@@ -28,3 +28,29 @@
 .arrowDisabled {
   color: rgba(0, 0, 0, 0.3);
 }
+
+/* Swipe container helpers */
+.noScrollbar::-webkit-scrollbar { display: none; }
+.noScrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.swipe {
+  outline: none;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  padding: 8px 12px;
+  scroll-padding-inline: 12px;
+  --edge-fade: 12px;
+  --edge-fade-y: 10px;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0, black var(--edge-fade), black calc(100% - var(--edge-fade)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, black var(--edge-fade-y), black calc(100% - var(--edge-fade-y)), transparent 100%);
+  mask-image:
+    linear-gradient(to right, transparent 0, black var(--edge-fade), black calc(100% - var(--edge-fade)), transparent 100%),
+    linear-gradient(to bottom, transparent 0, black var(--edge-fade-y), black calc(100% - var(--edge-fade-y)), transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
+
+@media (width >= 48rem /* 768px */) {
+  .swipe { padding: 10px 16px; scroll-padding-inline: 16px; --edge-fade: 16px; --edge-fade-y: 12px; }
+}
