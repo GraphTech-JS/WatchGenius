@@ -4,7 +4,6 @@
   padding: 1rem 1.25rem;
   z-index: 40;
   position: fixed;
-  overflow: hidden;
 }
 
 .logoName {
@@ -60,10 +59,10 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - 60px);
-  background: linear-gradient(0deg, #d1c4ac, #d1c4ac),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.27), rgba(0, 0, 0, 0.27));
-  z-index: 50;
+  height: calc(100% - 56px);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.27), rgba(0, 0, 0, 0.27)),
+    linear-gradient(0deg, #d1c4ac, #d1c4ac);
+  z-index: 30;
   box-shadow: 0px 4px 19.6px 2px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   pointer-events: auto;
@@ -81,6 +80,9 @@
 }
 .headerMobileSearchInput:focus-visible {
   outline: none;
+}
+.inactiveOption {
+  color: #9ca3af;
 }
 @media (width >= 48rem /* 768px */) {
   .header {
@@ -107,7 +109,7 @@
     height: 430px;
     overflow: hidden;
     pointer-events: auto;
-    z-index: -1;
+    z-index: 30;
   }
 }
 @media (width >= 64rem /* 1024px */) {
