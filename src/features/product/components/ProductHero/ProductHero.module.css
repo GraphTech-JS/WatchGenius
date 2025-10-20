@@ -65,7 +65,7 @@
     width: 100%;
     margin: 0 auto;
   }
-  
+
   .shareInputContainer {
     width: 100%;
     max-width: 400px;
@@ -79,18 +79,12 @@
     width: 100%;
     margin: 0 auto;
   }
-  
+
   .shareInputContainer {
     width: 100%;
     max-width: 450px;
     margin: 0 auto;
   }
-}
-
-@media (min-width: 1024px) and (max-width: 1279px) {
- 
-  
- 
 }
 
 @media (min-width: 1280px) {
@@ -270,8 +264,6 @@
   }
 }
 
-
-
 .shareInput {
   flex: 1;
   border: none;
@@ -309,7 +301,8 @@
 }
 
 .shareIcon {
-  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(2000%) hue-rotate(140deg) brightness(0.8) contrast(1.2);
+  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(2000%)
+    hue-rotate(140deg) brightness(0.8) contrast(1.2);
 }
 
 @keyframes slideDown {
@@ -321,4 +314,52 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+
+.indexBadgeWrap {
+  position: relative;
+}
+.indexBadgeBox {
+  border-radius: 5px;
+  background: #b4e1c7;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 9px 7px 8px;
+}
+.indexBadgeText {
+  font-family: 'Inter';
+  font-weight: 700;
+  font-size: 20px;
+  color: #067b06;
+}
+.indexTooltip {
+    position: absolute;
+    left: -221%;
+    top: calc(4% + 6px);
+  max-width: 240px;
+  background: #f6f7f8; 
+  color: #171414;
+  padding: 6px 10px;
+  border-radius: 20px;
+  border: 1px solid #04694f;
+  font-size: 12px;
+  box-shadow: 0 4px 13px 2px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+   visibility: hidden; 
+  transform: translateY(-2px);
+  transition: opacity .15s ease, transform .15s ease;
+  pointer-events: none;
+  z-index: 50;
+  white-space: nowrap;
+  font-family: 'Roboto Flex', sans-serif;
+  font-weight: 500;
+}
+.indexBadgeWrap:hover .indexTooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }

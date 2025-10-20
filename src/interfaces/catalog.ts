@@ -30,8 +30,8 @@ export interface WatchItem {
 export interface CatalogControlsProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
-  selectedIndex: string | null;
-  onIndexChange: (value: string | null) => void;
+  selectedIndexes: WatchIndex[];
+ onToggleIndex: (index: WatchIndex) => void; 
   sortValue: SortOption;
   onSortChange: (value: SortOption) => void;
   onSaveToChat: () => void;
@@ -65,8 +65,8 @@ export interface EmptyStateProps {
 }
 
 export interface SortButtonsProps{
-  selectedIndex?: string | null;
-  onButtonClick?: (button: string | null) => void;
+   selectedIndexes?: WatchIndex[];  // Змінити з string[] на WatchIndex[]
+  onToggleIndex?: (index: WatchIndex) => void;
 }
 
 export interface SortDropdownProps {
@@ -101,3 +101,5 @@ export interface TabletSidebarProps {
   onReset?: () => void;
   topOffset?: number;
 }
+
+

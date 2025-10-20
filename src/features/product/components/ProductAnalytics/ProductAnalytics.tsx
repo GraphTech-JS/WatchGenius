@@ -35,10 +35,15 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   const [activeChartPeriod, setActiveChartPeriod] = useState<'3M' | '1P'>('3M');
   const [isVolatilityHovered, setIsVolatilityHovered] = useState(false);
   const [isDemandHovered, setIsDemandHovered] = useState(false);
+  const [isLiquidityHovered, setIsLiquidityHovered] = useState(false);
+  const [isDynamicsHovered, setIsDynamicsHovered] = useState(false);
+  const [isAdsHovered, setIsAdsHovered] = useState(false);
+  const [isPriceLiquidityHovered, setIsPriceLiquidityHovered] = useState(false);
+  const [isPopularityHovered, setIsPopularityHovered] = useState(false);
   const screenWidth = useScreenWidth();
 
-  const demandPercentage = 65; 
-  const rotationAngle = (demandPercentage / 100) * 180 - 90; 
+  const demandPercentage = 65;
+  const rotationAngle = (demandPercentage / 100) * 180 - 90;
 
   const tabs = [
     { id: 'parameters', label: 'Параметри' },
@@ -107,49 +112,91 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                 </div>
               )}
 
-              <div className={styles.trendCard}>
-                <div className={styles.trendIcon}>
-                  <Image
-                    src={TrendWaterIcon}
-                    alt='Ліквідність'
-                    width={36}
-                    height={36}
-                  />
+              {isLiquidityHovered ? (
+                <div
+                  className={styles.trendTooltipLiquid}
+                  onMouseEnter={() => setIsLiquidityHovered(true)}
+                  onMouseLeave={() => setIsLiquidityHovered(false)}
+                >
+                  Швидкість обміну на гроші.
                 </div>
-                <div className={`${styles.trendContent} flex flex-col`}>
-                  <span className={styles.trendLabel}>Ліквідність</span>
-                  <span className={styles.trendValue}>
-                    {analytics.liquidity}%
-                  </span>
+              ) : (
+                <div
+                  className={styles.trendCard}
+                  onMouseEnter={() => setIsLiquidityHovered(true)}
+                  onMouseLeave={() => setIsLiquidityHovered(false)}
+                >
+                  <div className={styles.trendIcon}>
+                    <Image
+                      src={TrendWaterIcon}
+                      alt='Ліквідність'
+                      width={36}
+                      height={36}
+                    />
+                  </div>
+                  <div className={`${styles.trendContent} flex flex-col`}>
+                    <span className={styles.trendLabel}>Ліквідність</span>
+                    <span className={styles.trendValue}>
+                      {analytics.liquidity}%
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className={styles.trendCard}>
-                <div className={styles.trendIcon}>
-                  <Image
-                    src={DinamicIcon}
-                    alt='Динаміка'
-                    width={30}
-                    height={30}
-                  />
+              {isDynamicsHovered ? (
+                <div
+                  className={styles.trendTooltip}
+                  onMouseEnter={() => setIsDynamicsHovered(true)}
+                  onMouseLeave={() => setIsDynamicsHovered(false)}
+                >
+                  Зміни показників (спад або зростання)
                 </div>
-                <div className={`${styles.trendContent} flex flex-col`}>
-                  <span className={styles.trendLabel}>Динаміка</span>
-                  <span className={styles.trendValue}>
-                    +{analytics.dynamics}%
-                  </span>
+              ) : (
+                <div
+                  className={styles.trendCard}
+                  onMouseEnter={() => setIsDynamicsHovered(true)}
+                  onMouseLeave={() => setIsDynamicsHovered(false)}
+                >
+                  <div className={styles.trendIcon}>
+                    <Image
+                      src={DinamicIcon}
+                      alt='Динаміка'
+                      width={30}
+                      height={30}
+                    />
+                  </div>
+                  <div className={`${styles.trendContent} flex flex-col`}>
+                    <span className={styles.trendLabel}>Динаміка</span>
+                    <span className={styles.trendValue}>
+                      +{analytics.dynamics}%
+                    </span>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <div className={styles.trendCard}>
-                <div className={styles.trendIcon}>
-                  <Image src={AdsIcon} alt='ADS' width={30} height={30} />
+              {isAdsHovered ? (
+                <div
+                  className={styles.trendTooltip}
+                  onMouseEnter={() => setIsAdsHovered(true)}
+                  onMouseLeave={() => setIsAdsHovered(false)}
+                >
+                  Середній денний обсяг продажів.
                 </div>
-                <div className={`${styles.trendContent} flex flex-col`}>
-                  <span className={styles.trendLabel}>ADS</span>
-                  <span className={styles.trendValue}>{analytics.ads}</span>
+              ) : (
+                <div
+                  className={styles.trendCard}
+                  onMouseEnter={() => setIsAdsHovered(true)}
+                  onMouseLeave={() => setIsAdsHovered(false)}
+                >
+                  <div className={styles.trendIcon}>
+                    <Image src={AdsIcon} alt='ADS' width={30} height={30} />
+                  </div>
+                  <div className={`${styles.trendContent} flex flex-col`}>
+                    <span className={styles.trendLabel}>ADS</span>
+                    <span className={styles.trendValue}>{analytics.ads}</span>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className={styles.trendGauge}>
@@ -373,37 +420,63 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   Показник різниці ціни за обраний період.
                 </div>
               )}
-              <div className={styles.priceMetricCard}>
-                <div className={styles.priceMetricIcon}>
-                  <Image
-                    src={FluentArrowGrowthIcon}
-                    alt='Ліквідність'
-                    width={35}
-                    height={35}
-                  />
+              {!isPriceLiquidityHovered ? (
+                <div
+                  className={styles.priceMetricCard}
+                  onMouseEnter={() => setIsPriceLiquidityHovered(true)}
+                  onMouseLeave={() => setIsPriceLiquidityHovered(false)}
+                >
+                  <div className={styles.priceMetricIcon}>
+                    <Image
+                      src={FluentArrowGrowthIcon}
+                      alt='Ліквідність'
+                      width={35}
+                      height={35}
+                    />
+                  </div>
+                  <div className={styles.priceMetricContent}>
+                    <div className={styles.priceMetricLabel}>Ліквідність</div>
+                    <div className={styles.priceMetricValue}>Висока</div>
+                  </div>
                 </div>
-                <div className={styles.priceMetricContent}>
-                  <div className={styles.priceMetricLabel}>Ліквідність</div>
-                  <div className={styles.priceMetricValue}>Висока</div>
+              ) : (
+                <div
+                  className={styles.volatilityTooltipLiquid}
+                  onMouseEnter={() => setIsPriceLiquidityHovered(true)}
+                  onMouseLeave={() => setIsPriceLiquidityHovered(false)}
+                >
+                  Швидкість обміну на гроші.
                 </div>
-              </div>
+              )}
 
-              <div
-                className={`${styles.priceMetricCard} ${styles.priceMetricCardLong}`}
-              >
-                <div className={styles.priceMetricIcon}>
-                  <Image
-                    src={StarIcon}
-                    alt='Популярність'
-                    width={30}
-                    height={30}
-                  />
+              {!isPopularityHovered ? (
+                <div
+                  className={`${styles.priceMetricCard} ${styles.priceMetricCardLong}`}
+                  onMouseEnter={() => setIsPopularityHovered(true)}
+                  onMouseLeave={() => setIsPopularityHovered(false)}
+                >
+                  <div className={styles.priceMetricIcon}>
+                    <Image
+                      src={StarIcon}
+                      alt='Популярність'
+                      width={30}
+                      height={30}
+                    />
+                  </div>
+                  <div className={styles.priceMetricContent}>
+                    <div className={styles.priceMetricLabel}>Популярність</div>
+                    <div className={styles.priceMetricValue}>8.5/10</div>
+                  </div>
                 </div>
-                <div className={styles.priceMetricContent}>
-                  <div className={styles.priceMetricLabel}>Популярність</div>
-                  <div className={styles.priceMetricValue}>8.5/10</div>
+              ) : (
+                <div
+                  className={styles.volatilityTooltip}
+                  onMouseEnter={() => setIsPopularityHovered(true)}
+                  onMouseLeave={() => setIsPopularityHovered(false)}
+                >
+                  Рівень зацікавленості покупців.
                 </div>
-              </div>
+              )}
             </div>
 
             <div className={styles.monthlyReport}>

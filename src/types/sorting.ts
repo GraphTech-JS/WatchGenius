@@ -9,4 +9,6 @@ export enum SortOption {
   INDEX_DESC = 'За індексом (спадання)',
 }
 
+
+
 export type SortFunction<T> = (a: T, b: T) => number;

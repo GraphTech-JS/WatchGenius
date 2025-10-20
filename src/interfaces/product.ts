@@ -1,6 +1,5 @@
 import type { StaticImageData } from 'next/image';
 
-// Основні типи для продукту
 export interface Product {
   id: string;
   slug: string;
@@ -8,6 +7,7 @@ export interface Product {
   brand: string;
   model: string;
   reference: string;
+  index?: 'A' | 'B' | 'C';
   price: {
     min: number;
     max: number;
@@ -21,17 +21,13 @@ export interface Product {
   image: string | StaticImageData;
   thumbnails: (string | StaticImageData)[];
   description?: string;
-  
-  // Деталі продукту
+
   details: ProductDetail[];
   
-  // Аналітика
   analytics: ProductAnalytics;
   
-  // Схожі моделі
   similarModels: SimilarModel[];
   
-  // Пропозиції продавців
   sellerOffers: SellerOffer[];
 }
 
@@ -69,10 +65,9 @@ export interface SellerOffer {
   shipping: string;
   price: string;
   currency: '€' | '$' | '₴';
-  isSecure: boolean; // Додаємо поле для безпеки
+  isSecure: boolean; 
 }
 
-// Пропси для компонентів
 export interface ProductHeroProps {
   product: Product;
   onSave: () => void;
@@ -81,7 +76,7 @@ export interface ProductHeroProps {
   onShare: () => void;
   onBuy: () => void;
   onGetQuote: () => void;
-  layout?: 'horizontal' | 'vertical'; // Новий пропс для контролю layout'у
+  layout?: 'horizontal' | 'vertical'; 
 }
 
 export interface ProductAnalyticsProps {

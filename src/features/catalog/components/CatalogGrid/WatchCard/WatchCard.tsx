@@ -32,8 +32,9 @@ export const WatchCard: React.FC<Props> = ({
   onOpenFeedback,
 }) => {
   const router = useRouter();
-  const isUp = item.trend.value > 0;
-  const isFlat = item.trend.value === 0;
+  const trendValue = Number(item.trend.value);
+  const isUp = trendValue > 0;
+  const isFlat = trendValue === 0;
 
   const handleCardClick = () => {
     router.push(`/product/${item.slug}`);
@@ -45,13 +46,19 @@ export const WatchCard: React.FC<Props> = ({
       onClick={handleCardClick}
     >
       <div className='flex justify-between items-center'>
-        <span
-          className={`inline-flex items-center justify-center rounded-[5px] ${
-            styles.badge
-          } ${indexBadgeClass(item.index)}`}
-          title={`Індекс ${item.index}`}
-        >
-          {item.index}
+        <span className={styles.badgeTooltipWrapper}>
+          <span
+            className={`inline-flex items-center justify-center rounded-[5px] ${
+              styles.badge
+            } ${indexBadgeClass(item.index)}`}
+          >
+            {item.index}
+          </span>
+          <span className={styles.badgeTooltip}>
+            {item.index === 'A' && 'Топ-сегмент'}
+            {item.index === 'B' && 'Середній сегмент'}
+            {item.index === 'C' && 'Базовий сегмент'}
+          </span>
         </span>
 
         <button
@@ -84,9 +91,7 @@ export const WatchCard: React.FC<Props> = ({
         />
       </div>
 
-      <h4 className={`${styles.watchTitle} mt-[8px] mb-[8px]`}>
-        {item.title}
-      </h4>
+      <h4 className={`${styles.watchTitle} mt-[8px] mb-[8px]`}>{item.title}</h4>
 
       <div className='flex flex-col items-center gap-[9px] sm:flex-row sm:justify-between'>
         <div className='text-[16px] font-medium text-[var(--text-dark,#171414)]'>
@@ -104,14 +109,14 @@ export const WatchCard: React.FC<Props> = ({
           ) : (
             <span
               className={`${styles.trendBadge} ${styles.trendValue} ${
-                isUp ? styles.trendValuePositive : 'text-[#C73D3D] bg-[#FEECEC]'
+                isUp ? styles.trendValuePositive : styles.trendValueNegative
               }`}
               title={`${isUp ? 'Зростання' : 'Падіння'} за ${
                 item.trend.period
               }`}
             >
               {isUp ? <FaArrowUp /> : <FaArrowDown />}
-              {Math.abs(item.trend.value)} %{' '}
+              {Math.abs(trendValue)} %{' '}
               <span className={styles.trendPeriod}>{item.trend.period}</span>
             </span>
           )}
