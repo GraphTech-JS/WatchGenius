@@ -51,7 +51,7 @@ const createWatches = (): WatchItem[] => {
     const variant: 'product' | 'brand' = isBrandCard ? 'brand' : 'product';
     const image = isBrandCard ? RolexBrand : RolexCatalog;
     const buttonLabel = index === 'B' ? 'Get Quote' : 'Buy on Chrono24';
-    const trendValue = index === 'B' ? 0 : 7;
+    const trendValue = index === 'B' ? -5 : index === 'C' ? -2 : 7;
     const price = 15000 + (i * 1000);
 
     items.push({

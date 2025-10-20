@@ -6,6 +6,7 @@ import { FixedSidebar } from '@/features/catalog/components/FixedSidebar/FixedSi
 import { CatalogGrid } from '@/features/catalog/components/CatalogGrid/CatalogGrid';
 import { TabletSidebar } from '@/features/catalog/components/TabletSidebar/TabletSidebar';
 import { CatalogControls } from '@/features/catalog/components/CatalogControls/CatalogControls';
+import { ActiveFiltersBar } from '@/features/catalog/components/ActiveFiltersBar/ActiveFiltersBar';
 import { FeedbackModal } from '@/components/FeedbackModal/FeedbackModal';
 import { useFeedbackModal } from '@/hooks/useFeedbackModal';
 
@@ -19,8 +20,7 @@ const CatalogPage = () => {
   const sidebar = useSidebarPosition();
   const feedbackModal = useFeedbackModal();
 
-  const handleSaveToChat = () => {
-  };
+  const handleSaveToChat = () => {};
 
   const handleApplyFilters = (filters: UseCatalogFiltersReturn) => {
     search.applySidebarFilters(filters);
@@ -28,12 +28,11 @@ const CatalogPage = () => {
 
   const handleResetFilters = () => {
     search.setSearchTerm('');
-    search.setQuickIndexFilter(null);
+    search.setSelectedIndexes([]);
     search.clearSidebarFilters();
   };
 
-  const handleAskGeni = () => {
-  };
+  const handleAskGeni = () => {};
 
   return (
     <div className='bg-white py-[60px] min-h-screen mx-auto'>
@@ -56,8 +55,8 @@ const CatalogPage = () => {
       <CatalogControls
         searchTerm={search.searchTerm}
         onSearchChange={search.setSearchTerm}
-        selectedIndex={search.quickIndexFilter}
-        onIndexChange={search.toggleIndex}
+        selectedIndexes={search.selectedIndexes}
+        onToggleIndex={search.toggleIndex}
         sortValue={search.sortOption}
         onSortChange={search.setSortOption}
         onSaveToChat={handleSaveToChat}
@@ -79,7 +78,20 @@ const CatalogPage = () => {
           />
         </FixedSidebar>
 
-        <div className='flex-1 min-w-0'>
+        <div className='relative flex-1 min-w-0'>
+          <ActiveFiltersBar
+            ref={search.chipsRef as React.RefObject<HTMLDivElement>}
+            chips={search.activeFilters.map((c) => ({
+              id: c.id,
+              label: c.label,
+            }))}
+            onRemove={(id) => {
+              const chip = search.activeFilters.find((c) => c.id === id);
+              if (chip)
+                search.removeFilter({ group: chip.group, value: chip.value });
+            }}
+            onClearAll={search.clearAllFilters}
+          />
           <CatalogGrid
             items={search.filteredItems}
             initialCount={12}

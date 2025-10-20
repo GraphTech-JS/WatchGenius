@@ -27,7 +27,8 @@ export const useCatalogFilters = () => {
   const [yearFrom, setYearFrom] = useState<string>('2000');
   const [yearTo, setYearTo] = useState<string>('2005');
 
-  const [indexValue, setIndexValue] = useState<IndexButton | null>(null);
+  const [selectedIndexes, setSelectedIndexes] = useState<IndexButton[]>([]);
+  const toggleIndex = useCallback((index: IndexButton)=> setSelectedIndexes((prev) => toggleInArray(prev, index)), [])
 
   const filteredBrands = useMemo(
     () =>
@@ -98,7 +99,7 @@ export const useCatalogFilters = () => {
     setYearFrom('2000');
     setYearTo('2005');
 
-    setIndexValue(null);
+    setSelectedIndexes([]);
     setSearchTerm('');
   }, []);
 
@@ -107,6 +108,8 @@ export const useCatalogFilters = () => {
     selectedBrands,
     showAllBrands,
     openKeys,
+    selectedIndexes,
+    setSelectedIndexes,
     selectedConditions,
     selectedMechanisms,
     mechanismShowAll,
@@ -118,7 +121,6 @@ export const useCatalogFilters = () => {
     currency,
     yearFrom,
     yearTo,
-    indexValue,
 
     filteredBrands,
     visibleBrands,
@@ -127,6 +129,7 @@ export const useCatalogFilters = () => {
     setShowAllBrands,
     setOpenKeys,
     toggleBrand,
+    toggleIndex,
     toggleCondition,
     toggleMechanism,
     toggleMaterial,
@@ -137,7 +140,6 @@ export const useCatalogFilters = () => {
     setYearFrom,
     setYearTo,
     setMechanismShowAll,
-    setIndexValue,
     reset,
   };
 };

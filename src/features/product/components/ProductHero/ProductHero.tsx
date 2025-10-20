@@ -109,6 +109,9 @@ const ProductHero: React.FC<ProductHeroProps> = ({
     return `${currency} ${min.toLocaleString()}-${max.toLocaleString()}`;
   };
 
+  const productIndex =
+    product.index ?? product.similarModels?.[0]?.index ?? 'A';
+
   return (
     <div
       className={`flex ${
@@ -132,16 +135,23 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             className='object-contain p-4'
             priority
           />
-          <div
-            className='absolute top-4 right-4 rounded-[5px] bg-[#b4e1c7] flex items-center justify-center w-[44px] h-[44px]'
-            style={{ padding: '6px 9px 7px 8px' }}
-          >
-            <span
-              className='font-bold text-[20px] text-[#067b06]'
-              style={{ fontFamily: 'Inter' }}
-            >
-              A
-            </span>
+          <div className='absolute top-4 right-4 z-10'>
+            <div className='relative group'>
+              <div className={styles.indexBadgeContainer}>
+                <div className={styles.indexBadgeWrap}>
+                  <div className={styles.indexBadgeBox}>
+                    <span className={styles.indexBadgeText}>
+                      {productIndex}
+                    </span>
+                  </div>
+                  <div className={styles.indexTooltip}>
+                    {productIndex === 'A' && 'Топ-сегмент'}
+                    {productIndex === 'B' && 'Середній сегмент'}
+                    {productIndex === 'C' && 'Базовий сегмент'}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div
