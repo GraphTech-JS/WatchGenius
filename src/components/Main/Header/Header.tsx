@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,10 +11,10 @@ import {
   SearchWhite,
   Logo,
   Robot,
-  Heart,
   Close,
   Menu,
 } from "../../../../public/icons";
+import { HeartIcon } from "../../../../public/social/Icon";
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
@@ -25,16 +27,27 @@ export const Header = () => {
   const openMenu = () => {
     setMenuClosing(false);
     setOpen(true);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        const el = document.getElementById("mobileMenu");
+        if (el) el.classList.add(styles.menuOpen);
+      });
+    });
   };
 
   const startCloseMenu = () => {
-    // запускаємо анімацію закриття
+    const el = document.getElementById("mobileMenu");
+    if (el) {
+      el.classList.remove(styles.menuOpen);
+      el.classList.add(styles.menuClosing);
+    }
+
     setMenuClosing(true);
-    // після завершення transition (200ms) — відмонтовуємо
     setTimeout(() => {
       setOpen(false);
       setMenuClosing(false);
-    }, 200);
+    }, 400);
   };
 
   const [selectedCurrency, setSelectedCurrency] = useState("EUR");
@@ -43,6 +56,51 @@ export const Header = () => {
   const currencyRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+
+  const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  const handleSectionClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    id: string
+  ) => {
+    event.preventDefault();
+
+    if (pathname === "/") {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      router.push(`/#${id}`);
+    }
+  };
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+
+    const sections = ["dealers", "treands", "contacts"];
+    const handleScroll = () => {
+      let currentSection = null;
+      for (const id of sections) {
+        const section = document.getElementById(id);
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          if (rect.top <= 150 && rect.bottom >= 150) {
+            currentSection = id;
+            break;
+          }
+        }
+      }
+      setActiveSection(currentSection);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [pathname]);
 
   useEffect(() => setMounted(true), []);
 
@@ -90,18 +148,47 @@ export const Header = () => {
         </Link>
 
         <nav className={`hidden lg:flex gap-11 lg:pl-12 `}>
-          <Link href="/catalog" className={styles.headerLink} prefetch={false}>
-            Каталог
-          </Link>
-          <Link href="/dealers" className={styles.headerLink} prefetch={false}>
-            Дилери
-          </Link>
-          <Link href="#treands" className={styles.headerLink} prefetch={false}>
-            Тренди
-          </Link>
-          <Link href="#contacts" className={styles.headerLink} prefetch={false}>
-            Контакти
-          </Link>
+          {[
+            { href: "/catalog", label: "Каталог", type: "page" },
+            { href: "#dealers", label: "Дилери", type: "section" },
+            { href: "#treands", label: "Тренди", type: "section" },
+            { href: "#contacts", label: "Контакти", type: "section" },
+          ].map(({ href, label, type }) => {
+            const isCatalog = pathname === "/catalog";
+            const isMain = pathname === "/";
+            const sectionId = href.replace("#", "");
+            const isActive =
+              (isCatalog && href === "/catalog") ||
+              (isMain && activeSection === sectionId);
+
+            const isInactive =
+              (isCatalog && href !== "/catalog") ||
+              (isMain && activeSection && activeSection !== sectionId);
+
+            const commonClass = `${styles.headerLink} ${
+              isActive ? styles.headerLinkActive : ""
+            } ${isInactive ? styles.headerLinkInactive : ""}`;
+
+            return type === "page" ? (
+              <Link
+                key={label}
+                href={href}
+                className={commonClass}
+                prefetch={false}
+              >
+                {label}
+              </Link>
+            ) : (
+              <a
+                key={label}
+                href={href}
+                onClick={(e) => handleSectionClick(e, sectionId)}
+                className={commonClass}
+              >
+                {label}
+              </a>
+            );
+          })}
         </nav>
         <div className="flex ml-4 gap-4 relative">
           <div className="hidden md:flex gap-5 ">
@@ -221,17 +308,14 @@ export const Header = () => {
             </button>
           </div>
           <div className="hidden lg:flex gap-3">
-            <button className={`${styles.headerLangSwitchBtn} shrink-0`}>
+            <button
+              className={`${styles.headerLangSwitchBtn} shrink-0`}
+              onClick={() => window.dispatchEvent(new Event("openChat"))}
+            >
               <Image src={Robot.src} alt="AI агент" width={22} height={22} />
             </button>
             <button className={`${styles.headerLangSwitchBtn} shrink-0`}>
-              <Image
-                src={Heart.src}
-                alt="Heart"
-                width={20}
-                height={18}
-                className=""
-              />
+              <HeartIcon className={`w-5 h-5 text-green-800 `} />
             </button>
           </div>
           <div className="lg:hidden flex ml-4 w-8">
@@ -260,15 +344,7 @@ export const Header = () => {
           createPortal(
             <div
               id="mobileMenu"
-              className={`${
-                styles.headerMobileMenu
-              } fixed lg:hidden flex flex-col py-8 rounded-none md:rounded-b-xl
-        ${
-          open
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 -translate-y-3 pointer-events-none"
-        }
-        transition-all duration-200 ease-out will-change-transform`}
+              className={`${styles.headerMobileMenu} fixed flex flex-col py-8 rounded-none md:rounded-b-xl`}
             >
               <div
                 className={`${styles.headerMobileMenuTop} flex w-full justify-center `}

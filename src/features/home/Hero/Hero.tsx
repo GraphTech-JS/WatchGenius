@@ -11,7 +11,7 @@ export const Hero = () => {
       <div
         className={`${styles.heroContainer} 
         w-full relative 
-        bg-[url('/hero-section/HeroBgBig.png')] md:bg-[url('/hero-section/HeroBgBig.png')] lg:bg-[url('/hero-section/HeroBgBig.png')] 
+        bg-[url('/hero-section/HeroBgBig.webp')] md:bg-[url('/hero-section/HeroBgBig.webp')] lg:bg-[url('/hero-section/HeroBgBig.webp')] 
         bg-position-[center_right_-230px] sm:bg-position-[center_right_-200px] md:bg-position-[top_-70px_right_-120px] lg:bg-position-[center_left_204px]
         bg-no-repeat bg-cover md:bg-size-[auto_620px] lg:bg-cover `}
       >
@@ -43,9 +43,10 @@ export const Hero = () => {
                   <div>Каталог</div>
                 </button>
               </Link>
-              <Link href="/chat" className={styles.heroLink}>
+              <Link href="" className={styles.heroLink}>
                 <button
                   className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer`}
+                  onClick={() => window.dispatchEvent(new Event("openChat"))}
                 >
                   <RobotWhiteIcon
                     className={`${styles.footerSocialLinkItem} w-8 h-8 md:text-white `}

@@ -29,7 +29,27 @@
   transition: all 0.3s ease;
   position: relative;
 }
-
+.headerLink::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color: #04694f;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+.headerLinkActive {
+  color: var(--black);
+}
+.headerLinkInactive {
+  color: #17141480;
+  pointer-events: auto;
+}
+.headerLinkActive::after {
+  width: 80%;
+}
 .headerMobileMenuLink {
   font-size: 24px;
   font-weight: 600;
@@ -65,8 +85,25 @@
   z-index: 30;
   box-shadow: 0px 4px 19.6px 2px rgba(0, 0, 0, 0.25);
   overflow: hidden;
+  pointer-events: none;
+
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.menuOpen {
+  opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
 }
+
+.menuClosing {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
 .headerMobileLangSwitchBtn {
   color: var(--white);
   font-weight: 700;
