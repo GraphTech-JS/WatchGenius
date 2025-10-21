@@ -4,7 +4,6 @@
   padding: 1rem 1.25rem;
   z-index: 40;
   position: fixed;
-  overflow: hidden;
 }
 
 .logoName {
@@ -30,7 +29,27 @@
   transition: all 0.3s ease;
   position: relative;
 }
-
+.headerLink::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color: #04694f;
+  border-radius: 10px;
+  transition: width 0.3s ease;
+}
+.headerLinkActive {
+  color: var(--black);
+}
+.headerLinkInactive {
+  color: #17141480;
+  pointer-events: auto;
+}
+.headerLinkActive::after {
+  width: 80%;
+}
 .headerMobileMenuLink {
   font-size: 24px;
   font-weight: 600;
@@ -60,14 +79,31 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - 60px);
-  background: linear-gradient(0deg, #d1c4ac, #d1c4ac),
-    linear-gradient(0deg, rgba(0, 0, 0, 0.27), rgba(0, 0, 0, 0.27));
-  z-index: 50;
+  height: calc(100% - 56px);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.27), rgba(0, 0, 0, 0.27)),
+    linear-gradient(0deg, #d1c4ac, #d1c4ac);
+  z-index: 30;
   box-shadow: 0px 4px 19.6px 2px rgba(0, 0, 0, 0.25);
   overflow: hidden;
+  pointer-events: none;
+
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.menuOpen {
+  opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
 }
+
+.menuClosing {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+
 .headerMobileLangSwitchBtn {
   color: var(--white);
   font-weight: 700;
@@ -81,6 +117,9 @@
 }
 .headerMobileSearchInput:focus-visible {
   outline: none;
+}
+.inactiveOption {
+  color: #9ca3af;
 }
 @media (width >= 48rem /* 768px */) {
   .header {
@@ -107,7 +146,7 @@
     height: 430px;
     overflow: hidden;
     pointer-events: auto;
-    z-index: -1;
+    z-index: 30;
   }
 }
 @media (width >= 64rem /* 1024px */) {

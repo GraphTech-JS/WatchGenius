@@ -3,7 +3,7 @@
 import { ChatMenu } from "@/components/Chat/ChatMenu";
 import { ChatButton } from "@/components/Chat/components/ChatButton/ChatButton";
 import { FloatingButton } from "@/components/FloatingButton";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function ChatClient({
   children,
@@ -11,6 +11,19 @@ export default function ChatClient({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const openChat = () => setOpen(true);
+    const closeChat = () => setOpen(false);
+
+    window.addEventListener("openChat", openChat);
+    window.addEventListener("closeChat", closeChat);
+
+    return () => {
+      window.removeEventListener("openChat", openChat);
+      window.removeEventListener("closeChat", closeChat);
+    };
+  }, []);
 
   return (
     <div className="flex relative w-full h-full">
