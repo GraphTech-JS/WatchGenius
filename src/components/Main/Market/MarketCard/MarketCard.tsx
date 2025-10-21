@@ -98,7 +98,7 @@ export const MarketCard: React.FC<IWatch> = ({
         />
         <div className="flex flex-col h-full justify-between items-center gap-2 md:gap-2 lg:gap-3">
           <div
-            className={`${styles.cardWatchName} text-center max-h-[54px] md:max-h-[36px] lg:max-h-[54px] max-w-[164px] lg:max-w-[212px] overflow-hidden`}
+            className={`${styles.cardWatchName} text-center max-h-[54px] md:max-h-[36px]  max-w-[164px] lg:max-w-[212px] overflow-hidden`}
           >
             {brand}
           </div>

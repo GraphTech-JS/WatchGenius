@@ -450,27 +450,36 @@ export const Header = () => {
                 >
                   Каталог
                 </Link>
-                <Link
-                  href="/dealers"
-                  onClick={startCloseMenu}
+                <a
+                  href="#dealers"
+                  onClick={(e) => {
+                    handleSectionClick(e, "dealers");
+                    startCloseMenu();
+                  }}
                   className={styles.headerMobileMenuLink}
                 >
                   Дилери
-                </Link>
-                <Link
+                </a>
+                <a
                   href="#treands"
-                  onClick={startCloseMenu}
+                  onClick={(e) => {
+                    handleSectionClick(e, "treands");
+                    startCloseMenu();
+                  }}
                   className={styles.headerMobileMenuLink}
                 >
                   Тренди
-                </Link>
-                <Link
+                </a>
+                <a
                   href="#contacts"
-                  onClick={startCloseMenu}
+                  onClick={(e) => {
+                    handleSectionClick(e, "contacts");
+                    startCloseMenu();
+                  }}
                   className={styles.headerMobileMenuLink}
                 >
                   Контакти
-                </Link>
+                </a>
               </div>
             </div>,
             document.body
