@@ -11,7 +11,7 @@ import {
 
 export const Footer = () => {
   return (
-    <footer className={`${styles.footer} pb-[49px] md:pb-[30px]`} id="footer">
+    <footer className={`${styles.footer} pb-[49px] md:pb-[30px]`} id="contacts">
       <div
         className={`${styles.footerContainer} flex flex-col md:flex-row md:justify-between items-center gap-[30px]`}
       >
@@ -111,17 +111,17 @@ export const Footer = () => {
           <div className="flex md:flex-col flex-row gap-8">
             <Link href="#" className={styles.footerSocialLink} prefetch={false}>
               <DiscordIcon
-                className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50`}
+                className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50 hover:text-white/90`}
               />
             </Link>
             <Link href="#" className={styles.footerSocialLink} prefetch={false}>
               <TelegramIcon
-                className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50`}
+                className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50 hover:text-white/90`}
               />
             </Link>
             <Link href="#" className={styles.footerSocialLink} prefetch={false}>
               <InstagramIcon
-                className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50`}
+                className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50 hover:text-white/90`}
               />
             </Link>
           </div>

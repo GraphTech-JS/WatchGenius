@@ -43,36 +43,40 @@ const charts: HeroChartItemProps[] = [
 export const HeroChartsCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const swipeRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const checkSize = () => setIsDesktop(window.innerWidth >= 1024);
+    const checkSize = () => {
+      const w = window.innerWidth;
+      setIsDesktop(w >= 1024);
+      setIsTablet(w >= 768 && w < 1024);
+    };
     checkSize();
     window.addEventListener("resize", checkSize);
     return () => window.removeEventListener("resize", checkSize);
   }, []);
 
   useEffect(() => {
-    if (!isDesktop) {
-      const interval = setInterval(() => {
-        setActiveIndex((prevIndex) =>
-          prevIndex === charts.length - 1 ? 0 : prevIndex + 1
-        );
-      }, 40000);
-      return () => clearInterval(interval);
-    }
-  }, [isDesktop]);
+    if (isDesktop || isTablet) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev === charts.length - 1 ? 0 : prev + 1));
+    }, 40000);
+    return () => clearInterval(interval);
+  }, [isDesktop, isTablet]);
 
   // Mobile drag + snap + sync
   useEffect(() => {
     if (isDesktop) return;
     const el = swipeRef.current;
     if (!el) return;
+
     let isDown = false;
     let startX = 0;
     let startScroll = 0;
     let pointerId: number | null = null;
+
     const onDown = (e: PointerEvent) => {
       isDown = true;
       startX = e.clientX;
@@ -80,32 +84,59 @@ export const HeroChartsCarousel = () => {
       pointerId = e.pointerId;
       (e.target as Element).setPointerCapture?.(e.pointerId);
     };
+
     const onMove = (e: PointerEvent) => {
       if (!isDown) return;
       el.scrollLeft = startScroll - (e.clientX - startX);
     };
+
     const onUp = (e: PointerEvent) => {
       if (!isDown) return;
       isDown = false;
       if (pointerId !== null) {
-        try { (e.target as Element).releasePointerCapture?.(pointerId); } catch {}
+        try {
+          (e.target as Element).releasePointerCapture?.(pointerId);
+        } catch {}
         pointerId = null;
       }
-      const vw = el.clientWidth;
-      const idx = Math.round(el.scrollLeft / vw);
-      setActiveIndex(idx);
-      el.scrollTo({ left: idx * vw, behavior: "smooth" });
+
+      // mobile snap
+      if (!isTablet) {
+        const vw = el.clientWidth;
+        const idx = Math.round(el.scrollLeft / vw);
+        setActiveIndex(idx);
+        el.scrollTo({ left: idx * vw, behavior: "smooth" });
+      }
     };
+
     const onScroll = () => {
-      const vw = el.clientWidth;
-      const idx = Math.round(el.scrollLeft / vw);
-      if (idx !== activeIndex) setActiveIndex(idx);
+      if (isTablet) {
+        const chartWidth = 350 + 16;
+        const scroll = el.scrollLeft;
+        const maxScroll = el.scrollWidth - el.clientWidth;
+        const zone1End = chartWidth * 0.7;
+        const zone2End = maxScroll - chartWidth * 0.7;
+
+        if (scroll < zone1End) {
+          setActiveIndex(0);
+        } else if (scroll < zone2End) {
+          setActiveIndex(1);
+        } else {
+          setActiveIndex(2);
+        }
+      } else {
+        const vw = el.clientWidth;
+        const idx = Math.round(el.scrollLeft / vw);
+        if (idx !== activeIndex) setActiveIndex(idx);
+      }
     };
+
     el.addEventListener("pointerdown", onDown);
     el.addEventListener("pointermove", onMove);
     el.addEventListener("pointerup", onUp);
     el.addEventListener("pointercancel", onUp);
     el.addEventListener("scroll", onScroll, { passive: true });
+
     return () => {
       el.removeEventListener("pointerdown", onDown);
       el.removeEventListener("pointermove", onMove);
@@ -113,16 +144,23 @@ export const HeroChartsCarousel = () => {
       el.removeEventListener("pointercancel", onUp);
       el.removeEventListener("scroll", onScroll);
     };
-  }, [isDesktop, activeIndex]);
+  }, [isDesktop, isTablet, activeIndex]);
 
   const scrollToChart = (index: number) => {
     setActiveIndex(index);
+
     if (isDesktop && containerRef.current) {
       const chartWidth = 350 + 16;
       containerRef.current.scrollTo({
         left: index * chartWidth,
         behavior: "smooth",
       });
+    } else if (isTablet && swipeRef.current) {
+      const el = swipeRef.current;
+      const chartWidth = 350 + 16;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      const target = Math.min(index * chartWidth, maxScroll);
+      el.scrollTo({ left: target, behavior: "smooth" });
     } else if (!isDesktop && swipeRef.current) {
       const el = swipeRef.current;
       const viewport = el.clientWidth;
@@ -164,12 +202,53 @@ export const HeroChartsCarousel = () => {
     );
   }
 
+  if (isTablet) {
+    const tabletDots = [0, 1, 2];
+    return (
+      <div className={`${styles.heroChartsCarousel} w-full flex flex-col`}>
+        <div
+          ref={containerRef}
+          className={`${styles.heroChartContainer} flex gap-4 h-[108px] lg:h-[160px] rounded-l-[15px] overflow-hidden`}
+        >
+          <div
+            ref={swipeRef}
+            className={`flex gap-4 overflow-x-auto ${styles.swipe} ${styles.noScrollbar}`}
+            style={{ scrollSnapType: "x mandatory" }}
+          >
+            {charts.map((chart) => (
+              <div
+                key={chart.id}
+                className="snap-start shrink-0"
+                style={{ flex: "0 0 auto", width: "350px" }}
+              >
+                <div className={`${styles.heroChartItem} flex rounded-[10px]`}>
+                  <HeroChartItem {...chart} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="flex justify-center gap-2 mt-3">
+          {tabletDots.map((dotIndex) => (
+            <button
+              key={dotIndex}
+              onClick={() => scrollToChart(dotIndex)}
+              className={`${styles.dot} ${
+                activeIndex === dotIndex ? styles.activeDot : styles.inactiveDot
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`${styles.heroChartsCarousel} w-full flex flex-col items-center`}
     >
       <div
-        className={`${styles.heroChartContainer} w-full h-[108px] max-w-[360px] rounded-[15px] p-[6px]`}
+        className={`${styles.heroChartContainer} w-full h-[108px] max-w-[362px] rounded-[15px] `}
       >
         <div
           ref={swipeRef}
@@ -182,7 +261,9 @@ export const HeroChartsCarousel = () => {
               className="snap-start shrink-0 flex justify-center"
               style={{ flex: "0 0 100%", maxWidth: "100%" }}
             >
-              <div className={`${styles.heroChartItem} flex rounded-[10px] h-full w-full`}>
+              <div
+                className={`${styles.heroChartItem} flex rounded-[10px] h-full w-full`}
+              >
                 <HeroChartItem {...chart} />
               </div>
             </div>
@@ -204,4 +285,3 @@ export const HeroChartsCarousel = () => {
     </div>
   );
 };
-

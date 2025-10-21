@@ -6,8 +6,7 @@
 .productCard:hover {
   box-shadow: 0px 4px 18.1px 5px rgba(0, 0, 0, 0.4);
 }
-.marketCardHeadPercent {
-}
+
 .Price {
   font-weight: 500;
 }
@@ -36,4 +35,19 @@
 }
 .percentNegative {
   color: rgba(185, 27, 27, 0.9569);
+}
+
+.productCardScore {
+  font-size: 13px;
+}
+.marketCardHeadPercent {
+  font-size: 14px;
+}
+@media (width >= 48rem /* 768px */) {
+  .productCardScore {
+    font-size: 15px;
+  }
+  .marketCardHeadPercent {
+    font-size: 16px;
+  }
 }

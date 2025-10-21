@@ -19,3 +19,17 @@
   color: rgba(0, 0, 0, 0.7);
   line-height: 19px;
 }
+.cardImage {
+  width: auto;
+
+  max-height: 125px;
+  object-fit: contain;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+@media (width >= 48rem /* 768px */) {
+  .cardImage {
+    height: auto;
+    width: clamp(80px, 12vw, 134px);
+    max-height: clamp(70px, 10vw, 140px);
+  }
+}

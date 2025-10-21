@@ -23,7 +23,7 @@ export const Trending = () => {
   }, []);
   return (
     <section
-      id="trending"
+      id="treands"
       className={`${styles.trending} max-w-[90rem] mx-auto px-[1.25rem] lg:px-[6.25rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
     >
       <div className={styles.trendingContainer}>

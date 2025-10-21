@@ -61,9 +61,9 @@ export const MarketCard: React.FC<IWatch> = ({
       } else if (width >= 834) {
         setChartHeight(70); // tablets large
       } else if (width >= 768) {
-        setChartHeight(60); // tablets small
+        setChartHeight(70); // tablets small
       } else {
-        setChartHeight(70); // mobile
+        setChartHeight(79); // mobile
       }
     };
 
@@ -94,10 +94,12 @@ export const MarketCard: React.FC<IWatch> = ({
           alt={brand}
           width={134}
           height={142}
-          className="w-auto max-h-[125px] md:max-h-[84px] lg:max-h-[140px]"
+          className={`${styles.cardImage}`}
         />
-        <div className="flex flex-col gap-2 md:gap-0">
-          <div className={`${styles.cardWatchName} text-center max-h-[54px]`}>
+        <div className="flex flex-col h-full justify-between items-center gap-2 md:gap-2 lg:gap-3">
+          <div
+            className={`${styles.cardWatchName} text-center max-h-[54px] md:max-h-[36px]  max-w-[164px] lg:max-w-[212px] overflow-hidden`}
+          >
             {brand}
           </div>
           <LineChart
