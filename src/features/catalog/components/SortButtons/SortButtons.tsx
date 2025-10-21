@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
-import { SortButtonsProps, WatchIndex } from '@/interfaces';
+import { SortButtonsProps } from '@/interfaces/catalog';
+import { WatchIndex } from '@/interfaces/watch';
 
 import styles from './SortButtons.module.css';
 

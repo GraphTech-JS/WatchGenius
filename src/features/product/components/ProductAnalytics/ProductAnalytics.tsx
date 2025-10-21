@@ -25,7 +25,9 @@ import {
   PolygonIcon,
   EllipseIcon,
 } from '@/product-icons';
+
 import PriceChart from './components/PriceChart';
+import TrendGauge from './components/TrendGauge';
 
 const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   analytics,
@@ -42,8 +44,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   const [isPopularityHovered, setIsPopularityHovered] = useState(false);
   const screenWidth = useScreenWidth();
 
-  const demandPercentage = 65;
-  const rotationAngle = (demandPercentage / 100) * 180 - 90;
+  const isDesktop = (screenWidth ?? 1280) >= 1280;
+  const gaugeW = isDesktop ? 372 : 310;
+  const gaugeH = isDesktop ? 338 : 281;
 
   const tabs = [
     { id: 'parameters', label: 'Параметри' },
@@ -200,43 +203,39 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
             </div>
 
             <div className={styles.trendGauge}>
-              <div className={styles.gaugeContainer}>
-                <div className={styles.gaugeArc}>
-                  <Image
-                    src={DugaIcon}
-                    alt='Gauge Arc'
-                    fill
-                    className={styles.gaugeImage}
-                  />
-                </div>
-                <div
-                  className={styles.gaugeNeedle}
-                  style={{ transform: `rotate(${rotationAngle}deg)` }}
-                >
-                  <Image
-                    src={PolygonIcon}
-                    alt='Gauge Needle'
-                    fill
-                    className={styles.gaugeImage}
-                  />
-                </div>
-                <div className={styles.gaugeCenter}>
-                  <Image
-                    src={EllipseIcon}
-                    alt='Gauge Center'
-                    fill
-                    className={styles.gaugeImage}
-                  />
-                </div>
-                <div className={styles.gaugeValue}>{demandPercentage}%</div>
-                <div className={styles.gaugeLabels}>
-                  <span className={styles.gaugeLabelLow}>Low</span>
-                  <span className={styles.gaugeLabelHigh}>Hight</span>
-                </div>
-                <div className={styles.lastUpdated}>
-                  Актуально на {analytics.lastUpdated}
-                </div>
-              </div>
+              <TrendGauge
+                value={analytics.demand}
+                lastUpdated={analytics.lastUpdated}
+                arcSrc={DugaIcon}
+                pointerSrc={PolygonIcon}
+                centerSrc={EllipseIcon}
+                width={gaugeW}
+                height={gaugeH}
+                config={{
+                  pointerAnchorX: 0.28,
+                  pointerAnchorY: 0.915,
+                  pointerOffsetX: 1,
+                  pointerOffsetY: -1,
+
+                  pivotYR: 0.54,
+                  labelsYR: 0.66,
+                  labelsLeftXR: 0.00,
+                  labelsRightXR: 1.00,
+                  valueYR: 0.688,
+                  lastUpdatedYR: 0.94,
+
+                  fontFamily: "'Inter', sans-serif",
+                  labelFontSizePx: 20,
+                  labelFontWeight: 600,
+                  labelColor: '#000',
+
+                  valueFontSizePx: 24,
+                  valueColor: '#04694f',
+
+                  lastUpdatedFontSizePx: 12,
+                  lastUpdatedColor: 'rgba(0,0,0,0.6)',
+                }}
+              />
             </div>
           </div>
         )}
@@ -420,6 +419,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   Показник різниці ціни за обраний період.
                 </div>
               )}
+
               {!isPriceLiquidityHovered ? (
                 <div
                   className={styles.priceMetricCard}

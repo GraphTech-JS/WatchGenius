@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { ProductHeroProps } from '@/interfaces/product';
+import { useCompareContext } from '@/context/CompareContext';
 import {
   LinkIcon,
   ScalesIcon,
@@ -39,18 +40,28 @@ const ProductHero: React.FC<ProductHeroProps> = ({
   const [showGetQuoteModal, setShowGetQuoteModal] = useState(false);
   const [showBuyModal, setShowBuyModal] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  const [isInComparison, setIsInComparison] = useState(false);
   const screenWidth = useScreenWidth();
+  const { addToCompare, removeFromCompare, isInCompare } = useCompareContext();
+  const isInComparison = isInCompare(product.id);
+
+  const getIndexBadgeClasses = (index: string) => {
+    switch (index) {
+      case 'A':
+        return { box: styles.indexBadgeBoxA, text: styles.indexBadgeTextA };
+      case 'B':
+        return { box: styles.indexBadgeBoxB, text: styles.indexBadgeTextB };
+      case 'C':
+        return { box: styles.indexBadgeBoxC, text: styles.indexBadgeTextC };
+      default:
+        return { box: styles.indexBadgeBoxA, text: styles.indexBadgeTextA };
+    }
+  };
 
   const thumbnailsToRender =
     screenWidth && screenWidth < 1150
       ? product.thumbnails.slice(0, 3)
       : product.thumbnails.slice(0, 4);
 
-  const handleCompare = () => {
-    setIsInComparison(!isInComparison);
-    setShowComparisonModal(true);
-  };
   const handleShare = () => setShowShareModal(true);
 
   const handleSave = () => {
@@ -139,8 +150,16 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             <div className='relative group'>
               <div className={styles.indexBadgeContainer}>
                 <div className={styles.indexBadgeWrap}>
-                  <div className={styles.indexBadgeBox}>
-                    <span className={styles.indexBadgeText}>
+                  <div
+                    className={`${styles.indexBadgeBox} ${
+                      getIndexBadgeClasses(productIndex).box
+                    }`}
+                  >
+                    <span
+                      className={`${styles.indexBadgeText} ${
+                        getIndexBadgeClasses(productIndex).text
+                      }`}
+                    >
                       {productIndex}
                     </span>
                   </div>
@@ -242,11 +261,22 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             {formatPrice()}
           </div>
           <div className='flex items-center space-x-1'>
-            <span className='font-inter text-[20px] sm:text-[16px] lg:text-[16px] xl:text-[24px] font-semibold text-center text-[#05873b]'>
+            <span
+              className='font-inter text-[20px] font-semibold text-center text-[#05873b]'
+              style={{
+                fontWeight: 600,
+                fontSize: '20px',
+                textAlign: 'center',
+                color: '#05873b',
+              }}
+            >
               ↑ {Math.abs(product.priceTrend.value)}%
             </span>
-            <span className='font-inter text-[15px] sm:text-[14px] lg:text-[14px] xl:text-[16px] font-normal text-[#05873b]'>
-              за {product.priceTrend.period}
+            <span
+              className='font-inter text-[15px] font-normal text-[#05873b]'
+              style={{ fontWeight: 400, fontSize: '15px', color: '#05873b' }}
+            >
+              за 30 днів
             </span>
           </div>
         </div>
@@ -338,7 +368,14 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             <>
               <div className='md:col-span-1 md:order-3 xl:col-span-1 xl:order-2'>
                 <button
-                  onClick={handleCompare}
+                  onClick={() => {
+                    if (isInComparison) {
+                      removeFromCompare(product.id);
+                    } else {
+                      addToCompare(product.id);
+                      setShowComparisonModal(true);
+                    }
+                  }}
                   className={`${styles.actionButtonNarrow} ${
                     isInComparison ? styles.addedToCompare : ''
                   } group`}

@@ -8,6 +8,8 @@ interface Message {
 interface IMainContext {
   menuOpened: boolean;
   setMenuOpened: (opened: boolean) => void;
+  sideChatOpened: boolean;
+  setSideChatOpened: (opened: boolean) => void;
   setMessages: (messages: Message[]) => void;
   setMessage: (message: Message) => void;
   message: Message;
@@ -47,8 +49,9 @@ interface ISearchProps extends React.HTMLAttributes<HTMLInputElement> {
 
 
 
-export * from './catalog';
-export * from './product';
-export * from './compare';
+// export * from "./catalog";
+export * from "./product";
+export * from "./compare";
+export * from "./watch";
 
-export type { Message, IMainContext, IWatch, ISearchProps};
+export type { Message, IMainContext, IWatch, ISearchProps };

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { MainContextProvider } from '@/context';
 import { Akatab, Inter, Roboto_Flex } from 'next/font/google';
+import { CompareProvider } from '@/context/CompareContext';
 
 // CLEAN UP
 
@@ -58,7 +59,9 @@ export default function RootLayout({
     >
       <body>
         <main>
-          <MainContextProvider>{children}</MainContextProvider>
+          <MainContextProvider>
+            <CompareProvider>{children}</CompareProvider>
+          </MainContextProvider>
         </main>
       </body>
     </html>

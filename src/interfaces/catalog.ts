@@ -65,7 +65,7 @@ export interface EmptyStateProps {
 }
 
 export interface SortButtonsProps{
-   selectedIndexes?: WatchIndex[];  // Змінити з string[] на WatchIndex[]
+   selectedIndexes?: WatchIndex[];  
   onToggleIndex?: (index: WatchIndex) => void;
 }
 

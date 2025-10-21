@@ -7,14 +7,15 @@ import { SimilarModelsProps } from '@/interfaces/product';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { ScalesIcon } from '@/product-icons';
 import styles from './SimilarModels.module.css';
+import { useCompareContext } from '@/context/CompareContext';
 
 const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
   const router = useRouter();
   const [selectedModels, setSelectedModels] = useState<Set<string>>(new Set());
-
+  const { addToCompare } = useCompareContext();
   const handleCompareModels = () => {
-    const modelIds = models.map((model) => model.id).join(',');
-    router.push(`/compare?models=${modelIds}`);
+    selectedModels.forEach((modelId) => addToCompare(modelId));
+    router.push('/compare');
   };
 
   const handleModelSelect = (modelId: string) => {
@@ -27,6 +28,10 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
       }
       return newSet;
     });
+  };
+
+  const handleCardClick = (modelSlug: string) => {
+    router.push(`/product/${modelSlug}`);
   };
 
   const getIndexBadgeClass = (index: string) => {
@@ -68,7 +73,11 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
         {models.map((model) => {
           const trend = parseTrend(model.priceTrend);
           return (
-            <div key={model.id} className={styles.similarCard}>
+            <div
+              key={model.id}
+              className={styles.similarCard}
+              onClick={() => handleCardClick(model.slug)}
+            >
               <div className={styles.indexBadgeWrap}>
                 <div
                   className={`${styles.indexBadge} ${getIndexBadgeClass(
@@ -89,7 +98,10 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                     ? styles.comparisonIconSelected
                     : ''
                 }`}
-                onClick={() => handleModelSelect(model.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleModelSelect(model.id);
+                }}
               >
                 <Image
                   src={ScalesIcon}
@@ -109,7 +121,7 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                 />
               </div>
 
-              <h4 className={styles.similarTitle}>{model.title}</h4>
+              <h4 className={`${styles.similarTitle}`}>{model.title}</h4>
 
               <div className={styles.similarPriceAndTrend}>
                 <div className={styles.similarPrice}>{model.price}</div>
@@ -117,19 +129,21 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                 <div className={styles.similarTrendContainer}>
                   <span
                     className={`${styles.similarTrendBadge} ${
-                      trend.isPositive
-                        ? styles.similarTrendValue
-                        : styles.similarTrendValueNegative
+                      !trend.isPositive ? styles.similarTrendBadgeNegative : ''
                     }`}
                   >
-                    {trend.isPositive ? (
-                      <FaArrowUp className='text-[12px]' />
-                    ) : (
-                      <FaArrowDown className='text-[12px]' />
-                    )}
-                    {trend.value}%
-                    <span className={styles.similarTrendPeriod}>
-                      {trend.period}
+                    <span
+                      className={`${
+                        trend.isPositive
+                          ? styles.similarTrendValue
+                          : styles.similarTrendValueNegative
+                      }`}
+                    >
+                      {trend.isPositive ? <FaArrowUp /> : <FaArrowDown />}
+                      {trend.value}%
+                      <span className={styles.similarTrendPeriod}>
+                        {trend.period}
+                      </span>
                     </span>
                   </span>
                 </div>
