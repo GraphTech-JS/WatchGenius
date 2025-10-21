@@ -14,7 +14,7 @@ import {
   Close,
   Menu,
 } from "../../../../public/icons";
-import { HeartIcon } from "../../../../public/social/Icon";
+import { HeartIcon } from "../../../../public/header/Icon";
 
 export const Header = () => {
   const [open, setOpen] = useState(false);

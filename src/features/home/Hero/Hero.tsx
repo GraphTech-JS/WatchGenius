@@ -45,7 +45,7 @@ export const Hero = () => {
               </Link>
               <Link href="" className={styles.heroLink}>
                 <button
-                  className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer`}
+                  className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer backdrop-blur-lg`}
                   onClick={() => window.dispatchEvent(new Event("openChat"))}
                 >
                   <RobotWhiteIcon
