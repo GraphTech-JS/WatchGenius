@@ -2,8 +2,7 @@ import { CatalogSearch } from '../CatalogSearch/CatalogSearch';
 import { SaveToChatButton } from '../SaveToChatButton/SaveToChatButton';
 import { SortButtons } from '../SortButtons/SortButtons';
 import { SortDropdown } from '../SortDropdown/SortDropdown';
-import { CatalogControlsProps } from '@/interfaces';
-
+  import { CatalogControlsProps } from '@/interfaces/catalog';
 export const CatalogControls: React.FC<CatalogControlsProps> = ({
   searchTerm,
   onSearchChange,

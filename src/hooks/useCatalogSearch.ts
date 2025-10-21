@@ -1,9 +1,10 @@
 import { useState, useMemo, useCallback, useLayoutEffect, useRef } from 'react';
-import { watchesMock } from '@/mock/watches';
-import { WatchIndex } from '@/mock/watches';
+import { useWatches } from '@/hooks/useWatches';
+import { WatchIndex, WatchItem } from '@/interfaces'; 
 import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
 import { SortOption } from '@/types/sorting';
 import { applySorting } from '@/utils/sortingUtils';
+
 
 type ActiveFilterChip ={
   id: string;
@@ -11,6 +12,8 @@ type ActiveFilterChip ={
   value: string;
   label: string;
 }
+
+
 
 export const useCatalogSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -20,6 +23,7 @@ export const useCatalogSearch = () => {
   const [sortOption, setSortOption] = useState<SortOption>(SortOption.DEFAULT);
   const chipsRef = useRef<HTMLDivElement | null>(null);
   const [chipsHeight, setChipsHeight] = useState(0);
+    const { getAll } = useWatches();
 
   const activeFilters = useMemo<ActiveFilterChip[]>(() => {
   const chips: ActiveFilterChip[] = [];
@@ -138,7 +142,7 @@ const clearAllFilters = useCallback(() => {
   }, []);
 
   const filteredItems = useMemo(() => {
-    let items = watchesMock;
+    let items: WatchItem[] = getAll();
 
     if (searchTerm.trim()) {
       const term = searchTerm.trim().toLowerCase();

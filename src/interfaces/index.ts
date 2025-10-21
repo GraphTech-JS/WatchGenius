@@ -47,8 +47,9 @@ interface ISearchProps extends React.HTMLAttributes<HTMLInputElement> {
 
 
 
-export * from './catalog';
-export * from './product';
-export * from './compare';
+// export * from "./catalog";
+export * from "./product";
+export * from "./compare";
+export * from "./watch";
 
-export type { Message, IMainContext, IWatch, ISearchProps};
+export type { Message, IMainContext, IWatch, ISearchProps };

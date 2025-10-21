@@ -1,5 +1,5 @@
 import { SortOption, SortFunction } from '@/types/sorting';
-import { WatchItem } from '@/mock/watches';
+import type { WatchItem } from '@/interfaces';
 
 export const sortByPriceAsc: SortFunction<WatchItem> = (a, b) => {
   return a.price - b.price;

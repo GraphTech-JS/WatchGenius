@@ -38,6 +38,7 @@
   margin: 0 4px;
 }
 
+
 @media (max-width: 1279px) {
   .breadcrumbs {
     display: none;

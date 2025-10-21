@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { FaHeart, FaRegHeart, FaArrowUp, FaArrowDown } from 'react-icons/fa';
-import type { WatchItem } from '@/mock/watches';
+import type { WatchItem } from '@/interfaces/watch';
 import styles from './WatchCard.module.css';
 
 type Props = {

@@ -140,6 +140,11 @@
   text-align: center;
   color: #171414;
   margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .similarPriceAndTrend {
   display: flex;
@@ -173,9 +178,22 @@
   font-weight: 600;
   font-size: 14px;
   color: #05873b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.similarTrendBadgeNegative {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #FEECEC;
+  font-size: 14px;
 }
 .similarTrendValueNegative {
-  color: #c73d3d;
+  color: #C73D3D;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 .similarTrendPeriod {
   font-weight: 400;

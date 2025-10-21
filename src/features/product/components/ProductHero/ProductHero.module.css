@@ -322,7 +322,6 @@
 }
 .indexBadgeBox {
   border-radius: 5px;
-  background: #b4e1c7;
   width: 44px;
   height: 44px;
   display: flex;
@@ -330,11 +329,28 @@
   justify-content: center;
   padding: 6px 9px 7px 8px;
 }
+.indexBadgeBoxA {
+  background: #b4e1c7;
+}
+.indexBadgeBoxB {
+  background: #fff3d5;
+}
+.indexBadgeBoxC {
+  background: #fddcdc;
+}
 .indexBadgeText {
   font-family: 'Inter';
   font-weight: 700;
   font-size: 20px;
+}
+.indexBadgeTextA {
   color: #067b06;
+}
+.indexBadgeTextB {
+  color: #e57300;
+}
+.indexBadgeTextC {
+  color: #b91b1b;
 }
 .indexTooltip {
     position: absolute;

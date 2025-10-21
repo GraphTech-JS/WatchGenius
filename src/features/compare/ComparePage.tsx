@@ -53,6 +53,38 @@ const ComparePage: React.FC<ComparePageProps> = ({
     console.log('Купити продукт:', productId);
   };
 
+  // Якщо немає продуктів для порівняння
+  if (products.length === 0) {
+    return (
+      <div
+        className={`${styles.container} bg-white pt-[27px] pb-[90px] min-h-screen mx-auto mt-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16`}
+      >
+        <div className={styles.content}>
+          <Breadcrumbs items={breadcrumbItems} width={564} />
+
+          <div className='flex flex-col items-center justify-center min-h-[400px] text-center'>
+            <div className='mb-6'>
+              <h2 className='mb-2 text-2xl font-semibold text-gray-900'>
+                Немає товарів для порівняння
+              </h2>
+              <p className='mb-8 text-gray-600'>
+                Додайте годинники до порівняння, щоб побачити їх порівняльну
+                таблицю
+              </p>
+            </div>
+
+            <button
+              onClick={onBackToCatalog}
+              className='bg-[#04694f] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#035a3f] transition-colors'
+            >
+              Перейти до каталогу
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className={`${styles.container} bg-white pt-[27px] pb-[90px] min-h-screen mx-auto mt-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16`}

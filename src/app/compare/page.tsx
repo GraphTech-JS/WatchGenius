@@ -1,109 +1,74 @@
 'use client';
 
-import React from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useMemo } from 'react';
+import { useRouter} from 'next/navigation';
 import ComparePage from '@/features/compare/ComparePage';
 import { CompareProduct } from '@/interfaces/compare';
+import { useWatches } from '@/hooks/useWatches';
+import { WatchItem } from '@/interfaces/watch';
+import { useCompareContext } from '@/context/CompareContext';
 
-// Mock data для демонстрації
-const mockProducts: CompareProduct[] = [
-  {
-    id: '1',
-    slug: 'rolex-submariner-date',
-    title: 'ROLEX Submariner Date',
-    brand: 'ROLEX',
-    model: 'Submariner Date',
-    reference: '210.30.42.20.01.00101',
+const convertWatchToCompareProduct = (watch: WatchItem): CompareProduct => {
+  return {
+    id: watch.id,
+    slug: watch.slug,
+    title: watch.title,
+    brand: watch.brand,
+    model: watch.title.split(' ').slice(1).join(' '),
+    reference: watch.reference || `${watch.brand}-${watch.id}`,
+    index: watch.index,
     price: {
-      min: 19500,
-      max: 20000,
-      currency: '€',
+      min: Math.round(watch.price * 0.95),
+      max: Math.round(watch.price * 1.05),
+      currency: watch.currency,
     },
     priceTrend: {
-      value: 4.7,
-      period: '30 днів',
-      isPositive: true,
+      value: watch.trend.value,
+      period: watch.trend.period,
+      isPositive: watch.trend.value > 0,
     },
-    image: '/watch/RolexCatalog.png',
-    thumbnails: [
-      '/watch/RolexCatalog.png',
-      '/watch/RolexCatalog.png',
-      '/watch/RolexCatalog.png',
-      '/watch/RolexCatalog.png',
-    ],
-    description: 'Класичний підводний годинник Rolex Submariner Date',
+    image: watch.image,
+    thumbnails: [watch.image, watch.image, watch.image, watch.image],
+    description: `${watch.brand} ${watch.title} - ${watch.condition} годинник`,
     details: [
-      { label: 'Матеріал', value: 'Сталь' },
-      { label: 'Калібр', value: '3235' },
-      { label: 'Рік', value: '2023' },
-      { label: 'Діаметр', value: '42 mm' },
-      { label: 'Стан', value: 'Новий' },
-      { label: 'Водонепроникність', value: '300m' },
-      { label: 'Механізм', value: 'Автоматичний' },
+      { label: 'Матеріал', value: watch.material },
+      { label: 'Механізм', value: watch.mechanism },
+      { label: 'Рік', value: watch.year.toString() },
+      { label: 'Стан', value: watch.condition },
+      { label: 'Документи', value: watch.documents },
+      { label: 'Локація', value: watch.location },
     ],
     analytics: {
-      demand: 65,
-      liquidity: 72,
-      dynamics: 12,
-      ads: 'За 3 дні',
-      trendGauge: 65,
-      lastUpdated: 'вересень 2025 року',
+      demand: Math.floor((watch.id.charCodeAt(2) || 0) * 0.4) + 30, 
+      liquidity: Math.floor((watch.id.charCodeAt(2) || 0) * 0.3) + 50, 
+      dynamics: Math.floor((watch.id.charCodeAt(2) || 0) * 0.2) + 5, 
+      ads: `За ${Math.floor((watch.id.charCodeAt(2) || 0) * 0.1) + 1} днів`,
+      trendGauge: Math.floor((watch.id.charCodeAt(2) || 0) * 0.4) + 30, 
+      lastUpdated: 'вересень 2024 року', 
     },
     similarModels: [],
     sellerOffers: [],
-    comparisonId: '1',
-  },
-  {
-    id: '2',
-    slug: 'omega-seamaster',
-    title: 'Omega Seamaster',
-    brand: 'OMEGA',
-    model: 'Seamaster',
-    reference: '210.30.42.20.01.00102',
-    price: {
-      min: 18500,
-      max: 19500,
-      currency: '€',
-    },
-    priceTrend: {
-      value: 7.2,
-      period: '30 днів',
-      isPositive: true,
-    },
-    image: '/watch/RolexCatalog.png',
-    thumbnails: [
-      '/watch/RolexCatalog.png',
-      '/watch/RolexCatalog.png',
-      '/watch/RolexCatalog.png',
-      '/watch/RolexCatalog.png',
-    ],
-    description: 'Класичний підводний годинник Omega Seamaster',
-    details: [
-      { label: 'Матеріал', value: 'Сталь' },
-      { label: 'Калібр', value: '8800' },
-      { label: 'Рік', value: '2023' },
-      { label: 'Діаметр', value: '42 mm' },
-      { label: 'Стан', value: 'Новий' },
-      { label: 'Водонепроникність', value: '300m' },
-      { label: 'Механізм', value: 'Автоматичний' },
-    ],
-    analytics: {
-      demand: 58,
-      liquidity: 68,
-      dynamics: 8,
-      ads: 'За 5 днів',
-      trendGauge: 58,
-      lastUpdated: 'вересень 2025 року',
-    },
-    similarModels: [],
-    sellerOffers: [],
-    comparisonId: '2',
-  },
-];
+    comparisonId: watch.id,
+    isSelected: false,
+  };
+};
+
+
 
 const ComparePageWrapper = () => {
   const router = useRouter();
-  const products = mockProducts;
+ const { selectedWatches } = useCompareContext();
+  const { getManyByIds } = useWatches();
+
+  const watches = getManyByIds(selectedWatches);
+
+  const products = useMemo(() => {
+    if (watches.length === 0) {
+  return []; 
+    }
+
+    return watches.map(convertWatchToCompareProduct);
+  }, [watches]);
 
   const handleBackToCatalog = () => {
     router.push('/catalog');

@@ -3,8 +3,7 @@
 import React, { useMemo, useState } from 'react';
 import { WatchCard } from '@/features/catalog/components/CatalogGrid/WatchCard/WatchCard';
 import { EmptyState } from '@/features/catalog/components/CatalogGrid/EmptyState/EmptyState';
-import type { WatchItem } from '@/mock/watches';
-
+import type { WatchItem } from '@/interfaces';
 type Props = {
   items: WatchItem[];
   initialCount?: number;
