@@ -26,7 +26,7 @@ export default function ChatClient({
   }, []);
 
   return (
-    <div className="relative flex h-full w-full">
+    <div className="flex relative w-full h-full">
       {!open && (
         <div className="fixed right-4 z-[200] ">
           <FloatingButton
@@ -47,7 +47,7 @@ export default function ChatClient({
       )}
       <main
         id="main-content"
-        className="transition-all duration-300 ease-in-out w-full min-h-screen"
+        className="w-full min-h-screen transition-all duration-300 ease-in-out"
       >
         {children}
       </main>

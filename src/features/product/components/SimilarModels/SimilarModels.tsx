@@ -69,14 +69,20 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
           const trend = parseTrend(model.priceTrend);
           return (
             <div key={model.id} className={styles.similarCard}>
-              <div
-                className={`${styles.indexBadge} ${getIndexBadgeClass(
-                  model.index
-                )}`}
-              >
-                {model.index}
+              <div className={styles.indexBadgeWrap}>
+                <div
+                  className={`${styles.indexBadge} ${getIndexBadgeClass(
+                    model.index
+                  )}`}
+                >
+                  {model.index}
+                </div>
+                <div className={styles.indexTooltip}>
+                  {model.index === 'A' && 'Топ-сегмент'}
+                  {model.index === 'B' && 'Середній сегмент'}
+                  {model.index === 'C' && 'Базовий сегмент'}
+                </div>
               </div>
-
               <div
                 className={`${styles.comparisonIcon} ${
                   selectedModels.has(model.id)

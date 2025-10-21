@@ -38,13 +38,24 @@ const ArrowDown = () => (
   </svg>
 );
 
-export const ProductCard: React.FC<IWatch> = ({
+export type ProductCardProps = IWatch & {
+  className?: string;
+  cardStyle?: React.CSSProperties;
+  height?: number | string;
+  dense?: boolean;
+};
+
+export const ProductCard: React.FC<ProductCardProps> = ({
   image,
   changePercent,
   brand,
   price,
   chartData,
   chartId,
+  className,
+  cardStyle,
+  height,
+  dense = false,
 }) => {
   let variant: "green" | "orange" | "red" | "overall" = "orange";
   let percentClass = styles.percentNeutral;
@@ -72,8 +83,8 @@ export const ProductCard: React.FC<IWatch> = ({
     const updateHeight = () => {
       const width = window.innerWidth;
       if (width >= 1024) setChartHeight(70);
-      else if (width >= 834) setChartHeight(70);
-      else if (width >= 768) setChartHeight(60);
+      else if (width >= 834) setChartHeight(dense ? 60 : 70);
+      else if (width >= 768) setChartHeight(dense ? 54 : 60);
       else setChartHeight(50);
     };
     updateHeight();
@@ -83,10 +94,24 @@ export const ProductCard: React.FC<IWatch> = ({
 
   return (
     <div
-      className={`${styles.productCard} flex flex-col rounded-2xl h-[15rem] md:h-[21rem] px-3 md:px-4 py-2 md:py-3 max-w-[30rem] justify-between`}
+      className={`${
+        styles.productCard
+      } flex flex-col rounded-2xl h-[15rem] md:h-[21rem] px-2 md:px-4 ${
+        dense ? "py-2" : "py-3 md:py-3"
+      } max-w-[30rem] justify-between ${className || ""}`}
+      style={{
+        ...(cardStyle || {}),
+        ...(height !== undefined
+          ? { height: typeof height === "number" ? `${height}px` : height }
+          : {}),
+      }}
     >
       {/* header */}
-      <div className="relative mb-1 md:mb-4 flex w-full justify-center items-center">
+      <div
+        className={`relative ${
+          dense ? "mb-1" : "mb-1 md:mb-4"
+        } flex w-full justify-center items-center`}
+      >
         <button
           onClick={() => setIsFavorite((prev) => !prev)}
           className={`${styles.productCardScore} absolute top-0 left-0 flex items-center justify-center w-8 h-8`}
@@ -103,7 +128,11 @@ export const ProductCard: React.FC<IWatch> = ({
           alt={brand}
           width={134}
           height={142}
-          className="w-auto  max-h-[84px] md:max-h-[125px] lg:max-h-[140px]"
+          className={`w-auto  ${
+            dense
+              ? "max-h-[72px]"
+              : "max-h-[84px] md:max-h-[125px] lg:max-h-[140px]"
+          }`}
         />
 
         <div
@@ -114,8 +143,12 @@ export const ProductCard: React.FC<IWatch> = ({
       </div>
 
       {/* body */}
-      <div className=" mb-0 md:mb-1 flex gap-2 items-center justify-center">
-        <div className="flex flex-col gap-0 md:gap-2">
+      <div
+        className={` mb-0 md:mb-1 flex ${
+          dense ? "gap-1" : "gap-2"
+        } items-center justify-center`}
+      >
+        <div className={`flex flex-col ${dense ? "gap-0" : "gap-0 md:gap-2"}`}>
           <div
             className={`${styles.cardWatchName} text-center max-h-[54px] overflow-hidden font-bold`}
           >
@@ -135,7 +168,11 @@ export const ProductCard: React.FC<IWatch> = ({
         <div className="relative text-center max-h-[54px] w-full flex flex-row justify-between items-center">
           <div className={`${styles.Price}`}>{price} €</div>
           <div
-            className={`${styles.marketCardHeadPercent} ${percentClass} absolute bottom-3 left-14 flex items-center justify-center gap-0 min-w-14 font-bold`}
+            className={`${
+              styles.marketCardHeadPercent
+            } ${percentClass} absolute ${
+              dense ? "bottom-3 left-14" : "bottom-3 left-16"
+            } flex items-center justify-center gap-1 min-w-14  font-bold`}
           >
             {ArrowIcon && <ArrowIcon />}
             {changePercent} %

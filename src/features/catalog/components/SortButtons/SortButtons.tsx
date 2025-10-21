@@ -1,18 +1,19 @@
 'use client';
 import React from 'react';
-import { SortButtonsProps } from '@/interfaces';
+import { SortButtonsProps, WatchIndex } from '@/interfaces';
+
 import styles from './SortButtons.module.css';
 
 export const SortButtons: React.FC<SortButtonsProps> = ({
-  selectedIndex,
-  onButtonClick,
+  selectedIndexes,
+  onToggleIndex,
 }) => {
-  const buttons = ['A', 'B', 'C'];
+ const buttons: WatchIndex[] = ['A', 'B', 'C']; 
 
   return (
     <div className='flex gap-[10px]'>
       {buttons.map((button) => {
-        const isActive = selectedIndex === button;
+        const isActive = selectedIndexes?.includes(button) || false;
 
         const buttonStyle = {
           backgroundColor: isActive ? '#04694f' : 'white',
@@ -24,7 +25,7 @@ export const SortButtons: React.FC<SortButtonsProps> = ({
           <button
             key={button}
             type='button'
-            onClick={() => onButtonClick?.(button)}
+            onClick={() => onToggleIndex?.(button)}
             className={`${styles.sortButtons} ${isActive ? styles.active : ''}`}
             style={buttonStyle}
           >

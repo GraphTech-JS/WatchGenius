@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { LineChart } from "@/components/Main/Hero/Chart/LineChart";
 import styles from "./Market.module.css";
 import Image from "next/image";
+import Link from "next/link";
 import { GreenCup } from "../../../../../public/icons";
 
 interface IMarketTotal {
@@ -82,11 +83,12 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
           width={500}
         />
       </div>
-      <div
+      <Link
+        href="/catalog"
         className={`${styles.marketCardLink} absolute bottom-[16px] md:bottom-[20px] w-full left-1/2 transform -translate-x-1/2  text-center font-medium cursor-pointer`}
       >
         Перейти в каталог
-      </div>
+      </Link>
     </div>
   );
 };

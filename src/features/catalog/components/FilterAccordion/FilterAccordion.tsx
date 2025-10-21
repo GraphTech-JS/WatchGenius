@@ -28,8 +28,8 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
     setPriceFrom,
     setPriceTo,
 
-    indexValue,
-    setIndexValue,
+    selectedIndexes,
+    toggleIndex,
     openKeys,
     setOpenKeys,
 
@@ -122,12 +122,12 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
         {section === 'Індекс' && (
           <div className='flex gap-2 items-center'>
             {filterData.indexButtons.map((btn) => {
-              const active = indexValue === btn;
+              const active = selectedIndexes.includes(btn);
               return (
                 <button
                   key={btn}
                   type='button'
-                  onClick={() => setIndexValue(active ? null : btn)}
+                  onClick={() => toggleIndex(btn)}
                   className={`w-[76px] h-[26px] border rounded-[15px] px-[21px] text-[14px] font-medium transition-colors
                     flex items-center justify-center cursor-pointer
                     ${
