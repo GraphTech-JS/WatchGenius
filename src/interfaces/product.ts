@@ -47,6 +47,7 @@ export interface ProductAnalytics {
 
 export interface SimilarModel {
   id: string;
+  slug: string;
   title: string;
   price: string;
   priceTrend: string;

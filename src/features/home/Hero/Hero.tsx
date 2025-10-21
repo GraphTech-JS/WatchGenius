@@ -7,10 +7,10 @@ import { RobotWhiteIcon } from '../../../../public/chat/Icon';
 import { MainContext } from '@/context';
 
 export const Hero = () => {
-  const { setMenuOpened } = useContext(MainContext);
+  const { setSideChatOpened } = useContext(MainContext);
 
   const handleChatClick = () => {
-    setMenuOpened(true);
+    setSideChatOpened(true);
   };
 
   return (
@@ -50,16 +50,15 @@ export const Hero = () => {
                   <div>Каталог</div>
                 </button>
               </Link>
-              <Link href="/chat" className={styles.heroLink}>
-                <button
-                  className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer`}
-                >
-                  <RobotWhiteIcon
-                    className={`${styles.footerSocialLinkItem} w-8 h-8 md:text-white `}
-                  />
-                  <div>Geni - AI chat</div>
-                </button>
-              </Link>
+              <button
+                onClick={handleChatClick}
+                className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer`}
+              >
+                <RobotWhiteIcon
+                  className={`${styles.footerSocialLinkItem} w-8 h-8 md:text-white `}
+                />
+                <div>Geni - AI chat</div>
+              </button>
             </div>
           </div>
           <div className={`${styles.heroCharts} w-full z-10`}>

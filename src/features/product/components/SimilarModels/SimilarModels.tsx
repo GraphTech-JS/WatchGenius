@@ -30,6 +30,10 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
     });
   };
 
+  const handleCardClick = (modelSlug: string) => {
+    router.push(`/product/${modelSlug}`);
+  };
+
   const getIndexBadgeClass = (index: string) => {
     switch (index) {
       case 'A':
@@ -69,7 +73,11 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
         {models.map((model) => {
           const trend = parseTrend(model.priceTrend);
           return (
-            <div key={model.id} className={styles.similarCard}>
+            <div
+              key={model.id}
+              className={styles.similarCard}
+              onClick={() => handleCardClick(model.slug)}
+            >
               <div className={styles.indexBadgeWrap}>
                 <div
                   className={`${styles.indexBadge} ${getIndexBadgeClass(
@@ -90,7 +98,10 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                     ? styles.comparisonIconSelected
                     : ''
                 }`}
-                onClick={() => handleModelSelect(model.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleModelSelect(model.id);
+                }}
               >
                 <Image
                   src={ScalesIcon}

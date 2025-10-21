@@ -82,7 +82,7 @@ export function FloatingButton({
 
   return (
     <div
-      className={`fixed left-5 right-5 z-110  ${className}`}
+      className={`fixed right-5 left-5 z-110 ${className}`}
       style={{ bottom, ...style }}
     >
       {children({ bottom, isScrolling })}

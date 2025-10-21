@@ -27,6 +27,7 @@ const ProductPageWrapper = ({
       .slice(0, 6)
       .map((w) => ({
         id: w.id,
+        slug: w.slug,
         title: w.title,
         price: `${w.price.toLocaleString()} ${w.currency}`,
         priceTrend: `${w.trend.value > 0 ? '+' : ''}${w.trend.value}%`,

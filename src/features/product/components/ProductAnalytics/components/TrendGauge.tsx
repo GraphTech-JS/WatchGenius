@@ -6,31 +6,26 @@ import type { StaticImageData } from 'next/image';
 type ImgSrc = string | StaticImageData;
 
 type GaugeConfig = {
-  // Геометрія
-  pivotYR: number; // де знаходиться вісь обертання по висоті
-  labelsYR: number; // Y для Low/High
-  valueYR: number; // Y для % значення
-  lastUpdatedYR: number; // Y для "Актуально на ..."
+  pivotYR: number; 
+  labelsYR: number; 
+  valueYR: number; 
+  lastUpdatedYR: number; 
 
-  // Позиції по X для Low/Hight (як частка ширини)
-  labelsLeftXR: number; // 0..1, де малюємо "Low"
-  labelsRightXR: number; // 0..1, де малюємо "Hight"
+  labelsLeftXR: number; 
+  labelsRightXR: number; 
 
-  // Стрілка
-  pointerWidthR: number; // ширина стрілки відносно висоти контейнера
-  pointerHeightR: number; // висота стрілки відносно висоти контейнера
-  pointerAnchorX: number; // якір PNG (0..1) по X
-  pointerAnchorY: number; // якір PNG (0..1) по Y
-  pointerOffsetX: number; // дрібна підгонка (px)
+  pointerWidthR: number; 
+  pointerHeightR: number; 
+  pointerAnchorX: number; 
+  pointerAnchorY: number; 
+  pointerOffsetX: number; 
   pointerOffsetY: number;
 
-  // Центр (кнопка)
   centerSizeR: number;
   centerOffsetYR: number;
 
-  // Стилі
   fontFamily: string;
-  labelFontSizePx?: number; // якщо не вказано — рахуємо від висоти
+  labelFontSizePx?: number; 
   labelFontWeight: number;
   labelColor: string;
 
@@ -42,16 +37,15 @@ type GaugeConfig = {
 };
 
 type TrendGaugeProps = {
-  value: number; // 0–100
+  value: number; 
   arcSrc: ImgSrc;
   pointerSrc: ImgSrc;
   centerSrc: ImgSrc;
   lastUpdated?: string;
   className?: string;
 
-  // Розміри контейнера — повинні відповідати твоєму CSS
-  width: number; // 372 або 310
-  height: number; // 338 або 281
+  width: number; 
+  height: number; 
 
   config?: Partial<GaugeConfig>;
 };
@@ -63,34 +57,27 @@ function getHref(src: ImgSrc) {
   return typeof src === 'string' ? src : src.src;
 }
 
-// Базовий конфіг під твій макет (підігнано під другий скрін)
 const defaultConfig: GaugeConfig = {
-  // Геометрія
-  pivotYR: 0.69, // вісь обертання
-  labelsYR: 0.825, // Low/Hight трохи нижче дуги
-  valueYR: 0.8, // % посередині, нижче центру
+  pivotYR: 0.69, 
+  labelsYR: 0.825,
+  valueYR: 0.8, 
   lastUpdatedYR: 0.94,
 
-  // По X — ближче до країв дуги, не притискаючи до самого краю
-  labelsLeftXR: 0.14, // 14% ширини
-  labelsRightXR: 0.86, // 86% ширини
+  labelsLeftXR: 0.14, 
+  labelsRightXR: 0.86, 
 
-  // Стрілка (значення під твою PNG)
   pointerWidthR: 58 / 338,
   pointerHeightR: 111 / 338,
-  // Якщо твій ручний тюн працює — можна передати через props і переважити:
-  pointerAnchorX: 0.468, // базовий якір; твій кастом нижче в ProductAnalytics
+  pointerAnchorX: 0.468, 
   pointerAnchorY: 0.915,
   pointerOffsetX: 1,
   pointerOffsetY: -1,
 
-  // Кнопка-еліпс
   centerSizeR: 29 / 338,
   centerOffsetYR: 0,
 
-  // Стилі (за замовчуванням як у вимозі)
   fontFamily: "'Inter', sans-serif",
-  labelFontSizePx: undefined, // по замовчуванню вирахуємо від висоти
+  labelFontSizePx: undefined, 
   labelFontWeight: 600,
   labelColor: '#000',
 
@@ -121,10 +108,8 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
 
   const cfg = { ...defaultConfig, ...(config || {}) };
 
-  // Геометрія
   const pivotY = vbH * cfg.pivotYR;
 
-  // Стрілка
   const pointerW = vbH * cfg.pointerWidthR;
   const pointerH = vbH * cfg.pointerHeightR;
   const axPx = pointerW * cfg.pointerAnchorX;
@@ -132,21 +117,18 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
   const pointerX = cx - axPx + cfg.pointerOffsetX;
   const pointerY = pivotY - ayPx + cfg.pointerOffsetY;
 
-  // Центр
   const centerSize = vbH * cfg.centerSizeR;
   const centerX = cx - centerSize / 2;
   const centerY = pivotY - centerSize / 2 + cfg.centerOffsetYR * vbH;
 
-  // Тексти
   const labelsY = vbH * cfg.labelsYR;
   const valueY = vbH * cfg.valueYR;
   const lastUpdatedY = vbH * cfg.lastUpdatedYR;
 
-  // Розміри шрифтів (за замовчуванням від висоти контейнера)
-  const labelFontSize = cfg.labelFontSizePx ?? Math.round(vbH * 0.059); // ~20px при 338
-  const valueFontSize = cfg.valueFontSizePx ?? Math.round(vbH * 0.071); // ~24px при 338
+  const labelFontSize = cfg.labelFontSizePx ?? Math.round(vbH * 0.059); 
+  const valueFontSize = cfg.valueFontSizePx ?? Math.round(vbH * 0.071); 
   const lastUpdatedFontSize =
-    cfg.lastUpdatedFontSizePx ?? Math.round(vbH * 0.035); // ~12px
+    cfg.lastUpdatedFontSizePx ?? Math.round(vbH * 0.035); 
 
   const leftLabelX = vbW * cfg.labelsLeftXR;
   const rightLabelX = vbW * cfg.labelsRightXR;
@@ -160,7 +142,6 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
         role='img'
         aria-label={`Попит ${v}%`}
       >
-        {/* Дуга */}
         <image
           href={getHref(arcSrc)}
           x={0}
@@ -170,7 +151,6 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
           preserveAspectRatio='xMidYMid meet'
         />
 
-        {/* Стрілка */}
         <g
           transform={`rotate(${angle} ${cx} ${pivotY})`}
           style={{ transition: 'transform 0.8s cubic-bezier(0.4,0,0.2,1)' }}
@@ -185,7 +165,6 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
           />
         </g>
 
-        {/* Центр поверх стрілки */}
         <image
           href={getHref(centerSrc)}
           x={centerX}
@@ -195,7 +174,6 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
           preserveAspectRatio='xMidYMid meet'
         />
 
-        {/* Low / Hight */}
         <text
           x={leftLabelX}
           y={labelsY}
@@ -219,7 +197,6 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
           Hight
         </text>
 
-        {/* Відсоток */}
         <text
           x={cx}
           y={valueY}
@@ -232,7 +209,6 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
           {v}%
         </text>
 
-        {/* Актуальність */}
         {lastUpdated && (
           <text
             x={cx}

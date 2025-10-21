@@ -8,6 +8,8 @@ interface Message {
 interface IMainContext {
   menuOpened: boolean;
   setMenuOpened: (opened: boolean) => void;
+  sideChatOpened: boolean;
+  setSideChatOpened: (opened: boolean) => void;
   setMessages: (messages: Message[]) => void;
   setMessage: (message: Message) => void;
   message: Message;

@@ -1,20 +1,21 @@
 'use client';
 
-import { ChatMenu } from "@/components/Chat/ChatMenu";
-import { ChatButton } from "@/components/Chat/components/ChatButton/ChatButton";
-import { FloatingButton } from "@/components/FloatingButton";
-import React, { useState } from "react";
+import { ChatMenu } from '@/components/Chat/ChatMenu';
+import { ChatButton } from '@/components/Chat/components/ChatButton/ChatButton';
+import { FloatingButton } from '@/components/FloatingButton';
+import { MainContext } from '@/context';
+import React, { useContext } from 'react';
 
 export default function ChatClient({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [menuOpened, setMenuOpened] = useState(false);
+  const { sideChatOpened, setSideChatOpened } = useContext(MainContext);
 
   return (
     <div className='flex relative w-full h-full'>
-      {!menuOpened && (
+      {!sideChatOpened && (
         <div className='fixed right-4 z-[200] '>
           <FloatingButton
             watchedIds={['footer']}
@@ -24,7 +25,7 @@ export default function ChatClient({
           >
             {({ bottom, isScrolling }) => (
               <ChatButton
-                onClick={() => setMenuOpened(true)}
+                onClick={() => setSideChatOpened(true)}
                 dynamicPosition={{ bottom }}
                 isScrolling={isScrolling}
               />
@@ -39,13 +40,13 @@ export default function ChatClient({
         {children}
       </main>
 
-      {menuOpened && (
+      {sideChatOpened && (
         <aside
           className='fixed inset-0 z-[150]'
           style={{ height: '100vh', overflow: 'hidden' }}
         >
           <div className='h-full'>
-            <ChatMenu isOpen={true} onClose={() => setMenuOpened(false)} />
+            <ChatMenu isOpen={true} onClose={() => setSideChatOpened(false)} />
           </div>
         </aside>
       )}
