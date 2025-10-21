@@ -10,7 +10,7 @@ export default function ChatClient({
 }: {
   children: React.ReactNode;
 }) {
-  const [open, setOpen] = useState(false);
+  const [menuOpened, setMenuOpened] = useState(false);
 
   return (
     <div className='flex relative w-full h-full'>
