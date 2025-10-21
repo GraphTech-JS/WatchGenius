@@ -253,7 +253,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             {product.model}
           </div>
           <div className='font-inter text-[14px] md:text-[15px] lg:text-[16px]    xl:text-[16px] font-medium text-[rgba(23,20,20,0.5)]'>
-            (Ref.: {product.reference})
+            (Ref. {product.reference})
           </div>
         </div>
         <div className='flex flex-col gap-2 justify-center items-center text-center sm:flex-row sm:justify-between sm:items-center sm:text-left'>

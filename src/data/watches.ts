@@ -50,7 +50,7 @@ const createWatches = (): WatchItem[] => {
       documents: documents[0],
       location,
       year,
-      reference: `${brand.toUpperCase()}-${year}-${String(i + 1).padStart(3, '0')}`,
+      reference: `${210 + (i % 10)}.${30 + (i % 5)}.${42 + (i % 3)}.${20 + (i % 2)}.0${1 + (i % 9)},${String(i + 1).padStart(4, '0')}`,
     });
   }
 
