@@ -118,7 +118,7 @@ export const AiChat = () => {
         </div>
 
         <div className='flex overflow-y-auto flex-col flex-1 px-3 pt-3 min-h-0'>
-          <ChatList isTyping={isTyping} />
+          <ChatList isTyping={isTyping} showSavedMessages={false} />
 
           <div className='flex flex-col gap-2.5 py-3.5 mt-auto bg-[rgba(251,250,249,1)] border-t border-black/10 -mx-3 px-6.5'>
             <button

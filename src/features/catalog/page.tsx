@@ -57,22 +57,25 @@ const CatalogPage = () => {
         }
       });
 
-      if (selectedBrands.length)
+      if (
+        selectedBrands.length ||
+        selectedConditions.length ||
+        selectedMechanisms.length ||
+        selectedMaterials.length
+      ) {
         search.applySidebarFilters({
           selectedBrands,
-        } as UseCatalogFiltersReturn);
-      if (selectedConditions.length)
-        search.applySidebarFilters({
           selectedConditions,
-        } as UseCatalogFiltersReturn);
-      if (selectedMechanisms.length)
-        search.applySidebarFilters({
           selectedMechanisms,
-        } as UseCatalogFiltersReturn);
-      if (selectedMaterials.length)
-        search.applySidebarFilters({
           selectedMaterials,
+          selectedDocuments,
+          selectedLocations,
+          priceFrom: '0',
+          priceTo: '50000',
+          yearFrom: '2000',
+          yearTo: '2005',
         } as UseCatalogFiltersReturn);
+      }
       if (selectedIndexes.length) search.setSelectedIndexes(selectedIndexes);
 
       setSavedCatalogFilters(null);

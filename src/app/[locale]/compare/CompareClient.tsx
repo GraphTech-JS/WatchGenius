@@ -34,12 +34,14 @@ const convertWatchToCompareProduct = (watch: WatchItem): CompareProduct => {
     thumbnails: [watch.image, watch.image, watch.image, watch.image],
     description: `${watch.brand} ${watch.title} - ${watch.condition} годинник`,
     details: [
-      { label: 'Матеріал', value: watch.material },
       { label: 'Механізм', value: watch.mechanism },
       { label: 'Рік', value: watch.year.toString() },
+      { label: 'Матеріал', value: watch.material },
+      { label: 'Діаметр', value: `${watch.diameterMm}мм` },
       { label: 'Стан', value: watch.condition },
-      { label: 'Документи', value: watch.documents },
-      { label: 'Локація', value: watch.location },
+      { label: 'Ремінець', value: watch.material },
+      { label: 'Водостійкість', value: watch.waterResistance ? 'Так' : 'Ні' },
+      { label: 'Хронограф', value: watch.chronograph ? 'Так' : 'Ні' },
     ],
     analytics: {
       demand: Math.floor((watch.id.charCodeAt(2) || 0) * 0.4) + 30,

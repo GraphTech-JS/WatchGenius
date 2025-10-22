@@ -8,14 +8,22 @@ import { Message } from '@/interfaces';
 
 interface ChatListProps {
   isTyping?: boolean;
+  showSavedMessages?: boolean;
 }
 
-export const ChatList = ({ isTyping }: ChatListProps) => {
+export const ChatList = ({
+  isTyping,
+  showSavedMessages = true,
+}: ChatListProps) => {
   const { messages } = useContext(MainContext);
+
+  const filteredMessages = showSavedMessages
+    ? messages
+    : messages.filter((msg) => !msg.isSaved);
 
   return (
     <div className={styles.chatList}>
-      {messages.map((message: Message) => (
+      {filteredMessages.map((message: Message) => (
         <ChatMessage key={message.id} message={message} />
       ))}
       {isTyping && <div className={styles.typing}>Geni друкує…</div>}

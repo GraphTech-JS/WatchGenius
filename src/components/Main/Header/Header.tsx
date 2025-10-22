@@ -1,11 +1,12 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { createPortal } from "react-dom";
-import Link from "next/link";
-import Image from "next/image";
-import styles from "./Header.module.css";
+'use client';
+import React, { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { createPortal } from 'react-dom';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useLocale } from '@/hooks/useLocale';
+import styles from './Header.module.css';
 import {
   SearchNormal,
   SearchWhite,
@@ -13,10 +14,11 @@ import {
   Robot,
   Close,
   Menu,
-} from "../../../../public/icons";
-import { HeartIcon } from "../../../../public/header/Icon";
+} from '../../../../public/icons';
+import { HeartIcon } from '../../../../public/header/Icon';
 
 export const Header = () => {
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [showCurrency, setShowCurrency] = useState(false);
@@ -58,7 +60,6 @@ export const Header = () => {
   const searchRef = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
-  const cleanPathname = pathname?.replace(/^\/[a-z]{2}(\/|$)/, "/") || "/";
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
   const router = useRouter();
@@ -69,19 +70,18 @@ export const Header = () => {
   ) => {
     event.preventDefault();
 
-    if (pathname === "/") {
+    if (pathname === `/${locale}`) {
       const element = document.getElementById(id);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
-      const locale = pathname.split("/")[1];
       router.push(`/${locale}/#${id}`);
     }
   };
 
   useEffect(() => {
-    if (pathname !== "/") return;
+    if (pathname !== `/${locale}`) return;
 
     const sections = ['dealers', 'treands', 'contacts'];
     const handleScroll = () => {
@@ -101,8 +101,8 @@ export const Header = () => {
 
     window.addEventListener('scroll', handleScroll);
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [pathname, locale]);
 
   useEffect(() => setMounted(true), []);
 
@@ -131,17 +131,17 @@ export const Header = () => {
     return () => clearTimeout(timer);
   }, [showSearch]);
 
-  const currencies = ["EUR", "USD", "UAH", "PL", "KZT"];
-  const languages = ["УКР", "АНГЛ", "ПЛ"];
+  const currencies = ['EUR', 'USD', 'UAH', 'PL', 'KZT'];
+  const languages = ['УКР', 'АНГЛ', 'ПЛ'];
 
   return (
     <header className={`${styles.header} w-full`}>
       <div className={styles.headerContainer}>
-        <Link href="/" className={`flex items-center gap-[4px]`}>
+        <Link href={`/${locale}`} className={`flex items-center gap-[4px]`}>
           <Image
             src={Logo.src}
             className={`${styles.headerLogoIcon}`}
-            alt="logo"
+            alt='logo'
             width={40}
             height={40}
           />
@@ -151,27 +151,27 @@ export const Header = () => {
 
         <nav className={`hidden gap-11 lg:flex lg:pl-12`}>
           {[
-            { href: "/catalog", label: "Каталог", type: "page" },
-            { href: "#dealers", label: "Дилери", type: "section" },
-            { href: "#treands", label: "Тренди", type: "section" },
-            { href: "#contacts", label: "Контакти", type: "section" },
+            { href: `/${locale}/catalog`, label: 'Каталог', type: 'page' },
+            { href: '#dealers', label: 'Дилери', type: 'section' },
+            { href: '#treands', label: 'Тренди', type: 'section' },
+            { href: '#contacts', label: 'Контакти', type: 'section' },
           ].map(({ href, label, type }) => {
-            const isCatalog = pathname === "/catalog";
-            const isMain = pathname === "/";
-            const sectionId = href.replace("#", "");
+            const isCatalog = pathname === `/${locale}/catalog`;
+            const isMain = pathname === `/${locale}`;
+            const sectionId = href.replace('#', '');
             const isActive =
-              (isCatalog && href === "/catalog") ||
+              (isCatalog && href === `/${locale}/catalog`) ||
               (isMain && activeSection === sectionId);
 
-              const isInactive =
-                (isCatalog && href !== '/catalog') ||
-                (isMain && activeSection && activeSection !== sectionId);
+            const isInactive =
+              (isCatalog && href !== `/${locale}/catalog`) ||
+              (isMain && activeSection && activeSection !== sectionId);
 
-              const commonClass = `${styles.headerLink} ${
-                isActive ? styles.headerLinkActive : ''
-              } ${isInactive ? styles.headerLinkInactive : ''}`;
+            const commonClass = `${styles.headerLink} ${
+              isActive ? styles.headerLinkActive : ''
+            } ${isInactive ? styles.headerLinkInactive : ''}`;
 
-            return type === "page" ? (
+            return type === 'page' ? (
               <Link
                 key={label}
                 href={href}
@@ -192,11 +192,11 @@ export const Header = () => {
             );
           })}
         </nav>
-        <div className="flex relative gap-4 ml-4">
-          <div className="hidden gap-5 md:flex">
+        <div className='flex relative gap-4 ml-4'>
+          <div className='hidden gap-5 md:flex'>
             <div
               className={`relative ${
-                showSearch ? "lg:hidden" : "lg:flex"
+                showSearch ? 'lg:hidden' : 'lg:flex'
               } flex items-center w-8 text-center`}
               ref={currencyRef}
             >
@@ -210,7 +210,7 @@ export const Header = () => {
                 <div>{selectedCurrency}</div>
               </button>
               {showCurrency && (
-                <div className="absolute top-[-2px] lg:top-[-8px] left-[-14px] lg:left-[-14px] flex flex-col bg-white rounded-[10px] z-20">
+                <div className='absolute top-[-2px] lg:top-[-8px] left-[-14px] lg:left-[-14px] flex flex-col bg-white rounded-[10px] z-20'>
                   {currencies.map((cur) => (
                     <button
                       key={cur}
@@ -221,7 +221,7 @@ export const Header = () => {
                       className={`${
                         styles.headerLangSwitchBtn
                       } text-center px-3 py-2 hover:bg-gray-100 rounded-[10px] ${
-                        cur !== selectedCurrency ? styles.inactiveOption : ""
+                        cur !== selectedCurrency ? styles.inactiveOption : ''
                       }`}
                     >
                       {cur}
@@ -232,7 +232,7 @@ export const Header = () => {
             </div>
             <div
               className={`relative ${
-                showSearch ? "lg:hidden" : "lg:flex"
+                showSearch ? 'lg:hidden' : 'lg:flex'
               } flex items-center w-10 text-center`}
               ref={langRef}
             >
@@ -246,7 +246,7 @@ export const Header = () => {
                 <div>{selectedLang}</div>
               </button>
               {showLang && (
-                <div className="absolute top-[-2px] lg:top-[-8px] left-[-17px] lg:left-[-17px] flex flex-col bg-white rounded-[10px] z-20">
+                <div className='absolute top-[-2px] lg:top-[-8px] left-[-17px] lg:left-[-17px] flex flex-col bg-white rounded-[10px] z-20'>
                   {languages.map((lang) => (
                     <button
                       key={lang}
@@ -257,7 +257,7 @@ export const Header = () => {
                       className={`${
                         styles.headerLangSwitchBtn
                       } px-3 py-2 hover:bg-gray-100 rounded-[10px] text-center ${
-                        lang !== selectedLang ? styles.inactiveOption : ""
+                        lang !== selectedLang ? styles.inactiveOption : ''
                       }`}
                     >
                       {lang}
@@ -267,7 +267,7 @@ export const Header = () => {
               )}
             </div>
             <button
-              className={`lg:${showSearch ? "hidden" : "flex"} ${
+              className={`lg:${showSearch ? 'hidden' : 'flex'} ${
                 styles.headerLangSwitchBtn
               }  hidden shrink-0`}
               onClick={() => {
@@ -278,7 +278,7 @@ export const Header = () => {
             >
               <Image
                 src={SearchNormal.src}
-                alt="Пошук"
+                alt='Пошук'
                 width={18}
                 height={18}
               />
@@ -296,40 +296,40 @@ export const Header = () => {
             transition-all duration-300 ease-out`}
           >
             <input
-              type="text"
+              type='text'
               className={`${styles.headerMobileSearchInput} w-full max-w-[150px] `}
-              placeholder="Пошук"
+              placeholder='Пошук'
             />
             <button className={`${styles.headerLangSwitchBtn} shrink-0 mr-3`}>
               <Image
                 src={SearchNormal.src}
-                alt="Пошук"
+                alt='Пошук'
                 width={18}
                 height={18}
               />
             </button>
           </div>
-          <div className="hidden gap-3 lg:flex">
+          <div className='hidden gap-3 lg:flex'>
             <button
               className={`${styles.headerLangSwitchBtn} shrink-0`}
-              onClick={() => window.dispatchEvent(new Event("openChat"))}
+              onClick={() => window.dispatchEvent(new Event('openChat'))}
             >
-              <Image src={Robot.src} alt="AI агент" width={22} height={22} />
+              <Image src={Robot.src} alt='AI агент' width={22} height={22} />
             </button>
             <button className={`${styles.headerLangSwitchBtn} shrink-0`}>
               <HeartIcon className={`w-5 h-5 text-green-800`} />
             </button>
           </div>
-          <div className="flex ml-4 w-8 lg:hidden">
+          <div className='flex ml-4 w-8 lg:hidden'>
             <button
               className={styles.headerMobileMenuBtn}
               onClick={() => (open ? startCloseMenu() : openMenu())}
               aria-expanded={open}
-              aria-controls="mobileMenu"
+              aria-controls='mobileMenu'
             >
               <Image
                 src={open ? Close.src : Menu.src}
-                alt="menu icon"
+                alt='menu icon'
                 className={
                   open
                     ? styles.headerMobileMenuIconClose
@@ -345,33 +345,33 @@ export const Header = () => {
           (open || menuClosing) &&
           createPortal(
             <div
-              id="mobileMenu"
+              id='mobileMenu'
               className={`${styles.headerMobileMenu} fixed flex flex-col py-8 rounded-none md:rounded-b-xl`}
             >
               <div
                 className={`${styles.headerMobileMenuTop} flex w-full justify-center `}
               >
                 <div className={`${styles.headerMobileMenuSearch} flex `}></div>
-                <div className="flex gap-5 p-3 md:hidden">
-                  <div className="flex py-3 pl-4 rounded-xl border border-white">
+                <div className='flex gap-5 p-3 md:hidden'>
+                  <div className='flex py-3 pl-4 rounded-xl border border-white'>
                     <input
-                      type="text"
+                      type='text'
                       className={`${styles.headerMobileSearchInput} max-w-[200px]`}
-                      placeholder="Пошук"
+                      placeholder='Пошук'
                     />
                     <button
                       className={`${styles.headerLangSwitchBtn} shrink-0 mr-4`}
                     >
                       <Image
                         src={SearchWhite.src}
-                        alt="Пошук"
+                        alt='Пошук'
                         width={18}
                         height={18}
                       />
                     </button>
                   </div>
                   <div
-                    className="flex relative items-center w-10 text-center"
+                    className='flex relative items-center w-10 text-center'
                     ref={currencyRef}
                   >
                     <button
@@ -384,7 +384,7 @@ export const Header = () => {
                       <div>{selectedCurrency}</div>
                     </button>
                     {showCurrency && (
-                      <div className="absolute top-[5px] left-[-14px] flex flex-col bg-white rounded-[10px] z-20">
+                      <div className='absolute top-[5px] left-[-14px] flex flex-col bg-white rounded-[10px] z-20'>
                         {currencies.map((cur) => (
                           <button
                             key={cur}
@@ -397,7 +397,7 @@ export const Header = () => {
                             } text-center px-3 py-2 hover:bg-gray-100 rounded-[10px] ${
                               cur !== selectedCurrency
                                 ? styles.inactiveOption
-                                : ""
+                                : ''
                             }`}
                           >
                             {cur}
@@ -407,7 +407,7 @@ export const Header = () => {
                     )}
                   </div>
                   <div
-                    className="flex relative items-center w-10 text-center"
+                    className='flex relative items-center w-10 text-center'
                     ref={langRef}
                   >
                     <button
@@ -420,7 +420,7 @@ export const Header = () => {
                       <div>{selectedLang}</div>
                     </button>
                     {showLang && (
-                      <div className="absolute top-[5px] left-[-17px] flex flex-col bg-white rounded-[10px] z-20">
+                      <div className='absolute top-[5px] left-[-17px] flex flex-col bg-white rounded-[10px] z-20'>
                         {languages.map((lang) => (
                           <button
                             key={lang}
@@ -431,7 +431,7 @@ export const Header = () => {
                             className={`${
                               styles.headerLangSwitchBtn
                             } px-3 py-2 hover:bg-gray-100 rounded-[10px] text-center ${
-                              lang !== selectedLang ? styles.inactiveOption : ""
+                              lang !== selectedLang ? styles.inactiveOption : ''
                             }`}
                           >
                             {lang}
@@ -446,16 +446,16 @@ export const Header = () => {
                 className={`${styles.headerMobileMenuWrapper} md:mt-12 flex h-full flex-col items-center justify-center`}
               >
                 <Link
-                  href="/catalog"
+                  href={`/${locale}/catalog`}
                   onClick={startCloseMenu}
                   className={styles.headerMobileMenuLink}
                 >
                   Каталог
                 </Link>
                 <a
-                  href="#dealers"
+                  href='#dealers'
                   onClick={(e) => {
-                    handleSectionClick(e, "dealers");
+                    handleSectionClick(e, 'dealers');
                     startCloseMenu();
                   }}
                   className={styles.headerMobileMenuLink}
@@ -463,9 +463,9 @@ export const Header = () => {
                   Дилери
                 </a>
                 <a
-                  href="#treands"
+                  href='#treands'
                   onClick={(e) => {
-                    handleSectionClick(e, "treands");
+                    handleSectionClick(e, 'treands');
                     startCloseMenu();
                   }}
                   className={styles.headerMobileMenuLink}
@@ -473,9 +473,9 @@ export const Header = () => {
                   Тренди
                 </a>
                 <a
-                  href="#contacts"
+                  href='#contacts'
                   onClick={(e) => {
-                    handleSectionClick(e, "contacts");
+                    handleSectionClick(e, 'contacts');
                     startCloseMenu();
                   }}
                   className={styles.headerMobileMenuLink}
@@ -489,4 +489,4 @@ export const Header = () => {
       </div>
     </header>
   );
-  };
+};

@@ -3,12 +3,14 @@ import styles from './ChatMessage.module.css';
 import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { MainContext } from '@/context';
+import { useLocale } from '@/hooks/useLocale';
 
 export const ChatMessage = ({ message }: { message: Message }) => {
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
   const isAi = message.by === 'ai';
   const isSaved = message.isSaved;
   const router = useRouter();
+  const locale = useLocale();
   const { setSavedCatalogFilters, setMenuOpened } = useContext(MainContext);
 
   const handleSavedClick = () => {
@@ -17,7 +19,7 @@ export const ChatMessage = ({ message }: { message: Message }) => {
 
       setMenuOpened(false);
 
-      router.push('/catalog');
+      router.push(`/${locale}/catalog`);
     }
   };
 
