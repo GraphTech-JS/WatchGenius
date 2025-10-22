@@ -1,6 +1,9 @@
+"use client";
 import React from "react";
 import { LocalizedLink } from "@/components/LocalizedLink";
 import Image from "next/image";
+import { useRouter, usePathname } from "next/navigation";
+import { useLocale } from "@/hooks/useLocale";
 import styles from "./Footer.module.css";
 import { LogoWhite, Chrono } from "../../../../public/icons";
 import {
@@ -12,6 +15,25 @@ import { t } from "@/i18n";
 import { footerKeys } from "@/i18n/keys/footer";
 
 export const Footer = () => {
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleSectionClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    id: string
+  ) => {
+    event.preventDefault();
+
+    if (pathname === `/${locale}`) {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      router.push(`/${locale}/#${id}`);
+    }
+  };
   return (
     <footer className={`${styles.footer} pb-[49px] md:pb-[30px]`} id="contacts">
       <div
@@ -62,13 +84,26 @@ export const Footer = () => {
               >
                 {t(footerKeys.sections.menu.catalog)}
               </LocalizedLink>
-              <a href="#dealers" className={styles.footerLink}>
+              <a
+                href="#treands"
+                className={styles.footerLink}
+                onClick={(e) => handleSectionClick(e, "treands")}
+              >
                 {t(footerKeys.sections.menu.trends)}
               </a>
-              <a href="#treands" className={styles.footerLink}>
+              <a
+                href="#dealers"
+                className={styles.footerLink}
+                onClick={(e) => handleSectionClick(e, "dealers")}
+              >
                 {t(footerKeys.sections.menu.dealers)}
               </a>
-              <a href="#contacts" className={styles.footerLink}>
+
+              <a
+                href="#contacts"
+                className={styles.footerLink}
+                onClick={(e) => handleSectionClick(e, "contacts")}
+              >
                 {t(footerKeys.sections.menu.contacts)}
               </a>
             </nav>
@@ -149,7 +184,9 @@ export const Footer = () => {
               width={190}
               height={40}
             />
-            <div className={styles.chronoName}>{t(footerKeys.poweredBy)}</div>
+            <div className={`${styles.chronoName} text-nowrap`}>
+              {t(footerKeys.poweredBy)}
+            </div>
           </div>
         </div>
         <nav className={`${styles.footerSupportWrapper}`}>
