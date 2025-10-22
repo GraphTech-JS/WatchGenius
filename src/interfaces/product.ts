@@ -92,6 +92,7 @@ export interface ProductAnalyticsProps {
   onTabChange: (tab: 'parameters' | 'brand' | 'price' | 'trend') => void;
   details: ProductDetail[];
   brand: string;
+  isCompare?: boolean;
 }
 
 export interface SimilarModelsProps {

@@ -37,8 +37,22 @@
 .chatBody {
   flex: 1;
   overflow-y: auto;
-  padding: 12px 12px 8px 12px;
+  padding: 15px 20px;
   min-height: 0;
+}
+
+@media (min-width: 768px) {
+  .chatBody {
+    padding: 15px 40px;
+  }
+
+  
+}
+
+@media (min-width: 1024px) {
+  .chatBody {
+    padding: 15px 45px;
+  }
 }
 
 .chatBody::-webkit-scrollbar {
@@ -57,10 +71,16 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 14px 20px;
+  padding: 20px 20px;
   background: rgba(251, 250, 249, 1);
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .chatMenuButtons {
+    padding: 20px 45px;
+  }
 }
 
 .chatMenuBtn {
@@ -77,10 +97,16 @@
   display: flex;
   gap: 12px;
   align-items: center;
-  padding: 14px 20px;
+  padding: 15px 20px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   background: #fff;
   flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .inputBar {
+    padding: 15px 45px;
+  }
 }
 .chatHeaderInput {
   flex: 1;
