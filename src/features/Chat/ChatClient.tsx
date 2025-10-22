@@ -57,10 +57,10 @@ export default function ChatClient({
 
       {sideChatOpened && (
         <aside
-          className="fixed inset-0 z-[150]"
+          className="fixed inset-0 z-[150] pointer-events-none"
           style={{ height: "100vh", overflow: "hidden" }}
         >
-          <div className="h-full">
+          <div className="h-full pointer-events-none">
             <ChatMenu isOpen={true} onClose={() => setSideChatOpened(false)} />
           </div>
         </aside>
