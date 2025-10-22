@@ -87,9 +87,7 @@ const removeFrom = (arr: string[] = [], v: string) => arr.filter(x => x !== v);
 
 const removeFilter = useCallback((chip: { group: ActiveFilterChip['group']; value: string }) => {
   if (chip.group === 'index') {
-    // знімаємо зі швидких індексів
     setSelectedIndexes(prev => prev.filter(i => i !== chip.value));
-    // і, за наявності, зі списку індексів сайдбара
     setSidebarFilters(prev => {
       if (!prev) return prev;
       if (!prev.selectedIndexes?.includes(chip.value as WatchIndex)) return prev;

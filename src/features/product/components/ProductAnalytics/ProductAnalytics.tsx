@@ -28,11 +28,27 @@ import {
 
 import PriceChart from './components/PriceChart';
 import TrendGauge from './components/TrendGauge';
+import { BRAND_CONTENT } from '@/data/brands';
+
+const iconFor = (label: string) => {
+  const l = label.toLowerCase();
+  if (l.includes('механізм')) return MechanismIcon;
+  if (l.includes('матеріал')) return MaterialIcon;
+  if (l.includes('стан')) return StanIcon;
+  if (l.includes('водостій')) return WaterIcon;
+  if (l.includes('рік')) return YearIcon;
+  if (l.includes('діаметр')) return DiameterIcon;
+  if (l.includes('ремінець')) return StrapIcon;
+  if (l.includes('хронограф')) return ChronographIcon;
+  return MechanismIcon;
+};
 
 const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   analytics,
   activeTab,
   onTabChange,
+  details,
+  brand,
 }) => {
   const [activeChartPeriod, setActiveChartPeriod] = useState<'3M' | '1P'>('3M');
   const [isVolatilityHovered, setIsVolatilityHovered] = useState(false);
@@ -79,7 +95,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
       <div className={styles.contentContainer}>
         {activeTab === 'trend' && (
           <div>
-            <h3 className={styles.trendTitle}>Rolex</h3>
+            <h3 className={styles.trendTitle}>{brand}</h3>
             <p
               className={`${styles.trendContent} text-[12px] font-normal text-black leading-relaxed `}
             >
@@ -219,8 +235,8 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
 
                   pivotYR: 0.54,
                   labelsYR: 0.66,
-                  labelsLeftXR: 0.00,
-                  labelsRightXR: 1.00,
+                  labelsLeftXR: 0.0,
+                  labelsRightXR: 1.0,
                   valueYR: 0.688,
                   lastUpdatedYR: 0.94,
 
@@ -244,144 +260,52 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
           <div>
             <div className={styles.parametersContainer}>
               <div className={styles.parametersGrid}>
-                <div className={styles.parameterItem}>
-                  <div className={styles.parameterIcon}>
-                    <Image
-                      src={MechanismIcon}
-                      alt='Механізм'
-                      width={25}
-                      height={25}
-                    />
+                {details.map(({ label, value }) => (
+                  <div key={label} className={styles.parameterItem}>
+                    <div className={styles.parameterIcon}>
+                      <Image
+                        src={iconFor(label)}
+                        alt={label}
+                        width={25}
+                        height={25}
+                      />
+                    </div>
+                    <div className={styles.parameterContent}>
+                      <div className={styles.parameterLabel}>{label}:</div>
+                      <div className={styles.parameterValue}>{value}</div>
+                    </div>
                   </div>
-                  <div className={styles.parameterContent}>
-                    <div className={styles.parameterLabel}>Механізм:</div>
-                    <div className={styles.parameterValue}>Автоматичний</div>
-                  </div>
-                </div>
-                <div className={styles.parameterItem}>
-                  <div className={styles.parameterIcon}>
-                    <Image src={YearIcon} alt='Рік' width={25} height={25} />
-                  </div>
-                  <div className={styles.parameterContent}>
-                    <div className={styles.parameterLabel}>Рік:</div>
-                    <div className={styles.parameterValue}>2021</div>
-                  </div>
-                </div>
-                <div className={styles.parameterItem}>
-                  <div className={styles.parameterIcon}>
-                    <Image
-                      src={MaterialIcon}
-                      alt='Матеріал'
-                      width={25}
-                      height={25}
-                    />
-                  </div>
-                  <div className={styles.parameterContent}>
-                    <div className={styles.parameterLabel}>Матеріал:</div>
-                    <div className={styles.parameterValue}>Сталь</div>
-                  </div>
-                </div>
-                <div className={styles.parameterItem}>
-                  <div className={styles.parameterIcon}>
-                    <Image
-                      src={DiameterIcon}
-                      alt='Діаметр'
-                      width={25}
-                      height={25}
-                    />
-                  </div>
-                  <div className={styles.parameterContent}>
-                    <div className={styles.parameterLabel}>Діаметр:</div>
-                    <div className={styles.parameterValue}>41мм</div>
-                  </div>
-                </div>
-                <div className={styles.parameterItem}>
-                  <div className={styles.parameterIcon}>
-                    <Image src={StanIcon} alt='Стан' width={25} height={25} />
-                  </div>
-                  <div className={styles.parameterContent}>
-                    <div className={styles.parameterLabel}>Стан:</div>
-                    <div className={styles.parameterValue}>Новий</div>
-                  </div>
-                </div>
-                <div className={styles.parameterItem}>
-                  <div className={styles.parameterIcon}>
-                    <Image
-                      src={StrapIcon}
-                      alt='Ремінець'
-                      width={25}
-                      height={25}
-                    />
-                  </div>
-                  <div className={styles.parameterContent}>
-                    <div className={styles.parameterLabel}>Ремінець:</div>
-                    <div className={styles.parameterValue}>Залізо</div>
-                  </div>
-                </div>
-                <div className={styles.parameterItem}>
-                  <div className={styles.parameterIcon}>
-                    <Image
-                      src={WaterIcon}
-                      alt='Водостійкість'
-                      width={25}
-                      height={25}
-                    />
-                  </div>
-                  <div className={styles.parameterContent}>
-                    <div className={styles.parameterLabel}>Водостійкість:</div>
-                    <div className={styles.parameterValue}>Ні</div>
-                  </div>
-                </div>
-                <div className={styles.parameterItem}>
-                  <div className={styles.parameterIcon}>
-                    <Image
-                      src={ChronographIcon}
-                      alt='Хронограф'
-                      width={25}
-                      height={25}
-                    />
-                  </div>
-                  <div className={styles.parameterContent}>
-                    <div className={styles.parameterLabel}>Хронограф:</div>
-                    <div className={styles.parameterValue}>Ні</div>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
         )}
 
-        {activeTab === 'brand' && (
-          <div className={styles.brandContent}>
-            <div className={styles.brandBackground}>
-              <Image
-                src='/watch/RolexBrand.png'
-                alt='Rolex Brand Background'
-                width={592}
-                height={329}
-                className={styles.brandBackgroundImage}
-              />
-            </div>
-            <div className={styles.brandTextContent}>
-              <h3 className={styles.brandTitle}>Rolex</h3>
-              <p className={styles.brandText}>
-                Rolex — це всесвітньо відомий швейцарський бренд розкішних
-                годинників, що є символом престижу, точності та якості.
-              </p>
-              <p className={styles.brandText}>
-                Компанія була заснована у 1905 році Гансом Вільсдорфом і з
-                самого початку ставила за мету створення інноваційних та
-                надійних наручних годинників.
-              </p>
-              <p className={styles.brandText}>
-                Серед найважливіших досягнень бренду — винахід першого
-                водонепроникного годинника Oyster у 1926 році та механізму з
-                автоматичним підзаводом Perpetual у 1931 році. Ці інновації
-                стали основою для всієї сучасної годинникової індустрії.
-              </p>
-            </div>
-          </div>
-        )}
+        {activeTab === 'brand' &&
+          (() => {
+            const content = BRAND_CONTENT[brand] ?? BRAND_CONTENT.default;
+            return (
+              <div className={styles.brandContent}>
+                <div className={styles.brandBackground}>
+                  <Image
+                    src={content.image}
+                    alt={`${content.title} Brand Background`}
+                    width={592}
+                    height={329}
+                    className={styles.brandBackgroundImage}
+                  />
+                </div>
+                <div className={styles.brandTextContent}>
+                  <h3 className={styles.brandTitle}>{content.title}</h3>
+                  {content.paragraphs.map((p, idx) => (
+                    <p key={idx} className={styles.brandText}>
+                      {p}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
 
         {activeTab === 'price' && (
           <div>
@@ -407,7 +331,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   </div>
                   <div className={styles.priceMetricContent}>
                     <div className={styles.priceMetricLabel}>Волатильність</div>
-                    <div className={styles.priceMetricValue}>Низька</div>
+                    <div className={styles.priceMetricValue}>
+                      {analytics.volatility}
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -436,7 +362,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   </div>
                   <div className={styles.priceMetricContent}>
                     <div className={styles.priceMetricLabel}>Ліквідність</div>
-                    <div className={styles.priceMetricValue}>Висока</div>
+                    <div className={styles.priceMetricValue}>
+                      {analytics.liquidityLabel}
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -465,7 +393,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   </div>
                   <div className={styles.priceMetricContent}>
                     <div className={styles.priceMetricLabel}>Популярність</div>
-                    <div className={styles.priceMetricValue}>8.5/10</div>
+                    <div className={styles.priceMetricValue}>
+                      {analytics.popularity.toFixed(1)}/10
+                    </div>
                   </div>
                 </div>
               ) : (
@@ -484,18 +414,27 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
               <div className={styles.reportItems}>
                 <div className={styles.reportItem}>
                   <span className={styles.reportItemLabel}>Пік:</span>
-                  <span className={styles.reportItemValue}>€26,500</span>
+                  <span className={styles.reportItemValue}>
+                    €{analytics.reportPeak.toLocaleString('uk-UA')}
+                  </span>
                 </div>
                 <div className={styles.reportItem}>
                   <span className={styles.reportItemLabel}>Мінімум:</span>
-                  <span className={styles.reportItemValue}>€25,500</span>
+                  <span className={styles.reportItemValue}>
+                    €{analytics.reportMin.toLocaleString('uk-UA')}
+                  </span>
                 </div>
                 <div className={styles.reportItem}>
                   <span className={styles.reportItemLabel}>Зміни:</span>
                   <span
-                    className={`${styles.reportItemValue} ${styles.reportItemValueGreen}`}
+                    className={`${styles.reportItemValue} ${
+                      analytics.reportChangePct >= 0
+                        ? styles.reportItemValueGreen
+                        : styles.reportItemValueRed
+                    }`}
                   >
-                    +0.4%
+                    {analytics.reportChangePct >= 0 ? '+' : ''}
+                    {Math.abs(analytics.reportChangePct * 100).toFixed(1)}%
                   </span>
                 </div>
               </div>

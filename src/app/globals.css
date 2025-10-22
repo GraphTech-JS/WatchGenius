@@ -18,6 +18,8 @@
     rgba(237, 253, 244, 1) 100%
   );
   --yellow: rgba(216, 169, 28, 1);
+  --edge-size: 28px;
+  --edge-blur: 8px;
   --active-buttons: rgba(0, 82, 61, 1);
   --pink: rgba(253, 220, 220, 1);
   --text-dark: #171414;
@@ -26,6 +28,8 @@
     #d2f7d0 11.06%,
     rgba(255, 255, 255, 0.1) 99.52%
   );
+    --edge-size: 28px;
+  --edge-blur: 14px;
 }
 
 html,

@@ -1,20 +1,39 @@
 import { Message } from '@/interfaces';
 import styles from './ChatMessage.module.css';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { useRouter } from 'next/navigation';
+import { MainContext } from '@/context';
 
 export const ChatMessage = ({ message }: { message: Message }) => {
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
   const isAi = message.by === 'ai';
+  const isSaved = message.isSaved;
+  const router = useRouter();
+  const { setSavedCatalogFilters, setMenuOpened } = useContext(MainContext);
+
+  const handleSavedClick = () => {
+    if (isSaved && message.savedSearch) {
+      setSavedCatalogFilters(message.savedSearch);
+
+      setMenuOpened(false);
+
+      router.push('/catalog');
+    }
+  };
 
   return (
     <div
       className={`${styles.message} ${
         message.by === 'me' ? styles.messageMe : styles.messageAi
-      }`}
+      } ${isSaved ? styles.messageSaved : ''}`}
+      onClick={handleSavedClick}
     >
       <div className={styles.messageContainer}>
+        {isSaved && <span className={styles.savedIcon}>⭐</span>}
         <span>{message.content}</span>
-        {message.time && <span className={styles.time}>{message.time}</span>}
+        {!isSaved && message.time && (
+          <span className={styles.time}>{message.time}</span>
+        )}
       </div>
       {isAi && (
         <div className={styles.feedbackRow}>

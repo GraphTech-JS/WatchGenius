@@ -3,6 +3,11 @@ interface Message {
   by: "me" | "ai";
   id: number;
   time?: string;
+  isSaved?: boolean;
+  savedSearch?: {            
+    searchTerm: string;
+    filters: string[];         
+  };
 }
 
 interface IMainContext {
@@ -14,6 +19,11 @@ interface IMainContext {
   setMessage: (message: Message) => void;
   message: Message;
   messages: Array<Message>;
+  savedCatalogFilters: {
+    searchTerm: string;
+    filters: string[];
+  } | null;
+  setSavedCatalogFilters: (filters: { searchTerm: string; filters: string[] } | null) => void;
 }
 
 interface IWatch {
@@ -49,7 +59,7 @@ interface ISearchProps extends React.HTMLAttributes<HTMLInputElement> {
 
 
 
-// export * from "./catalog";
+export * from "./catalog";
 export * from "./product";
 export * from "./compare";
 export * from "./watch";

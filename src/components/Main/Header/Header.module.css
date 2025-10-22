@@ -1,14 +1,19 @@
 .header {
-  background: rgba(227, 219, 200, 0.7);
+  --header-bg-solid: 227, 219, 200;
+  --center-alpha: 0.85;
+  --edge-thickness: 12px;
+  --center-blur: 2px;
 
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: rgba(var(--header-bg-solid), 0.7);
+
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   padding: 1rem 1.25rem;
   z-index: 90;
   position: fixed;
-}
-
-.logoName {
-  font-family: var(--font-akatab);
-  font-size: 16px;
+  width: 100%;
+  isolation: isolate;
 }
 
 .headerContainer {
@@ -17,11 +22,70 @@
   align-items: center;
   max-width: 1300px;
   margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.headerBackdrop {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+
+  top: var(--edge-thickness);
+  bottom: var(--edge-thickness);
+
+  background: rgba(var(--header-bg-solid), 0.7);
+
+  -webkit-backdrop-filter: blur(var(--center-blur));
+  backdrop-filter: blur(var(--center-blur));
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+.header::before,
+.header::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: var(--edge-thickness);
+  pointer-events: none;
+  z-index: 1;
+
+  -webkit-backdrop-filter: url("#headerDistortion") blur(2px) saturate(100%) contrast(100%);
+  backdrop-filter: url("#headerDistortion") blur(2px) saturate(100%) contrast(100%);
+}
+
+.header::before {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--header-bg-solid), 0),
+    rgba(var(--header-bg-solid), 0)
+  );
+}
+
+.header::after {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(var(--header-bg-solid), 0),
+    rgba(var(--header-bg-solid), 0)
+  );
+}
+
+.logoName {
+  font-family: var(--font-akatab);
+  font-size: 16px;
 }
 .headerLogoIcon {
   width: 20px;
   height: 20px;
 }
+
 .headerLink {
   color: var(--black);
   font-size: 20px;
@@ -50,29 +114,38 @@
 .headerLinkActive::after {
   width: 80%;
 }
-.headerMobileMenuLink {
-  font-size: 24px;
-  font-weight: 600;
-  font-family: "Inter", sans-serif;
-  color: var(--white);
-  text-decoration: none;
-  transition: all 0.3s ease;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-}
 
-.headerMobileMenuLink:hover {
-  text-shadow: 0 0 10px rgba(250, 250, 250, 0.8);
-}
 .headerMobileMenuBtn {
   background: transparent;
   border: none;
   cursor: pointer;
 }
-
 .headerMobileMenuIconClose {
   width: 23px;
   height: 23px;
+}
+.headerMobileMenuIcon {
+  width: 32px;
+  height: 14px;
+}
+
+.headerMobileLangSwitchBtn {
+  color: var(--white);
+  font-weight: 700;
+}
+.headerLangSwitchBtn {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.headerMobileSearchInput::placeholder {
+  color: var(--white);
+}
+.headerMobileSearchInput:focus-visible {
+  outline: none;
+}
+.inactiveOption {
+  color: #9ca3af;
 }
 
 .headerMobileMenu {
@@ -104,24 +177,21 @@
   pointer-events: none;
 }
 
-.headerMobileLangSwitchBtn {
+.headerMobileMenuLink {
+  font-size: 24px;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
   color: var(--white);
-  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 1rem 2rem;
+  border-radius: 8px;
 }
-.headerLangSwitchBtn {
-  font-weight: 700;
-  cursor: pointer;
+.headerMobileMenuLink:hover {
+  text-shadow: 0 0 10px rgba(250, 250, 250, 0.8);
 }
-.headerMobileSearchInput::placeholder {
-  color: var(--white);
-}
-.headerMobileSearchInput:focus-visible {
-  outline: none;
-}
-.inactiveOption {
-  color: #9ca3af;
-}
-@media (width >= 48rem /* 768px */) {
+
+@media (min-width: 48rem) {
   .header {
     padding: 1rem 2.625rem;
   }
@@ -148,8 +218,13 @@
     pointer-events: auto;
     z-index: 30;
   }
+
+  .header {
+    --edge-thickness: 14px;
+  }
 }
-@media (width >= 64rem /* 1024px */) {
+
+@media (min-width: 64rem) {
   .header {
     padding: 1.25rem 5rem;
   }
@@ -158,8 +233,10 @@
     height: 40px;
   }
 }
-@media (width >= 80rem /* 1280px */) {
+
+@media (min-width: 80rem) {
   .header {
     padding: 1.25rem 7rem;
+    --edge-thickness: 16px; 
   }
 }

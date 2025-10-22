@@ -1,33 +1,44 @@
 .message {
   padding: 12px 14px;
   border-radius: 12px;
-  max-width: 720px;
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 400;
   font-size: 16px;
+  line-height: 24px;
   color: #111827;
   align-self: flex-start;
-  margin: 0 12px;
+  margin: 0;
   overflow-wrap: break-word;
   background: #f3f4f6;
 }
+.messageContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  span:not(.time):not(.savedIcon) {
+    padding-right: 20px;
+  }
+}
 
 .messageMe {
-  background-color: var(--green);
+  background-color: #2f855a;
   color: #fff;
   align-self: flex-end;
+  margin-left: auto;
 }
 
 .messageAi {
-  /* inherits base grey bubble */
+  align-self: flex-start;
+  margin-right: auto;
 }
 
 .time {
   display: block;
-  font-size: 12px;
-  opacity: 0.6;
+  font-size: 11px;
+  opacity: 0.5;
   text-align: right;
-  margin-top: 6px;
+  margin-top: 2px;
+  line-height: 1;
 }
 
 .feedbackRow {
@@ -46,7 +57,7 @@
   border-radius: 9999px;
   border: 2px solid #e5e7eb;
   background: #fff;
-  font-size: 10px; 
+  font-size: 10px;
   cursor: pointer;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
@@ -63,16 +74,63 @@
   border-color: #ef4444;
 }
 
+.messageSaved {
+  align-self: center !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  background: #fff !important; 
+  color: #171414 !important;    
+  padding: 13px 20px !important;
+  width: 100% !important;
+  max-width: none !important;
+  
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  text-align: center;
+}
+
+.messageSaved:hover {
+  background: #fafafa !important;
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.messageSaved:active {
+  transform: scale(0.98);
+}
+
+.messageSaved .messageContainer {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.savedIcon {
+  font-size: 16px;
+  display: inline-block;
+  padding: 0;
+  margin-right: 8px;
+}
+
+
+
 @media (max-width: 768px) {
   .message {
     font-size: 15px;
     padding: 10px 12px;
-    width: auto;
+    max-width: 85%;
   }
 }
 
 @media (max-width: 420px) {
   .message {
-    margin: 0 12px;
+    max-width: 90%;
+    font-size: 14px;
   }
 }

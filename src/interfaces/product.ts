@@ -43,6 +43,12 @@ export interface ProductAnalytics {
   ads: string;
   trendGauge: number;
   lastUpdated: string;
+  volatility: 'Низька' | 'Середня' | 'Висока';
+  liquidityLabel: 'Низька' | 'Середня' | 'Висока';
+  popularity: number; 
+  reportPeak: number;
+  reportMin: number;
+  reportChangePct: number; 
 }
 
 export interface SimilarModel {
@@ -84,6 +90,8 @@ export interface ProductAnalyticsProps {
   analytics: ProductAnalytics;
   activeTab: 'parameters' | 'brand' | 'price' | 'trend';
   onTabChange: (tab: 'parameters' | 'brand' | 'price' | 'trend') => void;
+  details: ProductDetail[];
+  brand: string;
 }
 
 export interface SimilarModelsProps {

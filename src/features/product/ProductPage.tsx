@@ -74,7 +74,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
     <div className='bg-white pt-[27px] pb-[60px] xl:pb-[90px] min-h-screen mx-auto mt-[80px]'>
       <div className={styles.productPage}>
         <div className='hidden sm:block'>
-          <Breadcrumbs items={breadcrumbItems}  />
+          <Breadcrumbs items={breadcrumbItems} />
         </div>
 
         <ProductHero
@@ -100,6 +100,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
               analytics={product.analytics}
               activeTab={activeTab}
               onTabChange={handleTabChange}
+              details={product.details}
+              brand={product.brand}
             />
           </div>
         </div>
