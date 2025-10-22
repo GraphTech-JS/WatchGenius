@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     "Keep track of your favorite watches, discover new ones, and stay updated with the latest trends in the world of horology.",
   keywords:
     "watches, watch tracker, luxury watches, watch collection, horology, watch enthusiasts",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export async function generateStaticParams() {
