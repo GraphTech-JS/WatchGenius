@@ -5,6 +5,8 @@ import Image from "next/image";
 import { RolexBrand, RolexBrandDark } from "../../../../public/watch";
 import { BrandCards } from "@/components/Main/BrandSpotlight/BrandCards/BrandCards";
 import { mockTrending } from "@/mock/watch";
+import { t } from "@/i18n";
+import { brandSpotlightKeys } from "@/i18n/keys/home";
 
 export const BrandSpotlight = () => {
   return (
@@ -48,15 +50,13 @@ export const BrandSpotlight = () => {
               <div
                 className={`${styles.BrandDescription} text-center md:text-start`}
               >
-                Швейцарська компанія, що випускає наручний годинник та аксесуари
-                під торговою маркою Ролекс. У рік Rolex випускає від півмільйона
-                годин.
+                {t(brandSpotlightKeys.description)}
               </div>
             </div>
             <button
               className={`${styles.brandViewAllBtn} hidden lg:block py-4 rounded-xl w-full max-w-[28.25rem] text-center`}
             >
-              Дивитись всі моделі
+              {t(brandSpotlightKeys.viewAll)}
             </button>
           </div>
           <div className={`${styles.brandCards} mt-8 w-full`}>
@@ -66,7 +66,7 @@ export const BrandSpotlight = () => {
         <button
           className={`${styles.brandViewAllBtn} px-10 py-4 rounded-xl w-full max-w-[28.25rem] lg:hidden`}
         >
-          Дивитись всі моделі
+          {t(brandSpotlightKeys.viewAll)}
         </button>
       </div>
     </section>

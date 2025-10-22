@@ -1,12 +1,15 @@
-'use client';
+"use client";
 
-import React, { useMemo } from 'react';
-import { useRouter} from 'next/navigation';
-import ComparePage from '@/features/compare/ComparePage';
-import { CompareProduct } from '@/interfaces/compare';
-import { useWatches } from '@/hooks/useWatches';
-import { WatchItem } from '@/interfaces/watch';
-import { useCompareContext } from '@/context/CompareContext';
+export const dynamic = "force-dynamic";
+
+import React, { useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { useLocale } from "@/hooks/useLocale";
+import ComparePage from "@/features/compare/ComparePage";
+import { CompareProduct } from "@/interfaces/compare";
+import { useWatches } from "@/hooks/useWatches";
+import { WatchItem } from "@/interfaces/watch";
+import { useCompareContext } from "@/context/CompareContext";
 
 const convertWatchToCompareProduct = (watch: WatchItem): CompareProduct => {
   return {
@@ -14,7 +17,7 @@ const convertWatchToCompareProduct = (watch: WatchItem): CompareProduct => {
     slug: watch.slug,
     title: watch.title,
     brand: watch.brand,
-    model: watch.title.split(' ').slice(1).join(' '),
+    model: watch.title.split(" ").slice(1).join(" "),
     reference: watch.reference || `${watch.brand}-${watch.id}`,
     index: watch.index,
     price: {
@@ -31,20 +34,20 @@ const convertWatchToCompareProduct = (watch: WatchItem): CompareProduct => {
     thumbnails: [watch.image, watch.image, watch.image, watch.image],
     description: `${watch.brand} ${watch.title} - ${watch.condition} годинник`,
     details: [
-      { label: 'Матеріал', value: watch.material },
-      { label: 'Механізм', value: watch.mechanism },
-      { label: 'Рік', value: watch.year.toString() },
-      { label: 'Стан', value: watch.condition },
-      { label: 'Документи', value: watch.documents },
-      { label: 'Локація', value: watch.location },
+      { label: "Матеріал", value: watch.material },
+      { label: "Механізм", value: watch.mechanism },
+      { label: "Рік", value: watch.year.toString() },
+      { label: "Стан", value: watch.condition },
+      { label: "Документи", value: watch.documents },
+      { label: "Локація", value: watch.location },
     ],
     analytics: {
-      demand: Math.floor((watch.id.charCodeAt(2) || 0) * 0.4) + 30, 
-      liquidity: Math.floor((watch.id.charCodeAt(2) || 0) * 0.3) + 50, 
-      dynamics: Math.floor((watch.id.charCodeAt(2) || 0) * 0.2) + 5, 
+      demand: Math.floor((watch.id.charCodeAt(2) || 0) * 0.4) + 30,
+      liquidity: Math.floor((watch.id.charCodeAt(2) || 0) * 0.3) + 50,
+      dynamics: Math.floor((watch.id.charCodeAt(2) || 0) * 0.2) + 5,
       ads: `За ${Math.floor((watch.id.charCodeAt(2) || 0) * 0.1) + 1} днів`,
-      trendGauge: Math.floor((watch.id.charCodeAt(2) || 0) * 0.4) + 30, 
-      lastUpdated: 'вересень 2024 року', 
+      trendGauge: Math.floor((watch.id.charCodeAt(2) || 0) * 0.4) + 30,
+      lastUpdated: "вересень 2024 року",
     },
     similarModels: [],
     sellerOffers: [],
@@ -53,25 +56,24 @@ const convertWatchToCompareProduct = (watch: WatchItem): CompareProduct => {
   };
 };
 
-
-
 const ComparePageWrapper = () => {
   const router = useRouter();
- const { selectedWatches } = useCompareContext();
+  const locale = useLocale();
+  const { selectedWatches } = useCompareContext();
   const { getManyByIds } = useWatches();
 
   const watches = getManyByIds(selectedWatches);
 
   const products = useMemo(() => {
     if (watches.length === 0) {
-  return []; 
+      return [];
     }
 
     return watches.map(convertWatchToCompareProduct);
   }, [watches]);
 
   const handleBackToCatalog = () => {
-    router.push('/catalog');
+    router.push(`/${locale}/catalog`);
   };
 
   return (

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Link from 'next/link';
-import styles from './Breadcrumbs.module.css';
+import React from "react";
+import { LocalizedLink } from "@/components/LocalizedLink";
+import styles from "./Breadcrumbs.module.css";
 
 interface BreadcrumbItem {
   label: string;
@@ -18,11 +18,11 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ items }) => {
     <nav className={styles.breadcrumbs}>
       {items.map((item, index) => (
         <React.Fragment key={index}>
-          {index > 0 && <span className={styles.separator}>{' > '}</span>}
+          {index > 0 && <span className={styles.separator}>{" > "}</span>}
           {item.href ? (
-            <Link href={item.href} className={styles.link}>
+            <LocalizedLink href={item.href} className={styles.link}>
               {item.label}
-            </Link>
+            </LocalizedLink>
           ) : (
             <span className={styles.current}>{item.label}</span>
           )}

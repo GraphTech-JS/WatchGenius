@@ -1,7 +1,7 @@
-'use client';
-import React, { useContext } from 'react';
-import styles from './HowTo.module.css';
-import Link from 'next/link';
+"use client";
+import React, { useContext } from "react";
+import styles from "./HowTo.module.css";
+import { LocalizedLink } from "@/components/LocalizedLink";
 import {
   ConfirmedIcon,
   CardIcon,
@@ -9,8 +9,10 @@ import {
   BoxIcon,
   BookIcon,
   RobotIcon,
-} from '../../../../public/howTo-section/Icon';
-import { MainContext } from '@/context';
+} from "../../../../public/howTo-section/Icon";
+import { MainContext } from "@/context";
+import { t } from "@/i18n";
+import { howToKeys } from "@/i18n/keys/home";
 
 export const HowTo = () => {
   const { setSideChatOpened } = useContext(MainContext);
@@ -20,7 +22,7 @@ export const HowTo = () => {
   };
   return (
     <section
-      id='howTo'
+      id="howTo"
       className={`${styles.howTo} max-w-[90rem] mx-auto pt-[3.25rem] pb-[3.75rem] px-[1.25rem] md:px-[2.5rem] lg:py-[3.75rem] lg:px-[6rem]`}
     >
       <div className={`${styles.howToContainer} w-full flex flex-col gap-6`}>
@@ -28,11 +30,11 @@ export const HowTo = () => {
           className={`${styles.howToTitle} w-full flex flex-col justify-center items-center gap-2.5 `}
         >
           <div className={`${styles.howToTitleText} `}>
-            How to buy{' '}
+            How to buy{" "}
             <span className={`${styles.howToTitleHighlighted}`}>safely?</span>
           </div>
           <div className={`${styles.howToText} text-center `}>
-            Дотримуйтесь цих порад, щоб ваше придбання було приємним і безпечним
+            {t(howToKeys.subtitle)}
           </div>
         </div>
         <div
@@ -52,10 +54,10 @@ export const HowTo = () => {
               className={`${styles.howToAdviceItemDesc} flex flex-col gap-2.5`}
             >
               <div className={`${styles.howToAdviceItemTitle} `}>
-                Перевіряйте продавця
+                {t(howToKeys.tips.seller.title)}
               </div>
               <div className={`${styles.howToAdviceItemText} `}>
-                Працюйте лише з перевіреними дилерами та продавцями з рейтингом.
+                {t(howToKeys.tips.seller.text)}
               </div>
             </div>
           </div>
@@ -73,11 +75,10 @@ export const HowTo = () => {
               className={`${styles.howToAdviceItemDesc} flex flex-col gap-2.5`}
             >
               <div className={`${styles.howToAdviceItemTitle} `}>
-                Захищайте оплату
+                {t(howToKeys.tips.payment.title)}
               </div>
               <div className={`${styles.howToAdviceItemText} `}>
-                Оплачуйте через платформи з escrow або з гарантією повернення
-                коштів.
+                {t(howToKeys.tips.payment.text)}
               </div>
             </div>
           </div>
@@ -95,11 +96,10 @@ export const HowTo = () => {
               className={`${styles.howToAdviceItemDesc} flex flex-col gap-2.5`}
             >
               <div className={`${styles.howToAdviceItemTitle} `}>
-                Перевіряйте автентичність
+                {t(howToKeys.tips.authenticity.title)}
               </div>
               <div className={`${styles.howToAdviceItemText} `}>
-                Попросіть сертифікати, перевірте серійні номери годинника перед
-                покупкою.
+                {t(howToKeys.tips.authenticity.text)}
               </div>
             </div>
           </div>
@@ -117,11 +117,10 @@ export const HowTo = () => {
               className={`${styles.howToAdviceItemDesc} flex flex-col gap-2.5`}
             >
               <div className={`${styles.howToAdviceItemTitle} `}>
-                Застрахуйте доставку
+                {t(howToKeys.tips.delivery.title)}
               </div>
               <div className={`${styles.howToAdviceItemText} `}>
-                Обирайте застраховану доставку з відстеженням, щоб захистити
-                вашу покупку.
+                {t(howToKeys.tips.delivery.text)}
               </div>
             </div>
           </div>
@@ -129,8 +128,8 @@ export const HowTo = () => {
         <div
           className={`${styles.howToButtons} flex flex-col md:flex-row md:justify-center gap-4 lg:gap-8 md:px-1`}
         >
-          <Link
-            href='/guide'
+          <LocalizedLink
+            href="/guide"
             prefetch={false}
             className={`${styles.howToLink} w-full lg:max-w-[24%]`}
           >
@@ -138,15 +137,15 @@ export const HowTo = () => {
               className={`${styles.howToGuideBtn} w-full py-[22px] lg:py-[18px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
             >
               <BookIcon className={`${styles.GuideIcon} w-6 h-6`} />
-              <div>Читати повний гайд</div>
+              <div>{t(howToKeys.buttons.guide)}</div>
             </button>
-          </Link>
+          </LocalizedLink>
           <button
             onClick={handleChatClick}
             className={`${styles.howToChatBtn} w-full lg:max-w-[24%] py-[22px] lg:py-[18px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
           >
             <RobotIcon className={`${styles.RobotIcon} w-6 h-6`} />
-            <div>Запитай у Geni</div>
+            <div>{t(howToKeys.buttons.chat)}</div>
           </button>
         </div>
       </div>

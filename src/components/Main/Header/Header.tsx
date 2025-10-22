@@ -3,7 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
-import Link from "next/link";
+// import Link from "next/link";
+import { LocalizedLink } from "@/components/LocalizedLink";
 import Image from "next/image";
 import styles from "./Header.module.css";
 import {
@@ -15,6 +16,8 @@ import {
   Menu,
 } from "../../../../public/icons";
 import { HeartIcon } from "../../../../public/header/Icon";
+import { t } from "@/i18n";
+import { headerKeys } from "@/i18n/keys/header";
 
 export const Header = () => {
   const [open, setOpen] = useState(false);
@@ -58,6 +61,7 @@ export const Header = () => {
   const searchRef = useRef<HTMLDivElement>(null);
 
   const pathname = usePathname();
+  const cleanPathname = pathname?.replace(/^\/[a-z]{2}(\/|$)/, "/") || "/";
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
   const router = useRouter();
@@ -68,18 +72,19 @@ export const Header = () => {
   ) => {
     event.preventDefault();
 
-    if (pathname === "/") {
+    if (cleanPathname === "/") {
       const element = document.getElementById(id);
       if (element) {
         element.scrollIntoView({ behavior: "smooth" });
       }
     } else {
-      router.push(`/#${id}`);
+      const locale = pathname.split("/")[1];
+      router.push(`/${locale}/#${id}`);
     }
   };
 
   useEffect(() => {
-    if (pathname !== "/") return;
+    if (cleanPathname !== "/") return;
 
     const sections = ["dealers", "treands", "contacts"];
     const handleScroll = () => {
@@ -100,7 +105,7 @@ export const Header = () => {
     window.addEventListener("scroll", handleScroll);
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
+  }, [cleanPathname]);
 
   useEffect(() => setMounted(true), []);
 
@@ -132,10 +137,14 @@ export const Header = () => {
   const currencies = ["EUR", "USD", "UAH", "PL", "KZT"];
   const languages = ["УКР", "АНГЛ", "ПЛ"];
 
+  const handleChatClick = () => {
+    window.dispatchEvent(new CustomEvent("toggleChat", { detail: true }));
+  };
+
   return (
     <header className={`${styles.header} w-full`}>
       <div className={styles.headerContainer}>
-        <Link href="/" className={`flex items-center gap-[4px]`}>
+        <LocalizedLink href="/" className={`flex items-center gap-[4px]`}>
           <Image
             src={Logo.src}
             className={`${styles.headerLogoIcon}`}
@@ -145,17 +154,33 @@ export const Header = () => {
           />
 
           <div className={styles.logoName}>WATCHGENIUS</div>
-        </Link>
+        </LocalizedLink>
 
         <nav className={`hidden lg:flex gap-11 lg:pl-12 `}>
           {[
-            { href: "/catalog", label: "Каталог", type: "page" },
-            { href: "#dealers", label: "Дилери", type: "section" },
-            { href: "#treands", label: "Тренди", type: "section" },
-            { href: "#contacts", label: "Контакти", type: "section" },
+            {
+              href: "/catalog",
+              label: t(headerKeys.nav.catalog),
+              type: "page",
+            },
+            {
+              href: "#dealers",
+              label: t(headerKeys.nav.dealers),
+              type: "section",
+            },
+            {
+              href: "#treands",
+              label: t(headerKeys.nav.trends),
+              type: "section",
+            },
+            {
+              href: "#contacts",
+              label: t(headerKeys.nav.contacts),
+              type: "section",
+            },
           ].map(({ href, label, type }) => {
-            const isCatalog = pathname === "/catalog";
-            const isMain = pathname === "/";
+            const isCatalog = cleanPathname === "/catalog";
+            const isMain = cleanPathname === "/";
             const sectionId = href.replace("#", "");
             const isActive =
               (isCatalog && href === "/catalog") ||
@@ -170,14 +195,14 @@ export const Header = () => {
             } ${isInactive ? styles.headerLinkInactive : ""}`;
 
             return type === "page" ? (
-              <Link
+              <LocalizedLink
                 key={label}
                 href={href}
                 className={commonClass}
                 prefetch={false}
               >
                 {label}
-              </Link>
+              </LocalizedLink>
             ) : (
               <a
                 key={label}
@@ -276,7 +301,7 @@ export const Header = () => {
             >
               <Image
                 src={SearchNormal.src}
-                alt="Пошук"
+                alt={t(headerKeys.search.button)}
                 width={18}
                 height={18}
               />
@@ -296,12 +321,12 @@ export const Header = () => {
             <input
               type="text"
               className={`${styles.headerMobileSearchInput} w-full max-w-[150px] `}
-              placeholder="Пошук"
+              placeholder={t(headerKeys.search.placeholder)}
             />
             <button className={`${styles.headerLangSwitchBtn} shrink-0 mr-3`}>
               <Image
                 src={SearchNormal.src}
-                alt="Пошук"
+                alt={t(headerKeys.search.button)}
                 width={18}
                 height={18}
               />
@@ -310,9 +335,14 @@ export const Header = () => {
           <div className="hidden lg:flex gap-3">
             <button
               className={`${styles.headerLangSwitchBtn} shrink-0`}
-              onClick={() => window.dispatchEvent(new Event("openChat"))}
+              onClick={handleChatClick}
             >
-              <Image src={Robot.src} alt="AI агент" width={22} height={22} />
+              <Image
+                src={Robot.src}
+                alt={t(headerKeys.aiAgent.tooltip)}
+                width={22}
+                height={22}
+              />
             </button>
             <button className={`${styles.headerLangSwitchBtn} shrink-0`}>
               <HeartIcon className={`w-5 h-5 text-green-800 `} />
@@ -327,7 +357,7 @@ export const Header = () => {
             >
               <Image
                 src={open ? Close.src : Menu.src}
-                alt="menu icon"
+                alt="menu"
                 className={
                   open
                     ? styles.headerMobileMenuIconClose
@@ -355,14 +385,14 @@ export const Header = () => {
                     <input
                       type="text"
                       className={`${styles.headerMobileSearchInput} max-w-[200px]`}
-                      placeholder="Пошук"
+                      placeholder={t(headerKeys.search.placeholder)}
                     />
                     <button
                       className={`${styles.headerLangSwitchBtn} shrink-0 mr-4`}
                     >
                       <Image
                         src={SearchWhite.src}
-                        alt="Пошук"
+                        alt={t(headerKeys.search.button)}
                         width={18}
                         height={18}
                       />
@@ -443,13 +473,13 @@ export const Header = () => {
               <div
                 className={`${styles.headerMobileMenuWrapper} md:mt-12 flex h-full flex-col items-center justify-center`}
               >
-                <Link
+                <LocalizedLink
                   href="/catalog"
                   onClick={startCloseMenu}
                   className={styles.headerMobileMenuLink}
                 >
-                  Каталог
-                </Link>
+                  {t(headerKeys.mobileMenu.catalog)}
+                </LocalizedLink>
                 <a
                   href="#dealers"
                   onClick={(e) => {
@@ -458,7 +488,7 @@ export const Header = () => {
                   }}
                   className={styles.headerMobileMenuLink}
                 >
-                  Дилери
+                  {t(headerKeys.mobileMenu.dealers)}
                 </a>
                 <a
                   href="#treands"
@@ -468,7 +498,7 @@ export const Header = () => {
                   }}
                   className={styles.headerMobileMenuLink}
                 >
-                  Тренди
+                  {t(headerKeys.mobileMenu.trends)}
                 </a>
                 <a
                   href="#contacts"
@@ -478,7 +508,7 @@ export const Header = () => {
                   }}
                   className={styles.headerMobileMenuLink}
                 >
-                  Контакти
+                  {t(headerKeys.mobileMenu.contacts)}
                 </a>
               </div>
             </div>,
