@@ -12,7 +12,7 @@ export interface SellerOffer {
 }
 
 const sellers = [
-  { name: 'Crown&Caliber', location: 'США, Атланта', rating: 4.9 },
+  { name: 'Crown and Caliber', location: 'США, Атланта', rating: 4.9 },
   { name: 'Chrono24 Premium', location: 'Німеччина, Мюнхен', rating: 4.7 },
   { name: 'WatchBox', location: 'США, Нью-Йорк', rating: 4.5 },
   { name: 'Swiss Watches', location: 'Швейцарія, Цюрих', rating: 4.8 },

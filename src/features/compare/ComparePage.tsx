@@ -90,7 +90,7 @@ const ComparePage: React.FC<ComparePageProps> = ({
       className={`${styles.container} bg-white pt-[27px] pb-[90px] min-h-screen mx-auto mt-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16`}
     >
       <div className={styles.content}>
-        <Breadcrumbs items={breadcrumbItems}/>
+        <Breadcrumbs items={breadcrumbItems} />
 
         <div
           className={`${styles.productsGrid} flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row md:gap-[60px]`}
@@ -116,6 +116,8 @@ const ComparePage: React.FC<ComparePageProps> = ({
                   analytics={products[0].analytics}
                   activeTab={activeTab1}
                   onTabChange={setActiveTab1}
+                  details={products[0].details}
+                  brand={products[0].brand}
                 />
               </div>
             </div>
@@ -142,6 +144,8 @@ const ComparePage: React.FC<ComparePageProps> = ({
                   analytics={products[1].analytics}
                   activeTab={activeTab2}
                   onTabChange={setActiveTab2}
+                  details={products[1].details}
+                  brand={products[1].brand}
                 />
               </div>
             </div>

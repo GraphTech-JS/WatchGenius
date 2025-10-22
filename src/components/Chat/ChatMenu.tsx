@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 'use client';
 
 import React, { useRef, useState, useEffect, useContext } from 'react';
@@ -18,6 +17,7 @@ interface ChatMenuProps {
 export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const chatBodyRef = useRef<HTMLDivElement>(null);
   const { message, messages, setMessage, setMessages } =
     useContext(MainContext);
   const [isTyping, setIsTyping] = useState(false);
@@ -25,6 +25,15 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) setIsAnimating(true);
   }, [isOpen]);
+
+  useEffect(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTo({
+        top: chatBodyRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [messages, isTyping]);
 
   const handleClose = () => {
     setIsAnimating(false);
@@ -125,64 +134,58 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
         <button
-          className={`${styles.chatMenuClose} flex items-center justify-center`}
+          className={`${styles.chatMenuClose} flex items-center justify-center cursor-pointer`}
           onClick={handleClose}
         >
           <CloseIcon className={`${styles.CloseIcon} w-4 h-4 `} />
         </button>
       </div>
 
-      <div className={styles.chatBody}>
-        <ChatList />
-        {isTyping && <div className={styles.typing}>Geni друкує…</div>}
-        <div
-          className={`${styles.chatMenuButtons} w-full flex flex-col gap-2.5 px-5 py-3.5`}
+      <div ref={chatBodyRef} className={styles.chatBody}>
+        <ChatList isTyping={isTyping} />
+      </div>
+
+      <div className={styles.chatMenuButtons}>
+        <button
+          className={styles.chatMenuActionBtn}
+          onClick={() => handleInlineButtonClick('Порівняти моделі')}
         >
-          <button
-            className={styles.chatMenuActionBtn}
-            onClick={() => handleInlineButtonClick('Порівняти моделі')}
-          >
-            <span className={styles.chatMenuBtnIcon}>🔍</span>
-            Порівняти моделі
-          </button>
-          <button
-            className={styles.chatMenuActionBtn}
-            onClick={() => handleInlineButtonClick('Показати тренди ринку')}
-          >
-            <span className={styles.chatMenuBtnIcon}>📈</span>
-            Показати тренди ринку
-          </button>
-          <button
-            className={styles.chatMenuActionBtn}
-            onClick={() =>
-              handleInlineButtonClick('Знайти годинник по бюджету')
-            }
-          >
-            <span className={styles.chatMenuBtnIcon}>💡</span>
-            Знайти годинник по бюджету
-          </button>
-          <button
-            className={styles.chatMenuActionBtn}
-            onClick={() =>
-              handleInlineButtonClick('Як перевірити справжність?')
-            }
-          >
-            <span className={styles.chatMenuBtnIcon}>✅</span>
-            Як перевірити справжність?
-          </button>
-        </div>
+          <span className={styles.chatMenuBtnIcon}>🔍</span>
+          Порівняти моделі
+        </button>
+        <button
+          className={styles.chatMenuActionBtn}
+          onClick={() => handleInlineButtonClick('Показати тренди ринку')}
+        >
+          <span className={styles.chatMenuBtnIcon}>📈</span>
+          Показати тренди ринку
+        </button>
+        <button
+          className={styles.chatMenuActionBtn}
+          onClick={() => handleInlineButtonClick('Знайти годинник по бюджету')}
+        >
+          <span className={styles.chatMenuBtnIcon}>💡</span>
+          Знайти годинник по бюджету
+        </button>
+        <button
+          className={styles.chatMenuActionBtn}
+          onClick={() => handleInlineButtonClick('Як перевірити справжність?')}
+        >
+          <span className={styles.chatMenuBtnIcon}>✅</span>
+          Як перевірити справжність?
+        </button>
       </div>
 
       <div className={styles.inputBar}>
-        <div className='relative'>
+        <div className={styles.inputWrapper}>
           <input
             placeholder='Напишіть питання про годинники…'
             value={message.content}
             onChange={handleChange}
-            className={`${styles.chatInput} border bg-[#fafafa] border-black/10 rounded-[10px] px-[23px] py-[25px] w-[418px] h-[58px] placeholder:text-[rgba(23,20,20,0.5)] placeholder:font-normal placeholder:text-base`}
+            className={styles.chatInput}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           />
-          <div className='absolute right-[17px] top-1/2 transform -translate-y-1/2'>
+          <div className={styles.attachIconWrapper}>
             <Image
               src={ChatAttachIcon.src}
               alt='attach'
@@ -193,7 +196,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
         <button
-          className='px-4 py-2 cursor-pointer flex items-center justify-center text-white rounded-[10px] w-[61px] h-[58px] bg-[#2f855a]'
+          className={styles.sendButton}
           onClick={handleSend}
           aria-label='Надіслати'
         >

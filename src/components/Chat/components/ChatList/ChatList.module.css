@@ -2,34 +2,13 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  height: 100%;
-  overflow-y: auto;
   padding: 8px 0 8px 0;
 }
 
 .typing {
   font-size: 14px;
   color: #6b7280;
-  margin: 8px 12px 0 12px;
+  padding: 8px 0 0 14px;
   font-style: italic;
-}
-
-.chatList::-webkit-scrollbar {
-  background: transparent;
-  border: 1px solid var(--black);
-  border-radius: 9px;
-}
-
-.chatList::-webkit-scrollbar-thumb {
-  background-color: rgba(24, 35, 45, 1);
-  border-radius: 9px;
-}
-
-@media (max-width: 420px) {
-  .chatList::-webkit-scrollbar {
-    display: none;
-  }
-  .chatList {
-    /* parent handles spacing */
-  }
+  flex-shrink: 0;
 }

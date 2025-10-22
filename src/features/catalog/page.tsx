@@ -1,5 +1,6 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
+import { MainContext } from '@/context';
 
 import { CatalogSidebar } from '@/features/catalog/components/CatalogSidebar/CatalogSidebar';
 import { FixedSidebar } from '@/features/catalog/components/FixedSidebar/FixedSidebar';
@@ -9,6 +10,7 @@ import { CatalogControls } from '@/features/catalog/components/CatalogControls/C
 import { ActiveFiltersBar } from '@/features/catalog/components/ActiveFiltersBar/ActiveFiltersBar';
 import { FeedbackModal } from '@/components/FeedbackModal/FeedbackModal';
 import { useFeedbackModal } from '@/hooks/useFeedbackModal';
+import { useSaveSearchToChat } from '@/hooks/useSaveSearchToChat';
 
 import styles from './page.module.css';
 import { useCatalogSearch } from '@/hooks/useCatalogSearch';
@@ -19,8 +21,74 @@ const CatalogPage = () => {
   const search = useCatalogSearch();
   const sidebar = useSidebarPosition();
   const feedbackModal = useFeedbackModal();
+  const { savedCatalogFilters, setSavedCatalogFilters } =
+    useContext(MainContext);
 
-  const handleSaveToChat = () => {};
+  const { saveSearchToChat } = useSaveSearchToChat();
+
+  useEffect(() => {
+    if (savedCatalogFilters) {
+      if (savedCatalogFilters.searchTerm) {
+        search.setSearchTerm(savedCatalogFilters.searchTerm);
+      }
+
+      const selectedBrands: string[] = [];
+      const selectedConditions: string[] = [];
+      const selectedMechanisms: string[] = [];
+      const selectedMaterials: string[] = [];
+      const selectedDocuments: string[] = [];
+      const selectedLocations: string[] = [];
+      const selectedIndexes: Array<'A' | 'B' | 'C'> = [];
+
+      savedCatalogFilters.filters.forEach((filter) => {
+        const [group, value] = filter.split(':');
+
+        if (group === 'brand') selectedBrands.push(value);
+        else if (group === 'condition') selectedConditions.push(value);
+        else if (group === 'mechanism') selectedMechanisms.push(value);
+        else if (group === 'material') selectedMaterials.push(value);
+        else if (group === 'document') selectedDocuments.push(value);
+        else if (group === 'location') selectedLocations.push(value);
+        else if (
+          group === 'index' &&
+          (value === 'A' || value === 'B' || value === 'C')
+        ) {
+          selectedIndexes.push(value);
+        }
+      });
+
+      if (
+        selectedBrands.length ||
+        selectedConditions.length ||
+        selectedMechanisms.length ||
+        selectedMaterials.length
+      ) {
+        search.applySidebarFilters({
+          selectedBrands,
+          selectedConditions,
+          selectedMechanisms,
+          selectedMaterials,
+          selectedDocuments,
+          selectedLocations,
+          priceFrom: '0',
+          priceTo: '50000',
+          yearFrom: '2000',
+          yearTo: '2005',
+        } as UseCatalogFiltersReturn);
+      }
+      if (selectedIndexes.length) search.setSelectedIndexes(selectedIndexes);
+
+      setSavedCatalogFilters(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [savedCatalogFilters]);
+
+  const handleSaveToChat = () => {
+    saveSearchToChat({
+      searchTerm: search.searchTerm,
+      activeFilters: search.activeFilters,
+    });
+  };
 
   const handleApplyFilters = (filters: UseCatalogFiltersReturn) => {
     search.applySidebarFilters(filters);

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { ClipLoader } from 'react-spinners';
 import { WatchCard } from '@/features/catalog/components/CatalogGrid/WatchCard/WatchCard';
 import { EmptyState } from '@/features/catalog/components/CatalogGrid/EmptyState/EmptyState';
 import type { WatchItem } from '@/interfaces';
@@ -20,6 +21,9 @@ export const CatalogGrid: React.FC<Props> = ({
   onOpenFeedback,
 }) => {
   const [showAll, setShowAll] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const suppressAutoRef = useRef(false); 
   const [liked, setLiked] = useState<Set<string>>(new Set());
 
   const visible = useMemo(
@@ -39,6 +43,32 @@ export const CatalogGrid: React.FC<Props> = ({
     });
 
   const canToggle = items.length > initialCount;
+
+  useEffect(() => {
+    if (!canToggle) return;
+    if (showAll) return;
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry.isIntersecting) return;
+        if (suppressAutoRef.current) {
+          suppressAutoRef.current = false;
+          return;
+        }
+        if (isLoading) return;
+        setIsLoading(true);
+        setTimeout(() => {
+          setShowAll(true);
+          setIsLoading(false);
+        }, 500);
+      },
+      { root: null, rootMargin: '120px', threshold: 0.01 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [canToggle, isLoading, showAll]);
 
   if (items.length === 0) {
     return (
@@ -66,13 +96,32 @@ export const CatalogGrid: React.FC<Props> = ({
       {canToggle && (
         <div className='flex justify-center mt-6'>
           <button
-            onClick={() => setShowAll((v) => !v)}
-            className='w-full text-center text-[20px] text-[#8b8b8b] underline cursor-pointer disabled:opacity-60 flex items-center justify-center'
+            onClick={() => {
+              if (isLoading) return;
+              if (showAll) {
+                suppressAutoRef.current = true;
+                setShowAll(false);
+                return;
+              }
+              setIsLoading(true);
+              setTimeout(() => {
+                setShowAll(true);
+                setIsLoading(false);
+              }, 500);
+            }}
+            disabled={isLoading}
+            className='w-full text-center text-[20px] text-[#8b8b8b] underline cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2'
           >
-            {showAll ? 'Показати менше' : 'Показати ще'}
+            {isLoading ? (
+              <ClipLoader size={24} color={'#04694f'} speedMultiplier={0.9} />
+            ) : (
+              <>{showAll ? 'Показати менше' : 'Показати ще'}</>
+            )}
           </button>
         </div>
       )}
+
+      {canToggle && !showAll && <div ref={sentinelRef} style={{ height: 1 }} />}
     </>
   );
 };

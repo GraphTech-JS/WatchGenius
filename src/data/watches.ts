@@ -30,6 +30,10 @@ const createWatches = (): WatchItem[] => {
     const trendValue = index === 'B' ? -5 : index === 'C' ? -2 : 7;
     const price = 15000 + i * 1000;
 
+    const diameterMm = 38 + (i % 6);
+    const waterResistance = (i % 2) === 0;
+    const chronograph = (i % 3) === 0;
+
     items.push({
       id: `w-${i + 1}`,
       slug: `${brand.toLowerCase().replace(' ', '-')}-submariner-${i + 1}`,
@@ -42,7 +46,9 @@ const createWatches = (): WatchItem[] => {
       buttonLabel,
       trend: { value: trendValue, period: '90d' },
       variant,
-
+      diameterMm,
+      waterResistance,
+      chronograph,
       brand,
       condition,
       mechanism,

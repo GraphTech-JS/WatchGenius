@@ -67,13 +67,14 @@ const ProductPageWrapper = ({
     ],
     description: `${watch.brand} ${watch.title} - ${watch.condition} стан`,
     details: [
-      { label: 'Матеріал', value: watch.material },
-      { label: 'Калібр', value: watch.reference || 'N/A' },
-      { label: 'Рік', value: watch.year.toString() },
-      { label: 'Діаметр', value: '41 mm' },
-      { label: 'Стан', value: watch.condition },
-      { label: 'Водонепроникність', value: '300m' },
       { label: 'Механізм', value: watch.mechanism },
+      { label: 'Рік', value: watch.year.toString() },
+      { label: 'Матеріал', value: watch.material },
+      { label: 'Діаметр', value: `${watch.diameterMm}мм` },
+      { label: 'Стан', value: watch.condition },
+      { label: 'Ремінець', value: 'Залізо' },
+      { label: 'Водостійкість', value: watch.waterResistance ? 'Так' : 'Ні' },
+      { label: 'Хронограф', value: watch.chronograph ? 'Так' : 'Ні' },
     ],
     analytics: {
       demand: Math.abs(watch.trend.value) * 10,
@@ -82,6 +83,25 @@ const ProductPageWrapper = ({
       ads: 'За 3 дні',
       trendGauge: Math.abs(watch.trend.value) * 10,
       lastUpdated: 'вересень 2025 року',
+      volatility:
+        Math.abs(watch.trend.value) < 4
+          ? 'Низька'
+          : Math.abs(watch.trend.value) < 8
+          ? 'Середня'
+          : 'Висока',
+      liquidityLabel:
+        watch.index === 'A'
+          ? 'Висока'
+          : watch.index === 'B'
+          ? 'Середня'
+          : 'Низька',
+      popularity: 7.5 + ((watch.id.charCodeAt(2) || 0) % 20) / 10, // 7.5..9.4
+      reportPeak: Math.round(watch.price * 1.03),
+      reportMin: Math.round(watch.price * 0.97),
+      reportChangePct:
+        (Math.sign(watch.trend.value) *
+          (2 + ((watch.id.charCodeAt(1) || 0) % 3))) /
+        10, 
     },
     similarModels,
     sellerOffers,

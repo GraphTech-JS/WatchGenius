@@ -22,4 +22,7 @@ export type WatchItem = {
   location: string;
   year: number;
   reference?: string;
+  diameterMm: number;         
+  waterResistance: boolean;   
+  chronograph: boolean;       
 };

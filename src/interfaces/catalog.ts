@@ -1,31 +1,8 @@
-import type { StaticImageData } from 'next/image';
 import { SortOption } from '@/types/sorting';
 import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
+import { WatchItem, WatchIndex } from './watch';
 
-export type WatchIndex = 'A' | 'B' | 'C';
-export type Currency = '€' | '$' | '₴';
-
-export interface WatchItem {
-  id: string;
-  slug: string;
-  title: string;
-  price: number;
-  currency: Currency;
-  index: WatchIndex;
-  image: string | StaticImageData;
-  brandLogo?: StaticImageData;
-  buttonLabel: string; 
-  trend: { value: number; period: string }; 
-  variant?: 'product' | 'brand';
-  
-  brand: string;
-  condition: string;
-  mechanism: string;
-  material: string;
-  documents: string;
-  location: string;
-  year: number;
-}
+export type { WatchItem, WatchIndex };
 
 export interface CatalogControlsProps {
   searchTerm: string;
