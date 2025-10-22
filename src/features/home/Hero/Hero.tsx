@@ -52,7 +52,7 @@ export const Hero = () => {
               </LocalizedLink>
               <button
                 onClick={handleChatClick}
-                className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer`}
+                className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer max-w-[346px] md:max-w-full`}
               >
                 <RobotWhiteIcon
                   className={`${styles.footerSocialLinkItem} w-8 h-8 md:text-white `}

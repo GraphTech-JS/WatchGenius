@@ -184,7 +184,9 @@ export const Footer = () => {
               width={190}
               height={40}
             />
-            <div className={styles.chronoName}>{t(footerKeys.poweredBy)}</div>
+            <div className={`${styles.chronoName} text-nowrap`}>
+              {t(footerKeys.poweredBy)}
+            </div>
           </div>
         </div>
         <nav className={`${styles.footerSupportWrapper}`}>

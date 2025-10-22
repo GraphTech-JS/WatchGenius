@@ -61,13 +61,12 @@
   outline: none;
   border: none;
   -webkit-tap-highlight-color: transparent;
-  padding: 8px 16px; /* add top/bottom to avoid clipping */
-  scroll-padding-inline: 16px;
+  padding: 8px 8px; /* add top/bottom to avoid clipping */
+  scroll-padding-inline: 8px;
   /* Soft edge fade so shadows don't look cut */
   --edge-fade: 16px;
   --edge-fade-y: 12px;
-  -webkit-mask-image:
-    linear-gradient(
+  -webkit-mask-image: linear-gradient(
       to right,
       transparent 0,
       black var(--edge-fade),
@@ -81,8 +80,7 @@
       black calc(100% - var(--edge-fade-y)),
       transparent 100%
     );
-  mask-image:
-    linear-gradient(
+  mask-image: linear-gradient(
       to right,
       transparent 0,
       black var(--edge-fade),
