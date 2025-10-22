@@ -63,7 +63,7 @@ export const HeroChartItem: React.FC<HeroChartItemProps> = ({
         <div
           className={`${
             styles[`chart${variant[0].toUpperCase() + variant.slice(1)}`]
-          } flex items-center justify-center w-8 lg:w-12 h-8 lg:h-11 rounded-md font-bold`}
+          } flex items-center justify-center w-10.5 lg:w-12 h-9.5 lg:h-11 rounded-md font-bold text-base lg:text-xl`}
         >
           {label}
         </div>
