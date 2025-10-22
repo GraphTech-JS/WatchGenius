@@ -1,10 +1,12 @@
 "use client";
 import React from "react";
 import styles from "./BestPrice.module.css";
-import Link from "next/link";
+import { LocalizedLink } from "@/components/LocalizedLink";
 import { CustomSelect } from "@/components/CustomSelect/CustomSelect";
 import { mockBest } from "@/mock/watch";
 import { ProductBest } from "@/components/ProductsTable/ProductBest/ProductBest";
+import { t } from "@/i18n";
+import { bestPriceKeys } from "@/i18n/keys/home";
 
 export const BestPrice = () => {
   const brands = [
@@ -36,7 +38,9 @@ export const BestPrice = () => {
         <div
           className={`${styles.bestModules} flex flex-col md:flex-row-reverse gap-6`}
         >
-          <div className={`${styles.bestAlert} flex flex-col items-center gap-4`}>
+          <div
+            className={`${styles.bestAlert} flex flex-col items-center gap-4`}
+          >
             <div className={`${styles.bestAlertTitle} `}>Set price alert</div>
             <div
               className={`${styles.bestAlertForm} flex flex-col gap-6 w-full`}
@@ -45,7 +49,7 @@ export const BestPrice = () => {
                 className={`${styles.bestAlertFormItem} flex flex-col gap-3.5 `}
               >
                 <div className={`${styles.FormItemTitle}`}>
-                  Оберіть модель годинника
+                  {t(bestPriceKeys.form.selectModel)}
                 </div>
                 <CustomSelect
                   options={brands}
@@ -56,7 +60,7 @@ export const BestPrice = () => {
                 className={`${styles.bestAlertFormItem} flex flex-col gap-3.5 `}
               >
                 <div className={`${styles.FormItemTitle}`}>
-                  Відповідатиме вартості
+                  {t(bestPriceKeys.form.matchPrice)}
                 </div>
                 <div
                   className={`${styles.FormItemInput} flex items-center justify-center w-full h-12 rounded-xl px-4 py-3.5`}
@@ -78,7 +82,7 @@ export const BestPrice = () => {
                 className={`${styles.bestAlertFormItem} flex flex-col gap-3.5 `}
               >
                 <div className={`${styles.FormItemTitle}`}>
-                  Email для сповіщень
+                  {t(bestPriceKeys.form.email)}
                 </div>
                 <div
                   className={`${styles.FormItemInput} flex items-center justify-center w-full h-12 rounded-xl px-4 py-3.5 `}
@@ -96,15 +100,14 @@ export const BestPrice = () => {
               <button
                 className={`${styles.FormBtn} flex items-center justify-center py-3.5 rounded-xl cursor-pointer `}
               >
-                <div>Отимувати сповіщення</div>
+                <div>{t(bestPriceKeys.form.button)}</div>
               </button>
               <div className={`${styles.Text}`}>
                 <p>
-                  Ми надсилатимемо сповіщення не частіше 1 разу на день.
-                  Натискаючи “Встановити”, Ви погоджуєтесь{" "}
-                  <Link href="./" className={`${styles.TextLink}`}>
-                    з умовами використання
-                  </Link>
+                  {t(bestPriceKeys.form.note)}{" "}
+                  <LocalizedLink href="./" className={`${styles.TextLink}`}>
+                    {t(bestPriceKeys.form.terms)}
+                  </LocalizedLink>
                 </p>
               </div>
             </div>
@@ -115,12 +118,12 @@ export const BestPrice = () => {
             <div className={`${styles.bestWatchesContainer}`}>
               <ProductBest items={mockBest} />
             </div>
-            <Link
+            <LocalizedLink
               href="./"
               className={`${styles.bestWatchesLink} cursor-pointer`}
             >
-              Найкращі пропозиції дня →
-            </Link>
+              {t(bestPriceKeys.link)}
+            </LocalizedLink>
           </div>
         </div>
       </div>

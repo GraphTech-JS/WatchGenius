@@ -2,9 +2,11 @@
 import React from "react";
 import styles from "./DealerCard.module.css";
 import Image from "next/image";
-import Link from "next/link";
+import { LocalizedLink } from "@/components/LocalizedLink";
 import { DetailsIcon, LetterIcon } from "../../../../public/dealers/Icon";
 import { DealerData } from "@/types/dealers";
+import { t } from "@/i18n";
+import { dealerCardKeys } from "@/i18n/keys/home";
 
 export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
   return (
@@ -49,7 +51,7 @@ export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
         <div
           className={`${styles.CardButtons} w-full lg:max-w-[14rem] flex flex-col gap-4 text-center`}
         >
-          <Link
+          <LocalizedLink
             href="/dealer"
             prefetch={false}
             className={`${styles.dealerCardLink} w-full `}
@@ -58,10 +60,10 @@ export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
               className={`${styles.dealerBtn} w-full py-4 lg:py-[16px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
             >
               <DetailsIcon className={`${styles.DealerIcon} w-4 h-4`} />
-              <div>Перейти на сайт</div>
+              <div>{t(dealerCardKeys.visit)}</div>
             </button>
-          </Link>
-          <Link
+          </LocalizedLink>
+          <LocalizedLink
             href="/price"
             prefetch={false}
             className={`${styles.dealerCardLink} w-full `}
@@ -70,9 +72,9 @@ export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
               className={`${styles.priceBtn} w-full py-4 lg:py-[16px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
             >
               <LetterIcon className={`${styles.BookIcon} w-5.5 h-5.5`} />
-              <div>Запит ціни</div>
+              <div>{t(dealerCardKeys.request)}</div>
             </button>
-          </Link>
+          </LocalizedLink>
         </div>
       </div>
     </div>

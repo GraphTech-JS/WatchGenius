@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { ChatMenu } from '@/components/Chat/ChatMenu';
-import { ChatButton } from '@/components/Chat/components/ChatButton/ChatButton';
-import { FloatingButton } from '@/components/FloatingButton';
-import { MainContext } from '@/context';
-import React, { useContext } from 'react';
+import { ChatMenu } from "@/components/Chat/ChatMenu";
+import { ChatButton } from "@/components/Chat/components/ChatButton/ChatButton";
+import { FloatingButton } from "@/components/FloatingButton";
+import { MainContext } from "@/context";
+import React, { useContext, useEffect } from "react";
 
 export default function ChatClient({
   children,
@@ -13,12 +13,27 @@ export default function ChatClient({
 }) {
   const { sideChatOpened, setSideChatOpened } = useContext(MainContext);
 
+  useEffect(() => {
+    const handleToggleChat = (e: Event) => {
+      const custom = e as CustomEvent<boolean>;
+      setSideChatOpened(!!custom.detail);
+    };
+
+    window.addEventListener("toggleChat", handleToggleChat as EventListener);
+    return () => {
+      window.removeEventListener(
+        "toggleChat",
+        handleToggleChat as EventListener
+      );
+    };
+  }, [setSideChatOpened]);
+
   return (
-    <div className='flex relative w-full h-full'>
+    <div className="flex relative w-full h-full">
       {!sideChatOpened && (
-        <div className='fixed right-4 z-[200] '>
+        <div className="fixed right-4 z-[200] ">
           <FloatingButton
-            watchedIds={['footer']}
+            watchedIds={["footer"]}
             safeOffset={16}
             initialOffsetPercent={0.4}
             extraOffset={0}
@@ -34,18 +49,18 @@ export default function ChatClient({
         </div>
       )}
       <main
-        id='main-content'
-        className='w-full min-h-screen transition-all duration-300 ease-in-out'
+        id="main-content"
+        className="w-full min-h-screen transition-all duration-300 ease-in-out"
       >
         {children}
       </main>
 
       {sideChatOpened && (
         <aside
-          className='fixed inset-0 z-[150]'
-          style={{ height: '100vh', overflow: 'hidden' }}
+          className="fixed inset-0 z-[150]"
+          style={{ height: "100vh", overflow: "hidden" }}
         >
-          <div className='h-full'>
+          <div className="h-full">
             <ChatMenu isOpen={true} onClose={() => setSideChatOpened(false)} />
           </div>
         </aside>

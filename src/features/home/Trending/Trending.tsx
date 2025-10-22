@@ -5,6 +5,8 @@ import { ThemedText } from "@/components/ThemedText/ThemedText";
 import { mockTrending } from "@/mock/watch";
 import { ProductCarousel } from "@/components/ProductsTable/ProductCarousel/ProductCarousel";
 import { SettingsIcon } from "../../../../public/social/Icon";
+import { t } from "@/i18n";
+import { trendingKeys } from "@/i18n/keys/home";
 
 export const Trending = () => {
   const [open, setOpen] = useState(false);
@@ -50,26 +52,29 @@ export const Trending = () => {
                 className={`${styles.trendingSettingsItem} py-2 px-5 flex items-center justify-end gap-6 border-b cursor-pointer`}
                 onClick={toggleMenu}
               >
-                <span>За трендом</span>
+                <span>{t(trendingKeys.sort.trend)}</span>
                 <SettingsIcon className="w-[24px] h-[24px] cursor-pointer" />
               </div>
               <div
                 className={`${styles.trendingSettingsItem} py-2 border-b cursor-pointer`}
                 onClick={toggleMenu}
               >
-                <span>За ціною</span>
+                <span>{t(trendingKeys.sort.price)}</span>
               </div>
               <div
                 className={`${styles.trendingSettingsItem} py-2 cursor-pointer`}
                 onClick={toggleMenu}
               >
-                <span>За рейтингом</span>
+                <span>{t(trendingKeys.sort.rating)}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <ProductCarousel items={mockTrending} />
+        <ProductCarousel
+          items={mockTrending}
+          ctaLabel={t(trendingKeys.carousel.cta)}
+        />
       </div>
     </section>
   );
