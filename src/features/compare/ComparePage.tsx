@@ -118,6 +118,7 @@ const ComparePage: React.FC<ComparePageProps> = ({
                   onTabChange={setActiveTab1}
                   details={products[0].details}
                   brand={products[0].brand}
+                  isCompare={true}
                 />
               </div>
             </div>
@@ -146,6 +147,7 @@ const ComparePage: React.FC<ComparePageProps> = ({
                   onTabChange={setActiveTab2}
                   details={products[1].details}
                   brand={products[1].brand}
+                  isCompare={true}
                 />
               </div>
             </div>

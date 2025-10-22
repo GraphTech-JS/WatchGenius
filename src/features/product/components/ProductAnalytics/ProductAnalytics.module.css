@@ -79,6 +79,14 @@
   z-index: 0;
   pointer-events: none;
 }
+
+.brandBackgroundCompare {
+  width: 400px;
+  height: 220px;
+  top: 52px;
+    left: 56px;
+}
+
 .brandBackgroundImage {
   width: 100%;
   height: 100%;

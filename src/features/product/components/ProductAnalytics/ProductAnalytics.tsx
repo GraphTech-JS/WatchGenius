@@ -49,6 +49,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   onTabChange,
   details,
   brand,
+  isCompare = false,
 }) => {
   const [activeChartPeriod, setActiveChartPeriod] = useState<'3M' | '1P'>('3M');
   const [isVolatilityHovered, setIsVolatilityHovered] = useState(false);
@@ -286,7 +287,11 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
             const content = BRAND_CONTENT[brand] ?? BRAND_CONTENT.default;
             return (
               <div className={styles.brandContent}>
-                <div className={styles.brandBackground}>
+                <div
+                  className={`${styles.brandBackground} ${
+                    isCompare ? styles.brandBackgroundCompare : ''
+                  }`}
+                >
                   <Image
                     src={content.image}
                     alt={`${content.title} Brand Background`}
