@@ -1,6 +1,6 @@
 import styles from "../admin.module.css";
 import React from "react";
-import { SettingsCog } from "../../../../public/icons";
+import { SettingsCog } from "../../../../../public/icons";
 import { AdminLayout } from "@/components/Main/AdminLayout/AdminLayout";
 import { Button } from "@/components/Button/Button";
 

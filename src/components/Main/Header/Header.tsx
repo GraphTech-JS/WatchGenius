@@ -3,7 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
-import Link from "next/link";
+// import Link from "next/link";
+import { LocalizedLink } from "@/components/LocalizedLink";
 import Image from "next/image";
 import styles from "./Header.module.css";
 import {
@@ -135,7 +136,7 @@ export const Header = () => {
   return (
     <header className={`${styles.header} w-full`}>
       <div className={styles.headerContainer}>
-        <Link href="/" className={`flex items-center gap-[4px]`}>
+        <LocalizedLink href="/" className={`flex items-center gap-[4px]`}>
           <Image
             src={Logo.src}
             className={`${styles.headerLogoIcon}`}
@@ -145,7 +146,7 @@ export const Header = () => {
           />
 
           <div className={styles.logoName}>WATCHGENIUS</div>
-        </Link>
+        </LocalizedLink>
 
         <nav className={`hidden lg:flex gap-11 lg:pl-12 `}>
           {[
@@ -170,14 +171,14 @@ export const Header = () => {
             } ${isInactive ? styles.headerLinkInactive : ""}`;
 
             return type === "page" ? (
-              <Link
+              <LocalizedLink
                 key={label}
                 href={href}
                 className={commonClass}
                 prefetch={false}
               >
                 {label}
-              </Link>
+              </LocalizedLink>
             ) : (
               <a
                 key={label}
@@ -443,13 +444,13 @@ export const Header = () => {
               <div
                 className={`${styles.headerMobileMenuWrapper} md:mt-12 flex h-full flex-col items-center justify-center`}
               >
-                <Link
+                <LocalizedLink
                   href="/catalog"
                   onClick={startCloseMenu}
                   className={styles.headerMobileMenuLink}
                 >
                   Каталог
-                </Link>
+                </LocalizedLink>
                 <a
                   href="#dealers"
                   onClick={(e) => {

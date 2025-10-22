@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Link from "next/link";
+// import Link from "next/link";
+import { LocalizedLink } from "@/components/LocalizedLink";
 import styles from "./ProductCarousel.module.css";
 import { ProductCard } from "@/components/ProductsTable/ProductCard/ProductCard";
 import type { IWatch } from "@/interfaces";
@@ -46,16 +47,18 @@ export const ProductCarousel: React.FC<Props> = ({
     el.scrollTo({ left: idx * viewport, behavior: "smooth" });
   };
 
-  const next = () => setPage((p) => {
-    const np = Math.min(p + 1, totalPages - 1);
-    scrollToPage(np);
-    return np;
-  });
-  const prev = () => setPage((p) => {
-    const np = Math.max(p - 1, 0);
-    scrollToPage(np);
-    return np;
-  });
+  const next = () =>
+    setPage((p) => {
+      const np = Math.min(p + 1, totalPages - 1);
+      scrollToPage(np);
+      return np;
+    });
+  const prev = () =>
+    setPage((p) => {
+      const np = Math.max(p - 1, 0);
+      scrollToPage(np);
+      return np;
+    });
 
   const isMobile = cols === 2;
   const isTablet = cols === 3;
@@ -84,7 +87,9 @@ export const ProductCarousel: React.FC<Props> = ({
       if (!isDown) return;
       isDown = false;
       if (pointerId !== null) {
-        try { (e.target as Element).releasePointerCapture?.(pointerId); } catch {}
+        try {
+          (e.target as Element).releasePointerCapture?.(pointerId);
+        } catch {}
         pointerId = null;
       }
       const viewport = el.clientWidth;
@@ -134,13 +139,13 @@ export const ProductCarousel: React.FC<Props> = ({
           const gap = "2.5rem"; // matches gap-10
           const basis = `calc((100% - ${gap} * ${cols - 1}) / ${cols})`;
           return (
-          <div
-            key={`${card.id}-${card.brand}`}
-            className="snap-start shrink-0"
-            style={{ flex: `0 0 ${basis}`, maxWidth: basis }}
-          >
-            <ProductCard {...card} />
-          </div>
+            <div
+              key={`${card.id}-${card.brand}`}
+              className="snap-start shrink-0"
+              style={{ flex: `0 0 ${basis}`, maxWidth: basis }}
+            >
+              <ProductCard {...card} />
+            </div>
           );
         })}
       </div>
@@ -160,12 +165,12 @@ export const ProductCarousel: React.FC<Props> = ({
                 />
               ))}
             </div>
-            <Link
+            <LocalizedLink
               href={ctaHref}
               className={`${styles.ctaBtn} inline-flex justify-self-start py-3.5 px-14 rounded-xl items-center`}
             >
               {ctaLabel}
-            </Link>
+            </LocalizedLink>
           </div>
         )}
 
@@ -173,12 +178,12 @@ export const ProductCarousel: React.FC<Props> = ({
           <div
             className={`${styles.desktopBar}  w-full grid items-center gap-4`}
           >
-            <Link
+            <LocalizedLink
               href={ctaHref}
               className={`${styles.ctaBtn} inline-flex justify-self-start py-[10px] px-[42px] rounded-xl items-center`}
             >
               {ctaLabel}
-            </Link>
+            </LocalizedLink>
 
             {/* Bars */}
             <div

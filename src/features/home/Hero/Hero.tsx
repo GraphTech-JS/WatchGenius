@@ -1,10 +1,11 @@
-'use client';
-import React, { useContext } from 'react';
-import styles from './Hero.module.css';
-import Link from 'next/link';
-import { HeroChartsCarousel } from '@/components/Main/Hero/HeroChartsCarousel/HeroChartsCarousel';
-import { RobotWhiteIcon } from '../../../../public/chat/Icon';
-import { MainContext } from '@/context';
+"use client";
+import React, { useContext } from "react";
+import styles from "./Hero.module.css";
+// import Link from 'next/link';
+import { LocalizedLink } from "@/components/LocalizedLink";
+import { HeroChartsCarousel } from "@/components/Main/Hero/HeroChartsCarousel/HeroChartsCarousel";
+import { RobotWhiteIcon } from "../../../../public/chat/Icon";
+import { MainContext } from "@/context";
 
 export const Hero = () => {
   const { setSideChatOpened } = useContext(MainContext);
@@ -22,7 +23,7 @@ export const Hero = () => {
         bg-position-[center_right_-230px] sm:bg-position-[center_right_-200px] md:bg-position-[top_-70px_right_-120px] lg:bg-position-[center_left_204px]
         bg-no-repeat bg-cover md:bg-size-[auto_620px] lg:bg-cover `}
       >
-        <div className='absolute inset-0 z-0 backdrop-blur-xs md:hidden' />
+        <div className="absolute inset-0 z-0 backdrop-blur-xs md:hidden" />
         <div
           className={`${styles.heroWrap} relative z-[2] max-w-[90rem] mx-auto w-full overflow-hidden px-3.5 md:pl-10 md:pr-0 pb-6 md:pb-4 lg:px-25
           pt-24 md:pt-28 lg:pt-36 lg:pb-6 flex flex-col items-center 
@@ -43,13 +44,13 @@ export const Hero = () => {
             <div
               className={`${styles.heroMenu} md:w-[90%] flex flex-col md:flex-row gap-6 items-center`}
             >
-              <Link href='/catalog' className={styles.heroLink}>
+              <LocalizedLink href="/catalog" className={styles.heroLink}>
                 <button
                   className={`${styles.heroCatalogBtn} w-full py-[12px] rounded-[10px] cursor-pointer`}
                 >
                   <div>Каталог</div>
                 </button>
-              </Link>
+              </LocalizedLink>
               <button
                 onClick={handleChatClick}
                 className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer`}

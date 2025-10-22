@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import styles from "./not-found.module.css";
-import { WatchBg } from "../../public/not-found";
-import Link from "next/link";
+import { WatchBg } from "../../../public/not-found";
+// import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/Button/Button";
 
@@ -31,12 +31,12 @@ const NotFound = () => {
             >
               Назад
             </Button>
-            <Button
+            {/* <Button
               variant="text"
               classNames={`${styles.notFoundBtn} ${styles.notFoundBtnChat}`}
             >
               <Link href="/chat"> Відкрити чат з AI агентом</Link>
-            </Button>
+            </Button> */}
           </div>
 
           <img
