@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import { LineChart } from "@/components/Main/Hero/Chart/LineChart";
 import styles from "./Market.module.css";
 import Image from "next/image";
-import Link from "next/link";
+import { LocalizedLink } from "@/components/LocalizedLink";
 import { GreenCup } from "../../../../../public/icons";
+import { t } from "@/i18n";
+import { marketKeys } from "@/i18n/keys/home";
 
 interface IMarketTotal {
   title: string;
@@ -65,13 +67,13 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
             <Image src={GreenCup.src} alt="" width={19} height={19} />
 
             <div className={`${styles.marketCardDetailsName} hidden lg:flex`}>
-              Обсяг угод
+              {t(marketKeys.dealsLabel)}
             </div>
           </div>
           <div
             className={`${styles.marketCardHeadDeals} flex items-center gap-1 `}
           >
-            {deals} угод
+            {deals} {t(marketKeys.dealsSuffix)}
           </div>
         </div>
       </div>
@@ -83,12 +85,12 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
           width={500}
         />
       </div>
-      <Link
+      <LocalizedLink
         href="/catalog"
         className={`${styles.marketCardLink} absolute bottom-[16px] md:bottom-[20px] w-full left-1/2 transform -translate-x-1/2  text-center font-medium cursor-pointer`}
       >
-        Перейти в каталог
-      </Link>
+        {t(marketKeys.catalogLink)}
+      </LocalizedLink>
     </div>
   );
 };

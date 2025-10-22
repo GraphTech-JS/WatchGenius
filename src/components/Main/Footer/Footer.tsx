@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "next/link";
+import { LocalizedLink } from "@/components/LocalizedLink";
 import Image from "next/image";
 import styles from "./Footer.module.css";
 import { LogoWhite, Chrono } from "../../../../public/icons";
@@ -8,6 +8,8 @@ import {
   TelegramIcon,
   InstagramIcon,
 } from "../../../../public/social/Icon";
+import { t } from "@/i18n";
+import { footerKeys } from "@/i18n/keys/footer";
 
 export const Footer = () => {
   return (
@@ -19,23 +21,28 @@ export const Footer = () => {
           className={`${styles.footerLeft} flex flex-col lg:gap-12 md:gap-20 gap-12 items-center justify-start p-1 `}
         >
           <nav>
-            <Link
+            <LocalizedLink
               href="/"
               className={`${styles.footerLogo} flex items-center md:gap-1 gap-2`}
             >
               <Image
                 src={LogoWhite.src}
                 className={`${styles.footerLogoIcom}`}
-                alt="logo"
+                alt={t(footerKeys.logo.alt)}
                 width={40}
                 height={40}
               />
               <div className={styles.logoName}>WATCHGENIUS</div>
-            </Link>
+            </LocalizedLink>
           </nav>
           <div className="hidden md:flex flex-col items-center gap-3">
-            <Image src={Chrono.src} alt="chrono24" width={190} height={40} />
-            <div className={styles.chronoName}>Powered by Chrono 24</div>
+            <Image
+              src={Chrono.src}
+              alt={t(footerKeys.chrono.alt)}
+              width={190}
+              height={40}
+            />
+            <div className={styles.chronoName}>{t(footerKeys.poweredBy)}</div>
           </div>
         </div>
         <div
@@ -44,56 +51,94 @@ export const Footer = () => {
           <div
             className={`${styles.footerLinks} md:w-1/3  flex flex-col md:gap-3 md:items-start items-center`}
           >
-            <div className={styles.footerLinkTitle}>Меню</div>
+            <div className={styles.footerLinkTitle}>
+              {t(footerKeys.sections.menu.title)}
+            </div>
             <nav className="hidden md:flex flex-col gap-5 items-start">
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Каталог
-              </Link>
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Тренди
-              </Link>
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Дилери
-              </Link>
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Контакти
-              </Link>
+              <LocalizedLink
+                href="/catalog"
+                className={styles.footerLink}
+                prefetch={false}
+              >
+                {t(footerKeys.sections.menu.catalog)}
+              </LocalizedLink>
+              <a href="#dealers" className={styles.footerLink}>
+                {t(footerKeys.sections.menu.trends)}
+              </a>
+              <a href="#treands" className={styles.footerLink}>
+                {t(footerKeys.sections.menu.dealers)}
+              </a>
+              <a href="#contacts" className={styles.footerLink}>
+                {t(footerKeys.sections.menu.contacts)}
+              </a>
             </nav>
           </div>
 
           <div
             className={`${styles.footerLinks} md:w-1/3   flex flex-col gap-3 items-start`}
           >
-            <div className={styles.footerLinkTitle}>Допомога</div>
+            <div className={styles.footerLinkTitle}>
+              {t(footerKeys.sections.help.title)}
+            </div>
             <nav className="hidden md:flex flex-col gap-5 items-start">
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                FAQ
-              </Link>
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Як це працює
-              </Link>
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Гайд з безпечної купівлі
-              </Link>
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Підтримка
-              </Link>
+              <LocalizedLink
+                href="#"
+                className={styles.footerLink}
+                prefetch={false}
+              >
+                {t(footerKeys.sections.help.faq)}
+              </LocalizedLink>
+              <LocalizedLink
+                href="#"
+                className={styles.footerLink}
+                prefetch={false}
+              >
+                {t(footerKeys.sections.help.howItWorks)}
+              </LocalizedLink>
+              <LocalizedLink
+                href="#"
+                className={styles.footerLink}
+                prefetch={false}
+              >
+                {t(footerKeys.sections.help.safeGuide)}
+              </LocalizedLink>
+              <LocalizedLink
+                href="#"
+                className={styles.footerLink}
+                prefetch={false}
+              >
+                {t(footerKeys.sections.help.support)}
+              </LocalizedLink>
             </nav>
           </div>
           <div
             className={`${styles.footerLinks} md:w-1/3 hidden lg:flex flex-col gap-3 items-start`}
           >
-            <div className={styles.footerLinkTitle}>Спільнота</div>
+            <div className={styles.footerLinkTitle}>
+              {t(footerKeys.sections.community.title)}
+            </div>
             <nav className="flex flex-col gap-5 items-start">
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Блог
-              </Link>
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Discord
-              </Link>
-              <Link href="#" className={styles.footerLink} prefetch={false}>
-                Телеграм - канал
-              </Link>
+              <LocalizedLink
+                href="#"
+                className={styles.footerLink}
+                prefetch={false}
+              >
+                {t(footerKeys.sections.community.blog)}
+              </LocalizedLink>
+              <LocalizedLink
+                href="#"
+                className={styles.footerLink}
+                prefetch={false}
+              >
+                {t(footerKeys.sections.community.discord)}
+              </LocalizedLink>
+              <LocalizedLink
+                href="#"
+                className={styles.footerLink}
+                prefetch={false}
+              >
+                {t(footerKeys.sections.community.telegram)}
+              </LocalizedLink>
             </nav>
           </div>
           <div className="md:hidden flex flex-col items-center gap-3">
@@ -104,36 +149,48 @@ export const Footer = () => {
               width={190}
               height={40}
             />
-            <div className={styles.chronoName}>Powered by Chrono 24</div>
+            <div className={styles.chronoName}>{t(footerKeys.poweredBy)}</div>
           </div>
         </div>
         <nav className={`${styles.footerSupportWrapper}`}>
           <div className="flex md:flex-col flex-row gap-8">
-            <Link href="#" className={styles.footerSocialLink} prefetch={false}>
+            <LocalizedLink
+              href="#"
+              className={styles.footerSocialLink}
+              prefetch={false}
+            >
               <DiscordIcon
                 className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50 hover:text-white/90`}
               />
-            </Link>
-            <Link href="#" className={styles.footerSocialLink} prefetch={false}>
+            </LocalizedLink>
+            <LocalizedLink
+              href="#"
+              className={styles.footerSocialLink}
+              prefetch={false}
+            >
               <TelegramIcon
                 className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50 hover:text-white/90`}
               />
-            </Link>
-            <Link href="#" className={styles.footerSocialLink} prefetch={false}>
+            </LocalizedLink>
+            <LocalizedLink
+              href="#"
+              className={styles.footerSocialLink}
+              prefetch={false}
+            >
               <InstagramIcon
                 className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50 hover:text-white/90`}
               />
-            </Link>
+            </LocalizedLink>
           </div>
         </nav>
       </div>
       <div
         className={`${styles.footerBottom} mx-auto max-w-[90rem] px-[2rem] md:px-[2.5rem] lg:px-[6.25rem] flex md:flex-row flex-col-reverse md:justify-between text-center gap-6`}
       >
-        <div>© 2025 WatchGenius. Всі права захищено</div>
+        <div>{t(footerKeys.copyright)}</div>
         <div className=" flex md:flex-row flex-col-reverse gap-6">
-          <div>Політика конфіденційності</div>
-          <div>Умови використання</div>
+          <div>{t(footerKeys.legal.privacy)}</div>
+          <div>{t(footerKeys.legal.terms)}</div>
         </div>
       </div>
     </footer>

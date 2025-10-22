@@ -6,6 +6,8 @@ import { LocalizedLink } from "@/components/LocalizedLink";
 import { HeroChartsCarousel } from "@/components/Main/Hero/HeroChartsCarousel/HeroChartsCarousel";
 import { RobotWhiteIcon } from "../../../../public/chat/Icon";
 import { MainContext } from "@/context";
+import { t } from "@/i18n";
+import { heroKeys } from "@/i18n/keys/home";
 
 export const Hero = () => {
   const { setSideChatOpened } = useContext(MainContext);
@@ -34,12 +36,9 @@ export const Hero = () => {
           >
             <div className={`${styles.heroText} flex flex-col gap-6 md:gap-1 `}>
               <h1 className={`${styles.heroTextTitle} flex text-white `}>
-                Зрозумілий ринок годинників з Data+ AI
+                {t(heroKeys.title)}
               </h1>
-              <p className={styles.heroTextSubtitle}>
-                Аналітика цін та трендів для 300+ моделей. Персональний
-                чат-асистент допоможе обрати годинник та купити безпечно
-              </p>
+              <p className={styles.heroTextSubtitle}>{t(heroKeys.subtitle)}</p>
             </div>
             <div
               className={`${styles.heroMenu} md:w-[90%] flex flex-col md:flex-row gap-6 items-center`}
@@ -48,7 +47,7 @@ export const Hero = () => {
                 <button
                   className={`${styles.heroCatalogBtn} w-full py-[12px] rounded-[10px] cursor-pointer`}
                 >
-                  <div>Каталог</div>
+                  <div>{t(heroKeys.buttons.catalog)}</div>
                 </button>
               </LocalizedLink>
               <button
@@ -58,7 +57,7 @@ export const Hero = () => {
                 <RobotWhiteIcon
                   className={`${styles.footerSocialLinkItem} w-8 h-8 md:text-white `}
                 />
-                <div>Geni - AI chat</div>
+                <div>{t(heroKeys.buttons.chat)}</div>
               </button>
             </div>
           </div>
