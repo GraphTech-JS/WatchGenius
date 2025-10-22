@@ -82,6 +82,6 @@ export const howToKeys = {
   },
 };
 export const dealerCardKeys = {
-  visit: "dealers.dealerCard.visit",
-  request: "dealers.dealerCard.request",
+  visit: "home.dealers.dealerCard.visit",
+  request: "home.dealers.dealerCard.request",
 };

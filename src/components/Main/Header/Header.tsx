@@ -137,6 +137,10 @@ export const Header = () => {
   const currencies = ["EUR", "USD", "UAH", "PL", "KZT"];
   const languages = ["УКР", "АНГЛ", "ПЛ"];
 
+  const handleChatClick = () => {
+    window.dispatchEvent(new CustomEvent("toggleChat", { detail: true }));
+  };
+
   return (
     <header className={`${styles.header} w-full`}>
       <div className={styles.headerContainer}>
@@ -331,7 +335,7 @@ export const Header = () => {
           <div className="hidden lg:flex gap-3">
             <button
               className={`${styles.headerLangSwitchBtn} shrink-0`}
-              onClick={() => window.dispatchEvent(new Event("openChat"))}
+              onClick={handleChatClick}
             >
               <Image
                 src={Robot.src}
