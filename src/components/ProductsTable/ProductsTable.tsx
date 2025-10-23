@@ -71,7 +71,7 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({
 
   return (
     <div className={styles.container}>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-2">
         <div className={styles.titleSection}>
           {/* {type === "products" && (
             <img src={BoxDarkIcon.src} alt="" className={styles.icon} />

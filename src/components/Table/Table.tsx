@@ -1,8 +1,8 @@
 // src/components/Table/Table.tsx
-"use client";
+'use client';
 
-import React from "react";
-import styles from "./Table.module.css";
+import React from 'react';
+import styles from './Table.module.css';
 // import { Delete, DownloadIcon, EditIcon } from "../../../public/icons";
 
 interface TableProps {
@@ -46,9 +46,9 @@ export const Table: React.FC<TableProps> = ({
 
                 // Ячейки с кнопками «Редагувати» + «Завантажити» + «Видалити»
                 if (
-                  col === "Кількість" ||
-                  col === "Опис" ||
-                  col === "Останнє використання"
+                  col === 'Кількість' ||
+                  col === 'Опис' ||
+                  col === 'Останнє використання'
                 ) {
                   return (
                     <td key={cellKey} className={styles.tableCell}>
@@ -59,7 +59,7 @@ export const Table: React.FC<TableProps> = ({
                             <button
                               onClick={() => onEdit(rowKey)}
                               className={styles.editButton}
-                              title="Редагувати"
+                              title='Редагувати'
                             >
                               {/* <img src={EditIcon.src} alt="edit" /> */}
                             </button>
@@ -68,7 +68,7 @@ export const Table: React.FC<TableProps> = ({
                             <button
                               onClick={() => onDownload(rowKey)}
                               className={styles.downloadButton}
-                              title="Завантажити"
+                              title='Завантажити'
                             >
                               {/* <img src={DownloadIcon.src} alt="download" /> */}
                             </button>
@@ -77,7 +77,7 @@ export const Table: React.FC<TableProps> = ({
                             <button
                               onClick={() => onDelete(rowKey)}
                               className={styles.deleteButton}
-                              title="Видалити"
+                              title='Видалити'
                             >
                               {/* <img src={Delete.src} alt="delete" /> */}
                             </button>
@@ -89,7 +89,7 @@ export const Table: React.FC<TableProps> = ({
                 }
 
                 // Ячейки «Тривалість» — только «Завантажити» + «Видалити»
-                if (col === "Тривалість") {
+                if (col === 'Тривалість') {
                   return (
                     <td key={cellKey} className={styles.tableCell}>
                       <div className={styles.durationCell}>
@@ -99,7 +99,7 @@ export const Table: React.FC<TableProps> = ({
                             <button
                               onClick={() => onDownload(rowKey)}
                               className={styles.downloadButton}
-                              title="Завантажити"
+                              title='Завантажити'
                             >
                               {/* <img src={DownloadIcon.src} alt="download" /> */}
                             </button>
@@ -108,7 +108,7 @@ export const Table: React.FC<TableProps> = ({
                             <button
                               onClick={() => onDelete(rowKey)}
                               className={styles.deleteButton}
-                              title="Видалити"
+                              title='Видалити'
                             >
                               {/* <img src={Delete.src} alt="delete" /> */}
                             </button>

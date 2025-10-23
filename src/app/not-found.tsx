@@ -1,10 +1,10 @@
-"use client";
-import React from "react";
-import styles from "./not-found.module.css";
-import { WatchBg } from "../../public/not-found";
-// import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/Button/Button";
+'use client';
+import React from 'react';
+import Image from 'next/image';
+import styles from './not-found.module.css';
+import { WatchBg } from '../../public/not-found';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/Button/Button';
 
 const NotFound = () => {
   const { back } = useRouter();
@@ -23,28 +23,24 @@ const NotFound = () => {
                 <p className={styles.notFoundDescription}>
                   Сторінку, яку ви шукаєте, не знайдено. Можливо, вона вже
                   зникла, змінила адресу або ніколи не існувала.
-                </p>{" "}
+                </p>
                 <Button
-                  variant="solid"
-                  bgColor="#fff"
-                  color="#000"
-                  classNames={`${styles.notFoundBtn} ${styles.notFoundBtnBack}`}
+                  variant='solid'
+                  bgColor='#04694f'
+                  color='#fff'
+                  classNames={styles.notFoundBtn}
                   onClick={goBack}
                 >
                   Назад
                 </Button>
-                {/* <Button
-              variant="text"
-              classNames={`${styles.notFoundBtn} ${styles.notFoundBtnChat}`}
-            >
-              <Link href="/chat"> Відкрити чат з AI агентом</Link>
-            </Button> */}
               </div>
 
-              <img
-                src={WatchBg.src}
-                alt="watch background"
+              <Image
+                src={WatchBg}
+                alt='watch background'
                 className={styles.notFoundWatchIcon}
+                fill
+                priority
               />
             </div>
           </div>
