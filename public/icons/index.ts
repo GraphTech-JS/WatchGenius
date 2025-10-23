@@ -41,4 +41,8 @@ export { default as Discord } from "./Discord.svg";
 export { default as Telegram } from "./Telegram.svg";
 export { default as FilterCatalog } from "./FilterCatalog.svg";
 export { default as RobotCatalog } from "./RobotCatalog.svg";
+export { default as Book } from "./Book.svg";
+export { default as History } from "./History.svg";
+export { default as Document } from "./Document.svg";
+export { default as Money } from "./Money.svg";
 //Add more icons in future

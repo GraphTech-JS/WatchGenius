@@ -2,51 +2,49 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  
 }
 
 .adminContent {
   display: flex;
   flex: 1;
   position: relative;
+  min-height: calc(100vh - 80px);
+  margin-top: 80px;
 }
 
 .mainContent {
   flex: 1;
-  margin-left: 0; /* Same as sidebar width */
-  min-height: calc(100vh - 160px); /* Adjust for header/footer height */
-  overflow-y: auto;
+  padding: 30px 40px;
 }
 
-/* Responsive Design */
-@media (max-width: 1920px) {
+@media (max-width: 1023px) {
+  .adminContent {
+    margin-top: 66px;
+  }
+
   .mainContent {
-    margin-left: 0;
+    padding: 25px 30px;
   }
 }
-@media (max-width: 1440px) {
-  .mainContent {
-    margin-left: 0;
-  }
-}
-@media (max-width: 835px) {
+
+@media (max-width: 768px) {
   .adminContent {
     flex-direction: column;
+    margin-top: 60px;
   }
 
   .mainContent {
-    margin-left: 0;
-    padding: 1rem;
-    min-height: auto;
+    padding: 80px 15px 15px;
   }
 }
 
 @media (max-width: 480px) {
   .mainContent {
-    padding: 0.5rem;
+    padding: 75px 10px 10px;
   }
 }
 
-/* Scrollbar styling for main content */
 .mainContent::-webkit-scrollbar {
   width: 8px;
 }

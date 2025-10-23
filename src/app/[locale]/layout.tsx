@@ -1,35 +1,36 @@
-import type { Metadata } from "next";
-import "../globals.css";
-import { MainContextProvider } from "@/context";
-import { Akatab, Inter, Roboto_Flex } from "next/font/google";
-import { CompareProvider } from "@/context/CompareContext";
-import { notFound } from "next/navigation";
+import type { Metadata } from 'next';
+import '../globals.css';
+import { MainContextProvider } from '@/context';
+import { Akatab, Inter, Roboto_Flex } from 'next/font/google';
+import { CompareProvider } from '@/context/CompareContext';
+import { notFound } from 'next/navigation';
 // import { NextIntlClientProvider } from "next-intl";
-import { languages, type Locale } from "@/i18n/settings";
+import { languages, type Locale } from '@/i18n/settings';
+import { BackdropDistortionDefs } from '@/components/Chat/components/BackdropDistortionDefs';
 
 const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
+  variable: '--font-inter',
+  subsets: ['latin'],
 });
 
 const roboto = Roboto_Flex({
-  variable: "--font-roboto",
-  subsets: ["latin"],
+  variable: '--font-roboto',
+  subsets: ['latin'],
 });
 const akatab = Akatab({
-  weight: "700",
-  variable: "--font-akatab",
-  subsets: ["latin"],
+  weight: '700',
+  variable: '--font-akatab',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "WatchGenius",
+  title: 'WatchGenius',
   description:
-    "Keep track of your favorite watches, discover new ones, and stay updated with the latest trends in the world of horology.",
+    'Keep track of your favorite watches, discover new ones, and stay updated with the latest trends in the world of horology.',
   keywords:
-    "watches, watch tracker, luxury watches, watch collection, horology, watch enthusiasts",
+    'watches, watch tracker, luxury watches, watch collection, horology, watch enthusiasts',
   icons: {
-    icon: "/favicon.ico",
+    icon: '/favicon.ico',
   },
 };
 
@@ -54,6 +55,7 @@ export default async function RootLayout({
 
   return (
     <body className={`${roboto.variable} ${inter.variable} ${akatab.variable}`}>
+      <BackdropDistortionDefs />
       <MainContextProvider>
         <CompareProvider>
           {/* <NextIntlClientProvider locale={locale} messages={messages}> */}

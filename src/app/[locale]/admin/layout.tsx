@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Header } from "@/components/Main/Header/Header";
-import { Footer } from "@/components/Main/Footer/Footer";
+import { Header } from '@/components/Main/Header/Header';
+import { Footer } from '@/components/Main/Footer/Footer';
 
 export default function RootLayout({
   children,
