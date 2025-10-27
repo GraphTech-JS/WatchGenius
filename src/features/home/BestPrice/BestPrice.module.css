@@ -28,15 +28,88 @@
 .FormItemInput {
   border: 1px solid #0000004d;
 }
+
+.FormItemInputError {
+  border-color: #ef4444;
+}
 .FormItemInputCurr {
   font-weight: 700;
-  font-size: 16px;
-  line-height: 18px;
+  font-size: 14px;
+  line-height: 16px;
   color: var(--green);
 }
-.FormItemInputCurr:hover {
+
+@media (min-width: 768px) {
+  .FormItemInputCurr {
+    font-size: 16px;
+    line-height: 18px;
+  }
+}
+
+.CurrencySelect {
+  position: relative;
+}
+
+.CurrencyButton {
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.CurrencyButton:hover .FormItemInputCurr {
   color: var(--dark-green);
 }
+
+.CurrencyDropdown {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 10;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .CurrencyDropdown {
+    top: -16px;
+    right: -17px;
+  }
+}
+
+.CurrencyOption {
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: #374151;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .CurrencyOption {
+    padding: 8px 16px;
+    font-size: 16px;
+  }
+}
+
+.CurrencyOption:hover {
+  background: #f3f4f6;
+  color: var(--green);
+}
+
+.CurrencyOptionActive {
+  background: #ecfdf5;
+  color: var(--green);
+}
+
+.CurrencyOption + .CurrencyOption {
+  border-top: 1px solid #e5e7eb;
+}
+
 .FormBtn {
   background: var(--green);
   color: #fff;
@@ -56,8 +129,8 @@
   font-weight: 500;
   font-size: 16px;
 }
-@media (width >= 48rem /* 768px */) {
-  .bestAlertTitle {
+  @media (width >= 48rem ) {
+    .bestAlertTitle {
     font-size: 24px;
     line-height: 28px;
   }
@@ -83,9 +156,17 @@
 }
 
 .Input[type="number"] {
-  -moz-appearance: textfield; /* Firefox */
+  appearance: textfield;
+  -moz-appearance: textfield;
 }
-@media (width >= 64rem /* 1024px */) {
+
+.ErrorMessage {
+  color: #ef4444;
+  font-size: 14px;
+  line-height: 16px;
+  padding-left: 4px;
+}
+@media (width >= 64rem) {
   .bestSectionTitle {
     font-size: 32px;
     line-height: 38px;

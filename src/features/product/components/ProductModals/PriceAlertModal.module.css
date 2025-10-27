@@ -17,7 +17,7 @@
   border-radius: 20px;
   padding: 33px 48px 33px;
   width: 606px;
-  height: 586px;
+  min-height: 586px;
   box-shadow: 0 4px 20px 2px rgba(0, 0, 0, 0.25);
   position: relative;
   max-width: 90vw;
@@ -115,12 +115,106 @@
   border-color: #04694f;
 }
 
+.formFieldWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.inputError {
+  border-color: #ef4444 !important;
+}
+
+.errorMessage {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+.currencySelect {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currencyButton {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.currencyButton:hover .currency {
+  color: #035a41;
+}
+
 .currency {
   font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  font-weight: 500;
-  color: #171414;
+  font-size: 14px;
+  font-weight: 700;
+  color: #04694f;
   margin-left: 8px;
+}
+
+@media (min-width: 768px) {
+  .currency {
+    font-size: 16px;
+  }
+}
+
+.currencyDropdown {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 10;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .currencyDropdown {
+    top: -16px;
+    right: -17px;
+  }
+}
+
+.currencyOption {
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: #374151;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .currencyOption {
+    padding: 8px 16px;
+    font-size: 16px;
+  }
+}
+
+.currencyOption:hover {
+  background: #f3f4f6;
+  color: #04694f;
+}
+
+.currencyOptionActive {
+  background: #ecfdf5;
+  color: #04694f;
+}
+
+.currencyOption + .currencyOption {
+  border-top: 1px solid #e5e7eb;
 }
 
 .buttonContainer {
@@ -128,6 +222,7 @@
   flex-direction: column;
   gap: 16px;
   margin-top: auto;
+  padding-top: 24px;
 }
 
 .submitButton {
@@ -175,7 +270,65 @@
   color: #035a41;
 }
 
+.successModalOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 100;
+  border-radius: 20px;
+  backdrop-filter: blur(2px);
+}
+
+.successModal {
+  border-radius: 16px;
+  padding: 24px 32px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 4px 20px 2px rgba(0, 0, 0, 0.25);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.3s ease-out;
+}
+
+.successModalText {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #04694f;
+  text-align: center;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 @media (max-width: 768px) {
+  .successModal {
+    padding: 20px 24px;
+    max-width: 85%;
+  }
+  
+  .successModalText {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
   .modal {
     width: 100%;
     max-width: 400px;

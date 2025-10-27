@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { CustomSelect } from '@/components/CustomSelect/CustomSelect';
+import { useFormValidation } from '@/hooks/useFormValidation';
 import styles from './PriceAlertModal.module.css';
 
 interface PriceAlertModalProps {
@@ -31,6 +32,23 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
     'Cartier',
   ];
 
+  const currencies = ['USD', 'EUR', 'UAH', 'PLN', 'KZT'];
+
+  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const currencyRef = useRef<HTMLDivElement>(null);
+
+  const {
+    errors,
+    validateForm,
+    validateEmail,
+    clearErrors,
+    clearEmailError,
+    clearPriceError,
+    clearModelError,
+  } = useFormValidation();
+
   useEffect(() => {
     if (isOpen) {
       setFormData({
@@ -38,8 +56,11 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
         targetPrice: '',
         email: '',
       });
+      clearErrors();
+      setSelectedCurrency('USD');
+      setIsCurrencyOpen(false);
     }
-  }, [isOpen, productTitle]);
+  }, [isOpen, productTitle, clearErrors]);
 
   const handleClose = useCallback(() => {
     onClose();
@@ -69,19 +90,100 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
     };
   }, [isOpen, handleClose]);
 
-  const handleInputChange = (field: keyof typeof formData, value: string) => {
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        currencyRef.current &&
+        !currencyRef.current.contains(e.target as Node)
+      ) {
+        setIsCurrencyOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const formatNumber = (value: string): string => {
+    const numbers = value.replace(/\D/g, '');
+    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  };
+
+  const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const formatted = formatNumber(value);
     setFormData((prev) => ({
       ...prev,
-      [field]: value,
+      targetPrice: formatted,
     }));
+    if (errors.price) {
+      clearPriceError();
+    }
+  };
+
+  const handleModelChange = (value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      watchModel: value,
+    }));
+    if (errors.model) {
+      clearModelError();
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFormData((prev) => ({
+      ...prev,
+      email: value,
+    }));
+    if (value) {
+      validateEmail(value);
+    } else {
+      clearEmailError();
+    }
+  };
+
+  const handleEmailBlur = () => {
+    validateEmail(formData.email);
+  };
+
+  const handleCurrencySelect = (currency: string) => {
+    setSelectedCurrency(currency);
+    setIsCurrencyOpen(false);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const isValid = validateForm({
+      email: formData.email,
+      price: formData.targetPrice,
+      selectedModel: formData.watchModel,
+    });
+
+    if (!isValid) {
+      return;
+    }
+
     try {
-      console.log('Відправка форми сповіщення про ціну:', formData);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      handleClose();
+      console.log('Відправка форми сповіщення про ціну:', {
+        ...formData,
+        currency: selectedCurrency,
+      });
+
+      setShowSuccessModal(true);
+
+      setTimeout(() => {
+        setShowSuccessModal(false);
+        handleClose();
+        setFormData({
+          watchModel: productTitle,
+          targetPrice: '',
+          email: '',
+        });
+        setSelectedCurrency('USD');
+        clearErrors();
+      }, 3000);
     } catch (error) {
       console.error('Помилка відправки форми:', error);
     }
@@ -108,36 +210,87 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
               <div className={styles.formItemTitle}>
                 Оберіть модель годинника
               </div>
-              <CustomSelect options={brands} placeholder={productTitle} />
+              <div className={styles.formFieldWrapper}>
+                <CustomSelect
+                  options={brands}
+                  placeholder={productTitle}
+                  onChange={handleModelChange}
+                />
+                {errors.model && (
+                  <div className={styles.errorMessage}>{errors.model}</div>
+                )}
+              </div>
             </div>
 
             <div className={styles.formItem}>
               <div className={styles.formItemTitle}>Відповідатиме вартості</div>
-              <div className={styles.priceInputContainer}>
-                <input
-                  type='number'
-                  placeholder='50 000'
-                  value={formData.targetPrice}
-                  onChange={(e) =>
-                    handleInputChange('targetPrice', e.target.value)
-                  }
-                  className={styles.priceInput}
-                />
-                <div className={styles.currency}>EUR</div>
+              <div className={styles.formFieldWrapper}>
+                <div
+                  className={`${styles.priceInputContainer} ${
+                    errors.price ? styles.inputError : ''
+                  }`}
+                >
+                  <input
+                    type='text'
+                    placeholder='50 000'
+                    value={formData.targetPrice}
+                    onChange={handlePriceChange}
+                    className={styles.priceInput}
+                  />
+                  <div ref={currencyRef} className={styles.currencySelect}>
+                    <div
+                      className={styles.currencyButton}
+                      onClick={() => setIsCurrencyOpen(!isCurrencyOpen)}
+                    >
+                      <span className={styles.currency}>
+                        {selectedCurrency}
+                      </span>
+                    </div>
+                    {isCurrencyOpen && (
+                      <div className={styles.currencyDropdown}>
+                        {currencies.map((currency) => (
+                          <div
+                            key={currency}
+                            className={`${styles.currencyOption} ${
+                              selectedCurrency === currency
+                                ? styles.currencyOptionActive
+                                : ''
+                            }`}
+                            onClick={() => handleCurrencySelect(currency)}
+                          >
+                            {currency}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {errors.price && (
+                  <div className={styles.errorMessage}>{errors.price}</div>
+                )}
               </div>
             </div>
 
             <div className={styles.formItem}>
               <div className={styles.formItemTitle}>Email для сповіщень</div>
-              <div className={styles.emailInputContainer}>
-                <input
-                  type='email'
-                  placeholder='xxxxxxxx@gmail.com'
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  className={styles.emailInput}
-                  required
-                />
+              <div className={styles.formFieldWrapper}>
+                <div
+                  className={`${styles.emailInputContainer} ${
+                    errors.email ? styles.inputError : ''
+                  }`}
+                >
+                  <input
+                    type='email'
+                    placeholder='xxxxxxxx@gmail.com'
+                    value={formData.email}
+                    onChange={handleEmailChange}
+                    onBlur={handleEmailBlur}
+                    className={styles.emailInput}
+                  />
+                </div>
+                {errors.email && (
+                  <div className={styles.errorMessage}>{errors.email}</div>
+                )}
               </div>
             </div>
           </div>
@@ -157,6 +310,16 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
             </div>
           </div>
         </form>
+
+        {showSuccessModal && (
+          <div className={styles.successModalOverlay}>
+            <div className={styles.successModal}>
+              <span className={styles.successModalText}>
+                Дякуємо за ваш запит! Ми повідомимо вас про зниження ціни!
+              </span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

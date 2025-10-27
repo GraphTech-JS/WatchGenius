@@ -1,13 +1,14 @@
-"use client";
+'use client';
 
-import React, { useRef, useState, useEffect, useContext } from "react";
-import styles from "./ChatMenu.module.css";
-import { RobotWhiteIcon, CloseIcon } from "../../../public/chat/Icon";
-import { ChatAttachIcon } from "../../../public/chat";
-import { MainContext } from "@/context";
-import Image from "next/image";
-import { SendBtn } from "../../../public/icons";
-import { ChatList } from "./components/ChatList/ChatList";
+import React, { useRef, useState, useEffect, useContext } from 'react';
+import styles from './ChatMenu.module.css';
+import { CloseIcon } from '../../../public/chat/Icon';
+import { ChatAttachIcon } from '../../../public/chat';
+import { MainContext } from '@/context';
+import Image from 'next/image';
+import { SendBtn } from '../../../public/icons';
+import RobotChatMenuIcon from '../../../public/icons/robot_chat_menu.svg';
+import { ChatList } from './components/ChatList/ChatList';
 
 interface ChatMenuProps {
   isOpen: boolean;
@@ -30,7 +31,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTo({
         top: chatBodyRef.current.scrollHeight,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   }, [messages, isTyping]);
@@ -43,7 +44,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage({
       content: e.target.value,
-      by: "me",
+      by: 'me',
       id: messages.length + 1 + Math.random() * 1000,
     });
   };
@@ -53,30 +54,30 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     setIsTyping(true);
     const baseId = messages.length + 1 + Math.floor(Math.random() * 1000);
     const aiResponse =
-      "Готовий допомогти! Оберіть опцію нижче або напишіть питання — підкажу моделі, тренди, бюджет і перевірку справжності.";
+      'Готовий допомогти! Оберіть опцію нижче або напишіть питання — підкажу моделі, тренди, бюджет і перевірку справжності.';
     setTimeout(() => {
       setMessages([
         ...messages,
         {
           content: message.content,
-          by: "me",
+          by: 'me',
           id: baseId,
           time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
         },
         {
           content: aiResponse,
-          by: "ai",
+          by: 'ai',
           id: baseId + 1,
           time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
         },
       ]);
-      setMessage({ content: "", by: "me", id: baseId + 2 });
+      setMessage({ content: '', by: 'me', id: baseId + 2 });
       setIsTyping(false);
     }, 800);
   };
@@ -84,26 +85,26 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   const handleInlineButtonClick = (buttonText: string) => {
     setIsTyping(true);
     const baseId = messages.length + 1 + Math.floor(Math.random() * 1000);
-    const aiResponse = "Ось що можу запропонувати далі. Продовжимо?";
+    const aiResponse = 'Ось що можу запропонувати далі. Продовжимо?';
     setTimeout(() => {
       setMessages([
         ...messages,
         {
           content: buttonText,
-          by: "me",
+          by: 'me',
           id: baseId,
           time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
         },
         {
           content: aiResponse,
-          by: "ai",
+          by: 'ai',
           id: baseId + 1,
           time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
         },
       ]);
@@ -115,7 +116,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     <div
       ref={ref}
       className={`${styles.chatMenu} ${
-        isAnimating ? styles.open : ""
+        isAnimating ? styles.open : ''
       } pointer-events-auto`}
     >
       <div
@@ -127,8 +128,12 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           <div
             className={`${styles.chatMenuHeaderRobotIcon} flex items-center justify-center w-11.5 h-11.5 rounded-full`}
           >
-            <RobotWhiteIcon
-              className={`${styles.RobotIcon} w-7 h-7 md:text-white `}
+            <Image
+              src={RobotChatMenuIcon}
+              alt='Geni AI'
+              width={28}
+              height={28}
+              className={styles.RobotIcon}
             />
           </div>
           <div className={`${styles.chatMenuHeaderNameTitle}`}>
@@ -150,28 +155,28 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
       <div className={styles.chatMenuButtons}>
         <button
           className={styles.chatMenuActionBtn}
-          onClick={() => handleInlineButtonClick("Порівняти моделі")}
+          onClick={() => handleInlineButtonClick('Порівняти моделі')}
         >
           <span className={styles.chatMenuBtnIcon}>🔍</span>
           Порівняти моделі
         </button>
         <button
           className={styles.chatMenuActionBtn}
-          onClick={() => handleInlineButtonClick("Показати тренди ринку")}
+          onClick={() => handleInlineButtonClick('Показати тренди ринку')}
         >
           <span className={styles.chatMenuBtnIcon}>📈</span>
           Показати тренди ринку
         </button>
         <button
           className={styles.chatMenuActionBtn}
-          onClick={() => handleInlineButtonClick("Знайти годинник по бюджету")}
+          onClick={() => handleInlineButtonClick('Знайти годинник по бюджету')}
         >
           <span className={styles.chatMenuBtnIcon}>💡</span>
           Знайти годинник по бюджету
         </button>
         <button
           className={styles.chatMenuActionBtn}
-          onClick={() => handleInlineButtonClick("Як перевірити справжність?")}
+          onClick={() => handleInlineButtonClick('Як перевірити справжність?')}
         >
           <span className={styles.chatMenuBtnIcon}>✅</span>
           Як перевірити справжність?
@@ -181,16 +186,16 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
       <div className={styles.inputBar}>
         <div className={styles.inputWrapper}>
           <input
-            placeholder="Напишіть питання про годинники…"
+            placeholder='Напишіть питання про годинники…'
             value={message.content}
             onChange={handleChange}
             className={styles.chatInput}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           />
           <div className={styles.attachIconWrapper}>
             <Image
               src={ChatAttachIcon.src}
-              alt="attach"
+              alt='attach'
               width={27}
               height={14}
               className={styles.attachIcon}
@@ -200,15 +205,15 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
         <button
           className={styles.sendButton}
           onClick={handleSend}
-          aria-label="Надіслати"
+          aria-label='Надіслати'
         >
           <Image
             src={SendBtn.src}
-            alt="send"
+            alt='send'
             width={29}
             height={30}
-            className="brightness-0 invert"
-            style={{ filter: "brightness(0) invert(1)" }}
+            className='brightness-0 invert'
+            style={{ filter: 'brightness(0) invert(1)' }}
           />
         </button>
       </div>
