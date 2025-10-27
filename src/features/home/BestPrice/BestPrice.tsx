@@ -180,7 +180,7 @@ export const BestPrice = () => {
                   <div
                     className={`${styles.FormItemInput} ${
                       errors.price ? styles.FormItemInputError : ''
-                    } flex items-center justify-center w-full h-12 rounded-xl px-4 py-3.5`}
+                    } flex items-center justify-center w-full rounded-xl px-4 py-3.5`}
                   >
                     <input
                       id='cost'
@@ -238,7 +238,7 @@ export const BestPrice = () => {
                   <div
                     className={`${styles.FormItemInput} ${
                       errors.email ? styles.FormItemInputError : ''
-                    } flex items-center justify-center w-full h-12 rounded-xl px-4 py-3.5 `}
+                    } flex items-center justify-center w-full rounded-xl px-4 py-3.5 `}
                   >
                     <input
                       id='userMail'

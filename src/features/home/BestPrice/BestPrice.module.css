@@ -27,6 +27,7 @@
 
 .FormItemInput {
   border: 1px solid #0000004d;
+  height: 57px;
 }
 
 .FormItemInputError {
@@ -61,8 +62,8 @@
 
 .CurrencyDropdown {
   position: absolute;
-  top: -14px;
-  right: -14px;
+  top: -21px;
+  right: -18px;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
@@ -74,8 +75,8 @@
 
 @media (min-width: 768px) {
   .CurrencyDropdown {
-    top: -16px;
-    right: -17px;
+    top: -20px;
+    right: -18px;
   }
 }
 
@@ -129,8 +130,8 @@
   font-weight: 500;
   font-size: 16px;
 }
-  @media (width >= 48rem ) {
-    .bestAlertTitle {
+@media (width >= 48rem) {
+  .bestAlertTitle {
     font-size: 24px;
     line-height: 28px;
   }
@@ -149,13 +150,13 @@
   box-shadow: none;
 }
 
-.Input[type="number"]::-webkit-inner-spin-button,
-.Input[type="number"]::-webkit-outer-spin-button {
+.Input[type='number']::-webkit-inner-spin-button,
+.Input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.Input[type="number"] {
+.Input[type='number'] {
   appearance: textfield;
   -moz-appearance: textfield;
 }
