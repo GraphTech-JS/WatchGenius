@@ -26,9 +26,15 @@
   background: var(--green);
 }
 .chatMenuHeaderNameTitle {
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 36px;
+  line-height: 1.2;
   font-weight: 500;
+}
+
+@media (max-width: 767px) {
+  .chatMenuHeaderNameTitle {
+    font-size: 20px;
+  }
 }
 .CloseIcon {
   color: rgba(0, 0, 0, 0.5);

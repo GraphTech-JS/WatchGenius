@@ -7,6 +7,13 @@ interface FeedbackFormProps {
   formData: FeedbackFormData;
   onUpdateFormData: (field: keyof FeedbackFormData, value: string) => void;
   onSubmit: () => void;
+  errors?: {
+    name: string;
+    email: string;
+    message: string;
+  };
+  onClearError?: (field: keyof FeedbackFormData) => void;
+  onBlur?: (field: keyof FeedbackFormData) => void;
 }
 
 export const FeedbackForm: React.FC<FeedbackFormProps> = ({
@@ -14,6 +21,9 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
   formData,
   onUpdateFormData,
   onSubmit,
+  errors = { name: '', email: '', message: '' },
+  onClearError,
+  onBlur,
 }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +34,16 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
     (field: keyof FeedbackFormData) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       onUpdateFormData(field, e.target.value);
+      if (onClearError && errors[field]) {
+        onClearError(field);
+      }
     };
+
+  const handleBlur = (field: keyof FeedbackFormData) => () => {
+    if (onBlur) {
+      onBlur(field);
+    }
+  };
 
   return (
     <div className={styles.formContainer}>
@@ -46,9 +65,14 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
               placeholder="Ваше ім'я"
               value={formData.name}
               onChange={handleInputChange('name')}
-              className={styles.input}
-              required
+              onBlur={handleBlur('name')}
+              className={`${styles.input} ${
+                errors.name ? styles.inputError : ''
+              }`}
             />
+            {errors.name && (
+              <div className={styles.errorMessage}>{errors.name}</div>
+            )}
           </div>
 
           <div className={styles.inputGroup}>
@@ -57,9 +81,14 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
               placeholder='Email'
               value={formData.email}
               onChange={handleInputChange('email')}
-              className={styles.input}
-              required
+              onBlur={handleBlur('email')}
+              className={`${styles.input} ${
+                errors.email ? styles.inputError : ''
+              }`}
             />
+            {errors.email && (
+              <div className={styles.errorMessage}>{errors.email}</div>
+            )}
           </div>
         </div>
 
@@ -68,10 +97,15 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
             placeholder='Повідомлення'
             value={formData.message}
             onChange={handleInputChange('message')}
-            className={styles.textarea}
+            onBlur={handleBlur('message')}
+            className={`${styles.textarea} ${
+              errors.message ? styles.inputError : ''
+            }`}
             rows={4}
-            required
           />
+          {errors.message && (
+            <div className={styles.errorMessage}>{errors.message}</div>
+          )}
         </div>
 
         <button type='submit' className={styles.submitButton}>

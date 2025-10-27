@@ -1,0 +1,59 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.modal {
+  border-radius: 16px;
+  padding: 19px 27px;
+  width: 855px;
+  max-width: 90%;
+  height: 71px;
+  box-shadow: 0 4px 20px 2px rgba(0, 0, 0, 0.25);
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: slideDown 0.3s ease-out;
+}
+
+.modalText {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #04694f;
+  text-align: center;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal {
+    padding: 15px 20px;
+    width: auto;
+    max-width: 90%;
+    min-height: auto;
+  }
+  
+  .modalText {
+    font-size: 16px;
+  }
+}
+

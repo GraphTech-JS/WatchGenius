@@ -1,5 +1,7 @@
 .control {
   border: 1px solid #0000004d;
+  height: 57px;
+  padding: 14px 16px !important;
 }
 .selectPlaceholder {
   color: #00000066;
@@ -19,6 +21,7 @@
   max-height: 0;
   opacity: 0;
   pointer-events: none;
+  z-index: 2;
 }
 
 .menuOpen {
