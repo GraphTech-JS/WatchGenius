@@ -1,8 +1,10 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { CatalogSidebar } from '@/features/catalog/components/CatalogSidebar/CatalogSidebar';
-import styles from './TabletSidebar.module.css';
+import React, { useEffect, useRef, useState } from "react";
+import { CatalogSidebar } from "@/features/catalog/components/CatalogSidebar/CatalogSidebar";
+import styles from "./TabletSidebar.module.css";
+import { t } from "@/i18n";
+import { catalogKeys } from "@/i18n/keys/catalog";
 
 type Props = {
   width?: number;
@@ -88,8 +90,8 @@ export const TabletSidebar: React.FC<Props> = ({
       if (wrapperRef.current.contains(e.target as Node)) return;
       close();
     };
-    document.addEventListener('mousedown', onDocClick);
-    return () => document.removeEventListener('mousedown', onDocClick);
+    document.addEventListener("mousedown", onDocClick);
+    return () => document.removeEventListener("mousedown", onDocClick);
   }, []);
 
   useEffect(() => {
@@ -106,8 +108,8 @@ export const TabletSidebar: React.FC<Props> = ({
       setHandleTop(center - 22.5);
     };
     alignHandle();
-    window.addEventListener('resize', alignHandle);
-    return () => window.removeEventListener('resize', alignHandle);
+    window.addEventListener("resize", alignHandle);
+    return () => window.removeEventListener("resize", alignHandle);
   }, []);
 
   useEffect(() => {
@@ -125,29 +127,29 @@ export const TabletSidebar: React.FC<Props> = ({
     };
 
     compute();
-    window.addEventListener('resize', compute);
+    window.addEventListener("resize", compute);
     const ro = new ResizeObserver(compute);
     if (containerRef?.current) ro.observe(containerRef.current);
 
     return () => {
-      window.removeEventListener('resize', compute);
+      window.removeEventListener("resize", compute);
       ro.disconnect();
     };
   }, [topOffset, containerRef]);
 
   return (
-    <div ref={wrapperRef} className={`${styles.wrapper} ${className || ''}`}>
+    <div ref={wrapperRef} className={`${styles.wrapper} ${className || ""}`}>
       <div
         ref={panelRef}
-        role='complementary'
-        aria-label='Фільтри'
+        role="complementary"
+        aria-label={t(catalogKeys.sidebar.aria.filters)}
         className={`${styles.panel} ${
           dragging ? styles.panelDragging : styles.panelNotDragging
         }`}
         style={{
           width,
           top: staticTop,
-          position: 'absolute',
+          position: "absolute",
           zIndex: BASE_Z,
           transform: `translateX(${x}px)`,
         }}
@@ -157,8 +159,12 @@ export const TabletSidebar: React.FC<Props> = ({
 
       <button
         ref={handleRef}
-        type='button'
-        aria-label={isOpen ? 'Закрити фільтри' : 'Відкрити фільтри'}
+        type="button"
+        aria-label={
+          isOpen
+            ? t(catalogKeys.sidebar.aria.close)
+            : t(catalogKeys.sidebar.aria.open)
+        }
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -166,10 +172,10 @@ export const TabletSidebar: React.FC<Props> = ({
           dragging ? styles.handleDragging : styles.handleNotDragging
         }`}
         style={{
-          position: 'absolute',
+          position: "absolute",
           left: x + width - HANDLE_OVERLAP,
           top: handleTop ? staticTop + handleTop : staticTop + 150,
-          transform: 'none',
+          transform: "none",
           zIndex: HANDLE_Z,
         }}
       />

@@ -1,4 +1,4 @@
-export { default as Rolex } from "./Rolex.png";
-export { default as RolexBrand } from "./RolexBrand.png";
-export { default as RolexBrandDark } from "./RolexBrandDark.png";
-export { default as RolexCatalog } from "./RolexCatalog.png";
+export { default as Rolex } from "./Rolex.webp";
+export { default as RolexBrand } from "./RolexBrand.webp";
+export { default as RolexBrandDark } from "./RolexBrandDark.webp";
+export { default as RolexCatalog } from "./RolexCatalog.webp";

@@ -1,7 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { FilterCheckbox } from '@/components/FilterCheckbox/FilterCheckbox';
+import React from "react";
+import { FilterCheckbox } from "@/components/FilterCheckbox/FilterCheckbox";
+import { t } from "@/i18n";
+import { catalogKeys } from "@/i18n/keys/catalog";
 
 interface ShowAllConfig {
   initialCount: number;
@@ -30,7 +32,7 @@ export const ChecklistSection: React.FC<Props> = ({
     : options;
 
   return (
-    <div className='space-y-3'>
+    <div className="space-y-3">
       {list.map((opt) => (
         <FilterCheckbox
           key={opt}
@@ -42,17 +44,17 @@ export const ChecklistSection: React.FC<Props> = ({
 
       {showAllConfig && (
         <button
-          type='button'
+          type="button"
           onClick={showAllConfig.onToggleShowAll}
           disabled={
             options.length <=
             (showAllConfig.disabledThreshold ?? showAllConfig.initialCount)
           }
-          className='w-full text-center text-[14px] font-[var(--font-inter)] text-[#8b8b8b] underline disabled:opacity-60'
+          className="w-full text-center text-[14px] font-[var(--font-inter)] text-[#8b8b8b] underline disabled:opacity-60"
         >
           {showAllConfig.showAll
-            ? showAllConfig.labels?.less ?? 'Показати менше'
-            : showAllConfig.labels?.more ?? 'Показати всі'}
+            ? showAllConfig.labels?.less ?? t(catalogKeys.filter.showLess)
+            : showAllConfig.labels?.more ?? t(catalogKeys.filter.showMore)}
         </button>
       )}
     </div>

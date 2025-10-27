@@ -1,5 +1,5 @@
 import { DealerData } from "@/types/dealers";
-import MockDealer from "../../public/dealers/Dealer.png";
+import MockDealer from "../../public/dealers/Dealer.webp";
 
 export const mockDealers: DealerData[] = [
   {

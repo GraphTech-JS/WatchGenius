@@ -1,13 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { Accordion } from '@/components/ui/Accordion';
-import { filterData } from '@/mock/filterData';
-import { FilterCheckbox } from '@/components/FilterCheckbox/FilterCheckbox';
-import { onlyDigits, formatDigits, onlyYearDigits } from '@/utils/format';
-import type { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
-import { ChecklistSection } from '@/features/catalog/components/parts/ChecklistSection';
+import { Accordion } from "@/components/ui/Accordion";
+import { filterData } from "@/mock/filterData";
+import { FilterCheckbox } from "@/components/FilterCheckbox/FilterCheckbox";
+import { onlyDigits, formatDigits, onlyYearDigits } from "@/utils/format";
+import type { UseCatalogFiltersReturn } from "@/hooks/useCatalogFilters";
+import { ChecklistSection } from "@/features/catalog/components/parts/ChecklistSection";
+import { t } from "@/i18n";
+import { catalogKeys } from "@/i18n/keys/catalog";
 
 type Props = {
   filters: UseCatalogFiltersReturn;
@@ -62,9 +64,9 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
     title: section,
     content: (
       <>
-        {section === 'Бренд' && (
+        {section === "Бренд" && (
           <>
-            <div className='space-y-3'>
+            <div className="space-y-3">
               {visibleBrands.map((brand) => (
                 <FilterCheckbox
                   key={brand}
@@ -75,65 +77,71 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
               ))}
 
               <button
-                type='button'
+                type="button"
                 onClick={() => setShowAllBrands((v) => !v)}
                 disabled={filteredBrands.length <= 5}
-                className='w-full text-center text-[14px] text-[#8b8b8b] underline disabled:opacity-60'
+                className="w-full text-center text-[14px] text-[#8b8b8b] underline disabled:opacity-60"
               >
-                {showAllBrands ? 'Показати менше' : 'Показати всі'}
+                {showAllBrands
+                  ? t(catalogKeys.filter.showLess)
+                  : t(catalogKeys.filter.showMore)}
               </button>
             </div>
           </>
         )}
 
-        {section === 'Ціна' && (
-          <div className='flex items-center gap-x-2 gap-y-2 max-w-[269px]'>
-            <span className='text-[14px] text-[rgba(23,20,20,0.6)]'>Від</span>
+        {section === "Ціна" && (
+          <div className="flex items-center gap-x-2 gap-y-2 max-w-[269px]">
+            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+              {t(catalogKeys.filter.from)}
+            </span>
             <input
-              inputMode='numeric'
-              pattern='[0-9]*'
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={isFromFocused ? priceFrom : formatDigits(priceFrom)}
               onFocus={() => setIsFromFocused(true)}
               onBlur={() => setIsFromFocused(false)}
               onChange={(e) => setPriceFrom(onlyDigits(e.target.value))}
-              className='w-[74px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20'
+              className="w-[74px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20"
             />
-            <span className='text-[14px] text-[rgba(23,20,20,0.6)]'>До</span>
+            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+              {t(catalogKeys.filter.to)}
+            </span>
             <input
-              inputMode='numeric'
-              pattern='[0-9]*'
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={isToFocused ? priceTo : formatDigits(priceTo)}
               onFocus={() => setIsToFocused(true)}
               onBlur={() => setIsToFocused(false)}
               onChange={(e) => setPriceTo(onlyDigits(e.target.value))}
-              className='w-[84px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20'
+              className="w-[84px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20"
             />
             <div
-              className='w-[40px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                            text-[14px] text-[var(--text-dark)] flex items-center justify-center select-none'
+              className="w-[40px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                            text-[14px] text-[var(--text-dark)] flex items-center justify-center select-none"
             >
               {currency}
             </div>
           </div>
         )}
 
-        {section === 'Індекс' && (
-          <div className='flex gap-2 items-center'>
+        {section === "Індекс" && (
+          <div className="flex gap-2 items-center">
             {filterData.indexButtons.map((btn) => {
               const active = selectedIndexes.includes(btn);
               return (
                 <button
                   key={btn}
-                  type='button'
+                  type="button"
                   onClick={() => toggleIndex(btn)}
                   className={`w-[76px] h-[26px] border rounded-[15px] px-[21px] text-[14px] font-medium transition-colors
                     flex items-center justify-center cursor-pointer
                     ${
                       active
-                        ? 'bg-[#04694f] text-white border-[#04694f]'
-                        : 'bg-white text-[var(--text-dark)] border-[rgba(23,20,20,0.3)] hover:bg-[#04694f] hover:text-white'
+                        ? "bg-[#04694f] text-white border-[#04694f]"
+                        : "bg-white text-[var(--text-dark)] border-[rgba(23,20,20,0.3)] hover:bg-[#04694f] hover:text-white"
                     }`}
                   aria-pressed={active}
                 >
@@ -144,7 +152,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           </div>
         )}
 
-        {section === 'Стан' && (
+        {section === "Стан" && (
           <ChecklistSection
             options={filterData.conditions}
             selected={selectedConditions}
@@ -152,7 +160,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           />
         )}
 
-        {section === 'Механізм' && (
+        {section === "Механізм" && (
           <ChecklistSection
             options={filterData.mechanisms}
             selected={selectedMechanisms}
@@ -166,7 +174,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           />
         )}
 
-        {section === 'Матеріал' && (
+        {section === "Матеріал" && (
           <ChecklistSection
             options={filterData.materials}
             selected={selectedMaterials}
@@ -174,35 +182,41 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           />
         )}
 
-        {section === 'Рік' && (
-          <div className='flex items-center gap-x-2 gap-y-2 max-w-[269px]'>
-            <span className='text-[14px] text-[rgba(23,20,20,0.6)]'>З</span>
+        {section === "Рік" && (
+          <div className="flex items-center gap-x-2 gap-y-2 max-w-[269px]">
+            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+              {t(catalogKeys.filter.from)}
+            </span>
             <input
-              inputMode='numeric'
-              pattern='[0-9]*'
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={yearFromFocus ? yearFrom : yearFrom}
               onFocus={() => setYearFromFocus(true)}
               onBlur={() => setYearFromFocus(false)}
               onChange={(e) => setYearFrom(onlyYearDigits(e.target.value))}
-              className='w-[74px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20'
+              className="w-[74px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20"
             />
-            <span className='text-[14px] text-[rgba(23,20,20,0.6)]'>До</span>
+            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+              {t(catalogKeys.filter.to)}
+            </span>
             <input
-              inputMode='numeric'
-              pattern='[0-9]*'
+              inputMode="numeric"
+              pattern="[0-9]*"
               value={yearToFocus ? yearTo : yearTo}
               onFocus={() => setYearToFocus(true)}
               onBlur={() => setYearToFocus(false)}
               onChange={(e) => setYearTo(onlyYearDigits(e.target.value))}
-              className='w-[84px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20'
+              className="w-[84px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20"
             />
-            <span className='text-[14px] text-[rgba(23,20,20,0.6)]'>Рік</span>
+            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+              {t(catalogKeys.filter.year)}
+            </span>
           </div>
         )}
 
-        {section === 'Документи' && (
+        {section === "Документи" && (
           <ChecklistSection
             options={filterData.documents}
             selected={selectedDocuments}
@@ -210,7 +224,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           />
         )}
 
-        {section === 'Локація' && (
+        {section === "Локація" && (
           <ChecklistSection
             options={filterData.locations}
             selected={selectedLocations}
@@ -221,7 +235,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
     ),
   }));
 
- return (
-   <Accordion items={items} openKeys={openKeys} onOpenChange={setOpenKeys} />
- );
+  return (
+    <Accordion items={items} openKeys={openKeys} onOpenChange={setOpenKeys} />
+  );
 };
