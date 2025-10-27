@@ -4,7 +4,7 @@ import Image from "next/image";
 import { LineChart } from "@/components/Main/Hero/Chart/LineChart";
 import styles from "./Market.module.css";
 import { IWatch } from "@/interfaces";
-
+import { LocalizedLink } from "@/components/LocalizedLink";
 const ArrowUp = () => (
   <svg width="12" height="14" viewBox="0 0 12 14" fill="none">
     <path
@@ -73,43 +73,45 @@ export const MarketCard: React.FC<IWatch> = ({
   }, []);
 
   return (
-    <div
-      className={`${styles.marketCard} flex flex-col gap-4 md:gap-2 rounded-2xl h-[12.5rem] md:h-[10rem] lg:h-[13.5rem] px-[1.25rem] md:px-[0.6rem] lg:px-[1.25rem] py-[1rem] md:py-[0.6rem] lg:py-[1rem] max-w-[30rem]`}
-    >
+    <LocalizedLink href="/product/rolex-submariner-1" prefetch={false}>
       <div
-        className={`${styles.marketCardHead} flex w-full justify-between items-start`}
+        className={`${styles.marketCard} flex flex-col gap-4 md:gap-2 rounded-2xl h-[12.5rem] md:h-[10rem] lg:h-[13.5rem] px-[1.25rem] md:px-[0.6rem] lg:px-[1.25rem] py-[1rem] md:py-[0.6rem] lg:py-[1rem] max-w-[30rem]`}
       >
-        <div className={`${styles.marketCardHeadName}`}>{title}</div>
         <div
-          className={`${styles.marketCardHeadPercent} flex items-center gap-1 font-bold`}
-          style={{ color: percentColor }}
+          className={`${styles.marketCardHead} flex w-full justify-between items-start`}
         >
-          {ArrowIcon && <ArrowIcon />}
-          {changePercent}%
-        </div>
-      </div>
-      <div className={`${styles.marketCardBody} flex gap-2 items-center`}>
-        <Image
-          src={image}
-          alt={brand}
-          width={134}
-          height={142}
-          className={`${styles.cardImage}`}
-        />
-        <div className="flex flex-col h-full justify-between items-center gap-2 md:gap-2 lg:gap-3">
+          <div className={`${styles.marketCardHeadName}`}>{title}</div>
           <div
-            className={`${styles.cardWatchName} text-center max-h-[54px] md:max-h-[36px]  max-w-[164px] lg:max-w-[212px] overflow-hidden`}
+            className={`${styles.marketCardHeadPercent} flex items-center gap-1 font-bold`}
+            style={{ color: percentColor }}
           >
-            {brand}
+            {ArrowIcon && <ArrowIcon />}
+            {changePercent}%
           </div>
-          <LineChart
-            data={chartData || []}
-            variant={variant}
-            id={chartId}
-            height={chartHeight}
+        </div>
+        <div className={`${styles.marketCardBody} flex gap-2 items-center`}>
+          <Image
+            src={image}
+            alt={brand}
+            width={134}
+            height={142}
+            className={`${styles.cardImage}`}
           />
+          <div className="flex flex-col h-full justify-between items-center gap-2 md:gap-2 lg:gap-3">
+            <div
+              className={`${styles.cardWatchName} text-center max-h-[54px] md:max-h-[36px]  max-w-[164px] lg:max-w-[212px] overflow-hidden`}
+            >
+              {brand}
+            </div>
+            <LineChart
+              data={chartData || []}
+              variant={variant}
+              id={chartId}
+              height={chartHeight}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </LocalizedLink>
   );
 };

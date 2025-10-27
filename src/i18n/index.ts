@@ -28,8 +28,21 @@ function getNestedTranslation(
   }, obj) as string | undefined;
 }
 
-export function t<K extends string>(key: K): string {
+export function t<K extends string>(
+  key: K,
+  vars?: Record<string, string | number>
+): string {
   const localeData = translations[currentLocale] as unknown as TranslationTree;
-  const value = getNestedTranslation(localeData, key.split("."));
-  return typeof value === "string" ? value : key;
+  let value = getNestedTranslation(localeData, key.split("."));
+
+  if (typeof value !== "string") return key;
+
+  if (vars) {
+    for (const [varName, varValue] of Object.entries(vars)) {
+      const regex = new RegExp(`{{\\s*${varName}\\s*}}`, "g");
+      value = value.replace(regex, String(varValue));
+    }
+  }
+
+  return value;
 }

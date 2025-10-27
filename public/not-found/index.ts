@@ -1,1 +1,1 @@
-export { default as WatchBg } from "./watch-bg.jpg";
+export { default as WatchBg } from "./watch-bg.webp";

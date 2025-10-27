@@ -45,6 +45,7 @@ export const Footer = () => {
           <nav>
             <LocalizedLink
               href="/"
+              prefetch={false}
               className={`${styles.footerLogo} flex items-center md:gap-1 gap-2`}
             >
               <Image
@@ -226,8 +227,22 @@ export const Footer = () => {
       >
         <div>{t(footerKeys.copyright)}</div>
         <div className=" flex md:flex-row flex-col-reverse gap-6">
-          <div>{t(footerKeys.legal.privacy)}</div>
-          <div>{t(footerKeys.legal.terms)}</div>
+          <LocalizedLink
+            href="#"
+            className={styles.footerSocialLink}
+            prefetch={false}
+          >
+            <div className=" hover:underline">
+              {t(footerKeys.legal.privacy)}
+            </div>
+          </LocalizedLink>
+          <LocalizedLink
+            href="#"
+            className={styles.footerSocialLink}
+            prefetch={false}
+          >
+            <div className=" hover:underline">{t(footerKeys.legal.terms)}</div>
+          </LocalizedLink>
         </div>
       </div>
     </footer>

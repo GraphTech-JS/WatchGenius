@@ -1,6 +1,6 @@
 import { IWatch } from "@/interfaces";
-import MockWatch from "../../public/watch/Rolex.png";
-import MockWatchLong from "../../public/watch/RolexLong.png";
+import MockWatch from "../../public/watch/Rolex.webp";
+import MockWatchLong from "../../public/watch/RolexLong.webp";
 
 export const mockCards: IWatch[] = [
   {
