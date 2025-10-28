@@ -34,6 +34,9 @@ export const SaveToChatButton: React.FC<SaveToChatButtonProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       disabled={isSaved}
+      aria-label={
+        isSaved ? t(a11yKeys.catalog.saved) : t(a11yKeys.catalog.saveToChat)
+      }
     >
       <Image
         src={isSaved ? StarIconHover : isHovered ? StarIconHover : StarIcon}
@@ -41,6 +44,7 @@ export const SaveToChatButton: React.FC<SaveToChatButtonProps> = ({
         width={18}
         height={18}
         className="w-[18px] h-[18px] md:w-4 md:h-4 lg:w-[18px] lg:h-[18px] flex-shrink-0"
+        aria-hidden='true'
       />
       <span className="text-[16px] md:text-[13px] lg:text-[16px] leading-tight">
         {isSaved

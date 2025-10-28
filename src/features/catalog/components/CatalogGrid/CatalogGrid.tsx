@@ -92,6 +92,7 @@ export const CatalogGrid: React.FC<Props> = ({
             liked={liked.has(item.id)}
             onToggleLike={toggleLike}
             onOpenFeedback={onOpenFeedback}
+            priority={index === 0}
           />
         ))}
       </div>
@@ -114,6 +115,11 @@ export const CatalogGrid: React.FC<Props> = ({
             }}
             disabled={isLoading}
             className="w-full text-center text-[20px] text-[#8b8b8b] underline cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+            aria-label={
+              showAll
+                ? 'Згорнути список годинників'
+                : 'Показати більше годинників'
+            }
           >
             {isLoading ? (
               <ClipLoader size={24} color={"#04694f"} speedMultiplier={0.9} />

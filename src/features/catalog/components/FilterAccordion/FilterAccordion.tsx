@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
-import { Accordion } from "@/components/ui/Accordion";
-import { filterData } from "@/mock/filterData";
-import { FilterCheckbox } from "@/components/FilterCheckbox/FilterCheckbox";
-import { onlyDigits, formatDigits, onlyYearDigits } from "@/utils/format";
-import type { UseCatalogFiltersReturn } from "@/hooks/useCatalogFilters";
-import { ChecklistSection } from "@/features/catalog/components/parts/ChecklistSection";
-import { t } from "@/i18n";
-import { catalogKeys } from "@/i18n/keys/catalog";
+import { Accordion } from '@/components/ui/Accordion';
+import { filterData } from '@/mock/filterData';
+import { FilterCheckbox } from '@/components/FilterCheckbox/FilterCheckbox';
+import { onlyDigits, formatDigits, onlyYearDigits } from '@/utils/format';
+import type { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
+import { ChecklistSection } from '@/features/catalog/components/parts/ChecklistSection';
+import { t } from '@/i18n';
+import { catalogKeys } from '@/i18n/keys/catalog';
+import { a11yKeys } from '@/i18n/keys/accessibility';
 
 type Props = {
   filters: UseCatalogFiltersReturn;
@@ -66,7 +67,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
       <>
         {section === "brand" && (
           <>
-            <div className="space-y-3">
+            <div className='space-y-3'>
               {visibleBrands.map((brand) => (
                 <FilterCheckbox
                   key={brand}
@@ -77,10 +78,10 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
               ))}
 
               <button
-                type="button"
+                type='button'
                 onClick={() => setShowAllBrands((v) => !v)}
                 disabled={filteredBrands.length <= 5}
-                className="w-full text-center text-[14px] text-[#8b8b8b] underline disabled:opacity-60"
+                className='w-full text-center text-[14px] text-[#8b8b8b] underline disabled:opacity-60'
               >
                 {showAllBrands
                   ? t(catalogKeys.filter.showLess)
@@ -92,35 +93,46 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
 
         {section === "price" && (
           <div className="flex items-center gap-x-2 gap-y-2 max-w-[269px]">
-            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+            <label
+              htmlFor='price-from'
+              className='text-[14px] text-[rgba(23,20,20,0.6)]'
+            >
               {t(catalogKeys.filter.from)}
-            </span>
+            </label>
             <input
-              inputMode="numeric"
-              pattern="[0-9]*"
+              id='price-from'
+              inputMode='numeric'
+              pattern='[0-9]*'
               value={isFromFocused ? priceFrom : formatDigits(priceFrom)}
               onFocus={() => setIsFromFocused(true)}
               onBlur={() => setIsFromFocused(false)}
               onChange={(e) => setPriceFrom(onlyDigits(e.target.value))}
-              className="w-[74px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20"
+              aria-label={t(a11yKeys.filter.priceFrom)}
+              className='w-[74px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20'
             />
-            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+            <label
+              htmlFor='price-to'
+              className='text-[14px] text-[rgba(23,20,20,0.6)]'
+            >
               {t(catalogKeys.filter.to)}
-            </span>
+            </label>
             <input
-              inputMode="numeric"
-              pattern="[0-9]*"
+              id='price-to'
+              inputMode='numeric'
+              pattern='[0-9]*'
               value={isToFocused ? priceTo : formatDigits(priceTo)}
               onFocus={() => setIsToFocused(true)}
               onBlur={() => setIsToFocused(false)}
               onChange={(e) => setPriceTo(onlyDigits(e.target.value))}
-              className="w-[84px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20"
+              aria-label={t(a11yKeys.filter.priceTo)}
+              className='w-[84px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20'
             />
             <div
-              className="w-[40px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                            text-[14px] text-[var(--text-dark)] flex items-center justify-center select-none"
+              className='w-[40px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                            text-[14px] text-[var(--text-dark)] flex items-center justify-center select-none'
+              aria-hidden='true'
             >
               {currency}
             </div>
@@ -134,14 +146,14 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
               return (
                 <button
                   key={btn}
-                  type="button"
+                  type='button'
                   onClick={() => toggleIndex(btn)}
                   className={`w-[76px] h-[26px] border rounded-[15px] px-[21px] text-[14px] font-medium transition-colors
                     flex items-center justify-center cursor-pointer
                     ${
                       active
-                        ? "bg-[#04694f] text-white border-[#04694f]"
-                        : "bg-white text-[var(--text-dark)] border-[rgba(23,20,20,0.3)] hover:bg-[#04694f] hover:text-white"
+                        ? 'bg-[#04694f] text-white border-[#04694f]'
+                        : 'bg-white text-[var(--text-dark)] border-[rgba(23,20,20,0.3)] hover:bg-[#04694f] hover:text-white'
                     }`}
                   aria-pressed={active}
                 >
@@ -184,33 +196,46 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
 
         {section === "year" && (
           <div className="flex items-center gap-x-2 gap-y-2 max-w-[269px]">
-            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+            <label
+              htmlFor='year-from'
+              className='text-[14px] text-[rgba(23,20,20,0.6)]'
+            >
               {t(catalogKeys.filter.from)}
-            </span>
+            </label>
             <input
-              inputMode="numeric"
-              pattern="[0-9]*"
+              id='year-from'
+              inputMode='numeric'
+              pattern='[0-9]*'
               value={yearFromFocus ? yearFrom : yearFrom}
               onFocus={() => setYearFromFocus(true)}
               onBlur={() => setYearFromFocus(false)}
               onChange={(e) => setYearFrom(onlyYearDigits(e.target.value))}
-              className="w-[74px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20"
+              aria-label={t(a11yKeys.filter.yearFrom)}
+              className='w-[74px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20'
             />
-            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+            <label
+              htmlFor='year-to'
+              className='text-[14px] text-[rgba(23,20,20,0.6)]'
+            >
               {t(catalogKeys.filter.to)}
-            </span>
+            </label>
             <input
-              inputMode="numeric"
-              pattern="[0-9]*"
+              id='year-to'
+              inputMode='numeric'
+              pattern='[0-9]*'
               value={yearToFocus ? yearTo : yearTo}
               onFocus={() => setYearToFocus(true)}
               onBlur={() => setYearToFocus(false)}
               onChange={(e) => setYearTo(onlyYearDigits(e.target.value))}
-              className="w-[84px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
-                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20"
+              aria-label={t(a11yKeys.filter.yearTo)}
+              className='w-[84px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[10px] bg-white
+                         text-[14px] text-[var(--text-dark)] text-center focus:outline-none focus:ring-2 focus:ring-[#04694f]/20'
             />
-            <span className="text-[14px] text-[rgba(23,20,20,0.6)]">
+            <span
+              className='text-[14px] text-[rgba(23,20,20,0.6)]'
+              aria-hidden='true'
+            >
               {t(catalogKeys.filter.year)}
             </span>
           </div>

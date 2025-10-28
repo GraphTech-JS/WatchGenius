@@ -23,7 +23,7 @@ const Dealers = lazy(() =>
 
 const HomePage = () => {
   return (
-    <>
+    <main>
       <Hero />
       <Market />
       <Suspense fallback={<div style={{ minHeight: '400px' }} />}>
@@ -41,7 +41,7 @@ const HomePage = () => {
       <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
         <Dealers />
       </Suspense>
-    </>
+    </main>
   );
 };
 

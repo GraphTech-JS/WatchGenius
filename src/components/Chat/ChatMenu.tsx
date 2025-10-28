@@ -1,16 +1,17 @@
-"use client";
+'use client';
 
-import React, { useRef, useState, useEffect, useContext } from "react";
-import styles from "./ChatMenu.module.css";
-import { CloseIcon } from "../../../public/chat/Icon";
-import { ChatAttachIcon } from "../../../public/chat";
-import { MainContext } from "@/context";
-import Image from "next/image";
-import { SendBtn } from "../../../public/icons";
-import RobotChatMenuIcon from "../../../public/icons/robot_chat_menu.svg";
-import { ChatList } from "./components/ChatList/ChatList";
-import { t } from "@/i18n";
-import { chatKeys } from "@/i18n/keys/chat";
+import React, { useRef, useState, useEffect, useContext } from 'react';
+import styles from './ChatMenu.module.css';
+import { CloseIcon } from '../../../public/chat/Icon';
+import { ChatAttachIcon } from '../../../public/chat';
+import { MainContext } from '@/context';
+import Image from 'next/image';
+import { SendBtn } from '../../../public/icons';
+import RobotChatMenuIcon from '../../../public/icons/robot_chat_menu.svg';
+import { ChatList } from './components/ChatList/ChatList';
+import { t } from '@/i18n';
+import { chatKeys } from '@/i18n/keys/chat';
+import { a11yKeys } from '@/i18n/keys/accessibility';
 
 interface ChatMenuProps {
   isOpen: boolean;
@@ -33,7 +34,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTo({
         top: chatBodyRef.current.scrollHeight,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     }
   }, [messages, isTyping]);
@@ -46,7 +47,7 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage({
       content: e.target.value,
-      by: "me",
+      by: 'me',
       id: messages.length + 1 + Math.random() * 1000,
     });
   };
@@ -61,24 +62,24 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
         ...messages,
         {
           content: message.content,
-          by: "me",
+          by: 'me',
           id: baseId,
           time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
         },
         {
           content: aiResponse,
-          by: "ai",
+          by: 'ai',
           id: baseId + 1,
           time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
         },
       ]);
-      setMessage({ content: "", by: "me", id: baseId + 2 });
+      setMessage({ content: '', by: 'me', id: baseId + 2 });
       setIsTyping(false);
     }, 800);
   };
@@ -92,20 +93,20 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
         ...messages,
         {
           content: buttonText,
-          by: "me",
+          by: 'me',
           id: baseId,
           time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
         },
         {
           content: aiResponse,
-          by: "ai",
+          by: 'ai',
           id: baseId + 1,
           time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
+            hour: '2-digit',
+            minute: '2-digit',
           }),
         },
       ]);
@@ -117,8 +118,10 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     <div
       ref={ref}
       className={`${styles.chatMenu} ${
-        isAnimating ? styles.open : ""
+        isAnimating ? styles.open : ''
       } pointer-events-auto`}
+      role='dialog'
+      aria-label={t(chatKeys.header.title)}
     >
       <div
         className={`${styles.chatMenuHeader} w-full flex justify-between px-4.5 pt-2 pb-3`}
@@ -131,10 +134,11 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           >
             <Image
               src={RobotChatMenuIcon}
-              alt="Geni AI"
+              alt=''
               width={28}
               height={28}
               className={styles.RobotIcon}
+              aria-hidden='true'
             />
           </div>
           <div className={`${styles.chatMenuHeaderNameTitle}`}>
@@ -144,12 +148,22 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
         <button
           className={`${styles.chatMenuClose} flex items-center justify-center cursor-pointer`}
           onClick={handleClose}
+          aria-label={t(a11yKeys.chat.close)}
         >
-          <CloseIcon className={`${styles.CloseIcon} w-4 h-4 `} />
+          <CloseIcon
+            className={`${styles.CloseIcon} w-4 h-4 `}
+            aria-hidden='true'
+          />
         </button>
       </div>
 
-      <div ref={chatBodyRef} className={styles.chatBody}>
+      <div
+        ref={chatBodyRef}
+        className={styles.chatBody}
+        role='log'
+        aria-label={t(a11yKeys.chat.messages)}
+        aria-live='polite'
+      >
         <ChatList isTyping={isTyping} />
       </div>
 
@@ -159,8 +173,11 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           onClick={() =>
             handleInlineButtonClick(t(chatKeys.inlineButtons.compare))
           }
+          aria-label={t(a11yKeys.chat.compareWatches)}
         >
-          <span className={styles.chatMenuBtnIcon}>🔍</span>
+          <span className={styles.chatMenuBtnIcon} aria-hidden='true'>
+            🔍
+          </span>
           {t(chatKeys.inlineButtons.compare)}
         </button>
         <button
@@ -168,8 +185,11 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           onClick={() =>
             handleInlineButtonClick(t(chatKeys.inlineButtons.trends))
           }
+          aria-label={t(a11yKeys.chat.viewTrends)}
         >
-          <span className={styles.chatMenuBtnIcon}>📈</span>
+          <span className={styles.chatMenuBtnIcon} aria-hidden='true'>
+            📈
+          </span>
           {t(chatKeys.inlineButtons.trends)}
         </button>
         <button
@@ -177,8 +197,11 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           onClick={() =>
             handleInlineButtonClick(t(chatKeys.inlineButtons.budget))
           }
+          aria-label={t(a11yKeys.chat.getBudgetTips)}
         >
-          <span className={styles.chatMenuBtnIcon}>💡</span>
+          <span className={styles.chatMenuBtnIcon} aria-hidden='true'>
+            💡
+          </span>
           {t(chatKeys.inlineButtons.budget)}
         </button>
         <button
@@ -186,43 +209,56 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
           onClick={() =>
             handleInlineButtonClick(t(chatKeys.inlineButtons.authenticity))
           }
+          aria-label={t(a11yKeys.chat.checkAuthenticity)}
         >
-          <span className={styles.chatMenuBtnIcon}>✅</span>
+          <span className={styles.chatMenuBtnIcon} aria-hidden='true'>
+            ✅
+          </span>
           {t(chatKeys.inlineButtons.authenticity)}
         </button>
       </div>
 
       <div className={styles.inputBar}>
         <div className={styles.inputWrapper}>
+          <label htmlFor='chat-input' className='sr-only'>
+            {t(a11yKeys.chat.input)}
+          </label>
           <input
+            id='chat-input'
             placeholder={t(chatKeys.input.placeholder)}
             value={message.content}
             onChange={handleChange}
             className={styles.chatInput}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+            aria-label={t(a11yKeys.chat.input)}
           />
-          <div className={styles.attachIconWrapper}>
+          <button
+            className={styles.attachIconWrapper}
+            aria-label={t(a11yKeys.chat.attach)}
+          >
             <Image
               src={ChatAttachIcon.src}
-              alt="attach"
+              alt=''
               width={27}
               height={14}
               className={styles.attachIcon}
+              aria-hidden='true'
             />
-          </div>
+          </button>
         </div>
         <button
           className={styles.sendButton}
           onClick={handleSend}
-          aria-label={t(chatKeys.input.send)}
+          aria-label={t(a11yKeys.chat.send)}
         >
           <Image
             src={SendBtn.src}
-            alt="send"
+            alt=''
             width={29}
             height={30}
-            className="brightness-0 invert"
-            style={{ filter: "brightness(0) invert(1)" }}
+            className='brightness-0 invert'
+            style={{ filter: 'brightness(0) invert(1)' }}
+            aria-hidden='true'
           />
         </button>
       </div>

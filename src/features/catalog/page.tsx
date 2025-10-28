@@ -1,23 +1,23 @@
-"use client";
-import React, { useEffect, useContext } from "react";
-import { MainContext } from "@/context";
+'use client';
+import React, { useEffect, useContext } from 'react';
+import { MainContext } from '@/context';
 
-import { CatalogSidebar } from "@/features/catalog/components/CatalogSidebar/CatalogSidebar";
-import { FixedSidebar } from "@/features/catalog/components/FixedSidebar/FixedSidebar";
-import { CatalogGrid } from "@/features/catalog/components/CatalogGrid/CatalogGrid";
-import { TabletSidebar } from "@/features/catalog/components/TabletSidebar/TabletSidebar";
-import { CatalogControls } from "@/features/catalog/components/CatalogControls/CatalogControls";
-import { ActiveFiltersBar } from "@/features/catalog/components/ActiveFiltersBar/ActiveFiltersBar";
-import { FeedbackModal } from "@/components/FeedbackModal/FeedbackModal";
-import { useFeedbackModal } from "@/hooks/useFeedbackModal";
-import { useSaveSearchToChat } from "@/hooks/useSaveSearchToChat";
+import { CatalogSidebar } from '@/features/catalog/components/CatalogSidebar/CatalogSidebar';
+import { FixedSidebar } from '@/features/catalog/components/FixedSidebar/FixedSidebar';
+import { CatalogGrid } from '@/features/catalog/components/CatalogGrid/CatalogGrid';
+import { TabletSidebar } from '@/features/catalog/components/TabletSidebar/TabletSidebar';
+import { CatalogControls } from '@/features/catalog/components/CatalogControls/CatalogControls';
+import { ActiveFiltersBar } from '@/features/catalog/components/ActiveFiltersBar/ActiveFiltersBar';
+import { FeedbackModal } from '@/components/FeedbackModal/FeedbackModal';
+import { useFeedbackModal } from '@/hooks/useFeedbackModal';
+import { useSaveSearchToChat } from '@/hooks/useSaveSearchToChat';
 
-import styles from "./page.module.css";
-import { useCatalogSearch } from "@/hooks/useCatalogSearch";
-import { useSidebarPosition } from "@/hooks/useSidebarPosition";
-import { UseCatalogFiltersReturn } from "@/hooks/useCatalogFilters";
-import { t } from "@/i18n";
-import { catalogKeys } from "@/i18n/keys/catalog";
+import styles from './page.module.css';
+import { useCatalogSearch } from '@/hooks/useCatalogSearch';
+import { useSidebarPosition } from '@/hooks/useSidebarPosition';
+import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
+import { t } from '@/i18n';
+import { catalogKeys } from '@/i18n/keys/catalog';
 
 const CatalogPage = () => {
   const search = useCatalogSearch();
@@ -40,20 +40,20 @@ const CatalogPage = () => {
       const selectedMaterials: string[] = [];
       const selectedDocuments: string[] = [];
       const selectedLocations: string[] = [];
-      const selectedIndexes: Array<"A" | "B" | "C"> = [];
+      const selectedIndexes: Array<'A' | 'B' | 'C'> = [];
 
       savedCatalogFilters.filters.forEach((filter) => {
-        const [group, value] = filter.split(":");
+        const [group, value] = filter.split(':');
 
-        if (group === "brand") selectedBrands.push(value);
-        else if (group === "condition") selectedConditions.push(value);
-        else if (group === "mechanism") selectedMechanisms.push(value);
-        else if (group === "material") selectedMaterials.push(value);
-        else if (group === "document") selectedDocuments.push(value);
-        else if (group === "location") selectedLocations.push(value);
+        if (group === 'brand') selectedBrands.push(value);
+        else if (group === 'condition') selectedConditions.push(value);
+        else if (group === 'mechanism') selectedMechanisms.push(value);
+        else if (group === 'material') selectedMaterials.push(value);
+        else if (group === 'document') selectedDocuments.push(value);
+        else if (group === 'location') selectedLocations.push(value);
         else if (
-          group === "index" &&
-          (value === "A" || value === "B" || value === "C")
+          group === 'index' &&
+          (value === 'A' || value === 'B' || value === 'C')
         ) {
           selectedIndexes.push(value);
         }
@@ -72,10 +72,10 @@ const CatalogPage = () => {
           selectedMaterials,
           selectedDocuments,
           selectedLocations,
-          priceFrom: "0",
-          priceTo: "50000",
-          yearFrom: "2000",
-          yearTo: "2005",
+          priceFrom: '0',
+          priceTo: '50000',
+          yearFrom: '2000',
+          yearTo: '2005',
         } as UseCatalogFiltersReturn);
       }
       if (selectedIndexes.length) search.setSelectedIndexes(selectedIndexes);
@@ -97,7 +97,7 @@ const CatalogPage = () => {
   };
 
   const handleResetFilters = () => {
-    search.setSearchTerm("");
+    search.setSearchTerm('');
     search.setSelectedIndexes([]);
     search.clearSidebarFilters();
   };
@@ -105,8 +105,8 @@ const CatalogPage = () => {
   const handleAskGeni = () => {};
 
   return (
-    <div className="bg-white py-[60px] min-h-screen mx-auto">
-      <div className="flex flex-col mb-[15px]">
+    <main className='bg-white py-[60px] min-h-screen mx-auto'>
+      <div className='flex flex-col mb-[15px]'>
         <h1 className={styles.catalogTitle}>{t(catalogKeys.page.title)}</h1>
         <p className={styles.catalogSubtitle}>
           {t(catalogKeys.page.subtitle, { count: search.filteredItems.length })}
@@ -114,7 +114,7 @@ const CatalogPage = () => {
       </div>
 
       <TabletSidebar
-        className="block lg:hidden"
+        className='block lg:hidden'
         width={321}
         zIndex={5}
         containerRef={sidebar.sectionRef as React.RefObject<HTMLElement>}
@@ -147,13 +147,13 @@ const CatalogPage = () => {
 
       <div
         ref={sidebar.sectionRef}
-        className="flex relative gap-[20px] items-start"
+        className='flex relative gap-[20px] items-start'
       >
         <FixedSidebar
           containerRef={sidebar.sectionRef as React.RefObject<HTMLElement>}
           width={320}
           top={96}
-          className="hidden lg:block"
+          className='hidden lg:block'
         >
           <CatalogSidebar
             onApply={handleApplyFilters}
@@ -161,7 +161,7 @@ const CatalogPage = () => {
           />
         </FixedSidebar>
 
-        <div className="relative flex-1 min-w-0">
+        <div className='relative flex-1 min-w-0'>
           <CatalogGrid
             items={search.filteredItems}
             initialCount={12}
@@ -177,7 +177,7 @@ const CatalogPage = () => {
         onClose={feedbackModal.closeModal}
         watchTitle={feedbackModal.watchTitle}
       />
-    </div>
+    </main>
   );
 };
 export default CatalogPage;

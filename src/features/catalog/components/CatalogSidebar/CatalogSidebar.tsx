@@ -39,24 +39,32 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
         width: `${widthPx}px`,
       }}
     >
-      <h3
+      <h2
         className={`${styles.sidebarTitle} text-[16px] font-medium  pb-1 text-[var(--text-dark)] mb-6`}
       >
         {title}
-      </h3>
+      </h2>
 
       <div className='relative mb-6'>
+        <label htmlFor='sidebar-brand-search' className='sr-only'>
+          {t(catalogKeys.sidebar.searchPlaceholder)}
+        </label>
         <input
-          type='text'
+          id='sidebar-brand-search'
+          type='search'
           value={filters.searchTerm}
           onChange={(e) => filters.setSearchTerm(e.target.value)}
           data-sidebar-search='true'
           placeholder={t(catalogKeys.sidebar.searchPlaceholder)}
+          aria-label={t(catalogKeys.sidebar.searchPlaceholder)}
           className='w-[269px] h-[31px] border border-[rgba(23,20,20,0.3)] rounded-[15px] pl-[40px] pr-[10px]
                      bg-white text-[14px] text-[var(--text-dark)]
                       placeholder:text-[#8b8b8b]'
         />
-        <span className='absolute left-[15px] top-1/2 -translate-y-1/2 text-[#8b8b8b]'>
+        <span
+          className='absolute left-[15px] top-1/2 -translate-y-1/2 text-[#8b8b8b]'
+          aria-hidden='true'
+        >
           <Search size={16} />
         </span>
       </div>
@@ -69,6 +77,7 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
           className='w-[269px] h-[40px] bg-[#04694f] text-white rounded-[10px]
                      font-[var(--font-inter)] text-[20px]
                      hover:bg-[#035a3f] transition-colors flex items-center justify-center'
+          aria-label='Застосувати фільтри до каталогу'
         >
           {t(catalogKeys.sidebar.apply)}
         </button>
@@ -81,6 +90,7 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
           style={{
             background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
           }}
+          aria-label='Скинути всі фільтри'
         >
           {t(catalogKeys.sidebar.reset)}
         </button>

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Product } from "@/interfaces/product";
+import React, { useState } from 'react';
+import { Product } from '@/interfaces/product';
 import {
   ProductHero,
   ProductAnalytics,
@@ -19,8 +19,8 @@ interface ProductPageProps {
 
 const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
   const [activeTab, setActiveTab] = useState<
-    "parameters" | "brand" | "price" | "trend"
-  >("trend");
+    'parameters' | 'brand' | 'price' | 'trend'
+  >('trend');
 
   const breadcrumbItems = [
     { label: t(productKeys.breadcrumbs.catalog), href: "/catalog" },
@@ -29,55 +29,57 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
     { label: t(productKeys.breadcrumbs.model) },
   ];
   const handleSave = () => {
-    console.log("Зберегти продукт");
+    console.log('Зберегти продукт');
   };
 
   const handleCompare = () => {
-    console.log("Порівняти продукт");
+    console.log('Порівняти продукт');
   };
 
   const handlePriceNotification = () => {
-    console.log("Сповіщення про ціну");
+    console.log('Сповіщення про ціну');
   };
 
   const handleShare = () => {
-    console.log("Поділитися продуктом");
+    console.log('Поділитися продуктом');
   };
 
   const handleBuy = () => {
-    console.log("Купити продукт");
+    console.log('Купити продукт');
   };
 
   const handleGetQuote = () => {
-    console.log("Отримати пропозицію");
+    console.log('Отримати пропозицію');
   };
 
-  const handleTabChange = (tab: "parameters" | "brand" | "price" | "trend") => {
+  const handleTabChange = (tab: 'parameters' | 'brand' | 'price' | 'trend') => {
     setActiveTab(tab);
   };
 
   const handleSortChange = (sort: string) => {
-    console.log("Зміна сортування:", sort);
+    console.log('Зміна сортування:', sort);
   };
 
   const handleRegionChange = (region: string) => {
-    console.log("Зміна регіону:", region);
+    console.log('Зміна регіону:', region);
   };
 
   const handleConditionChange = (condition: string) => {
-    console.log("Зміна стану:", condition);
+    console.log('Зміна стану:', condition);
   };
 
   const handlePurchase = (offerId: string) => {
-    console.log("Покупка пропозиції:", offerId);
+    console.log('Покупка пропозиції:', offerId);
   };
 
   return (
-    <div className="bg-white pt-[27px] pb-[60px] xl:pb-[90px] min-h-screen mx-auto mt-[80px]">
+    <main className='bg-white pt-[27px] pb-[60px] xl:pb-[90px] min-h-screen mx-auto mt-[80px]'>
       <div className={styles.productPage}>
         <div className="hidden sm:block">
           <Breadcrumbs items={breadcrumbItems} />
         </div>
+
+        <h1 className='sr-only'>{product.title} - Деталі продукту</h1>
 
         <ProductHero
           product={product}
@@ -89,15 +91,15 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
           onGetQuote={handleGetQuote}
         />
 
-        <div className="flex flex-col-reverse sm:flex-col-reverse md:flex-row lg:flex-row xl:flex-row gap-[20px] sm:gap-[25px] md:gap-[60px] lg:gap-[60px] xl:gap-[60px] mb-8">
-          <div className="w-full sm:w-full md:w-[calc(50%-30px)] lg:w-[calc(50%-30px)] xl:w-auto">
+        <div className='flex flex-col-reverse sm:flex-col-reverse md:flex-row lg:flex-row xl:flex-row gap-[20px] sm:gap-[25px] md:gap-[60px] lg:gap-[60px] xl:gap-[60px] mb-8'>
+          <div className='w-full sm:w-full md:w-[calc(50%-30px)] lg:w-[calc(50%-30px)] xl:w-auto'>
             <SimilarModels
               models={product.similarModels}
               onCompare={handleCompare}
             />
           </div>
 
-          <div className="h-[750px] sm:h-auto  md:h-[640px] lg:h-auto w-full sm:w-full md:w-[calc(50%-30px)] lg:w-[calc(50%-30px)] xl:w-[603px]">
+          <div className='h-[750px] sm:h-auto  md:h-[640px] lg:h-auto w-full sm:w-full md:w-[calc(50%-30px)] lg:w-[calc(50%-30px)] xl:w-[603px]'>
             <ProductAnalytics
               analytics={product.analytics}
               activeTab={activeTab}
@@ -115,7 +117,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
           onPurchase={handlePurchase}
         />
       </div>
-    </div>
+    </main>
   );
 };
 

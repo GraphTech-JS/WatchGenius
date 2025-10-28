@@ -42,17 +42,67 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: var(--font-inter);
+  text-rendering: optimizeLegibility;
 }
 
 * {
   box-sizing: border-box;
 }
 
+/* Performance optimizations */
+[class*='carousel'],
+[class*='scroll'],
+[class*='swipe'] {
+  will-change: scroll-position;
+  contain: layout;
+}
+
+img,
+picture,
+video {
+  content-visibility: auto;
+}
+
 a {
   color: inherit;
   text-decoration: none;
 }
+
+/* Accessibility: Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Accessibility: Focus styles for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--green-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--green-primary);
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--green-primary);
+  outline-offset: 0;
+  border-radius: 4px;
+}
 .range-slider {
+  appearance: none;
   -webkit-appearance: none;
   width: 100%;
   height: 8px;

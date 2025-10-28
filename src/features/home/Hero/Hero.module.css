@@ -1,12 +1,14 @@
 .hero {
   background: #a58e6a;
   padding-top: 3.5rem;
+  contain: layout style;
 }
 
 .heroBgImage {
   z-index: 0;
   object-fit: cover;
-  object-position: 50% 120%; 
+  object-position: 50% 120%;
+  will-change: transform;
 }
 
 

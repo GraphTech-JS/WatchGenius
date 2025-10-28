@@ -58,7 +58,7 @@ export const Footer = () => {
               <div className={styles.logoName}>WATCHGENIUS</div>
             </LocalizedLink>
           </nav>
-          <div className='hidden md:flex flex-col items-center gap-3'>
+          <div className='hidden flex-col gap-3 items-center md:flex'>
             <Image
               src={Chrono.src}
               alt={t(footerKeys.chrono.alt)}
@@ -77,7 +77,7 @@ export const Footer = () => {
             <div className={styles.footerLinkTitle}>
               {t(footerKeys.sections.menu.title)}
             </div>
-            <nav className='hidden md:flex flex-col gap-5 items-start'>
+            <nav className='hidden flex-col gap-5 items-start md:flex'>
               <LocalizedLink
                 href='/catalog'
                 className={styles.footerLink}
@@ -116,32 +116,36 @@ export const Footer = () => {
             <div className={styles.footerLinkTitle}>
               {t(footerKeys.sections.help.title)}
             </div>
-            <nav className='hidden md:flex flex-col gap-5 items-start'>
+            <nav className='hidden flex-col gap-5 items-start md:flex'>
               <LocalizedLink
-                href='#'
+                href='#faq'
                 className={styles.footerLink}
                 prefetch={false}
+                aria-label={t(footerKeys.sections.help.faq)}
               >
                 {t(footerKeys.sections.help.faq)}
               </LocalizedLink>
               <LocalizedLink
-                href='#'
+                href='#how-it-works'
                 className={styles.footerLink}
                 prefetch={false}
+                aria-label={t(footerKeys.sections.help.howItWorks)}
               >
                 {t(footerKeys.sections.help.howItWorks)}
               </LocalizedLink>
               <LocalizedLink
-                href='#'
+                href='#safe-guide'
                 className={styles.footerLink}
                 prefetch={false}
+                aria-label={t(footerKeys.sections.help.safeGuide)}
               >
                 {t(footerKeys.sections.help.safeGuide)}
               </LocalizedLink>
               <LocalizedLink
-                href='#'
+                href='#support'
                 className={styles.footerLink}
                 prefetch={false}
+                aria-label={t(footerKeys.sections.help.support)}
               >
                 {t(footerKeys.sections.help.support)}
               </LocalizedLink>
@@ -155,29 +159,32 @@ export const Footer = () => {
             </div>
             <nav className='flex flex-col gap-5 items-start'>
               <LocalizedLink
-                href='#'
+                href='#blog'
                 className={styles.footerLink}
                 prefetch={false}
+                aria-label={t(footerKeys.sections.community.blog)}
               >
                 {t(footerKeys.sections.community.blog)}
               </LocalizedLink>
               <LocalizedLink
-                href='#'
+                href='#discord'
                 className={styles.footerLink}
                 prefetch={false}
+                aria-label={t(footerKeys.sections.community.discord)}
               >
                 {t(footerKeys.sections.community.discord)}
               </LocalizedLink>
               <LocalizedLink
-                href='#'
+                href='#telegram'
                 className={styles.footerLink}
                 prefetch={false}
+                aria-label={t(footerKeys.sections.community.telegram)}
               >
                 {t(footerKeys.sections.community.telegram)}
               </LocalizedLink>
             </nav>
           </div>
-          <div className='md:hidden flex flex-col items-center gap-3'>
+          <div className='flex flex-col gap-3 items-center md:hidden'>
             <Image
               className={styles.chronoIcon}
               src={Chrono.src}
@@ -190,33 +197,42 @@ export const Footer = () => {
             </div>
           </div>
         </div>
-        <nav className={`${styles.footerSupportWrapper}`}>
-          <div className='flex md:flex-col flex-row gap-8'>
+        <nav
+          className={`${styles.footerSupportWrapper}`}
+          aria-label='Соціальні мережі'
+        >
+          <div className='flex flex-row gap-8 md:flex-col'>
             <LocalizedLink
-              href='#'
+              href='#discord-social'
               className={styles.footerSocialLink}
               prefetch={false}
+              aria-label='Приєднатися до Discord спільноти'
             >
               <DiscordIcon
                 className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50 hover:text-white/90`}
+                aria-hidden='true'
               />
             </LocalizedLink>
             <LocalizedLink
-              href='#'
+              href='#telegram-social'
               className={styles.footerSocialLink}
               prefetch={false}
+              aria-label='Підписатися на Telegram канал'
             >
               <TelegramIcon
                 className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50 hover:text-white/90`}
+                aria-hidden='true'
               />
             </LocalizedLink>
             <LocalizedLink
-              href='#'
+              href='#instagram-social'
               className={styles.footerSocialLink}
               prefetch={false}
+              aria-label='Слідкувати в Instagram'
             >
               <InstagramIcon
                 className={`${styles.footerSocialLinkItem} w-10 h-10 md:text-white/50 hover:text-white/90`}
+                aria-hidden='true'
               />
             </LocalizedLink>
           </div>
@@ -226,22 +242,20 @@ export const Footer = () => {
         className={`${styles.footerBottom} mx-auto max-w-[90rem] px-[2rem] md:px-[2.5rem] lg:px-[6.25rem] flex md:flex-row flex-col-reverse md:justify-between text-center gap-6`}
       >
         <div>{t(footerKeys.copyright)}</div>
-        <div className=' flex md:flex-row flex-col-reverse gap-6'>
+        <div className='flex flex-col-reverse gap-6  md:flex-row'>
           <LocalizedLink
             href='/privacy'
             className={styles.footerSocialLink}
             prefetch={false}
           >
-            <div className=' hover:underline'>
-              {t(footerKeys.legal.privacy)}
-            </div>
+            <div className='hover:underline'>{t(footerKeys.legal.privacy)}</div>
           </LocalizedLink>
           <LocalizedLink
             href='/terms'
             className={styles.footerSocialLink}
             prefetch={false}
           >
-            <div className=' hover:underline'>{t(footerKeys.legal.terms)}</div>
+            <div className='hover:underline'>{t(footerKeys.legal.terms)}</div>
           </LocalizedLink>
         </div>
       </div>
