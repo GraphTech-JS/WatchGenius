@@ -5,6 +5,7 @@ import { StarIcon, StarIconHover } from "../../../../../public/catalogPage";
 import Image from "next/image";
 import { t } from "@/i18n";
 import { catalogKeys } from "@/i18n/keys/catalog";
+import { a11yKeys } from '@/i18n/keys/accessibility';
 
 interface SaveToChatButtonProps {
   onClick: () => void;
