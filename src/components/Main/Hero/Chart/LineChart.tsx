@@ -1,29 +1,31 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
 export interface LineChartProps {
   data: number[];
-  variant?: "green" | "orange" | "red" | "overall";
+  variant?: 'green' | 'orange' | 'red' | 'overall';
   id?: string;
   height?: number;
   width?: number;
+  'aria-label'?: string;
 }
 
 export const LineChart: React.FC<LineChartProps> = ({
   data,
-  variant = "green",
-  id = "chartGradient",
+  variant = 'green',
+  id = 'chartGradient',
   height = 80,
   width = 300,
+  'aria-label': ariaLabel,
 }) => {
   if (data.length === 0) return null;
   const padding = 0;
 
   const colorSchemes = {
-    green: { fill: "#D2F7D0", line: "#B4E1C7" },
-    orange: { fill: "#EED09D", line: "#E3C980" },
-    red: { fill: "#F4CBC7", line: "#FFD0D0" },
-    overall: { fill: "#D2F7D0", line: "#B4E1C7" },
+    green: { fill: '#D2F7D0', line: '#B4E1C7' },
+    orange: { fill: '#EED09D', line: '#E3C980' },
+    red: { fill: '#F4CBC7', line: '#FFD0D0' },
+    overall: { fill: '#D2F7D0', line: '#B4E1C7' },
   };
 
   const { fill: fillColor, line: lineColor } = colorSchemes[variant];
@@ -69,17 +71,19 @@ export const LineChart: React.FC<LineChartProps> = ({
 
   return (
     <svg
-      width="100%"
+      width='100%'
       height={height}
       viewBox={`0 0 ${width} ${height}`}
-      preserveAspectRatio="none"
+      preserveAspectRatio='none'
+      aria-label={ariaLabel}
+      role={ariaLabel ? 'img' : undefined}
     >
       <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={fillColor} stopOpacity="1" />
-          <stop offset="50%" stopColor={fillColor} stopOpacity="0.8" />
-          <stop offset="80%" stopColor={fillColor} stopOpacity="0.2" />
-          <stop offset="100%" stopColor={fillColor} stopOpacity="0" />
+        <linearGradient id={gradientId} x1='0' y1='0' x2='0' y2='1'>
+          <stop offset='0%' stopColor={fillColor} stopOpacity='1' />
+          <stop offset='50%' stopColor={fillColor} stopOpacity='0.8' />
+          <stop offset='80%' stopColor={fillColor} stopOpacity='0.2' />
+          <stop offset='100%' stopColor={fillColor} stopOpacity='0' />
         </linearGradient>
       </defs>
 
@@ -87,11 +91,11 @@ export const LineChart: React.FC<LineChartProps> = ({
 
       <path
         d={path}
-        fill="none"
+        fill='none'
         stroke={lineColor}
-        strokeWidth="2"
-        strokeLinejoin="round"
-        strokeLinecap="round"
+        strokeWidth='2'
+        strokeLinejoin='round'
+        strokeLinecap='round'
       />
     </svg>
   );

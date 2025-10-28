@@ -1,12 +1,14 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { createPortal } from "react-dom";
-import Link from "next/link";
-import Image from "next/image";
-import { useLocale } from "@/hooks/useLocale";
-import styles from "./Header.module.css";
+'use client';
+import React, { useState, useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { createPortal } from 'react-dom';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useLocale } from '@/hooks/useLocale';
+import styles from './Header.module.css';
+import { t } from '@/i18n';
+import { a11yKeys } from '@/i18n/keys/accessibility';
 import {
   SearchNormal,
   SearchWhite,
@@ -14,8 +16,8 @@ import {
   Robot,
   Close,
   Menu,
-} from "../../../../public/icons";
-import { HeartIcon } from "../../../../public/header/Icon";
+} from '../../../../public/icons';
+import { HeartIcon } from '../../../../public/header/Icon';
 
 export const Header = () => {
   const locale = useLocale();
@@ -32,14 +34,14 @@ export const Header = () => {
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        const el = document.getElementById("mobileMenu");
+        const el = document.getElementById('mobileMenu');
         if (el) el.classList.add(styles.menuOpen);
       });
     });
   };
 
   const startCloseMenu = () => {
-    const el = document.getElementById("mobileMenu");
+    const el = document.getElementById('mobileMenu');
     if (el) {
       el.classList.remove(styles.menuOpen);
       el.classList.add(styles.menuClosing);
@@ -52,8 +54,8 @@ export const Header = () => {
     }, 400);
   };
 
-  const [selectedCurrency, setSelectedCurrency] = useState("EUR");
-  const [selectedLang, setSelectedLang] = useState("УКР");
+  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
+  const [selectedLang, setSelectedLang] = useState('УКР');
 
   const currencyRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
@@ -73,7 +75,7 @@ export const Header = () => {
     if (pathname === `/${locale}`) {
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
       router.push(`/${locale}/#${id}`);
@@ -83,7 +85,7 @@ export const Header = () => {
   useEffect(() => {
     if (pathname !== `/${locale}`) return;
 
-    const sections = ["dealers", "treands", "contacts"];
+    const sections = ['dealers', 'treands', 'contacts'];
     const handleScroll = () => {
       let currentSection = null;
       for (const id of sections) {
@@ -99,9 +101,9 @@ export const Header = () => {
       setActiveSection(currentSection);
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
     handleScroll();
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname, locale]);
 
   useEffect(() => setMounted(true), []);
@@ -119,8 +121,8 @@ export const Header = () => {
         setShowSearch(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -131,8 +133,8 @@ export const Header = () => {
     return () => clearTimeout(timer);
   }, [showSearch]);
 
-  const currencies = ["EUR", "USD", "UAH", "PL", "KZT"];
-  const languages = ["УКР", "АНГЛ", "ПЛ"];
+  const currencies = ['EUR', 'USD', 'UAH', 'PL', 'KZT'];
+  const languages = ['УКР', 'АНГЛ', 'ПЛ'];
 
   return (
     <header className={`${styles.header} w-full`}>
@@ -141,7 +143,7 @@ export const Header = () => {
           <Image
             src={Logo.src}
             className={`${styles.headerLogoIcon}`}
-            alt="logo"
+            alt='logo'
             width={40}
             height={40}
           />
@@ -151,14 +153,14 @@ export const Header = () => {
 
         <nav className={`hidden gap-11 lg:flex lg:pl-12`}>
           {[
-            { href: `/${locale}/catalog`, label: "Каталог", type: "page" },
-            { href: "#dealers", label: "Дилери", type: "section" },
-            { href: "#treands", label: "Тренди", type: "section" },
-            { href: "#contacts", label: "Контакти", type: "section" },
+            { href: `/${locale}/catalog`, label: 'Каталог', type: 'page' },
+            { href: '#dealers', label: 'Дилери', type: 'section' },
+            { href: '#treands', label: 'Тренди', type: 'section' },
+            { href: '#contacts', label: 'Контакти', type: 'section' },
           ].map(({ href, label, type }) => {
             const isCatalog = pathname === `/${locale}/catalog`;
             const isMain = pathname === `/${locale}`;
-            const sectionId = href.replace("#", "");
+            const sectionId = href.replace('#', '');
             const isActive =
               (isCatalog && href === `/${locale}/catalog`) ||
               (isMain && activeSection === sectionId);
@@ -168,10 +170,10 @@ export const Header = () => {
               (isMain && activeSection && activeSection !== sectionId);
 
             const commonClass = `${styles.headerLink} ${
-              isActive ? styles.headerLinkActive : ""
-            } ${isInactive ? styles.headerLinkInactive : ""}`;
+              isActive ? styles.headerLinkActive : ''
+            } ${isInactive ? styles.headerLinkInactive : ''}`;
 
-            return type === "page" ? (
+            return type === 'page' ? (
               <Link
                 key={label}
                 href={href}
@@ -192,11 +194,11 @@ export const Header = () => {
             );
           })}
         </nav>
-        <div className="flex relative gap-4 ml-4">
-          <div className="hidden gap-5 md:flex">
+        <div className='flex relative gap-4 ml-4'>
+          <div className='hidden gap-5 md:flex'>
             <div
               className={`relative ${
-                showSearch ? "lg:hidden" : "lg:flex"
+                showSearch ? 'lg:hidden' : 'lg:flex'
               } flex items-center w-8 text-center`}
               ref={currencyRef}
             >
@@ -206,11 +208,14 @@ export const Header = () => {
                   setShowCurrency((prev) => !prev);
                   setShowLang(false);
                 }}
+                aria-label={t(a11yKeys.currency.select)}
+                aria-expanded={showCurrency}
+                aria-haspopup='true'
               >
                 <div>{selectedCurrency}</div>
               </button>
               {showCurrency && (
-                <div className="absolute top-[-2px] lg:top-[-8px] left-[-14px] lg:left-[-14px] flex flex-col bg-white rounded-[10px] z-20">
+                <div className='absolute top-[-2px] lg:top-[-8px] left-[-14px] lg:left-[-14px] flex flex-col bg-white rounded-[10px] z-20'>
                   {currencies.map((cur) => (
                     <button
                       key={cur}
@@ -221,7 +226,7 @@ export const Header = () => {
                       className={`${
                         styles.headerLangSwitchBtn
                       } text-center px-3 py-2 hover:bg-gray-100 rounded-[10px] ${
-                        cur !== selectedCurrency ? styles.inactiveOption : ""
+                        cur !== selectedCurrency ? styles.inactiveOption : ''
                       }`}
                     >
                       {cur}
@@ -232,7 +237,7 @@ export const Header = () => {
             </div>
             <div
               className={`relative ${
-                showSearch ? "lg:hidden" : "lg:flex"
+                showSearch ? 'lg:hidden' : 'lg:flex'
               } flex items-center w-10 text-center`}
               ref={langRef}
             >
@@ -242,11 +247,14 @@ export const Header = () => {
                   setShowLang((prev) => !prev);
                   setShowCurrency(false);
                 }}
+                aria-label={t(a11yKeys.language.select)}
+                aria-expanded={showLang}
+                aria-haspopup='true'
               >
                 <div>{selectedLang}</div>
               </button>
               {showLang && (
-                <div className="absolute top-[-2px] lg:top-[-8px] left-[-17px] lg:left-[-17px] flex flex-col bg-white rounded-[10px] z-20">
+                <div className='absolute top-[-2px] lg:top-[-8px] left-[-17px] lg:left-[-17px] flex flex-col bg-white rounded-[10px] z-20'>
                   {languages.map((lang) => (
                     <button
                       key={lang}
@@ -257,7 +265,7 @@ export const Header = () => {
                       className={`${
                         styles.headerLangSwitchBtn
                       } px-3 py-2 hover:bg-gray-100 rounded-[10px] text-center ${
-                        lang !== selectedLang ? styles.inactiveOption : ""
+                        lang !== selectedLang ? styles.inactiveOption : ''
                       }`}
                     >
                       {lang}
@@ -267,7 +275,7 @@ export const Header = () => {
               )}
             </div>
             <button
-              className={`lg:${showSearch ? "hidden" : "flex"} ${
+              className={`lg:${showSearch ? 'hidden' : 'flex'} ${
                 styles.headerLangSwitchBtn
               }  hidden shrink-0`}
               onClick={() => {
@@ -275,12 +283,15 @@ export const Header = () => {
                 setShowCurrency(false);
                 setShowLang(false);
               }}
+              aria-label={t(a11yKeys.search.open)}
+              aria-expanded={showSearch}
             >
               <Image
                 src={SearchNormal.src}
-                alt="Пошук"
+                alt=''
                 width={18}
                 height={18}
+                aria-hidden='true'
               />
             </button>
           </div>
@@ -289,51 +300,74 @@ export const Header = () => {
             className={`md:flex
             ${
               showSearch
-                ? "lg:opacity-100 lg:translate-y-0 lg:relative lg:pointer-events-auto"
-                : "lg:opacity-0 lg:translate-y-4 lg:absolute lg:pointer-events-none"
+                ? 'lg:opacity-100 lg:translate-y-0 lg:relative lg:pointer-events-auto'
+                : 'lg:opacity-0 lg:translate-y-4 lg:absolute lg:pointer-events-none'
             }
             hidden rounded-xl border border-black pl-4 py-2 items-center gap-2
             transition-all duration-300 ease-out`}
           >
+            <label htmlFor='desktop-search' className='sr-only'>
+              {t(a11yKeys.search.catalog)}
+            </label>
             <input
-              type="text"
+              id='desktop-search'
+              type='search'
               className={`${styles.headerMobileSearchInput} w-full max-w-[150px] `}
-              placeholder="Пошук"
+              placeholder='Пошук'
+              aria-label={t(a11yKeys.search.catalog)}
             />
-            <button className={`${styles.headerLangSwitchBtn} shrink-0 mr-3`}>
+            <button
+              className={`${styles.headerLangSwitchBtn} shrink-0 mr-3`}
+              aria-label={t(a11yKeys.search.submit)}
+            >
               <Image
                 src={SearchNormal.src}
-                alt="Пошук"
+                alt=''
                 width={18}
                 height={18}
+                aria-hidden='true'
               />
             </button>
           </div>
-          <div className="hidden gap-3 lg:flex">
+          <div className='hidden gap-3 lg:flex'>
             <button
               className={`${styles.headerLangSwitchBtn} shrink-0`}
               onClick={() =>
                 window.dispatchEvent(
-                  new CustomEvent("toggleChat", { detail: true })
+                  new CustomEvent('toggleChat', { detail: true })
                 )
               }
+              aria-label={t(a11yKeys.ai.open)}
             >
-              <Image src={Robot.src} alt="AI агент" width={22} height={22} />
+              <Image
+                src={Robot.src}
+                alt=''
+                width={22}
+                height={22}
+                aria-hidden='true'
+              />
             </button>
-            <button className={`${styles.headerLangSwitchBtn} shrink-0`}>
-              <HeartIcon className={`w-5 h-5 text-green-800`} />
+            <button
+              className={`${styles.headerLangSwitchBtn} shrink-0`}
+              aria-label={t(a11yKeys.favorites.view)}
+            >
+              <HeartIcon
+                className={`w-5 h-5 text-green-800`}
+                aria-hidden='true'
+              />
             </button>
           </div>
-          <div className="flex ml-4 w-8 lg:hidden">
+          <div className='flex ml-4 w-8 lg:hidden'>
             <button
               className={styles.headerMobileMenuBtn}
               onClick={() => (open ? startCloseMenu() : openMenu())}
               aria-expanded={open}
-              aria-controls="mobileMenu"
+              aria-controls='mobileMenu'
+              aria-label={open ? t(a11yKeys.menu.close) : t(a11yKeys.menu.open)}
             >
               <Image
                 src={open ? Close.src : Menu.src}
-                alt="menu icon"
+                alt=''
                 className={
                   open
                     ? styles.headerMobileMenuIconClose
@@ -341,6 +375,7 @@ export const Header = () => {
                 }
                 width={32}
                 height={14}
+                aria-hidden='true'
               />
             </button>
           </div>
@@ -349,33 +384,40 @@ export const Header = () => {
           (open || menuClosing) &&
           createPortal(
             <div
-              id="mobileMenu"
+              id='mobileMenu'
               className={`${styles.headerMobileMenu} fixed flex flex-col py-8 rounded-none md:rounded-b-xl`}
             >
               <div
                 className={`${styles.headerMobileMenuTop} flex w-full justify-center `}
               >
                 <div className={`${styles.headerMobileMenuSearch} flex `}></div>
-                <div className="flex gap-5 p-3 md:hidden">
-                  <div className="flex py-3 pl-4 rounded-xl border border-white">
+                <div className='flex gap-5 p-3 md:hidden'>
+                  <div className='flex py-3 pl-4 rounded-xl border border-white'>
+                    <label htmlFor='mobile-search' className='sr-only'>
+                      {t(a11yKeys.search.catalog)}
+                    </label>
                     <input
-                      type="text"
+                      id='mobile-search'
+                      type='search'
                       className={`${styles.headerMobileSearchInput} max-w-[200px]`}
-                      placeholder="Пошук"
+                      placeholder='Пошук'
+                      aria-label={t(a11yKeys.search.catalog)}
                     />
                     <button
                       className={`${styles.headerLangSwitchBtn} shrink-0 mr-4`}
+                      aria-label={t(a11yKeys.search.submit)}
                     >
                       <Image
                         src={SearchWhite.src}
-                        alt="Пошук"
+                        alt=''
                         width={18}
                         height={18}
+                        aria-hidden='true'
                       />
                     </button>
                   </div>
                   <div
-                    className="flex relative items-center w-10 text-center"
+                    className='flex relative items-center w-10 text-center'
                     ref={currencyRef}
                   >
                     <button
@@ -384,11 +426,14 @@ export const Header = () => {
                         setShowCurrency((prev) => !prev);
                         setShowLang(false);
                       }}
+                      aria-label={t(a11yKeys.currency.select)}
+                      aria-expanded={showCurrency}
+                      aria-haspopup='true'
                     >
                       <div>{selectedCurrency}</div>
                     </button>
                     {showCurrency && (
-                      <div className="absolute top-[5px] left-[-14px] flex flex-col bg-white rounded-[10px] z-20">
+                      <div className='absolute top-[5px] left-[-14px] flex flex-col bg-white rounded-[10px] z-20'>
                         {currencies.map((cur) => (
                           <button
                             key={cur}
@@ -401,7 +446,7 @@ export const Header = () => {
                             } text-center px-3 py-2 hover:bg-gray-100 rounded-[10px] ${
                               cur !== selectedCurrency
                                 ? styles.inactiveOption
-                                : ""
+                                : ''
                             }`}
                           >
                             {cur}
@@ -411,7 +456,7 @@ export const Header = () => {
                     )}
                   </div>
                   <div
-                    className="flex relative items-center w-10 text-center"
+                    className='flex relative items-center w-10 text-center'
                     ref={langRef}
                   >
                     <button
@@ -420,11 +465,14 @@ export const Header = () => {
                         setShowLang((prev) => !prev);
                         setShowCurrency(false);
                       }}
+                      aria-label={t(a11yKeys.language.select)}
+                      aria-expanded={showLang}
+                      aria-haspopup='true'
                     >
                       <div>{selectedLang}</div>
                     </button>
                     {showLang && (
-                      <div className="absolute top-[5px] left-[-17px] flex flex-col bg-white rounded-[10px] z-20">
+                      <div className='absolute top-[5px] left-[-17px] flex flex-col bg-white rounded-[10px] z-20'>
                         {languages.map((lang) => (
                           <button
                             key={lang}
@@ -435,7 +483,7 @@ export const Header = () => {
                             className={`${
                               styles.headerLangSwitchBtn
                             } px-3 py-2 hover:bg-gray-100 rounded-[10px] text-center ${
-                              lang !== selectedLang ? styles.inactiveOption : ""
+                              lang !== selectedLang ? styles.inactiveOption : ''
                             }`}
                           >
                             {lang}
@@ -457,9 +505,9 @@ export const Header = () => {
                   Каталог
                 </Link>
                 <a
-                  href="#dealers"
+                  href='#dealers'
                   onClick={(e) => {
-                    handleSectionClick(e, "dealers");
+                    handleSectionClick(e, 'dealers');
                     startCloseMenu();
                   }}
                   className={styles.headerMobileMenuLink}
@@ -467,9 +515,9 @@ export const Header = () => {
                   Дилери
                 </a>
                 <a
-                  href="#treands"
+                  href='#treands'
                   onClick={(e) => {
-                    handleSectionClick(e, "treands");
+                    handleSectionClick(e, 'treands');
                     startCloseMenu();
                   }}
                   className={styles.headerMobileMenuLink}
@@ -477,9 +525,9 @@ export const Header = () => {
                   Тренди
                 </a>
                 <a
-                  href="#contacts"
+                  href='#contacts'
                   onClick={(e) => {
-                    handleSectionClick(e, "contacts");
+                    handleSectionClick(e, 'contacts');
                     startCloseMenu();
                   }}
                   className={styles.headerMobileMenuLink}

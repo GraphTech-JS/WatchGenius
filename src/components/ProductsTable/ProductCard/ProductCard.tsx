@@ -7,9 +7,17 @@ import { IWatch } from '@/interfaces';
 import { BellIcon } from '../../../../public/social/Icon';
 import { Heart } from 'lucide-react';
 import { LocalizedLink } from '@/components/LocalizedLink';
+import { t } from '@/i18n';
+import { a11yKeys } from '@/i18n/keys/accessibility';
 
 const ArrowUp = () => (
-  <svg width='16' height='14' viewBox='0 0 16 14' fill='none'>
+  <svg
+    width='16'
+    height='14'
+    viewBox='0 0 16 14'
+    fill='none'
+    aria-hidden='true'
+  >
     <path
       d='
       M8 1 V14
@@ -25,7 +33,13 @@ const ArrowUp = () => (
 );
 
 const ArrowDown = () => (
-  <svg width='16' height='14' viewBox='0 0 16 14' fill='none'>
+  <svg
+    width='16'
+    height='14'
+    viewBox='0 0 16 14'
+    fill='none'
+    aria-hidden='true'
+  >
     <path
       d='
       M8 13 V1 
@@ -44,6 +58,7 @@ export type ProductCardProps = IWatch & {
   cardStyle?: React.CSSProperties;
   height?: number | string;
   dense?: boolean;
+  priority?: boolean;
 };
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -57,6 +72,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   cardStyle,
   height,
   dense = false,
+  priority = false,
 }) => {
   let variant: 'green' | 'orange' | 'red' | 'overall' = 'orange';
   let percentClass = styles.percentNeutral;
@@ -94,8 +110,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   }, []);
 
   return (
-    <LocalizedLink href='/product/rolex-submariner-1' prefetch={false}>
-      <div
+    <LocalizedLink
+      href='/product/rolex-submariner-1'
+      prefetch={false}
+      aria-label={t(a11yKeys.card.product, {
+        brand,
+        price,
+        currency: '€',
+        change: changePercent,
+      })}
+    >
+      <article
         className={`${
           styles.productCard
         } flex flex-col rounded-2xl h-[15rem] md:h-[21rem] px-2 md:px-4 ${
@@ -115,14 +140,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           } flex w-full justify-center items-center`}
         >
           <button
-            onClick={() => setIsFavorite((prev) => !prev)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsFavorite((prev) => !prev);
+            }}
             className={`${styles.productCardScore} absolute top-0 left-0 flex items-center justify-center w-8 h-8`}
+            aria-label={
+              isFavorite
+                ? t(a11yKeys.favorites.remove)
+                : t(a11yKeys.favorites.add)
+            }
+            aria-pressed={isFavorite}
           >
             <Heart
               size={20}
               className={`cursor-pointer transition-colors duration-300 ${
                 isFavorite ? 'text-[#04694f] fill-[#04694f]' : 'text-[#000000]'
               }`}
+              aria-hidden='true'
             />
           </button>
 
@@ -136,10 +172,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 ? 'max-h-[72px]'
                 : 'max-h-[84px] md:max-h-[125px] lg:max-h-[140px]'
             }`}
+            priority={priority}
           />
 
           <div
             className={`${styles.productCardScore} ${scoreClass} absolute top-0 right-0 flex items-center justify-center w-6 md:w-8 h-6 md:h-8 rounded-md font-bold`}
+            aria-label={t(a11yKeys.rating.label, { rating: score })}
+            role='status'
           >
             {score}
           </div>
@@ -164,6 +203,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               variant={variant}
               id={chartId}
               height={chartHeight}
+              aria-label={t(a11yKeys.chart.priceChange, {
+                trend:
+                  changePercent > 0
+                    ? t(a11yKeys.chart.trendUp)
+                    : changePercent < 0
+                    ? t(a11yKeys.chart.trendDown)
+                    : t(a11yKeys.chart.trendStable),
+              })}
             />
           </div>
         </div>
@@ -182,12 +229,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               {ArrowIcon && <ArrowIcon />}
               {changePercent} %
             </div>
-            <BellIcon
-              className={`${styles.productCardBell} w-[13px] md:w-[21px] h-[16px] md:h-[22px] cursor-pointer`}
-            />
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+              aria-label={t(a11yKeys.notifications.priceAlert)}
+              className='p-0 bg-transparent border-0 cursor-pointer'
+            >
+              <BellIcon
+                className={`${styles.productCardBell} w-[13px] md:w-[21px] h-[16px] md:h-[22px]`}
+                aria-hidden='true'
+              />
+            </button>
           </div>
         </div>
-      </div>
+      </article>
     </LocalizedLink>
   );
 };

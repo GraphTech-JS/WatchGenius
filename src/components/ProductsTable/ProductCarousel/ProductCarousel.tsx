@@ -131,14 +131,14 @@ export const ProductCarousel: React.FC<Props> = ({
         ref={swipeRef}
         className={`flex gap-10 overflow-x-auto snap-x snap-mandatory scroll-smooth ${styles.swipe} ${styles.noScrollbar}`}
       >
-        {items.map((card) => {
+        {items.map((card, index) => {
           return (
             <div
               key={`${card.id}-${card.brand}`}
               className='snap-start shrink-0 w-[calc((100%_-_2.5rem)_/_2)] md:w-[calc((100%_-_5rem)_/_3)] xl:w-[calc((100%_-_7.5rem)_/_4)]'
               style={{ minWidth: 0 }}
             >
-              <ProductCard {...card} />
+              <ProductCard {...card} priority={index === 0} />
             </div>
           );
         })}

@@ -23,7 +23,7 @@ export const CatalogGrid: React.FC<Props> = ({
   const [showAll, setShowAll] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const suppressAutoRef = useRef(false); 
+  const suppressAutoRef = useRef(false);
   const [liked, setLiked] = useState<Set<string>>(new Set());
 
   const visible = useMemo(
@@ -82,13 +82,14 @@ export const CatalogGrid: React.FC<Props> = ({
   return (
     <>
       <div className='grid max-[375px]:gap-y-[17px] max-[375px]:gap-[17px] gap-[17px] gap-y-[25px] grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4'>
-        {visible.map((item) => (
+        {visible.map((item, index) => (
           <WatchCard
             key={item.id}
             item={item}
             liked={liked.has(item.id)}
             onToggleLike={toggleLike}
             onOpenFeedback={onOpenFeedback}
+            priority={index === 0}
           />
         ))}
       </div>

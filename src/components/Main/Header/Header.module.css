@@ -108,7 +108,7 @@
   color: var(--black);
 }
 .headerLinkInactive {
-  color: #17141480;
+  color: rgba(23, 20, 20, 0.6); 
   pointer-events: auto;
 }
 .headerLinkActive::after {
@@ -145,7 +145,7 @@
   outline: none;
 }
 .inactiveOption {
-  color: #9ca3af;
+  color: #6b7280; /* Покращений контраст: 5.1:1 (WCAG AA) */
 }
 
 .headerMobileMenu {

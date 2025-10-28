@@ -9,6 +9,7 @@ import { RobotWhiteIcon } from '../../../../public/chat/Icon';
 import { MainContext } from '@/context';
 import { t } from '@/i18n';
 import { heroKeys } from '@/i18n/keys/home';
+import { a11yKeys } from '@/i18n/keys/accessibility';
 
 export const Hero = () => {
   const { setSideChatOpened } = useContext(MainContext);
@@ -22,13 +23,14 @@ export const Hero = () => {
       <div className={`${styles.heroContainer} w-full relative`}>
         <Image
           src='/hero-section/HeroBgBig.webp'
-          alt='Hero Background'
+          alt=''
           fill
           priority
           fetchPriority='high'
           quality={90}
           sizes='100vw'
           className={styles.heroBgImage}
+          role='presentation'
         />
         <div className='absolute inset-0 z-0 backdrop-blur-xs md:hidden' />
         <div
@@ -58,9 +60,11 @@ export const Hero = () => {
               <button
                 onClick={handleChatClick}
                 className={`${styles.heroChatBtn} py-[8px] flex items-center justify-center w-full rounded-[10px] gap-[10px] cursor-pointer max-w-[346px] md:max-w-full`}
+                aria-label={t(a11yKeys.ai.chat)}
               >
                 <RobotWhiteIcon
                   className={`${styles.footerSocialLinkItem} w-8 h-8 md:text-white `}
+                  aria-hidden='true'
                 />
                 <div>{t(heroKeys.buttons.chat)}</div>
               </button>

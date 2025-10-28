@@ -56,7 +56,7 @@ const ComparePage: React.FC<ComparePageProps> = ({
   // Якщо немає продуктів для порівняння
   if (products.length === 0) {
     return (
-      <div
+      <main
         className={`${styles.container} bg-white pt-[27px] pb-[90px] min-h-screen mx-auto mt-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16`}
       >
         <div className={styles.content}>
@@ -64,9 +64,9 @@ const ComparePage: React.FC<ComparePageProps> = ({
 
           <div className='flex flex-col items-center justify-center min-h-[400px] text-center'>
             <div className='mb-6'>
-              <h2 className='mb-2 text-2xl font-semibold text-gray-900'>
+              <h1 className='mb-2 text-2xl font-semibold text-gray-900'>
                 Немає товарів для порівняння
-              </h2>
+              </h1>
               <p className='mb-8 text-gray-600'>
                 Додайте годинники до порівняння, щоб побачити їх порівняльну
                 таблицю
@@ -76,24 +76,29 @@ const ComparePage: React.FC<ComparePageProps> = ({
             <button
               onClick={onBackToCatalog}
               className='bg-[#04694f] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#035a3f] transition-colors'
+              aria-label='Повернутися до каталогу годинників'
             >
               Перейти до каталогу
             </button>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 
   return (
-    <div
+    <main
       className={`${styles.container} bg-white pt-[27px] pb-[90px] min-h-screen mx-auto mt-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16`}
     >
       <div className={styles.content}>
         <Breadcrumbs items={breadcrumbItems} />
 
+        <h1 className='sr-only'>Порівняння годинників</h1>
+
         <div
           className={`${styles.productsGrid} flex flex-col sm:flex-col md:flex-row lg:flex-row xl:flex-row md:gap-[60px]`}
+          role='region'
+          aria-label='Порівняння двох годинників'
         >
           {products[0] && (
             <div
@@ -155,12 +160,16 @@ const ComparePage: React.FC<ComparePageProps> = ({
         </div>
 
         <div className={styles.backButtonContainer}>
-          <button onClick={onBackToCatalog} className={styles.backButton}>
+          <button
+            onClick={onBackToCatalog}
+            className={styles.backButton}
+            aria-label='Повернутися до каталогу годинників'
+          >
             Повернутись в каталог
           </button>
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 
