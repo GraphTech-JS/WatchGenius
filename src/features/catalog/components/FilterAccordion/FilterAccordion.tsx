@@ -62,16 +62,16 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
 
   const items = filterData.sections.map((section) => ({
     key: section,
-    title: section,
+    title: t(`catalog.filterSections.${section}`),
     content: (
       <>
-        {section === 'Бренд' && (
+        {section === "brand" && (
           <>
             <div className='space-y-3'>
               {visibleBrands.map((brand) => (
                 <FilterCheckbox
                   key={brand}
-                  label={brand}
+                  label={t(`${catalogKeys.filterData.brands}.${brand}`)}
                   checked={selectedBrands.includes(brand)}
                   onChange={() => toggleBrand(brand)}
                 />
@@ -91,8 +91,8 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           </>
         )}
 
-        {section === 'Ціна' && (
-          <div className='flex items-center gap-x-2 gap-y-2 max-w-[269px]'>
+        {section === "price" && (
+          <div className="flex items-center gap-x-2 gap-y-2 max-w-[269px]">
             <label
               htmlFor='price-from'
               className='text-[14px] text-[rgba(23,20,20,0.6)]'
@@ -139,8 +139,8 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           </div>
         )}
 
-        {section === 'Індекс' && (
-          <div className='flex gap-2 items-center'>
+        {section === "index" && (
+          <div className="flex gap-2 items-center">
             {filterData.indexButtons.map((btn) => {
               const active = selectedIndexes.includes(btn);
               return (
@@ -164,7 +164,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           </div>
         )}
 
-        {section === 'Стан' && (
+        {section === "condition" && (
           <ChecklistSection
             options={filterData.conditions}
             selected={selectedConditions}
@@ -172,7 +172,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           />
         )}
 
-        {section === 'Механізм' && (
+        {section === "mechanism" && (
           <ChecklistSection
             options={filterData.mechanisms}
             selected={selectedMechanisms}
@@ -186,7 +186,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           />
         )}
 
-        {section === 'Матеріал' && (
+        {section === "material" && (
           <ChecklistSection
             options={filterData.materials}
             selected={selectedMaterials}
@@ -194,8 +194,8 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           />
         )}
 
-        {section === 'Рік' && (
-          <div className='flex items-center gap-x-2 gap-y-2 max-w-[269px]'>
+        {section === "year" && (
+          <div className="flex items-center gap-x-2 gap-y-2 max-w-[269px]">
             <label
               htmlFor='year-from'
               className='text-[14px] text-[rgba(23,20,20,0.6)]'
@@ -241,7 +241,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           </div>
         )}
 
-        {section === 'Документи' && (
+        {section === "documents" && (
           <ChecklistSection
             options={filterData.documents}
             selected={selectedDocuments}
@@ -249,7 +249,7 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           />
         )}
 
-        {section === 'Локація' && (
+        {section === "location" && (
           <ChecklistSection
             options={filterData.locations}
             selected={selectedLocations}

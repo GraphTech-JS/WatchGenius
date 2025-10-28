@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import Link from 'next/link';
-import { CustomSelect } from '@/components/CustomSelect/CustomSelect';
-import { useFormValidation } from '@/hooks/useFormValidation';
-import styles from './PriceAlertModal.module.css';
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import Link from "next/link";
+import { CustomSelect } from "@/components/CustomSelect/CustomSelect";
+import { useFormValidation } from "@/hooks/useFormValidation";
+import styles from "./PriceAlertModal.module.css";
+import { t } from "@/i18n";
+import { modalsKeys } from "@/i18n/keys/modals";
 
 interface PriceAlertFormData {
   watchModel: string;
@@ -22,29 +24,29 @@ interface PriceAlertModalProps {
 const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
   isOpen,
   onClose,
-  productTitle = 'Rolex Submariner Oyster Perpetual',
+  productTitle = "Rolex Submariner Oyster Perpetual",
 }) => {
   const [formData, setFormData] = useState<PriceAlertFormData>({
     watchModel: productTitle,
-    targetPrice: '',
-    email: '',
+    targetPrice: "",
+    email: "",
     consent: false,
   });
 
-  const [consentError, setConsentError] = useState('');
+  const [consentError, setConsentError] = useState("");
 
   const brands = [
-    'Rolex Submariner',
-    'Omega Speedmaster',
-    'Patek Philippe',
-    'Seiko 5',
-    'Audemars Piguet',
-    'Cartier',
+    "Rolex Submariner",
+    "Omega Speedmaster",
+    "Patek Philippe",
+    "Seiko 5",
+    "Audemars Piguet",
+    "Cartier",
   ];
 
-  const currencies = ['USD', 'EUR', 'UAH', 'PLN', 'KZT'];
+  const currencies = ["USD", "EUR", "UAH", "PLN", "KZT"];
 
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  const [selectedCurrency, setSelectedCurrency] = useState("USD");
   const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const currencyRef = useRef<HTMLDivElement>(null);
@@ -61,10 +63,10 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
 
   const validateConsent = (value: boolean): boolean => {
     if (!value) {
-      setConsentError('Необхідно погодитись з умовами');
+      setConsentError(t(modalsKeys.priceAlert.consentError));
       return false;
     }
-    setConsentError('');
+    setConsentError("");
     return true;
   };
 
@@ -72,13 +74,13 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
     if (isOpen) {
       setFormData({
         watchModel: productTitle,
-        targetPrice: '',
-        email: '',
+        targetPrice: "",
+        email: "",
         consent: false,
       });
       clearErrors();
-      setConsentError('');
-      setSelectedCurrency('USD');
+      setConsentError("");
+      setSelectedCurrency("USD");
       setIsCurrencyOpen(false);
     }
   }, [isOpen, productTitle, clearErrors]);
@@ -95,19 +97,19 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         handleClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen, handleClose]);
 
@@ -120,13 +122,13 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
         setIsCurrencyOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const formatNumber = (value: string): string => {
-    const numbers = value.replace(/\D/g, '');
-    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    const numbers = value.replace(/\D/g, "");
+    return numbers.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
   };
 
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -189,7 +191,7 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
     }
 
     try {
-      console.log('Відправка форми сповіщення про ціну:', {
+      console.log("Відправка форми сповіщення про ціну:", {
         ...formData,
         currency: selectedCurrency,
       });
@@ -201,16 +203,16 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
         handleClose();
         setFormData({
           watchModel: productTitle,
-          targetPrice: '',
-          email: '',
+          targetPrice: "",
+          email: "",
           consent: false,
         });
-        setSelectedCurrency('USD');
+        setSelectedCurrency("USD");
         clearErrors();
-        setConsentError('');
+        setConsentError("");
       }, 3000);
     } catch (error) {
-      console.error('Помилка відправки форми:', error);
+      console.error("Помилка відправки форми:", error);
     }
   };
 
@@ -222,18 +224,18 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
         <button
           className={styles.closeButton}
           onClick={handleClose}
-          aria-label='Закрити модальне вікно'
+          aria-label="Закрити модальне вікно"
         >
           ×
         </button>
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.title}>Set price alert</div>
+          <div className={styles.title}>{t(modalsKeys.priceAlert.title)}</div>
 
           <div className={styles.formContent}>
             <div className={styles.formItem}>
               <div className={styles.formItemTitle}>
-                Оберіть модель годинника
+                {t(modalsKeys.priceAlert.modelLabel)}
               </div>
               <div className={styles.formFieldWrapper}>
                 <CustomSelect
@@ -248,16 +250,18 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
             </div>
 
             <div className={styles.formItem}>
-              <div className={styles.formItemTitle}>Відповідатиме вартості</div>
+              <div className={styles.formItemTitle}>
+                {t(modalsKeys.priceAlert.priceLabel)}
+              </div>
               <div className={styles.formFieldWrapper}>
                 <div
                   className={`${styles.priceInputContainer} ${
-                    errors.price ? styles.inputError : ''
+                    errors.price ? styles.inputError : ""
                   }`}
                 >
                   <input
-                    type='text'
-                    placeholder='50 000'
+                    type="text"
+                    placeholder="50 000"
                     value={formData.targetPrice}
                     onChange={handlePriceChange}
                     className={styles.priceInput}
@@ -279,7 +283,7 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
                             className={`${styles.currencyOption} ${
                               selectedCurrency === currency
                                 ? styles.currencyOptionActive
-                                : ''
+                                : ""
                             }`}
                             onClick={() => handleCurrencySelect(currency)}
                           >
@@ -297,16 +301,18 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
             </div>
 
             <div className={styles.formItem}>
-              <div className={styles.formItemTitle}>Email для сповіщень</div>
+              <div className={styles.formItemTitle}>
+                {t(modalsKeys.priceAlert.emailLabel)}
+              </div>
               <div className={styles.formFieldWrapper}>
                 <div
                   className={`${styles.emailInputContainer} ${
-                    errors.email ? styles.inputError : ''
+                    errors.email ? styles.inputError : ""
                   }`}
                 >
                   <input
-                    type='email'
-                    placeholder='xxxxxxxx@gmail.com'
+                    type="email"
+                    placeholder={t(modalsKeys.priceAlert.placeholderEmail)}
                     value={formData.email}
                     onChange={handleEmailChange}
                     onBlur={handleEmailBlur}
@@ -323,21 +329,20 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
           <div className={styles.consentWrapper}>
             <label className={styles.consentLabel}>
               <input
-                type='checkbox'
+                type="checkbox"
                 checked={formData.consent}
                 onChange={(e) => {
                   setFormData({ ...formData, consent: e.target.checked });
                   if (e.target.checked) {
-                    setConsentError('');
+                    setConsentError("");
                   }
                 }}
                 className={styles.checkbox}
               />
-              <span className={consentError ? styles.consentTextError : ''}>
-                Ми надсилатимемо сповіщення не частіше 1 разу на день.
-                Натискаючи &quot;Встановити&quot;, Ви погоджуєтесь{' '}
-                <Link href='/terms' className={styles.consentLink}>
-                  з умовами використання
+              <span className={consentError ? styles.consentTextError : ""}>
+                {t(modalsKeys.priceAlert.consentText)}{" "}
+                <Link href="/terms" className={styles.consentLink}>
+                  {t(modalsKeys.priceAlert.consentLink)}
                 </Link>
               </span>
             </label>
@@ -347,8 +352,8 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
           </div>
 
           <div className={styles.buttonContainer}>
-            <button type='submit' className={styles.submitButton}>
-              Отимувати сповіщення
+            <button type="submit" className={styles.submitButton}>
+              {t(modalsKeys.priceAlert.button)}
             </button>
           </div>
         </form>
@@ -357,7 +362,7 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
           <div className={styles.successModalOverlay}>
             <div className={styles.successModal}>
               <span className={styles.successModalText}>
-                Дякуємо за ваш запит! Ми повідомимо вас про зниження ціни!
+                {t(modalsKeys.priceAlert.success)}
               </span>
             </div>
           </div>

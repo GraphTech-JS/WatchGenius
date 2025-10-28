@@ -16,8 +16,9 @@ import {
   Robot,
   Close,
   Menu,
-} from '../../../../public/icons';
-import { HeartIcon } from '../../../../public/header/Icon';
+} from "../../../../public/icons";
+import { HeartIcon } from "../../../../public/header/Icon";
+import { headerKeys } from "@/i18n/keys/header";
 
 export const Header = () => {
   const locale = useLocale();
@@ -153,10 +154,26 @@ export const Header = () => {
 
         <nav className={`hidden gap-11 lg:flex lg:pl-12`}>
           {[
-            { href: `/${locale}/catalog`, label: 'Каталог', type: 'page' },
-            { href: '#dealers', label: 'Дилери', type: 'section' },
-            { href: '#treands', label: 'Тренди', type: 'section' },
-            { href: '#contacts', label: 'Контакти', type: 'section' },
+            {
+              href: `/${locale}/catalog`,
+              label: t(headerKeys.nav.catalog),
+              type: "page",
+            },
+            {
+              href: "#dealers",
+              label: t(headerKeys.nav.dealers),
+              type: "section",
+            },
+            {
+              href: "#treands",
+              label: t(headerKeys.nav.trends),
+              type: "section",
+            },
+            {
+              href: "#contacts",
+              label: t(headerKeys.nav.contacts),
+              type: "section",
+            },
           ].map(({ href, label, type }) => {
             const isCatalog = pathname === `/${locale}/catalog`;
             const isMain = pathname === `/${locale}`;
@@ -313,8 +330,7 @@ export const Header = () => {
               id='desktop-search'
               type='search'
               className={`${styles.headerMobileSearchInput} w-full max-w-[150px] `}
-              placeholder='Пошук'
-              aria-label={t(a11yKeys.search.catalog)}
+              placeholder={t(headerKeys.search.placeholder)}
             />
             <button
               className={`${styles.headerLangSwitchBtn} shrink-0 mr-3`}
@@ -322,7 +338,7 @@ export const Header = () => {
             >
               <Image
                 src={SearchNormal.src}
-                alt=''
+                alt={t(headerKeys.search.placeholder)}
                 width={18}
                 height={18}
                 aria-hidden='true'
@@ -341,7 +357,7 @@ export const Header = () => {
             >
               <Image
                 src={Robot.src}
-                alt=''
+                alt={t(headerKeys.aiAgent.tooltip)}
                 width={22}
                 height={22}
                 aria-hidden='true'
@@ -400,8 +416,7 @@ export const Header = () => {
                       id='mobile-search'
                       type='search'
                       className={`${styles.headerMobileSearchInput} max-w-[200px]`}
-                      placeholder='Пошук'
-                      aria-label={t(a11yKeys.search.catalog)}
+                      placeholder={t(headerKeys.search.placeholder)}
                     />
                     <button
                       className={`${styles.headerLangSwitchBtn} shrink-0 mr-4`}
@@ -409,7 +424,7 @@ export const Header = () => {
                     >
                       <Image
                         src={SearchWhite.src}
-                        alt=''
+                        alt={t(headerKeys.search.placeholder)}
                         width={18}
                         height={18}
                         aria-hidden='true'
@@ -502,7 +517,7 @@ export const Header = () => {
                   onClick={startCloseMenu}
                   className={styles.headerMobileMenuLink}
                 >
-                  Каталог
+                  {t(headerKeys.mobileMenu.catalog)}
                 </Link>
                 <a
                   href='#dealers'
@@ -512,7 +527,7 @@ export const Header = () => {
                   }}
                   className={styles.headerMobileMenuLink}
                 >
-                  Дилери
+                  {t(headerKeys.mobileMenu.dealers)}
                 </a>
                 <a
                   href='#treands'
@@ -522,7 +537,7 @@ export const Header = () => {
                   }}
                   className={styles.headerMobileMenuLink}
                 >
-                  Тренди
+                  {t(headerKeys.mobileMenu.trends)}
                 </a>
                 <a
                   href='#contacts'
@@ -532,7 +547,7 @@ export const Header = () => {
                   }}
                   className={styles.headerMobileMenuLink}
                 >
-                  Контакти
+                  {t(headerKeys.mobileMenu.contacts)}
                 </a>
               </div>
             </div>,
