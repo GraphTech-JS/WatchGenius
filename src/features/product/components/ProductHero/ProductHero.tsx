@@ -20,7 +20,6 @@ import { PriceAlertModal, GetQuoteModal } from "../ProductModals";
 import { FeedbackModal } from "@/components/FeedbackModal/FeedbackModal";
 import { useScreenWidth } from "@/hooks/useScreenWidth";
 import { useLocale } from "@/hooks/useLocale";
-import { t } from "@/i18n";
 import { productKeys } from "@/i18n/keys/product";
 
 const mainButtonTextStyle = {
