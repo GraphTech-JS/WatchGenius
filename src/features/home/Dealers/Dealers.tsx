@@ -1,16 +1,16 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import styles from "./Dealers.module.css";
-import { ArrowIcon } from "../../../../public/social/Icon";
-import { DealerCard } from "@/components/Main/Dealers/DealerCard";
-import { mockDealers } from "@/mock/dealers";
+'use client';
+import React, { useState, useEffect, useRef } from 'react';
+import styles from './Dealers.module.css';
+import { ArrowIcon } from '../../../../public/social/Icon';
+import { DealerCard } from '@/components/Main/Dealers/DealerCard';
+import { mockDealers } from '@/mock/dealers';
 
 export const Dealers = () => {
   const [cols, setCols] = useState<1 | 2>(1);
   const [page, setPage] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   // Only need the setter; value is not read
-  const [, setDirection] = useState<"next" | "prev" | null>(null);
+  const [, setDirection] = useState<'next' | 'prev' | null>(null);
   const swipeRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -29,8 +29,8 @@ export const Dealers = () => {
     };
 
     onResize();
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
   }, []);
 
   const totalPages = Math.max(1, Math.ceil(mockDealers.length / cols));
@@ -39,18 +39,18 @@ export const Dealers = () => {
     const el = swipeRef.current;
     if (!el) return;
     const viewport = el.clientWidth;
-    el.scrollTo({ left: idx * viewport, behavior: "smooth" });
+    el.scrollTo({ left: idx * viewport, behavior: 'smooth' });
   };
 
   const next = () => {
     if (page < totalPages - 1) {
-      setDirection("next");
+      setDirection('next');
       scrollToPage(page + 1);
     }
   };
   const prev = () => {
     if (page > 0) {
-      setDirection("prev");
+      setDirection('prev');
       scrollToPage(page - 1);
     }
   };
@@ -90,15 +90,15 @@ export const Dealers = () => {
       setPage(newPage);
       scrollToPage(newPage);
     };
-    el.addEventListener("pointerdown", onPointerDown);
-    el.addEventListener("pointermove", onPointerMove);
-    el.addEventListener("pointerup", onPointerUp);
-    el.addEventListener("pointercancel", onPointerUp);
+    el.addEventListener('pointerdown', onPointerDown);
+    el.addEventListener('pointermove', onPointerMove);
+    el.addEventListener('pointerup', onPointerUp);
+    el.addEventListener('pointercancel', onPointerUp);
     return () => {
-      el.removeEventListener("pointerdown", onPointerDown);
-      el.removeEventListener("pointermove", onPointerMove);
-      el.removeEventListener("pointerup", onPointerUp);
-      el.removeEventListener("pointercancel", onPointerUp);
+      el.removeEventListener('pointerdown', onPointerDown);
+      el.removeEventListener('pointermove', onPointerMove);
+      el.removeEventListener('pointerup', onPointerUp);
+      el.removeEventListener('pointercancel', onPointerUp);
     };
   }, [page, totalPages]);
 
@@ -115,15 +115,15 @@ export const Dealers = () => {
         if (idx !== page) setPage(idx);
       });
     };
-    el.addEventListener("scroll", onScroll, { passive: true });
+    el.addEventListener('scroll', onScroll, { passive: true });
     return () => {
-      el.removeEventListener("scroll", onScroll);
+      el.removeEventListener('scroll', onScroll);
       cancelAnimationFrame(raf);
     };
   }, [page]);
 
   return (
-    <section id="dealers" className={styles.dealers}>
+    <section id='dealers' className={styles.dealers}>
       <div
         className={`${styles.dealersContainer} w-full flex flex-col gap-6 max-w-[90rem] mx-auto px-5 md:px-10 lg:px-25 py-7 lg:py-9 mb-12.5 md:mb-12 lg:mb-15`}
       >
@@ -142,8 +142,12 @@ export const Dealers = () => {
                   className={
                     page === 0 ? styles.arrowDisabled : styles.arrowActive
                   }
+                  aria-label='Попередній дилер'
                 >
-                  <ArrowIcon className="w-[14px] h-[26px] transform rotate-180 cursor-pointer" />
+                  <ArrowIcon
+                    className='w-[14px] h-[26px] transform rotate-180 cursor-pointer'
+                    aria-hidden='true'
+                  />
                 </button>
                 <button
                   onClick={next}
@@ -153,8 +157,12 @@ export const Dealers = () => {
                       ? styles.arrowDisabled
                       : styles.arrowActive
                   }
+                  aria-label='Наступний дилер'
                 >
-                  <ArrowIcon className="w-[14px] h-[26px] cursor-pointer" />
+                  <ArrowIcon
+                    className='w-[14px] h-[26px] cursor-pointer'
+                    aria-hidden='true'
+                  />
                 </button>
               </div>
             </div>
@@ -168,12 +176,12 @@ export const Dealers = () => {
             onAnimationEnd={() => setDirection(null)}
           >
             {mockDealers.map((dealer) => {
-              const gap = "1.5rem"; // Tailwind gap-6
+              const gap = '1.5rem'; // Tailwind gap-6
               const basis = `calc((100% - ${gap} * ${cols - 1}) / ${cols})`;
               return (
                 <div
                   key={dealer.id}
-                  className="snap-start shrink-0"
+                  className='snap-start shrink-0'
                   style={{ flex: `0 0 ${basis}`, maxWidth: basis }}
                 >
                   <DealerCard dealer={dealer} />
@@ -189,9 +197,10 @@ export const Dealers = () => {
                   key={i}
                   onClick={() => scrollToPage(i)}
                   aria-label={`Сторінка ${i + 1}`}
+                  aria-current={i === page ? 'true' : 'false'}
                   className={`${styles.dot} ${
-                    i === page ? styles.dotActive : ""
-                  } w-2 h-2 rounded-full cursor-pointer`}
+                    i === page ? styles.dotActive : ''
+                  } w-2 h-2 rounded-full cursor-pointer p-[17px]`}
                 />
               ))}
             </div>

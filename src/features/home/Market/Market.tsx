@@ -170,7 +170,7 @@ export const Market = () => {
             {mobileCards.map((card, idx) => (
               <div
                 key={`mob-${idx}`}
-                className='snap-start shrink-0 flex justify-center'
+                className='flex justify-center snap-start shrink-0'
                 style={{ flex: '0 0 100%', maxWidth: '100%' }}
               >
                 {card.content}
@@ -178,7 +178,7 @@ export const Market = () => {
             ))}
           </div>
 
-          <div className='flex justify-center gap-2 mt-4'>
+          <div className='flex gap-2 justify-center mt-4'>
             {mobileCards.map((_, idx) => (
               <button
                 key={idx}
