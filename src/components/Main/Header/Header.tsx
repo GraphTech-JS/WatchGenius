@@ -18,7 +18,6 @@ import {
   Menu,
 } from "../../../../public/icons";
 import { HeartIcon } from "../../../../public/header/Icon";
-import { t } from "@/i18n";
 import { headerKeys } from "@/i18n/keys/header";
 
 export const Header = () => {
