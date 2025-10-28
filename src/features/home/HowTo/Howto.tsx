@@ -1,7 +1,7 @@
-"use client";
-import React, { useContext } from "react";
-import styles from "./HowTo.module.css";
-import { LocalizedLink } from "@/components/LocalizedLink";
+'use client';
+import React, { useContext } from 'react';
+import styles from './HowTo.module.css';
+import { LocalizedLink } from '@/components/LocalizedLink';
 import {
   ConfirmedIcon,
   CardIcon,
@@ -9,10 +9,10 @@ import {
   BoxIcon,
   BookIcon,
   RobotIcon,
-} from "../../../../public/howTo-section/Icon";
-import { MainContext } from "@/context";
-import { t } from "@/i18n";
-import { howToKeys } from "@/i18n/keys/home";
+} from '../../../../public/howTo-section/Icon';
+import { MainContext } from '@/context';
+import { t } from '@/i18n';
+import { howToKeys } from '@/i18n/keys/home';
 
 export const HowTo = () => {
   const { setSideChatOpened } = useContext(MainContext);
@@ -22,7 +22,7 @@ export const HowTo = () => {
   };
   return (
     <section
-      id="howTo"
+      id='howTo'
       className={`${styles.howTo} max-w-[90rem] mx-auto pt-[3.25rem] pb-[3.75rem] px-[1.25rem] md:px-[2.5rem] lg:py-[3.75rem] lg:px-[6rem]`}
     >
       <div className={`${styles.howToContainer} w-full flex flex-col gap-6`}>
@@ -30,7 +30,7 @@ export const HowTo = () => {
           className={`${styles.howToTitle} w-full flex flex-col justify-center items-center gap-2.5 `}
         >
           <div className={`${styles.howToTitleText} `}>
-            How to buy{" "}
+            How to buy{' '}
             <span className={`${styles.howToTitleHighlighted}`}>safely?</span>
           </div>
           <div className={`${styles.howToText} text-center `}>
@@ -129,22 +129,30 @@ export const HowTo = () => {
           className={`${styles.howToButtons} flex flex-col md:flex-row md:justify-center gap-4 lg:gap-8 md:px-1`}
         >
           <LocalizedLink
-            href="/guide"
+            href='/guide'
             prefetch={false}
             className={`${styles.howToLink} w-full lg:max-w-[24%]`}
           >
             <button
               className={`${styles.howToGuideBtn} w-full py-[22px] lg:py-[18px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
+              aria-label={t(howToKeys.buttons.guide)}
             >
-              <BookIcon className={`${styles.GuideIcon} w-6 h-6`} />
+              <BookIcon
+                className={`${styles.GuideIcon} w-6 h-6`}
+                aria-hidden='true'
+              />
               <div>{t(howToKeys.buttons.guide)}</div>
             </button>
           </LocalizedLink>
           <button
             onClick={handleChatClick}
             className={`${styles.howToChatBtn} w-full lg:max-w-[24%] py-[22px] lg:py-[18px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
+            aria-label={t(howToKeys.buttons.chat)}
           >
-            <RobotIcon className={`${styles.RobotIcon} w-6 h-6`} />
+            <RobotIcon
+              className={`${styles.RobotIcon} w-6 h-6`}
+              aria-hidden='true'
+            />
             <div>{t(howToKeys.buttons.chat)}</div>
           </button>
         </div>

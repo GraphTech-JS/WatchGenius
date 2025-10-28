@@ -232,6 +232,8 @@ export const HeroChartsCarousel = () => {
               className={`${styles.dot} ${
                 activeIndex === dotIndex ? styles.activeDot : styles.inactiveDot
               }`}
+              aria-label={`Переглянути графік ${dotIndex + 1}`}
+              aria-current={activeIndex === dotIndex ? 'true' : 'false'}
             />
           ))}
         </div>
@@ -272,7 +274,8 @@ export const HeroChartsCarousel = () => {
               className={`${styles.dot} ${
                 activeIndex === index ? styles.activeDot : styles.inactiveDot
               }`}
-              aria-label={`dot ${index + 1}`}
+              aria-label={`Переглянути графік ${index + 1}`}
+              aria-current={activeIndex === index ? 'true' : 'false'}
             />
           ))}
         </div>
