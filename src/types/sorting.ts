@@ -1,15 +1,13 @@
-import { t } from "@/i18n";
-import { catalogKeys } from "@/i18n/keys/catalog";
-
 export const SortOption = {
-  DEFAULT: t(catalogKeys.sort.default),
-  TREND_90_DAYS: t(catalogKeys.sort.treand90days),
-  PRICE_ASC: t(catalogKeys.sort.priceASC),
-  PRICE_DESC: t(catalogKeys.sort.priceDESC),
-  NEWEST: t(catalogKeys.sort.newest),
-  NAME: t(catalogKeys.sort.name),
-  INDEX_ASC: t(catalogKeys.sort.indexASC),
-  INDEX_DESC: t(catalogKeys.sort.indexDESC),
+  DEFAULT: "DEFAULT",
+  TREND_90_DAYS: "TREND_90_DAYS",
+  PRICE_ASC: "PRICE_ASC",
+  PRICE_DESC: "PRICE_DESC",
+  NEWEST: "NEWEST",
+  NAME: "NAME",
+  INDEX_ASC: "INDEX_ASC",
+  INDEX_DESC: "INDEX_DESC",
 } as const;
 
 export type SortOption = (typeof SortOption)[keyof typeof SortOption];
+export type SortFunction<T> = (a: T, b: T) => number;
