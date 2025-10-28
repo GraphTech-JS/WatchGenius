@@ -1,6 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
+import { t } from '@/i18n';
+import { formKeys } from '@/i18n/keys/common';
 import styles from './GetQuoteModal.module.css';
 
 interface GetQuoteModalProps {
@@ -14,12 +17,14 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
     name: '',
     email: '',
     phone: '',
+    consent: false,
   });
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [consentError, setConsentError] = useState('');
 
   const validateName = (value: string): boolean => {
     if (!value.trim()) {
@@ -58,16 +63,27 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
     return true;
   };
 
+  const validateConsent = (value: boolean): boolean => {
+    if (!value) {
+      setConsentError(t(formKeys.consent.error));
+      return false;
+    }
+    setConsentError('');
+    return true;
+  };
+
   useEffect(() => {
     if (isOpen) {
       setFormData({
         name: '',
         email: '',
         phone: '',
+        consent: false,
       });
       setNameError('');
       setEmailError('');
       setPhoneError('');
+      setConsentError('');
       setShowSuccessModal(false);
     }
   }, [isOpen]);
@@ -113,8 +129,9 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
     const isNameValid = validateName(formData.name);
     const isEmailValid = validateEmailLocal(formData.email);
     const isPhoneValid = validatePhone(formData.phone);
+    const isConsentValid = validateConsent(formData.consent);
 
-    if (!isNameValid || !isEmailValid || !isPhoneValid) {
+    if (!isNameValid || !isEmailValid || !isPhoneValid || !isConsentValid) {
       return;
     }
 
@@ -130,10 +147,12 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
           name: '',
           email: '',
           phone: '',
+          consent: false,
         });
         setNameError('');
         setEmailError('');
         setPhoneError('');
+        setConsentError('');
       }, 3000);
     } catch (error) {
       console.error('Помилка відправки форми:', error);
@@ -222,6 +241,31 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
                 )}
               </div>
             </div>
+          </div>
+
+          <div className={styles.consentWrapper}>
+            <label className={styles.consentLabel}>
+              <input
+                type='checkbox'
+                checked={formData.consent}
+                onChange={(e) => {
+                  setFormData({ ...formData, consent: e.target.checked });
+                  if (e.target.checked) {
+                    setConsentError('');
+                  }
+                }}
+                className={styles.checkbox}
+              />
+              <span className={consentError ? styles.consentTextError : ''}>
+                {t(formKeys.consent.label)}{' '}
+                <Link href='/' className={styles.consentLink}>
+                  {t(formKeys.consent.link)}
+                </Link>
+              </span>
+            </label>
+            {consentError && (
+              <div className={styles.errorMessage}>{consentError}</div>
+            )}
           </div>
 
           <div className={styles.buttonContainer}>

@@ -1,52 +1,15 @@
-"use client";
+import type { Metadata } from 'next';
+import AdminClient from './AdminClient';
 
-import React from "react";
-
-import styles from "./admin.module.css";
-import { AdminLayout } from "@/components/Main/AdminLayout/AdminLayout";
-import { ProductsTable } from "@/components/ProductsTable/ProductsTable";
+export const metadata: Metadata = {
+  title: 'Admin Panel - WatchGenius',
+  description: 'Admin panel for managing WatchGenius platform',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default function AdminProducts() {
-  return (
-    <AdminLayout>
-      <div className={styles.dashboard}>
-        <div className={styles.dashboardContainer}>
-          <ProductsTable
-            type="products"
-            products={[
-              {
-                id: "235",
-                name: "Найменування",
-                category: "Категорія",
-                price: "1 204 грн",
-                quantity: 30,
-              },
-              {
-                id: "2354",
-                name: "Найменування",
-                category: "Категорія",
-                price: "1 204 грн",
-                quantity: 30,
-              },
-              {
-                id: "2356",
-                name: "Найменування",
-                category: "Категорія",
-                price: "1 204 грн",
-                quantity: 30,
-              },
-              {
-                id: "2357",
-                name: "Найменування",
-                category: "Категорія",
-                price: "1 204 грн",
-                quantity: 30,
-              },
-            ]}
-            onEdit={() => {}}
-          />
-        </div>
-      </div>
-    </AdminLayout>
-  );
+  return <AdminClient />;
 }

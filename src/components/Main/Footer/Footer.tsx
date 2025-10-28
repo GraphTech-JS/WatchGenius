@@ -1,18 +1,18 @@
-"use client";
-import React from "react";
-import { LocalizedLink } from "@/components/LocalizedLink";
-import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
-import { useLocale } from "@/hooks/useLocale";
-import styles from "./Footer.module.css";
-import { LogoWhite, Chrono } from "../../../../public/icons";
+'use client';
+import React from 'react';
+import { LocalizedLink } from '@/components/LocalizedLink';
+import Image from 'next/image';
+import { useRouter, usePathname } from 'next/navigation';
+import { useLocale } from '@/hooks/useLocale';
+import styles from './Footer.module.css';
+import { LogoWhite, Chrono } from '../../../../public/icons';
 import {
   DiscordIcon,
   TelegramIcon,
   InstagramIcon,
-} from "../../../../public/social/Icon";
-import { t } from "@/i18n";
-import { footerKeys } from "@/i18n/keys/footer";
+} from '../../../../public/social/Icon';
+import { t } from '@/i18n';
+import { footerKeys } from '@/i18n/keys/footer';
 
 export const Footer = () => {
   const locale = useLocale();
@@ -28,14 +28,14 @@ export const Footer = () => {
     if (pathname === `/${locale}`) {
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
       router.push(`/${locale}/#${id}`);
     }
   };
   return (
-    <footer className={`${styles.footer} pb-[49px] md:pb-[30px]`} id="contacts">
+    <footer className={`${styles.footer} pb-[49px] md:pb-[30px]`} id='contacts'>
       <div
         className={`${styles.footerContainer} flex flex-col md:flex-row md:justify-between items-center gap-[30px]`}
       >
@@ -44,7 +44,7 @@ export const Footer = () => {
         >
           <nav>
             <LocalizedLink
-              href="/"
+              href='/'
               prefetch={false}
               className={`${styles.footerLogo} flex items-center md:gap-1 gap-2`}
             >
@@ -58,7 +58,7 @@ export const Footer = () => {
               <div className={styles.logoName}>WATCHGENIUS</div>
             </LocalizedLink>
           </nav>
-          <div className="hidden md:flex flex-col items-center gap-3">
+          <div className='hidden md:flex flex-col items-center gap-3'>
             <Image
               src={Chrono.src}
               alt={t(footerKeys.chrono.alt)}
@@ -77,33 +77,33 @@ export const Footer = () => {
             <div className={styles.footerLinkTitle}>
               {t(footerKeys.sections.menu.title)}
             </div>
-            <nav className="hidden md:flex flex-col gap-5 items-start">
+            <nav className='hidden md:flex flex-col gap-5 items-start'>
               <LocalizedLink
-                href="/catalog"
+                href='/catalog'
                 className={styles.footerLink}
                 prefetch={false}
               >
                 {t(footerKeys.sections.menu.catalog)}
               </LocalizedLink>
               <a
-                href="#treands"
+                href='#treands'
                 className={styles.footerLink}
-                onClick={(e) => handleSectionClick(e, "treands")}
+                onClick={(e) => handleSectionClick(e, 'treands')}
               >
                 {t(footerKeys.sections.menu.trends)}
               </a>
               <a
-                href="#dealers"
+                href='#dealers'
                 className={styles.footerLink}
-                onClick={(e) => handleSectionClick(e, "dealers")}
+                onClick={(e) => handleSectionClick(e, 'dealers')}
               >
                 {t(footerKeys.sections.menu.dealers)}
               </a>
 
               <a
-                href="#contacts"
+                href='#contacts'
                 className={styles.footerLink}
-                onClick={(e) => handleSectionClick(e, "contacts")}
+                onClick={(e) => handleSectionClick(e, 'contacts')}
               >
                 {t(footerKeys.sections.menu.contacts)}
               </a>
@@ -116,30 +116,30 @@ export const Footer = () => {
             <div className={styles.footerLinkTitle}>
               {t(footerKeys.sections.help.title)}
             </div>
-            <nav className="hidden md:flex flex-col gap-5 items-start">
+            <nav className='hidden md:flex flex-col gap-5 items-start'>
               <LocalizedLink
-                href="#"
+                href='#'
                 className={styles.footerLink}
                 prefetch={false}
               >
                 {t(footerKeys.sections.help.faq)}
               </LocalizedLink>
               <LocalizedLink
-                href="#"
+                href='#'
                 className={styles.footerLink}
                 prefetch={false}
               >
                 {t(footerKeys.sections.help.howItWorks)}
               </LocalizedLink>
               <LocalizedLink
-                href="#"
+                href='#'
                 className={styles.footerLink}
                 prefetch={false}
               >
                 {t(footerKeys.sections.help.safeGuide)}
               </LocalizedLink>
               <LocalizedLink
-                href="#"
+                href='#'
                 className={styles.footerLink}
                 prefetch={false}
               >
@@ -153,23 +153,23 @@ export const Footer = () => {
             <div className={styles.footerLinkTitle}>
               {t(footerKeys.sections.community.title)}
             </div>
-            <nav className="flex flex-col gap-5 items-start">
+            <nav className='flex flex-col gap-5 items-start'>
               <LocalizedLink
-                href="#"
+                href='#'
                 className={styles.footerLink}
                 prefetch={false}
               >
                 {t(footerKeys.sections.community.blog)}
               </LocalizedLink>
               <LocalizedLink
-                href="#"
+                href='#'
                 className={styles.footerLink}
                 prefetch={false}
               >
                 {t(footerKeys.sections.community.discord)}
               </LocalizedLink>
               <LocalizedLink
-                href="#"
+                href='#'
                 className={styles.footerLink}
                 prefetch={false}
               >
@@ -177,11 +177,11 @@ export const Footer = () => {
               </LocalizedLink>
             </nav>
           </div>
-          <div className="md:hidden flex flex-col items-center gap-3">
+          <div className='md:hidden flex flex-col items-center gap-3'>
             <Image
               className={styles.chronoIcon}
               src={Chrono.src}
-              alt="chrono24"
+              alt='chrono24'
               width={190}
               height={40}
             />
@@ -191,9 +191,9 @@ export const Footer = () => {
           </div>
         </div>
         <nav className={`${styles.footerSupportWrapper}`}>
-          <div className="flex md:flex-col flex-row gap-8">
+          <div className='flex md:flex-col flex-row gap-8'>
             <LocalizedLink
-              href="#"
+              href='#'
               className={styles.footerSocialLink}
               prefetch={false}
             >
@@ -202,7 +202,7 @@ export const Footer = () => {
               />
             </LocalizedLink>
             <LocalizedLink
-              href="#"
+              href='#'
               className={styles.footerSocialLink}
               prefetch={false}
             >
@@ -211,7 +211,7 @@ export const Footer = () => {
               />
             </LocalizedLink>
             <LocalizedLink
-              href="#"
+              href='#'
               className={styles.footerSocialLink}
               prefetch={false}
             >
@@ -226,22 +226,22 @@ export const Footer = () => {
         className={`${styles.footerBottom} mx-auto max-w-[90rem] px-[2rem] md:px-[2.5rem] lg:px-[6.25rem] flex md:flex-row flex-col-reverse md:justify-between text-center gap-6`}
       >
         <div>{t(footerKeys.copyright)}</div>
-        <div className=" flex md:flex-row flex-col-reverse gap-6">
+        <div className=' flex md:flex-row flex-col-reverse gap-6'>
           <LocalizedLink
-            href="#"
+            href='/privacy'
             className={styles.footerSocialLink}
             prefetch={false}
           >
-            <div className=" hover:underline">
+            <div className=' hover:underline'>
               {t(footerKeys.legal.privacy)}
             </div>
           </LocalizedLink>
           <LocalizedLink
-            href="#"
+            href='/terms'
             className={styles.footerSocialLink}
             prefetch={false}
           >
-            <div className=" hover:underline">{t(footerKeys.legal.terms)}</div>
+            <div className=' hover:underline'>{t(footerKeys.legal.terms)}</div>
           </LocalizedLink>
         </div>
       </div>

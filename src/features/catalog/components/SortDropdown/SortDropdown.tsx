@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useRef, useState, useId, useMemo } from 'react';
-import { FaChevronDown } from 'react-icons/fa';
+import { ChevronDown } from 'lucide-react';
 import styles from './SortDropdown.module.css';
 import { SortOption } from '@/types/sorting';
 
@@ -83,19 +83,18 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
         <span className='truncate text-[16px] md:text-[14px] lg:text-[16px]'>
           {value}
         </span>
-        <div
+        <ChevronDown
+          size={26}
           className={`pointer-events-none absolute 
                       right-[20px] md:right-[12px] lg:right-[20px]
                       top-1/2 -translate-y-1/2 
-                      w-4 h-4 transition-all duration-150 ease-in-out 
+                      transition-all duration-300 ease-in-out 
                       ${
                         isOpen
                           ? 'rotate-180 text-black'
                           : 'rotate-0 text-[#8b8b8b]'
                       }`}
-        >
-          <FaChevronDown className='w-4 h-4 md:w-3 md:h-3 lg:w-4 lg:h-4' />
-        </div>
+        />
       </button>
 
       <div

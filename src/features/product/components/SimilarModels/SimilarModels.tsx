@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { SimilarModelsProps } from "@/interfaces/product";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
-import { ScalesIcon } from "@/product-icons";
-import styles from "./SimilarModels.module.css";
-import { useCompareContext } from "@/context/CompareContext";
-import { useLocale } from "@/hooks/useLocale";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { SimilarModelsProps } from '@/interfaces/product';
+import { ArrowUp, ArrowDown } from 'lucide-react';
+import { ScalesIcon } from '@/product-icons';
+import styles from './SimilarModels.module.css';
+import { useCompareContext } from '@/context/CompareContext';
+import { useLocale } from '@/hooks/useLocale';
 
 const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
   const router = useRouter();
@@ -39,11 +39,11 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
 
   const getIndexBadgeClass = (index: string) => {
     switch (index) {
-      case "A":
+      case 'A':
         return styles.indexBadgeA;
-      case "B":
+      case 'B':
         return styles.indexBadgeB;
-      case "C":
+      case 'C':
         return styles.indexBadgeC;
       default:
         return styles.indexBadgeA;
@@ -51,9 +51,9 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
   };
 
   const parseTrend = (trend: string) => {
-    const isPositive = trend.includes("+") || trend.includes("↑");
-    const value = trend.replace(/[↑↓+%]/g, "");
-    const period = "90d";
+    const isPositive = trend.includes('+') || trend.includes('↑');
+    const value = trend.replace(/[↑↓+%]/g, '');
+    const period = '90d';
     return { isPositive, value, period };
   };
 
@@ -90,16 +90,16 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                   {model.index}
                 </div>
                 <div className={styles.indexTooltip}>
-                  {model.index === "A" && "Топ-сегмент"}
-                  {model.index === "B" && "Середній сегмент"}
-                  {model.index === "C" && "Базовий сегмент"}
+                  {model.index === 'A' && 'Топ-сегмент'}
+                  {model.index === 'B' && 'Середній сегмент'}
+                  {model.index === 'C' && 'Базовий сегмент'}
                 </div>
               </div>
               <div
                 className={`${styles.comparisonIcon} ${
                   selectedModels.has(model.id)
                     ? styles.comparisonIconSelected
-                    : ""
+                    : ''
                 }`}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -108,7 +108,7 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
               >
                 <Image
                   src={ScalesIcon}
-                  alt="Порівняти"
+                  alt='Порівняти'
                   width={20}
                   height={20}
                   unoptimized
@@ -132,7 +132,7 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                 <div className={styles.similarTrendContainer}>
                   <span
                     className={`${styles.similarTrendBadge} ${
-                      !trend.isPositive ? styles.similarTrendBadgeNegative : ""
+                      !trend.isPositive ? styles.similarTrendBadgeNegative : ''
                     }`}
                   >
                     <span
@@ -142,7 +142,11 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                           : styles.similarTrendValueNegative
                       }`}
                     >
-                      {trend.isPositive ? <FaArrowUp /> : <FaArrowDown />}
+                      {trend.isPositive ? (
+                        <ArrowUp size={12} />
+                      ) : (
+                        <ArrowDown size={12} />
+                      )}
                       {trend.value}%
                       <span className={styles.similarTrendPeriod}>
                         {trend.period}

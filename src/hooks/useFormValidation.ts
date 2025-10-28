@@ -1,15 +1,19 @@
 import { useState, useCallback } from 'react';
+import { t } from '@/i18n';
+import { formKeys } from '@/i18n/keys/common';
 
 interface FormData {
   email: string;
   price: string;
   selectedModel: string;
+  consent?: boolean;
 }
 
 export const useFormValidation = () => {
   const [emailError, setEmailError] = useState('');
   const [priceError, setPriceError] = useState('');
   const [modelError, setModelError] = useState('');
+  const [consentError, setConsentError] = useState('');
 
   const validateEmail = useCallback((value: string): boolean => {
     if (!value) {
@@ -44,38 +48,56 @@ export const useFormValidation = () => {
     return true;
   }, []);
 
-  const validateForm = useCallback((formData: FormData): boolean => {
-    const isModelValid = validateModel(formData.selectedModel);
-    const isPriceValid = validatePrice(formData.price);
-    const isEmailValid = validateEmail(formData.email);
+  const validateConsent = useCallback((consent: boolean): boolean => {
+    if (!consent) {
+      setConsentError(t(formKeys.consent.error));
+      return false;
+    }
+    setConsentError('');
+    return true;
+  }, []);
 
-    return isModelValid && isPriceValid && isEmailValid;
-  }, [validateEmail, validateModel, validatePrice]);
+  const validateForm = useCallback(
+    (formData: FormData): boolean => {
+      const isModelValid = validateModel(formData.selectedModel);
+      const isPriceValid = validatePrice(formData.price);
+      const isEmailValid = validateEmail(formData.email);
+      const isConsentValid = formData.consent !== undefined ? validateConsent(formData.consent) : true;
+
+      return isModelValid && isPriceValid && isEmailValid && isConsentValid;
+    },
+    [validateEmail, validateModel, validatePrice, validateConsent]
+  );
 
   const clearErrors = useCallback(() => {
     setEmailError('');
     setPriceError('');
     setModelError('');
+    setConsentError('');
   }, []);
 
   const clearEmailError = useCallback(() => setEmailError(''), []);
   const clearPriceError = useCallback(() => setPriceError(''), []);
   const clearModelError = useCallback(() => setModelError(''), []);
+  const clearConsentError = useCallback(() => setConsentError(''), []);
 
   return {
     errors: {
       email: emailError,
       price: priceError,
       model: modelError,
+      consent: consentError,
     },
     validateEmail,
     validatePrice,
     validateModel,
+    validateConsent,
     validateForm,
     clearErrors,
     clearEmailError,
     clearPriceError,
     clearModelError,
+    clearConsentError,
   };
 };
 

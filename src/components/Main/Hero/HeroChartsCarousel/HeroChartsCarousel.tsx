@@ -1,41 +1,41 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import styles from "./HeroChartsCarousel.module.css";
-import { HeroChartItem } from "./HeroChartItem";
-import { HeroChartItemProps } from "./HeroChartItem";
+'use client';
+import React, { useState, useEffect, useRef } from 'react';
+import styles from './HeroChartsCarousel.module.css';
+import { HeroChartItem } from './HeroChartItem';
+import { HeroChartItemProps } from './HeroChartItem';
 
 const charts: HeroChartItemProps[] = [
   {
-    id: "chart1",
-    label: "A",
+    id: 'hero-chart1',
+    label: 'A',
     data: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
-    variant: "green",
-    percent: "+7%",
-    period: "за 90 днів",
+    variant: 'green',
+    percent: '+7%',
+    period: 'за 90 днів',
   },
   {
-    id: "chart2",
-    label: "B",
+    id: 'hero-chart2',
+    label: 'B',
     data: [7, 6, 7, 6, 7.5, 7, 8],
-    variant: "orange",
-    percent: "+0%",
-    period: "за 90 днів",
+    variant: 'orange',
+    percent: '+0%',
+    period: 'за 90 днів',
   },
   {
-    id: "chart3",
-    label: "C",
+    id: 'hero-chart3',
+    label: 'C',
     data: [5, 6, 7, 6, 7.5, 7, 8],
-    variant: "red",
-    percent: "-7%",
-    period: "за 90 днів",
+    variant: 'red',
+    percent: '-7%',
+    period: 'за 90 днів',
   },
   {
-    id: "chart4",
-    label: "Overall",
+    id: 'hero-chart4',
+    label: 'Overall',
     data: [5, 6, 7, 6, 7.5, 7, 8],
-    variant: "overall",
-    percent: "+1,2%",
-    period: "за 90 днів",
+    variant: 'overall',
+    percent: '+1,2%',
+    period: 'за 90 днів',
     isSpecial: true,
   },
 ];
@@ -54,8 +54,8 @@ export const HeroChartsCarousel = () => {
       setIsTablet(w >= 768 && w < 1024);
     };
     checkSize();
-    window.addEventListener("resize", checkSize);
-    return () => window.removeEventListener("resize", checkSize);
+    window.addEventListener('resize', checkSize);
+    return () => window.removeEventListener('resize', checkSize);
   }, []);
 
   useEffect(() => {
@@ -105,7 +105,7 @@ export const HeroChartsCarousel = () => {
         const vw = el.clientWidth;
         const idx = Math.round(el.scrollLeft / vw);
         setActiveIndex(idx);
-        el.scrollTo({ left: idx * vw, behavior: "smooth" });
+        el.scrollTo({ left: idx * vw, behavior: 'smooth' });
       }
     };
 
@@ -131,18 +131,18 @@ export const HeroChartsCarousel = () => {
       }
     };
 
-    el.addEventListener("pointerdown", onDown);
-    el.addEventListener("pointermove", onMove);
-    el.addEventListener("pointerup", onUp);
-    el.addEventListener("pointercancel", onUp);
-    el.addEventListener("scroll", onScroll, { passive: true });
+    el.addEventListener('pointerdown', onDown);
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup', onUp);
+    el.addEventListener('pointercancel', onUp);
+    el.addEventListener('scroll', onScroll, { passive: true });
 
     return () => {
-      el.removeEventListener("pointerdown", onDown);
-      el.removeEventListener("pointermove", onMove);
-      el.removeEventListener("pointerup", onUp);
-      el.removeEventListener("pointercancel", onUp);
-      el.removeEventListener("scroll", onScroll);
+      el.removeEventListener('pointerdown', onDown);
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup', onUp);
+      el.removeEventListener('pointercancel', onUp);
+      el.removeEventListener('scroll', onScroll);
     };
   }, [isDesktop, isTablet, activeIndex]);
 
@@ -153,40 +153,111 @@ export const HeroChartsCarousel = () => {
       const chartWidth = 350 + 16;
       containerRef.current.scrollTo({
         left: index * chartWidth,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
     } else if (isTablet && swipeRef.current) {
       const el = swipeRef.current;
       const chartWidth = 350 + 16;
       const maxScroll = el.scrollWidth - el.clientWidth;
       const target = Math.min(index * chartWidth, maxScroll);
-      el.scrollTo({ left: target, behavior: "smooth" });
+      el.scrollTo({ left: target, behavior: 'smooth' });
     } else if (!isDesktop && swipeRef.current) {
       const el = swipeRef.current;
       const viewport = el.clientWidth;
-      el.scrollTo({ left: index * viewport, behavior: "smooth" });
+      el.scrollTo({ left: index * viewport, behavior: 'smooth' });
     }
   };
 
-  if (isDesktop) {
-    return (
-      <div className={`${styles.heroChartsCarousel} flex lg:w-fit flex-col`}>
+  const tabletDots = [0, 1, 2];
+
+  return (
+    <>
+      {/* DESKTOP версія - показується тільки на lg */}
+      <div
+        className={`${styles.heroChartsCarousel} hidden lg:flex lg:w-fit flex-col`}
+      >
         <div
           ref={containerRef}
-          className={`${styles.heroChartContainer} flex gap-4 h-[108px] lg:h-[160px] rounded-[15px] p-[6px] lg:p-[15px] overflow-hidden`}
+          className={`${styles.heroChartContainer} flex gap-4 h-[160px] rounded-[15px] p-[15px] overflow-hidden`}
         >
           {charts.map((chart) => (
             <div
-              key={chart.id}
+              key={`desktop-${chart.id}`}
               className={`${styles.heroChartItem} flex rounded-[10px]`}
             >
-              <HeroChartItem {...chart} />
+              <HeroChartItem {...{ ...chart, id: `${chart.id}-desktop` }} />
             </div>
           ))}
         </div>
+      </div>
+
+      {/* TABLET версія - показується тільки на md до lg */}
+      <div
+        className={`${styles.heroChartsCarousel} hidden md:flex lg:hidden w-full flex-col`}
+      >
         <div
-          className={`${styles.dotsWrapper} lg:hidden flex justify-center gap-2`}
+          ref={containerRef}
+          className={`${styles.heroChartContainer} flex gap-4 h-[108px] rounded-l-[15px] overflow-hidden`}
         >
+          <div
+            ref={swipeRef}
+            className={`flex gap-4 overflow-x-auto ${styles.swipe} ${styles.noScrollbar}`}
+            style={{ scrollSnapType: 'x mandatory' }}
+          >
+            {charts.map((chart) => (
+              <div
+                key={`tablet-${chart.id}`}
+                className='snap-start shrink-0'
+                style={{ flex: '0 0 auto', width: '350px' }}
+              >
+                <div className={`${styles.heroChartItem} flex rounded-[10px]`}>
+                  <HeroChartItem {...{ ...chart, id: `${chart.id}-tablet` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className='flex justify-center gap-2 mt-3'>
+          {tabletDots.map((dotIndex) => (
+            <button
+              key={dotIndex}
+              onClick={() => scrollToChart(dotIndex)}
+              className={`${styles.dot} ${
+                activeIndex === dotIndex ? styles.activeDot : styles.inactiveDot
+              }`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* MOBILE версія - показується тільки до md */}
+      <div
+        className={`${styles.heroChartsCarousel} flex md:hidden w-full flex-col items-center`}
+      >
+        <div
+          className={`${styles.heroChartContainer} w-full h-[108px] max-w-[362px] rounded-[15px] `}
+        >
+          <div
+            ref={swipeRef}
+            className={`flex gap-4 overflow-x-auto snap-x snap-mandatory ${styles.swipe} ${styles.noScrollbar}`}
+            style={{ width: '100%' }}
+          >
+            {charts.map((chart) => (
+              <div
+                key={`mobile-${chart.id}`}
+                className='snap-start shrink-0 flex justify-center'
+                style={{ flex: '0 0 100%', maxWidth: '100%' }}
+              >
+                <div
+                  className={`${styles.heroChartItem} flex rounded-[10px] h-full w-full`}
+                >
+                  <HeroChartItem {...{ ...chart, id: `${chart.id}-mobile` }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={`${styles.dotsWrapper}  flex justify-center gap-2`}>
           {charts.map((_, index) => (
             <button
               key={index}
@@ -199,89 +270,6 @@ export const HeroChartsCarousel = () => {
           ))}
         </div>
       </div>
-    );
-  }
-
-  if (isTablet) {
-    const tabletDots = [0, 1, 2];
-    return (
-      <div className={`${styles.heroChartsCarousel} w-full flex flex-col`}>
-        <div
-          ref={containerRef}
-          className={`${styles.heroChartContainer} flex gap-4 h-[108px] lg:h-[160px] rounded-l-[15px] overflow-hidden`}
-        >
-          <div
-            ref={swipeRef}
-            className={`flex gap-4 overflow-x-auto ${styles.swipe} ${styles.noScrollbar}`}
-            style={{ scrollSnapType: "x mandatory" }}
-          >
-            {charts.map((chart) => (
-              <div
-                key={chart.id}
-                className="snap-start shrink-0"
-                style={{ flex: "0 0 auto", width: "350px" }}
-              >
-                <div className={`${styles.heroChartItem} flex rounded-[10px]`}>
-                  <HeroChartItem {...chart} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="flex justify-center gap-2 mt-3">
-          {tabletDots.map((dotIndex) => (
-            <button
-              key={dotIndex}
-              onClick={() => scrollToChart(dotIndex)}
-              className={`${styles.dot} ${
-                activeIndex === dotIndex ? styles.activeDot : styles.inactiveDot
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={`${styles.heroChartsCarousel} w-full flex flex-col items-center`}
-    >
-      <div
-        className={`${styles.heroChartContainer} w-full h-[108px] max-w-[362px] rounded-[15px] `}
-      >
-        <div
-          ref={swipeRef}
-          className={`flex gap-4 overflow-x-auto snap-x snap-mandatory ${styles.swipe} ${styles.noScrollbar}`}
-          style={{ width: "100%" }}
-        >
-          {charts.map((chart) => (
-            <div
-              key={chart.id}
-              className="snap-start shrink-0 flex justify-center"
-              style={{ flex: "0 0 100%", maxWidth: "100%" }}
-            >
-              <div
-                className={`${styles.heroChartItem} flex rounded-[10px] h-full w-full`}
-              >
-                <HeroChartItem {...chart} />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className={`${styles.dotsWrapper}  flex justify-center gap-2`}>
-        {charts.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => scrollToChart(index)}
-            className={`${styles.dot} ${
-              activeIndex === index ? styles.activeDot : styles.inactiveDot
-            }`}
-            aria-label={`dot ${index + 1}`}
-          />
-        ))}
-      </div>
-    </div>
+    </>
   );
 };

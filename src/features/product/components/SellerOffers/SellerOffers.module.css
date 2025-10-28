@@ -17,7 +17,7 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 .filterDropdownButton:hover {
@@ -35,21 +35,7 @@
   border-bottom-color: transparent;
 }
 
-.filterDropdownArrow {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 16px;
-  height: 16px;
-  transition: all 0.15s ease-in-out;
-  color: #8b8b8b;
-}
-
-.filterDropdownButton.open .filterDropdownArrow {
-  transform: translateY(-50%) rotate(180deg);
-  color: #000;
-}
+/* Arrow styles moved to inline Tailwind classes */
 
 .filterDropdownList {
   position: absolute;
@@ -64,7 +50,7 @@
   overflow: hidden;
   z-index: 50;
   transform-origin: top;
-  transition: all 0.15s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
 
 .filterDropdownList.closed {

@@ -28,16 +28,19 @@ export const BestPrice = () => {
   const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [selectedModel, setSelectedModel] = useState('');
+  const [consent, setConsent] = useState(false);
   const currencyRef = useRef<HTMLDivElement>(null);
 
   const {
     errors,
     validateForm,
     validateEmail,
+    validateConsent,
     clearErrors,
     clearEmailError,
     clearPriceError,
     clearModelError,
+    clearConsentError,
   } = useFormValidation();
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,13 +99,14 @@ export const BestPrice = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    const isConsentValid = validateConsent(consent);
     const isValid = validateForm({
       email,
       price,
       selectedModel,
     });
 
-    if (!isValid) {
+    if (!isValid || !isConsentValid) {
       return;
     }
 
@@ -119,6 +123,7 @@ export const BestPrice = () => {
     setPrice('');
     setSelectedModel('');
     setSelectedCurrency('USD');
+    setConsent(false);
     clearErrors();
   };
 
@@ -264,13 +269,36 @@ export const BestPrice = () => {
                 >
                   <div>{t(bestPriceKeys.form.button)}</div>
                 </button>
-                <div className={`${styles.Text}`}>
-                  <p>
-                    {t(bestPriceKeys.form.note)}{' '}
-                    <LocalizedLink href='./' className={`${styles.TextLink}`}>
-                      {t(bestPriceKeys.form.terms)}
-                    </LocalizedLink>
-                  </p>
+                <div className='flex flex-col gap-2'>
+                  <label className='flex items-start gap-2 cursor-pointer'>
+                    <input
+                      type='checkbox'
+                      checked={consent}
+                      onChange={(e) => {
+                        setConsent(e.target.checked);
+                        if (e.target.checked && errors.consent) {
+                          clearConsentError();
+                        }
+                      }}
+                      className={`${styles.Checkbox} mt-0.5 cursor-pointer`}
+                    />
+                    <div className={`${styles.Text}`}>
+                      <p>
+                        {t(bestPriceKeys.form.note)}{' '}
+                        <LocalizedLink
+                          href='/terms'
+                          className={`${styles.TextLink}`}
+                        >
+                          {t(bestPriceKeys.form.terms)}
+                        </LocalizedLink>
+                      </p>
+                    </div>
+                  </label>
+                  {errors.consent && (
+                    <div className={`${styles.ErrorMessage}`}>
+                      {errors.consent}
+                    </div>
+                  )}
                 </div>
               </div>
             </form>

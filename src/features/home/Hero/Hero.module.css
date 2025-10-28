@@ -2,6 +2,35 @@
   background: #a58e6a;
   padding-top: 3.5rem;
 }
+
+.heroBgImage {
+  z-index: 0;
+  object-fit: cover;
+  object-position: 50% 120%; 
+}
+
+
+@media (min-width: 40rem /* 640px */) {
+  .heroBgImage {
+    object-position: 65% 50%; 
+  }
+}
+
+
+@media (min-width: 48rem /* 768px */) {
+  .heroBgImage {
+    object-position: 75% 35%; 
+  }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 64rem ) {
+  .heroBgImage {
+    object-position: 100% 50%; 
+    left: 200px !important; 
+  }
+}
+
 .heroContainer::before {
   content: "";
   position: absolute;
