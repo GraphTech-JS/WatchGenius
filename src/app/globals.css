@@ -42,10 +42,25 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: var(--font-inter);
+  text-rendering: optimizeLegibility;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* Performance optimizations */
+[class*='carousel'],
+[class*='scroll'],
+[class*='swipe'] {
+  will-change: scroll-position;
+  contain: layout;
+}
+
+img,
+picture,
+video {
+  content-visibility: auto;
 }
 
 a {
@@ -87,6 +102,7 @@ select:focus-visible {
   border-radius: 4px;
 }
 .range-slider {
+  appearance: none;
   -webkit-appearance: none;
   width: 100%;
   height: 8px;

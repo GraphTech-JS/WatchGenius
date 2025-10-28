@@ -149,8 +149,10 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             src={product.image}
             alt={product.title}
             fill
+            sizes='(max-width: 768px) 100vw, 577px'
             className='object-contain p-4'
             priority
+            fetchPriority='high'
           />
           <div className='absolute top-4 right-4 z-10'>
             <div className='relative group'>

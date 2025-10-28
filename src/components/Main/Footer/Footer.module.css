@@ -27,14 +27,12 @@
   height: 30px;
 }
 .chronoName {
-  color: #ffffff66;
-  opacity: 0.6;
+  color: rgba(255, 255, 255, 0.75);
   line-height: 20px;
 }
 
 .footerBottom {
-  color: #ffffff66;
-  opacity: 0.6;
+  color: rgba(255, 255, 255, 0.75);
 }
 
 .footerLinkTitle {
@@ -44,8 +42,7 @@
   font-weight: 600;
 }
 .footerLink {
-  color: #ffffffb2;
-  opacity: 0.7;
+  color: rgba(255, 255, 255, 0.85);
 }
 /* .footerSocialLink {
 
