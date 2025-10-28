@@ -6,6 +6,13 @@ import { CustomSelect } from '@/components/CustomSelect/CustomSelect';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import styles from './PriceAlertModal.module.css';
 
+interface PriceAlertFormData {
+  watchModel: string;
+  targetPrice: string;
+  email: string;
+  consent: boolean;
+}
+
 interface PriceAlertModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -17,11 +24,14 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
   onClose,
   productTitle = 'Rolex Submariner Oyster Perpetual',
 }) => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<PriceAlertFormData>({
     watchModel: productTitle,
     targetPrice: '',
     email: '',
+    consent: false,
   });
+
+  const [consentError, setConsentError] = useState('');
 
   const brands = [
     'Rolex Submariner',
@@ -49,14 +59,25 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
     clearModelError,
   } = useFormValidation();
 
+  const validateConsent = (value: boolean): boolean => {
+    if (!value) {
+      setConsentError('Необхідно погодитись з умовами');
+      return false;
+    }
+    setConsentError('');
+    return true;
+  };
+
   useEffect(() => {
     if (isOpen) {
       setFormData({
         watchModel: productTitle,
         targetPrice: '',
         email: '',
+        consent: false,
       });
       clearErrors();
+      setConsentError('');
       setSelectedCurrency('USD');
       setIsCurrencyOpen(false);
     }
@@ -161,7 +182,9 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
       selectedModel: formData.watchModel,
     });
 
-    if (!isValid) {
+    const isConsentValid = validateConsent(formData.consent);
+
+    if (!isValid || !isConsentValid) {
       return;
     }
 
@@ -180,9 +203,11 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
           watchModel: productTitle,
           targetPrice: '',
           email: '',
+          consent: false,
         });
         setSelectedCurrency('USD');
         clearErrors();
+        setConsentError('');
       }, 3000);
     } catch (error) {
       console.error('Помилка відправки форми:', error);
@@ -295,19 +320,36 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
             </div>
           </div>
 
+          <div className={styles.consentWrapper}>
+            <label className={styles.consentLabel}>
+              <input
+                type='checkbox'
+                checked={formData.consent}
+                onChange={(e) => {
+                  setFormData({ ...formData, consent: e.target.checked });
+                  if (e.target.checked) {
+                    setConsentError('');
+                  }
+                }}
+                className={styles.checkbox}
+              />
+              <span className={consentError ? styles.consentTextError : ''}>
+                Ми надсилатимемо сповіщення не частіше 1 разу на день.
+                Натискаючи &quot;Встановити&quot;, Ви погоджуєтесь{' '}
+                <Link href='/terms' className={styles.consentLink}>
+                  з умовами використання
+                </Link>
+              </span>
+            </label>
+            {consentError && (
+              <div className={styles.errorMessage}>{consentError}</div>
+            )}
+          </div>
+
           <div className={styles.buttonContainer}>
             <button type='submit' className={styles.submitButton}>
               Отимувати сповіщення
             </button>
-            <div className={styles.disclaimer}>
-              <p>
-                Ми надсилатимемо сповіщення не частіше 1 разу на день.
-                Натискаючи &quot;Встановити&quot;, Ви погоджуєтесь{' '}
-                <Link href='/terms' className={styles.disclaimerLink}>
-                  з умовами використання
-                </Link>
-              </p>
-            </div>
           </div>
         </form>
 

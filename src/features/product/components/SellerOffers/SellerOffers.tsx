@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { FaChevronDown } from 'react-icons/fa';
+import { ChevronDown } from 'lucide-react';
 import { SellerOffersProps } from '@/interfaces/product';
 import {
   SafetyIcon,
@@ -177,9 +177,10 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
           <span>
             {selectedOption?.displayLabel || selectedOption?.label || value}
           </span>
-          <FaChevronDown
-            className={`${styles.filterDropdownArrow} ${
-              isOpen ? styles.open : ''
+          <ChevronDown
+            size={26}
+            className={`absolute right-[20px] top-1/2 -translate-y-1/2 transition-all duration-300 ease-in-out ${
+              isOpen ? 'rotate-180 text-black' : 'text-[#8b8b8b]'
             }`}
           />
         </button>

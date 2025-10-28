@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
+import React, { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 
 export type AccordionItem<K extends string = string> = {
   key: K;
@@ -45,12 +45,12 @@ export function Accordion<K extends string = string>({
   };
 
   const toId = (title: React.ReactNode, idx: number) =>
-    typeof title === "string"
-      ? `section-${title.toLowerCase().replace(/\s+/g, "-")}`
+    typeof title === 'string'
+      ? `section-${title.toLowerCase().replace(/\s+/g, '-')}`
       : `section-${idx}`;
 
   return (
-    <div className={["mb-8 space-y-1", className].filter(Boolean).join(" ")}>
+    <div className={['mb-8 space-y-1', className].filter(Boolean).join(' ')}>
       {items.map((it, idx) => {
         const isOpen = currentOpen.includes(it.key);
         const id = toId(it.title, idx);
@@ -61,17 +61,18 @@ export function Accordion<K extends string = string>({
               onClick={() => toggle(it.key)}
               aria-expanded={isOpen}
               aria-controls={id}
-              className="w-full flex items-center justify-between py-3
+              className='w-full flex items-center justify-between py-3
                          text-[20px]  font-[var(--font-inter)] text-[var(--text-dark)]
                          cursor-pointer  rounded-[8px]
-                         transition-colors duration-200"
+                         transition-colors duration-200'
             >
               <span>{it.title}</span>
-              <FaChevronDown
-                className={`text-[20px] transition-all duration-300 ease-in-out ${
+              <ChevronDown
+                size={26}
+                className={`transition-all duration-300 ease-in-out ${
                   isOpen
-                    ? "rotate-180 text-[#04694f]"
-                    : "text-[var(--text-dark)]"
+                    ? 'rotate-180 text-[#04694f]'
+                    : 'text-[var(--text-dark)]'
                 }`}
               />
             </button>
@@ -80,15 +81,15 @@ export function Accordion<K extends string = string>({
               id={id}
               className={`overflow-hidden transition-all duration-300 ease-in-out ${
                 isOpen
-                  ? "pb-3 opacity-100 max-h-[500px]"
-                  : "pb-0 max-h-0 opacity-0"
+                  ? 'pb-3 opacity-100 max-h-[500px]'
+                  : 'pb-0 max-h-0 opacity-0'
               }`}
             >
-              <div className="pt-2">{it.content}</div>
+              <div className='pt-2'>{it.content}</div>
             </div>
 
             {idx < items.length - 1 && (
-              <div className="h-px bg-[rgba(23,20,20,0.1)] " />
+              <div className='h-px bg-[rgba(23,20,20,0.1)] ' />
             )}
           </div>
         );

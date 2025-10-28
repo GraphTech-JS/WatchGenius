@@ -167,6 +167,16 @@
   line-height: 16px;
   padding-left: 4px;
 }
+
+.Checkbox {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  min-height: 18px;
+  accent-color: var(--green);
+  border-radius: 4px;
+}
+
 @media (width >= 64rem) {
   .bestSectionTitle {
     font-size: 32px;

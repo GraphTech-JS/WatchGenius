@@ -14,7 +14,7 @@ export const mockCards: IWatch[] = [
     changePercent: 7,
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: "#22c55e",
-    chartId: "chart1",
+    chartId: "market-chart1",
   },
   {
     id: 2,
@@ -27,7 +27,7 @@ export const mockCards: IWatch[] = [
     changePercent: 0,
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: "#EED09D",
-    chartId: "chart2",
+    chartId: "market-chart2",
   },
 ];
 
@@ -42,7 +42,7 @@ export const mockTrending: IWatch[] = [
     changePercent: -12,
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: "#22c55e",
-    chartId: "chart1",
+    chartId: "trending-chart1",
   },
   {
     id: 2,
@@ -54,7 +54,7 @@ export const mockTrending: IWatch[] = [
     changePercent: 0,
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: "#EED09D",
-    chartId: "chart2",
+    chartId: "trending-chart2",
   },
   {
     id: 3,
@@ -66,7 +66,7 @@ export const mockTrending: IWatch[] = [
     changePercent: 21,
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: "#EED09D",
-    chartId: "chart3",
+    chartId: "trending-chart3",
   },
   {
     id: 4,
@@ -78,7 +78,7 @@ export const mockTrending: IWatch[] = [
     changePercent: 7,
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: "#EED09D",
-    chartId: "chart4",
+    chartId: "trending-chart4",
   },
   {
     id: 5,
@@ -90,7 +90,7 @@ export const mockTrending: IWatch[] = [
     changePercent: 7,
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: "#EED09D",
-    chartId: "chart5",
+    chartId: "trending-chart5",
   },
   {
     id: 6,
@@ -102,7 +102,7 @@ export const mockTrending: IWatch[] = [
     changePercent: 0,
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: "#EED09D",
-    chartId: "chart6",
+    chartId: "trending-chart6",
   },
 ];
 

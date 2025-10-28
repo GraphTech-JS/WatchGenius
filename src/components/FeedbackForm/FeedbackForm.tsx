@@ -1,18 +1,25 @@
 import React from 'react';
+import Link from 'next/link';
 import styles from './FeedbackForm.module.css';
 import { FeedbackFormData } from '@/types/feedback';
+import { t } from '@/i18n';
+import { formKeys } from '@/i18n/keys/common';
 
 interface FeedbackFormProps {
   watchTitle: string;
   formData: FeedbackFormData;
-  onUpdateFormData: (field: keyof FeedbackFormData, value: string) => void;
+  onUpdateFormData: (
+    field: keyof FeedbackFormData,
+    value: string | boolean
+  ) => void;
   onSubmit: () => void;
   errors?: {
     name: string;
     email: string;
     message: string;
+    consent?: string;
   };
-  onClearError?: (field: keyof FeedbackFormData) => void;
+  onClearError?: (field: keyof FeedbackFormData | 'consent') => void;
   onBlur?: (field: keyof FeedbackFormData) => void;
 }
 
@@ -105,6 +112,31 @@ export const FeedbackForm: React.FC<FeedbackFormProps> = ({
           />
           {errors.message && (
             <div className={styles.errorMessage}>{errors.message}</div>
+          )}
+        </div>
+
+        <div className={styles.consentWrapper}>
+          <label className={styles.consentLabel}>
+            <input
+              type='checkbox'
+              checked={formData.consent || false}
+              onChange={(e) => {
+                onUpdateFormData('consent', e.target.checked);
+                if (e.target.checked && onClearError) {
+                  onClearError('consent');
+                }
+              }}
+              className={styles.checkbox}
+            />
+            <span className={errors.consent ? styles.consentTextError : ''}>
+              {t(formKeys.consent.label)}{' '}
+              <Link href='/' className={styles.consentLink}>
+                {t(formKeys.consent.link)}
+              </Link>
+            </span>
+          </label>
+          {errors.consent && (
+            <div className={styles.errorMessage}>{errors.consent}</div>
           )}
         </div>
 

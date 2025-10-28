@@ -1,6 +1,8 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { FeedbackModalProps, FeedbackFormData } from '@/types/feedback';
 import { FeedbackForm } from '@/components/FeedbackForm/FeedbackForm';
+import { t } from '@/i18n';
+import { formKeys } from '@/i18n/keys/common';
 import styles from './FeedbackModal.module.css';
 
 export const FeedbackModal: React.FC<FeedbackModalProps> = ({
@@ -12,12 +14,14 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
     name: '',
     email: '',
     message: '',
+    consent: false,
   });
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [messageError, setMessageError] = useState('');
+  const [consentError, setConsentError] = useState('');
 
   const validateName = (value: string): boolean => {
     if (!value.trim()) {
@@ -51,12 +55,22 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
     return true;
   };
 
+  const validateConsent = (value: boolean): boolean => {
+    if (!value) {
+      setConsentError(t(formKeys.consent.error));
+      return false;
+    }
+    setConsentError('');
+    return true;
+  };
+
   useEffect(() => {
     if (isOpen) {
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', message: '', consent: false });
       setNameError('');
       setEmailError('');
       setMessageError('');
+      setConsentError('');
       setShowSuccessModal(false);
     }
   }, [isOpen]);
@@ -91,7 +105,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
   const handleUpdateFormData = (
     field: keyof typeof formData,
-    value: string
+    value: string | boolean
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -103,8 +117,9 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
     const isNameValid = validateName(formData.name);
     const isEmailValid = validateEmail(formData.email);
     const isMessageValid = validateMessage(formData.message);
+    const isConsentValid = validateConsent(formData.consent || false);
 
-    if (!isNameValid || !isEmailValid || !isMessageValid) {
+    if (!isNameValid || !isEmailValid || !isMessageValid || !isConsentValid) {
       return;
     }
 
@@ -116,20 +131,22 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
       setTimeout(() => {
         setShowSuccessModal(false);
         handleClose();
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({ name: '', email: '', message: '', consent: false });
         setNameError('');
         setEmailError('');
         setMessageError('');
+        setConsentError('');
       }, 3000);
     } catch (error) {
       console.error('Помилка відправки форми:', error);
     }
   };
 
-  const handleClearError = (field: keyof FeedbackFormData) => {
+  const handleClearError = (field: keyof FeedbackFormData | 'consent') => {
     if (field === 'name') setNameError('');
     if (field === 'email') setEmailError('');
     if (field === 'message') setMessageError('');
+    if (field === 'consent') setConsentError('');
   };
 
   const handleBlur = (field: keyof FeedbackFormData) => {
@@ -160,6 +177,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
             name: nameError,
             email: emailError,
             message: messageError,
+            consent: consentError,
           }}
           onClearError={handleClearError}
           onBlur={handleBlur}

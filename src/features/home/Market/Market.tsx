@@ -1,10 +1,10 @@
-"use client";
-import React, { useState, useEffect, useRef } from "react";
-import styles from "./Market.module.css";
-import { ThemedText } from "@/components/ThemedText/ThemedText";
-import { mockCards } from "@/mock/watch";
-import { MarketCard } from "@/components/Main/Market/MarketCard/MarketCard";
-import { MarketTotal } from "@/components/Main/Market/MarketCard/MarketTotal";
+'use client';
+import React, { useState, useEffect, useRef } from 'react';
+import styles from './Market.module.css';
+import { ThemedText } from '@/components/ThemedText/ThemedText';
+import { mockCards } from '@/mock/watch';
+import { MarketCard } from '@/components/Main/Market/MarketCard/MarketCard';
+import { MarketTotal } from '@/components/Main/Market/MarketCard/MarketTotal';
 
 export const Market = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -14,38 +14,76 @@ export const Market = () => {
   useEffect(() => {
     const checkSize = () => setIsDesktop(window.innerWidth >= 768);
     checkSize();
-    window.addEventListener("resize", checkSize);
-    return () => window.removeEventListener("resize", checkSize);
+    window.addEventListener('resize', checkSize);
+    return () => window.removeEventListener('resize', checkSize);
   }, []);
 
-  const allCards = [
+  const desktopCards = [
     ...mockCards.map((card, idx) => ({
-      type: "card" as const,
-      content: <MarketCard key={`card-${idx}`} {...card} />,
+      type: 'card' as const,
+      content: (
+        <MarketCard
+          key={`desktop-card-${idx}`}
+          {...{
+            ...card,
+            chartId: `${card.chartId}-desktop`,
+            priority: idx === 0,
+          }}
+        />
+      ),
     })),
     {
-      type: "total" as const,
+      type: 'total' as const,
       content: (
         <MarketTotal
-          key="total"
-          title="Liquidity Leaders"
+          key='desktop-total'
+          title='Liquidity Leaders'
           deals={120}
           amount={12545000}
           chartData={[7, 6, 7, 6, 7.5, 7, 8]}
+          chartId='market-total-desktop'
         />
       ),
     },
   ];
 
-  // Mobile swipe helpers must be declared before any conditional return
+  const mobileCards = [
+    ...mockCards.map((card, idx) => ({
+      type: 'card' as const,
+      content: (
+        <MarketCard
+          key={`mobile-card-${idx}`}
+          {...{
+            ...card,
+            chartId: `${card.chartId}-mobile`,
+            priority: idx === 0,
+          }}
+        />
+      ),
+    })),
+    {
+      type: 'total' as const,
+      content: (
+        <MarketTotal
+          key='mobile-total'
+          title='Liquidity Leaders'
+          deals={120}
+          amount={12545000}
+          chartData={[7, 6, 7, 6, 7.5, 7, 8]}
+          chartId='market-total-mobile'
+        />
+      ),
+    },
+  ];
+
   const scrollToIndex = (idx: number) => {
     const el = swipeRef.current;
     if (!el) return;
     const viewport = el.clientWidth;
-    el.scrollTo({ left: idx * viewport, behavior: "smooth" });
+    el.scrollTo({ left: idx * viewport, behavior: 'smooth' });
   };
   useEffect(() => {
-    if (isDesktop) return; // guard: run only on mobile
+    if (isDesktop) return; 
     const el = swipeRef.current;
     if (!el) return;
     let isDown = false;
@@ -67,7 +105,9 @@ export const Market = () => {
       if (!isDown) return;
       isDown = false;
       if (pointerId !== null) {
-        try { (e.target as Element).releasePointerCapture?.(pointerId); } catch {}
+        try {
+          (e.target as Element).releasePointerCapture?.(pointerId);
+        } catch {}
         pointerId = null;
       }
       const viewport = el.clientWidth;
@@ -75,19 +115,19 @@ export const Market = () => {
       setActiveIndex(idx);
       scrollToIndex(idx);
     };
-    el.addEventListener("pointerdown", onDown);
-    el.addEventListener("pointermove", onMove);
-    el.addEventListener("pointerup", onUp);
-    el.addEventListener("pointercancel", onUp);
+    el.addEventListener('pointerdown', onDown);
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup', onUp);
+    el.addEventListener('pointercancel', onUp);
     return () => {
-      el.removeEventListener("pointerdown", onDown);
-      el.removeEventListener("pointermove", onMove);
-      el.removeEventListener("pointerup", onUp);
-      el.removeEventListener("pointercancel", onUp);
+      el.removeEventListener('pointerdown', onDown);
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup', onUp);
+      el.removeEventListener('pointercancel', onUp);
     };
   }, [isDesktop]);
   useEffect(() => {
-    if (isDesktop) return; // guard: run only on mobile
+    if (isDesktop) return; 
     const el = swipeRef.current;
     if (!el) return;
     let raf = 0;
@@ -99,68 +139,57 @@ export const Market = () => {
         if (idx !== activeIndex) setActiveIndex(idx);
       });
     };
-    el.addEventListener("scroll", onScroll, { passive: true });
+    el.addEventListener('scroll', onScroll, { passive: true });
     return () => {
-      el.removeEventListener("scroll", onScroll);
+      el.removeEventListener('scroll', onScroll);
       cancelAnimationFrame(raf);
     };
   }, [isDesktop, activeIndex]);
 
-  if (isDesktop) {
-    return (
-      <section
-        id="market"
-        className={`${styles.market} max-w-[90rem] mx-auto px-[1.25rem] lg:px-[6.25rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
-      >
-        <div className={`${styles.marketContainer}`}>
-          <div className={`${styles.marketTitle} mb-6`}>
-            <ThemedText type="h2">Market overview</ThemedText>
-          </div>
-          <div className={`${styles.marketContent} grid md:grid-cols-3 gap-6`}>
-            {allCards.map((card) => card.content)}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-
   return (
     <section
-      id="market"
-      className={`${styles.market} px-[1.25rem] pt-6 lg:pt-12 pb-10`}
+      id='market'
+      className={`${styles.market} max-w-[90rem] mx-auto px-[1.25rem] lg:px-[6.25rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
     >
       <div className={`${styles.marketContainer}`}>
         <div className={`${styles.marketTitle} mb-6`}>
-          <ThemedText type="h2">Market overview</ThemedText>
+          <ThemedText type='h2'>Market overview</ThemedText>
         </div>
 
         <div
-          ref={swipeRef}
-          className={`${styles.marketContent} flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth ${styles.swipe} ${styles.noScrollbar}`}
+          className={`${styles.marketContent} hidden md:grid md:grid-cols-3 gap-6`}
         >
-          {allCards.map((card, idx) => (
-            <div
-              key={`mob-${idx}`}
-              className="snap-start shrink-0 flex justify-center"
-              style={{ flex: "0 0 100%", maxWidth: "100%" }}
-            >
-              {card.content}
-            </div>
-          ))}
+          {desktopCards.map((card) => card.content)}
         </div>
 
-        <div className="flex justify-center gap-2 mt-4">
-          {allCards.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => scrollToIndex(idx)}
-              className={`w-2 h-2 rounded-full transition-all ${
-                activeIndex === idx ? "bg-[#04694F] scale-110" : "bg-gray-300"
-              }`}
-              aria-label={`Показати товар ${idx + 1}`}
-            />
-          ))}
+        <div className='md:hidden'>
+          <div
+            ref={swipeRef}
+            className={`${styles.marketContent} flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth ${styles.swipe} ${styles.noScrollbar}`}
+          >
+            {mobileCards.map((card, idx) => (
+              <div
+                key={`mob-${idx}`}
+                className='snap-start shrink-0 flex justify-center'
+                style={{ flex: '0 0 100%', maxWidth: '100%' }}
+              >
+                {card.content}
+              </div>
+            ))}
+          </div>
+
+          <div className='flex justify-center gap-2 mt-4'>
+            {mobileCards.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => scrollToIndex(idx)}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  activeIndex === idx ? 'bg-[#04694F] scale-110' : 'bg-gray-300'
+                }`}
+                aria-label={`Показати товар ${idx + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
