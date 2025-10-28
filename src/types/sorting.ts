@@ -1,14 +1,15 @@
-export enum SortOption {
-  DEFAULT = 'За замовчуванням',
-  TREND_90_DAYS = 'По тренду (90 днів)',
-  PRICE_ASC = 'По ціні (зростання)',
-  PRICE_DESC = 'По ціні (спадання)',
-  NEWEST = 'По новизні',
-  NAME = 'По назві',
-  INDEX_ASC = 'За індексом (зростання)',
-  INDEX_DESC = 'За індексом (спадання)',
-}
+import { t } from "@/i18n";
+import { catalogKeys } from "@/i18n/keys/catalog";
 
+export const SortOption = {
+  DEFAULT: t(catalogKeys.sort.default),
+  TREND_90_DAYS: t(catalogKeys.sort.treand90days),
+  PRICE_ASC: t(catalogKeys.sort.priceASC),
+  PRICE_DESC: t(catalogKeys.sort.priceDESC),
+  NEWEST: t(catalogKeys.sort.newest),
+  NAME: t(catalogKeys.sort.name),
+  INDEX_ASC: t(catalogKeys.sort.indexASC),
+  INDEX_DESC: t(catalogKeys.sort.indexDESC),
+} as const;
 
-
-export type SortFunction<T> = (a: T, b: T) => number;
+export type SortOption = (typeof SortOption)[keyof typeof SortOption];

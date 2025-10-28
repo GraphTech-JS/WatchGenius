@@ -1,7 +1,9 @@
-'use client';
+"use client";
 
-import React, { useEffect } from 'react';
-import styles from './ComparisonModal.module.css';
+import React, { useEffect } from "react";
+import styles from "./ComparisonModal.module.css";
+import { t } from "@/i18n";
+import { modalsKeys } from "@/i18n/keys/modals";
 
 interface ComparisonModalProps {
   isVisible: boolean;
@@ -30,7 +32,9 @@ const ComparisonModal: React.FC<ComparisonModalProps> = ({
     <div className={styles.modalOverlay}>
       <div className={styles.modal}>
         <span className={styles.modalText}>
-          {isAdded ? 'Додано до порівняння' : 'Прибрано з порівняння'}
+          {isAdded
+            ? t(modalsKeys.comparison.added)
+            : t(modalsKeys.comparison.removed)}
         </span>
       </div>
     </div>

@@ -2,6 +2,8 @@ export const catalogKeys = {
   page: {
     title: "catalog.page.title",
     subtitle: "catalog.page.subtitle",
+    showLess: "catalog.page.showLess",
+    showMore: "catalog.page.showMore",
   },
   sidebar: {
     title: "catalog.sidebar.title",
@@ -14,6 +16,21 @@ export const catalogKeys = {
       filters: "catalog.sidebar.aria.filters",
     },
   },
+  controls: {
+    searchPlaceholder: "catalog.controls.searchPlaceholder",
+    saveBtn: "catalog.controls.saveBtn",
+    savedBtn: "catalog.controls.savedBtn",
+  },
+  sort: {
+    default: "catalog.sort.default",
+    treand90days: "catalog.sort.treand90days",
+    priceASC: "catalog.sort.priceASC",
+    priceDESC: "catalog.sort.priceDESC",
+    newest: "catalog.sort.newest",
+    name: "catalog.sort.name",
+    indexASC: "catalog.sort.indexASC",
+    indexDESC: "catalog.sort.indexDESC",
+  },
   filter: {
     showMore: "catalog.filter.showMore",
     showLess: "catalog.filter.showLess",
@@ -24,5 +41,24 @@ export const catalogKeys = {
   activeFilters: {
     clearAll: "catalog.activeFilters.clearAll",
     removeFilter: "catalog.activeFilters.removeFilter",
+  },
+  filterData: {
+    brands: "catalog.filterData.brands",
+    conditions: "catalog.filterData.conditions",
+    mechanisms: "catalog.filterData.mechanisms",
+    materials: "catalog.filterData.materials",
+    documents: "catalog.filterData.documents",
+    locations: "catalog.filterData.locations",
+  },
+  filterSections: {
+    brand: "catalog.filterSections.brand",
+    price: "catalog.filterSections.price",
+    index: "catalog.filterSections.index",
+    condition: "catalog.filterSections.condition",
+    mechanism: "catalog.filterSections.mechanism",
+    material: "catalog.filterSections.material",
+    year: "catalog.filterSections.year",
+    documents: "catalog.filterSections.documents",
+    location: "catalog.filterSections.location",
   },
 };

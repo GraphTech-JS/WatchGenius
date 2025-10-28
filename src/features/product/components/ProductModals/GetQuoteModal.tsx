@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useCallback } from 'react';
-import Link from 'next/link';
-import { t } from '@/i18n';
-import { formKeys } from '@/i18n/keys/common';
-import styles from './GetQuoteModal.module.css';
+import React, { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
+import { t } from "@/i18n";
+import { formKeys } from "@/i18n/keys/common";
+import { modalsKeys } from "@/i18n/keys/modals";
+import styles from "./GetQuoteModal.module.css";
 
 interface GetQuoteModalProps {
   isOpen: boolean;
@@ -14,52 +15,52 @@ interface GetQuoteModalProps {
 
 const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
+    name: "",
+    email: "",
+    phone: "",
     consent: false,
   });
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [nameError, setNameError] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [phoneError, setPhoneError] = useState('');
-  const [consentError, setConsentError] = useState('');
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
+  const [consentError, setConsentError] = useState("");
 
   const validateName = (value: string): boolean => {
     if (!value.trim()) {
-      setNameError("Ім'я обов'язкове");
+      setNameError(t(modalsKeys.getQuote.errors.nameRequired));
       return false;
     }
-    setNameError('');
+    setNameError("");
     return true;
   };
 
   const validateEmailLocal = (value: string): boolean => {
     if (!value) {
-      setEmailError("Email обов'язковий");
+      setEmailError(t(modalsKeys.getQuote.errors.emailRequired));
       return false;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) {
-      setEmailError('Введіть коректний email');
+      setEmailError(t(modalsKeys.getQuote.errors.emailInvalid));
       return false;
     }
-    setEmailError('');
+    setEmailError("");
     return true;
   };
 
   const validatePhone = (value: string): boolean => {
     if (!value.trim()) {
-      setPhoneError("Телефон обов'язковий");
+      setPhoneError(t(modalsKeys.getQuote.errors.phoneRequired));
       return false;
     }
     const phoneRegex = /^[\d\s\+\-\(\)]+$/;
-    if (!phoneRegex.test(value) || value.replace(/\D/g, '').length < 10) {
-      setPhoneError('Введіть коректний номер телефону');
+    if (!phoneRegex.test(value) || value.replace(/\D/g, "").length < 10) {
+      setPhoneError(t(modalsKeys.getQuote.errors.phoneInvalid));
       return false;
     }
-    setPhoneError('');
+    setPhoneError("");
     return true;
   };
 
@@ -68,22 +69,22 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
       setConsentError(t(formKeys.consent.error));
       return false;
     }
-    setConsentError('');
+    setConsentError("");
     return true;
   };
 
   useEffect(() => {
     if (isOpen) {
       setFormData({
-        name: '',
-        email: '',
-        phone: '',
+        name: "",
+        email: "",
+        phone: "",
         consent: false,
       });
-      setNameError('');
-      setEmailError('');
-      setPhoneError('');
-      setConsentError('');
+      setNameError("");
+      setEmailError("");
+      setPhoneError("");
+      setConsentError("");
       setShowSuccessModal(false);
     }
   }, [isOpen]);
@@ -100,19 +101,19 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         handleClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen, handleClose]);
 
@@ -136,7 +137,7 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
     }
 
     try {
-      console.log('Відправка форми запиту:', formData);
+      console.log("Відправка форми запиту:", formData);
 
       setShowSuccessModal(true);
 
@@ -144,18 +145,18 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
         setShowSuccessModal(false);
         handleClose();
         setFormData({
-          name: '',
-          email: '',
-          phone: '',
+          name: "",
+          email: "",
+          phone: "",
           consent: false,
         });
-        setNameError('');
-        setEmailError('');
-        setPhoneError('');
-        setConsentError('');
+        setNameError("");
+        setEmailError("");
+        setPhoneError("");
+        setConsentError("");
       }, 3000);
     } catch (error) {
-      console.error('Помилка відправки форми:', error);
+      console.error("Помилка відправки форми:", error);
     }
   };
 
@@ -167,29 +168,31 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
         <button
           className={styles.closeButton}
           onClick={handleClose}
-          aria-label='Закрити модальне вікно'
+          aria-label="Закрити модальне вікно"
         >
           ×
         </button>
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.title}>Get quote</div>
+          <div className={styles.title}>{t(modalsKeys.getQuote.title)}</div>
 
           <div className={styles.formContent}>
             <div className={styles.formItem}>
-              <div className={styles.formItemTitle}>Введіть ім&apos;я</div>
+              <div className={styles.formItemTitle}>
+                {t(modalsKeys.getQuote.nameLabel)}
+              </div>
               <div className={styles.formFieldWrapper}>
                 <input
-                  type='text'
-                  placeholder="Ваше ім'я"
+                  type="text"
+                  placeholder={t(modalsKeys.getQuote.namePlaceholder)}
                   value={formData.name}
                   onChange={(e) => {
-                    handleInputChange('name', e.target.value);
-                    if (nameError) setNameError('');
+                    handleInputChange("name", e.target.value);
+                    if (nameError) setNameError("");
                   }}
                   onBlur={() => validateName(formData.name)}
                   className={`${styles.input} ${
-                    nameError ? styles.inputError : ''
+                    nameError ? styles.inputError : ""
                   }`}
                 />
                 {nameError && (
@@ -199,19 +202,21 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
             </div>
 
             <div className={styles.formItem}>
-              <div className={styles.formItemTitle}>Введіть пошту</div>
+              <div className={styles.formItemTitle}>
+                {t(modalsKeys.getQuote.emailLabel)}
+              </div>
               <div className={styles.formFieldWrapper}>
                 <input
-                  type='email'
-                  placeholder='your@email.com'
+                  type="email"
+                  placeholder={t(modalsKeys.getQuote.emailPlaceholder)}
                   value={formData.email}
                   onChange={(e) => {
-                    handleInputChange('email', e.target.value);
-                    if (emailError) setEmailError('');
+                    handleInputChange("email", e.target.value);
+                    if (emailError) setEmailError("");
                   }}
                   onBlur={() => validateEmailLocal(formData.email)}
                   className={`${styles.input} ${
-                    emailError ? styles.inputError : ''
+                    emailError ? styles.inputError : ""
                   }`}
                 />
                 {emailError && (
@@ -221,19 +226,21 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
             </div>
 
             <div className={styles.formItem}>
-              <div className={styles.formItemTitle}>Введіть номер телефону</div>
+              <div className={styles.formItemTitle}>
+                {t(modalsKeys.getQuote.phoneLabel)}
+              </div>
               <div className={styles.formFieldWrapper}>
                 <input
-                  type='tel'
-                  placeholder='+380 50 123 45 67'
+                  type="tel"
+                  placeholder={t(modalsKeys.getQuote.phonePlaceholder)}
                   value={formData.phone}
                   onChange={(e) => {
-                    handleInputChange('phone', e.target.value);
-                    if (phoneError) setPhoneError('');
+                    handleInputChange("phone", e.target.value);
+                    if (phoneError) setPhoneError("");
                   }}
                   onBlur={() => validatePhone(formData.phone)}
                   className={`${styles.input} ${
-                    phoneError ? styles.inputError : ''
+                    phoneError ? styles.inputError : ""
                   }`}
                 />
                 {phoneError && (
@@ -246,19 +253,19 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
           <div className={styles.consentWrapper}>
             <label className={styles.consentLabel}>
               <input
-                type='checkbox'
+                type="checkbox"
                 checked={formData.consent}
                 onChange={(e) => {
                   setFormData({ ...formData, consent: e.target.checked });
                   if (e.target.checked) {
-                    setConsentError('');
+                    setConsentError("");
                   }
                 }}
                 className={styles.checkbox}
               />
-              <span className={consentError ? styles.consentTextError : ''}>
-                {t(formKeys.consent.label)}{' '}
-                <Link href='/' className={styles.consentLink}>
+              <span className={consentError ? styles.consentTextError : ""}>
+                {t(formKeys.consent.label)}{" "}
+                <Link href="/" className={styles.consentLink}>
                   {t(formKeys.consent.link)}
                 </Link>
               </span>
@@ -269,8 +276,8 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           <div className={styles.buttonContainer}>
-            <button type='submit' className={styles.submitButton}>
-              Відправити
+            <button type="submit" className={styles.submitButton}>
+              {t(modalsKeys.getQuote.button)}
             </button>
           </div>
         </form>
@@ -279,8 +286,7 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
           <div className={styles.successModalOverlay}>
             <div className={styles.successModal}>
               <span className={styles.successModalText}>
-                Дякуємо за ваш запит! Ми зв&apos;яжемось з вами найближчим
-                часом!
+                <span>{t(modalsKeys.getQuote.success)}</span>
               </span>
             </div>
           </div>

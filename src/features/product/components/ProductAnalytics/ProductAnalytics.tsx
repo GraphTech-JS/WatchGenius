@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import Image from 'next/image';
-import { ProductAnalyticsProps } from '@/interfaces/product';
-import styles from './ProductAnalytics.module.css';
-import { useScreenWidth } from '@/hooks/useScreenWidth';
+import React, { useState } from "react";
+import Image from "next/image";
+import { ProductAnalyticsProps } from "@/interfaces/product";
+import styles from "./ProductAnalytics.module.css";
+import { useScreenWidth } from "@/hooks/useScreenWidth";
+import { t } from "@/i18n";
+import { productKeys } from "@/i18n/keys/product";
 
 import {
   MechanismIcon,
@@ -24,22 +26,22 @@ import {
   DugaIcon,
   PolygonIcon,
   EllipseIcon,
-} from '@/product-icons';
+} from "@/product-icons";
 
-import PriceChart from './components/PriceChart';
-import TrendGauge from './components/TrendGauge';
-import { BRAND_CONTENT } from '@/data/brands';
+import PriceChart from "./components/PriceChart";
+import TrendGauge from "./components/TrendGauge";
+import { BRAND_CONTENT } from "@/data/brands";
 
 const iconFor = (label: string) => {
   const l = label.toLowerCase();
-  if (l.includes('механізм')) return MechanismIcon;
-  if (l.includes('матеріал')) return MaterialIcon;
-  if (l.includes('стан')) return StanIcon;
-  if (l.includes('водостій')) return WaterIcon;
-  if (l.includes('рік')) return YearIcon;
-  if (l.includes('діаметр')) return DiameterIcon;
-  if (l.includes('ремінець')) return StrapIcon;
-  if (l.includes('хронограф')) return ChronographIcon;
+  if (l.includes("механізм")) return MechanismIcon;
+  if (l.includes("матеріал")) return MaterialIcon;
+  if (l.includes("стан")) return StanIcon;
+  if (l.includes("водостій")) return WaterIcon;
+  if (l.includes("рік")) return YearIcon;
+  if (l.includes("діаметр")) return DiameterIcon;
+  if (l.includes("ремінець")) return StrapIcon;
+  if (l.includes("хронограф")) return ChronographIcon;
   return MechanismIcon;
 };
 
@@ -51,7 +53,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   brand,
   isCompare = false,
 }) => {
-  const [activeChartPeriod, setActiveChartPeriod] = useState<'3M' | '1P'>('3M');
+  const [activeChartPeriod, setActiveChartPeriod] = useState<"3M" | "1P">("3M");
   const [isVolatilityHovered, setIsVolatilityHovered] = useState(false);
   const [isDemandHovered, setIsDemandHovered] = useState(false);
   const [isLiquidityHovered, setIsLiquidityHovered] = useState(false);
@@ -66,15 +68,15 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   const gaugeH = isDesktop ? 338 : 281;
 
   const tabs = [
-    { id: 'parameters', label: 'Параметри' },
-    { id: 'brand', label: 'Про бренд' },
-    { id: 'price', label: 'Аналітика ціни' },
-    { id: 'trend', label: 'Аналітика тренду' },
+    { id: "parameters", label: t(productKeys.analytics.tabs.parameters) },
+    { id: "brand", label: t(productKeys.analytics.tabs.brand) },
+    { id: "price", label: t(productKeys.analytics.tabs.price) },
+    { id: "trend", label: t(productKeys.analytics.tabs.trend) },
   ] as const;
 
   const visibleTabs =
     screenWidth && screenWidth < 1279
-      ? tabs.filter((t) => t.id !== 'parameters')
+      ? tabs.filter((t) => t.id !== "parameters")
       : tabs;
 
   return (
@@ -85,7 +87,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={`${styles.tabButton} ${
-              activeTab === tab.id ? styles.active : ''
+              activeTab === tab.id ? styles.active : ""
             }`}
           >
             {tab.label}
@@ -94,15 +96,13 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
       </div>
 
       <div className={styles.contentContainer}>
-        {activeTab === 'trend' && (
+        {activeTab === "trend" && (
           <div>
             <h3 className={styles.trendTitle}>{brand}</h3>
             <p
               className={`${styles.trendContent} text-[12px] font-normal text-black leading-relaxed `}
             >
-              Цей екран відображає аналітику тренду, щоб ви могли швидко оцінити
-              поточну ситуацію. Ви бачите загальний стан бренду, його попит
-              серед споживачів, ліквідність та динаміку росту бренду.
+              {t(productKeys.analytics.trend.description)}
             </p>
 
             <div className={styles.trendMetrics}>
@@ -112,7 +112,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   onMouseEnter={() => setIsDemandHovered(true)}
                   onMouseLeave={() => setIsDemandHovered(false)}
                 >
-                  Показник різниці ціни за обраний період.
+                  {t(productKeys.analytics.trend.tooltip.demand)}
                 </div>
               ) : (
                 <div
@@ -121,10 +121,17 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   onMouseLeave={() => setIsDemandHovered(false)}
                 >
                   <div className={styles.trendIcon}>
-                    <Image src={ZipIcon} alt='Попит' width={32} height={28} />
+                    <Image
+                      src={ZipIcon}
+                      alt={t(productKeys.analytics.trend.demand)}
+                      width={32}
+                      height={28}
+                    />
                   </div>
                   <div className={`${styles.trendContent} flex flex-col`}>
-                    <span className={styles.trendLabel}>Попит</span>
+                    <span className={styles.trendLabel}>
+                      {t(productKeys.analytics.trend.demand)}
+                    </span>
                     <span className={styles.trendValue}>
                       {analytics.demand}%
                     </span>
@@ -138,7 +145,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   onMouseEnter={() => setIsLiquidityHovered(true)}
                   onMouseLeave={() => setIsLiquidityHovered(false)}
                 >
-                  Швидкість обміну на гроші.
+                  {t(productKeys.analytics.trend.tooltip.liquidity)}
                 </div>
               ) : (
                 <div
@@ -149,13 +156,15 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   <div className={styles.trendIcon}>
                     <Image
                       src={TrendWaterIcon}
-                      alt='Ліквідність'
+                      alt={t(productKeys.analytics.trend.liquidity)}
                       width={36}
                       height={36}
                     />
                   </div>
                   <div className={`${styles.trendContent} flex flex-col`}>
-                    <span className={styles.trendLabel}>Ліквідність</span>
+                    <span className={styles.trendLabel}>
+                      {t(productKeys.analytics.trend.liquidity)}
+                    </span>
                     <span className={styles.trendValue}>
                       {analytics.liquidity}%
                     </span>
@@ -169,7 +178,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   onMouseEnter={() => setIsDynamicsHovered(true)}
                   onMouseLeave={() => setIsDynamicsHovered(false)}
                 >
-                  Зміни показників (спад або зростання)
+                  {t(productKeys.analytics.trend.tooltip.dynamics)}
                 </div>
               ) : (
                 <div
@@ -180,13 +189,15 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   <div className={styles.trendIcon}>
                     <Image
                       src={DinamicIcon}
-                      alt='Динаміка'
+                      alt={t(productKeys.analytics.trend.dynamics)}
                       width={30}
                       height={30}
                     />
                   </div>
                   <div className={`${styles.trendContent} flex flex-col`}>
-                    <span className={styles.trendLabel}>Динаміка</span>
+                    <span className={styles.trendLabel}>
+                      {t(productKeys.analytics.trend.dynamics)}
+                    </span>
                     <span className={styles.trendValue}>
                       +{analytics.dynamics}%
                     </span>
@@ -200,7 +211,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   onMouseEnter={() => setIsAdsHovered(true)}
                   onMouseLeave={() => setIsAdsHovered(false)}
                 >
-                  Середній денний обсяг продажів.
+                  {t(productKeys.analytics.trend.tooltip.ads)}
                 </div>
               ) : (
                 <div
@@ -209,10 +220,17 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   onMouseLeave={() => setIsAdsHovered(false)}
                 >
                   <div className={styles.trendIcon}>
-                    <Image src={AdsIcon} alt='ADS' width={30} height={30} />
+                    <Image
+                      src={AdsIcon}
+                      alt={t(productKeys.analytics.trend.ads)}
+                      width={30}
+                      height={30}
+                    />
                   </div>
                   <div className={`${styles.trendContent} flex flex-col`}>
-                    <span className={styles.trendLabel}>ADS</span>
+                    <span className={styles.trendLabel}>
+                      {t(productKeys.analytics.trend.ads)}
+                    </span>
                     <span className={styles.trendValue}>{analytics.ads}</span>
                   </div>
                 </div>
@@ -244,20 +262,20 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   fontFamily: "'Inter', sans-serif",
                   labelFontSizePx: 20,
                   labelFontWeight: 600,
-                  labelColor: '#000',
+                  labelColor: "#000",
 
                   valueFontSizePx: 24,
-                  valueColor: '#04694f',
+                  valueColor: "#04694f",
 
                   lastUpdatedFontSizePx: 12,
-                  lastUpdatedColor: 'rgba(0,0,0,0.6)',
+                  lastUpdatedColor: "rgba(0,0,0,0.6)",
                 }}
               />
             </div>
           </div>
         )}
 
-        {activeTab === 'parameters' && (
+        {activeTab === "parameters" && (
           <div>
             <div className={styles.parametersContainer}>
               <div className={styles.parametersGrid}>
@@ -282,14 +300,14 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
           </div>
         )}
 
-        {activeTab === 'brand' &&
+        {activeTab === "brand" &&
           (() => {
             const content = BRAND_CONTENT[brand] ?? BRAND_CONTENT.default;
             return (
               <div className={styles.brandContent}>
                 <div
                   className={`${styles.brandBackground} ${
-                    isCompare ? styles.brandBackgroundCompare : ''
+                    isCompare ? styles.brandBackgroundCompare : ""
                   }`}
                 >
                   <Image
@@ -312,7 +330,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
             );
           })()}
 
-        {activeTab === 'price' && (
+        {activeTab === "price" && (
           <div>
             <PriceChart
               period={activeChartPeriod}
@@ -329,13 +347,15 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   <div className={styles.priceMetricIcon}>
                     <Image
                       src={ZipIcon}
-                      alt='Волатильність'
+                      alt={t(productKeys.analytics.price.volatility)}
                       width={32}
                       height={28}
                     />
                   </div>
                   <div className={styles.priceMetricContent}>
-                    <div className={styles.priceMetricLabel}>Волатильність</div>
+                    <div className={styles.priceMetricLabel}>
+                      {t(productKeys.analytics.price.volatility)}
+                    </div>
                     <div className={styles.priceMetricValue}>
                       {analytics.volatility}
                     </div>
@@ -347,7 +367,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   onMouseEnter={() => setIsVolatilityHovered(true)}
                   onMouseLeave={() => setIsVolatilityHovered(false)}
                 >
-                  Показник різниці ціни за обраний період.
+                  {t(productKeys.analytics.trend.tooltip.demand)}
                 </div>
               )}
 
@@ -360,13 +380,15 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   <div className={styles.priceMetricIcon}>
                     <Image
                       src={FluentArrowGrowthIcon}
-                      alt='Ліквідність'
+                      alt={t(productKeys.analytics.price.liquidity)}
                       width={35}
                       height={35}
                     />
                   </div>
                   <div className={styles.priceMetricContent}>
-                    <div className={styles.priceMetricLabel}>Ліквідність</div>
+                    <div className={styles.priceMetricLabel}>
+                      {t(productKeys.analytics.price.liquidity)}
+                    </div>
                     <div className={styles.priceMetricValue}>
                       {analytics.liquidityLabel}
                     </div>
@@ -378,7 +400,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   onMouseEnter={() => setIsPriceLiquidityHovered(true)}
                   onMouseLeave={() => setIsPriceLiquidityHovered(false)}
                 >
-                  Швидкість обміну на гроші.
+                  {t(productKeys.analytics.trend.tooltip.liquidity)}
                 </div>
               )}
 
@@ -391,13 +413,15 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   <div className={styles.priceMetricIcon}>
                     <Image
                       src={StarIcon}
-                      alt='Популярність'
+                      alt={t(productKeys.analytics.price.popularity)}
                       width={30}
                       height={30}
                     />
                   </div>
                   <div className={styles.priceMetricContent}>
-                    <div className={styles.priceMetricLabel}>Популярність</div>
+                    <div className={styles.priceMetricLabel}>
+                      {t(productKeys.analytics.price.popularity)}
+                    </div>
                     <div className={styles.priceMetricValue}>
                       {analytics.popularity.toFixed(1)}/10
                     </div>
@@ -409,28 +433,36 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   onMouseEnter={() => setIsPopularityHovered(true)}
                   onMouseLeave={() => setIsPopularityHovered(false)}
                 >
-                  Рівень зацікавленості покупців.
+                  {t(productKeys.analytics.price.tooltip.popularity)}
                 </div>
               )}
             </div>
 
             <div className={styles.monthlyReport}>
-              <div className={styles.reportTitle}>Звіт за місяць</div>
+              <div className={styles.reportTitle}>
+                {t(productKeys.analytics.price.report.title)}
+              </div>
               <div className={styles.reportItems}>
                 <div className={styles.reportItem}>
-                  <span className={styles.reportItemLabel}>Пік:</span>
+                  <span className={styles.reportItemLabel}>
+                    {t(productKeys.analytics.price.report.peak)}
+                  </span>
                   <span className={styles.reportItemValue}>
-                    €{analytics.reportPeak.toLocaleString('uk-UA')}
+                    €{analytics.reportPeak.toLocaleString("uk-UA")}
                   </span>
                 </div>
                 <div className={styles.reportItem}>
-                  <span className={styles.reportItemLabel}>Мінімум:</span>
+                  <span className={styles.reportItemLabel}>
+                    {t(productKeys.analytics.price.report.min)}
+                  </span>
                   <span className={styles.reportItemValue}>
-                    €{analytics.reportMin.toLocaleString('uk-UA')}
+                    €{analytics.reportMin.toLocaleString("uk-UA")}
                   </span>
                 </div>
                 <div className={styles.reportItem}>
-                  <span className={styles.reportItemLabel}>Зміни:</span>
+                  <span className={styles.reportItemLabel}>
+                    {t(productKeys.analytics.price.report.change)}
+                  </span>
                   <span
                     className={`${styles.reportItemValue} ${
                       analytics.reportChangePct >= 0
@@ -438,7 +470,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                         : styles.reportItemValueRed
                     }`}
                   >
-                    {analytics.reportChangePct >= 0 ? '+' : ''}
+                    {analytics.reportChangePct >= 0 ? "+" : ""}
                     {Math.abs(analytics.reportChangePct * 100).toFixed(1)}%
                   </span>
                 </div>

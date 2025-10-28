@@ -1,10 +1,13 @@
-'use client';
+"use client";
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ClipLoader } from 'react-spinners';
-import { WatchCard } from '@/features/catalog/components/CatalogGrid/WatchCard/WatchCard';
-import { EmptyState } from '@/features/catalog/components/CatalogGrid/EmptyState/EmptyState';
-import type { WatchItem } from '@/interfaces';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { ClipLoader } from "react-spinners";
+import { WatchCard } from "@/features/catalog/components/CatalogGrid/WatchCard/WatchCard";
+import { EmptyState } from "@/features/catalog/components/CatalogGrid/EmptyState/EmptyState";
+import type { WatchItem } from "@/interfaces";
+import { t } from "@/i18n";
+import { catalogKeys } from "@/i18n/keys/catalog";
+
 type Props = {
   items: WatchItem[];
   initialCount?: number;
@@ -23,7 +26,7 @@ export const CatalogGrid: React.FC<Props> = ({
   const [showAll, setShowAll] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const suppressAutoRef = useRef(false); 
+  const suppressAutoRef = useRef(false);
   const [liked, setLiked] = useState<Set<string>>(new Set());
 
   const visible = useMemo(
@@ -64,7 +67,7 @@ export const CatalogGrid: React.FC<Props> = ({
           setIsLoading(false);
         }, 500);
       },
-      { root: null, rootMargin: '120px', threshold: 0.01 }
+      { root: null, rootMargin: "120px", threshold: 0.01 }
     );
     io.observe(el);
     return () => io.disconnect();
@@ -81,7 +84,7 @@ export const CatalogGrid: React.FC<Props> = ({
 
   return (
     <>
-      <div className='grid max-[375px]:gap-y-[17px] max-[375px]:gap-[17px] gap-[17px] gap-y-[25px] grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4'>
+      <div className="grid max-[375px]:gap-y-[17px] max-[375px]:gap-[17px] gap-[17px] gap-y-[25px] grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
         {visible.map((item) => (
           <WatchCard
             key={item.id}
@@ -94,7 +97,7 @@ export const CatalogGrid: React.FC<Props> = ({
       </div>
 
       {canToggle && (
-        <div className='flex justify-center mt-6'>
+        <div className="flex justify-center mt-6">
           <button
             onClick={() => {
               if (isLoading) return;
@@ -110,12 +113,16 @@ export const CatalogGrid: React.FC<Props> = ({
               }, 500);
             }}
             disabled={isLoading}
-            className='w-full text-center text-[20px] text-[#8b8b8b] underline cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2'
+            className="w-full text-center text-[20px] text-[#8b8b8b] underline cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
           >
             {isLoading ? (
-              <ClipLoader size={24} color={'#04694f'} speedMultiplier={0.9} />
+              <ClipLoader size={24} color={"#04694f"} speedMultiplier={0.9} />
             ) : (
-              <>{showAll ? 'Показати менше' : 'Показати ще'}</>
+              <>
+                {showAll
+                  ? t(catalogKeys.page.showLess)
+                  : t(catalogKeys.page.showMore)}
+              </>
             )}
           </button>
         </div>
