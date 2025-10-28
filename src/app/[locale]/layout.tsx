@@ -48,6 +48,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || 'https://watchgenius.com'
   ),
+  other: {
+    'dns-prefetch': 'https://fonts.gstatic.com',
+    preconnect: 'https://fonts.gstatic.com',
+  },
   openGraph: {
     type: 'website',
     locale: 'uk_UA',

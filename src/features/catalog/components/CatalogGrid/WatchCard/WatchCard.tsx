@@ -7,12 +7,15 @@ import { useLocale } from '@/hooks/useLocale';
 import { Heart, ArrowUp, ArrowDown } from 'lucide-react';
 import type { WatchItem } from '@/interfaces/watch';
 import styles from './WatchCard.module.css';
+import { t } from '@/i18n';
+import { a11yKeys } from '@/i18n/keys/accessibility';
 
 type Props = {
   item: WatchItem;
   liked: boolean;
   onToggleLike: (id: string) => void;
   onOpenFeedback?: (watchTitle: string) => void;
+  priority?: boolean;
 };
 
 const indexBadgeClass = (idx: WatchItem['index']) => {
@@ -31,6 +34,7 @@ export const WatchCard: React.FC<Props> = ({
   liked,
   onToggleLike,
   onOpenFeedback,
+  priority = false,
 }) => {
   const router = useRouter();
   const locale = useLocale();
@@ -64,7 +68,9 @@ export const WatchCard: React.FC<Props> = ({
         </span>
 
         <button
-          aria-label={liked ? 'Прибрати з обраного' : 'Додати в обране'}
+          aria-label={
+            liked ? t(a11yKeys.favorites.remove) : t(a11yKeys.favorites.add)
+          }
           onClick={(e) => {
             e.stopPropagation();
             onToggleLike(item.id);
@@ -88,7 +94,8 @@ export const WatchCard: React.FC<Props> = ({
           style={{
             padding: item.variant === 'brand' ? '0 20px 0 20px' : '0',
           }}
-          priority={false}
+          priority={priority}
+          fetchPriority={priority ? 'high' : undefined}
         />
       </div>
 

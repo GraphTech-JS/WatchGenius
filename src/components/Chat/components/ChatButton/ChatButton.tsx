@@ -1,6 +1,8 @@
-import React from "react";
-import { RobotWhiteIcon } from "../../../../../public/chat/Icon";
-import styles from "./ChatButton.module.css";
+import React from 'react';
+import { RobotWhiteIcon } from '../../../../../public/chat/Icon';
+import styles from './ChatButton.module.css';
+import { t } from '@/i18n';
+import { a11yKeys } from '@/i18n/keys/accessibility';
 
 interface IChatButton {
   onClick: () => void;
@@ -15,12 +17,14 @@ export const ChatButton: React.FC<IChatButton> = ({
 }) => (
   <>
     <button
-      type="button"
-      aria-label="Open chat"
+      type='button'
+      aria-label={t(a11yKeys.ai.chat)}
       onClick={onClick}
       style={{
         // Respect dynamic bottom plus mobile safe area inset
-        bottom: `calc(${dynamicPosition?.bottom || "20%"} + env(safe-area-inset-bottom))`,
+        bottom: `calc(${
+          dynamicPosition?.bottom || '20%'
+        } + env(safe-area-inset-bottom))`,
       }}
       className={`
         fixed
@@ -32,8 +36,8 @@ export const ChatButton: React.FC<IChatButton> = ({
         z-[120]
         ${
           isScrolling
-            ? "transition-none"
-            : "transition-all duration-500 ease-out"
+            ? 'transition-none'
+            : 'transition-all duration-500 ease-out'
         }
         ${styles.chatButton}
         ${styles.chatButtonEnter}
@@ -45,6 +49,7 @@ export const ChatButton: React.FC<IChatButton> = ({
     >
       <RobotWhiteIcon
         className={`${styles.chatButtonIcon} w-9 h-9 md:w-10 md:h-10 md:text-white `}
+        aria-hidden='true'
       />
     </button>
   </>
