@@ -105,17 +105,33 @@ export default async function RootLayout({
   //   .default;
 
   return (
-    <body className={`${roboto.variable} ${inter.variable} ${akatab.variable}`}>
-      <OrganizationJsonLd />
-      <WebSiteJsonLd />
-      <BackdropDistortionDefs />
-      <MainContextProvider>
-        <CompareProvider>
-          {/* <NextIntlClientProvider locale={locale} messages={messages}> */}
-          <main>{children}</main>
-          {/* </NextIntlClientProvider> */}
-        </CompareProvider>
-      </MainContextProvider>
-    </body>
+    <>
+      <head>
+        <link
+          rel='preconnect'
+          href='https://fonts.googleapis.com'
+          crossOrigin='anonymous'
+        />
+        <link
+          rel='preconnect'
+          href='https://fonts.gstatic.com'
+          crossOrigin='anonymous'
+        />
+      </head>
+      <body
+        className={`${roboto.variable} ${inter.variable} ${akatab.variable}`}
+      >
+        <OrganizationJsonLd />
+        <WebSiteJsonLd />
+        <BackdropDistortionDefs />
+        <MainContextProvider>
+          <CompareProvider>
+            {/* <NextIntlClientProvider locale={locale} messages={messages}> */}
+            <main>{children}</main>
+            {/* </NextIntlClientProvider> */}
+          </CompareProvider>
+        </MainContextProvider>
+      </body>
+    </>
   );
 }

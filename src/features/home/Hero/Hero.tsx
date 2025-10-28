@@ -27,8 +27,10 @@ export const Hero = () => {
           fill
           priority
           fetchPriority='high'
-          quality={90}
+          quality={85}
           sizes='100vw'
+          placeholder='blur'
+          blurDataURL='data:image/webp;base64,UklGRjQAAABXRUJQVlA4ICgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA='
           className={styles.heroBgImage}
           role='presentation'
         />

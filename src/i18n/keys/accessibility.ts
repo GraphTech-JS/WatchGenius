@@ -82,5 +82,11 @@ export const a11yKeys = {
     checkAuthenticity: 'accessibility.chat.checkAuthenticity',
     messages: 'accessibility.chat.messages',
   },
+  filter: {
+    priceFrom: 'accessibility.filter.priceFrom',
+    priceTo: 'accessibility.filter.priceTo',
+    yearFrom: 'accessibility.filter.yearFrom',
+    yearTo: 'accessibility.filter.yearTo',
+  },
 };
 

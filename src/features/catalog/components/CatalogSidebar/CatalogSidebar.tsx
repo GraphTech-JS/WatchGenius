@@ -39,11 +39,11 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
         width: `${widthPx}px`,
       }}
     >
-      <h3
+      <h2
         className={`${styles.sidebarTitle} text-[16px] font-medium  pb-1 text-[var(--text-dark)] mb-6`}
       >
         {title}
-      </h3>
+      </h2>
 
       <div className='relative mb-6'>
         <label htmlFor='sidebar-brand-search' className='sr-only'>

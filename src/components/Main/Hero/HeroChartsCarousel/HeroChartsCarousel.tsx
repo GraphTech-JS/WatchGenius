@@ -46,6 +46,7 @@ export const HeroChartsCarousel = () => {
   const [isTablet, setIsTablet] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const swipeRef = useRef<HTMLDivElement | null>(null);
+  const rafId = useRef<number | null>(null);
 
   useEffect(() => {
     const checkSize = () => {
@@ -110,24 +111,29 @@ export const HeroChartsCarousel = () => {
     };
 
     const onScroll = () => {
-      if (isTablet) {
-        const chartWidth = 350 + 16;
-        const scroll = el.scrollLeft;
-        const maxScroll = el.scrollWidth - el.clientWidth;
-        const zone1End = chartWidth * 0.7;
-        const zone2End = maxScroll - chartWidth * 0.7;
+      if (!rafId.current) {
+        rafId.current = requestAnimationFrame(() => {
+          rafId.current = null;
+          if (isTablet) {
+            const chartWidth = 350 + 16;
+            const scroll = el.scrollLeft;
+            const maxScroll = el.scrollWidth - el.clientWidth;
+            const zone1End = chartWidth * 0.7;
+            const zone2End = maxScroll - chartWidth * 0.7;
 
-        if (scroll < zone1End) {
-          setActiveIndex(0);
-        } else if (scroll < zone2End) {
-          setActiveIndex(1);
-        } else {
-          setActiveIndex(2);
-        }
-      } else {
-        const vw = el.clientWidth;
-        const idx = Math.round(el.scrollLeft / vw);
-        if (idx !== activeIndex) setActiveIndex(idx);
+            if (scroll < zone1End) {
+              setActiveIndex(0);
+            } else if (scroll < zone2End) {
+              setActiveIndex(1);
+            } else {
+              setActiveIndex(2);
+            }
+          } else {
+            const vw = el.clientWidth;
+            const idx = Math.round(el.scrollLeft / vw);
+            if (idx !== activeIndex) setActiveIndex(idx);
+          }
+        });
       }
     };
 
@@ -143,6 +149,7 @@ export const HeroChartsCarousel = () => {
       el.removeEventListener('pointerup', onUp);
       el.removeEventListener('pointercancel', onUp);
       el.removeEventListener('scroll', onScroll);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
     };
   }, [isDesktop, isTablet, activeIndex]);
 
@@ -217,7 +224,7 @@ export const HeroChartsCarousel = () => {
             ))}
           </div>
         </div>
-        <div className='flex justify-center gap-2 mt-3'>
+        <div className='flex gap-2 justify-center mt-3'>
           {tabletDots.map((dotIndex) => (
             <button
               key={dotIndex}
@@ -245,7 +252,7 @@ export const HeroChartsCarousel = () => {
             {charts.map((chart) => (
               <div
                 key={`mobile-${chart.id}`}
-                className='snap-start shrink-0 flex justify-center'
+                className='flex justify-center snap-start shrink-0'
                 style={{ flex: '0 0 100%', maxWidth: '100%' }}
               >
                 <div
