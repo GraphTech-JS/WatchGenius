@@ -95,7 +95,11 @@ const PriceChart: React.FC<PriceChartProps> = ({ period, onPeriodChange }) => {
     tooltip: TooltipModel<'line'>;
   }) => {
     const { chart, tooltip } = context;
-    let tooltipEl = chart.canvas.parentNode?.querySelector(
+
+    const containerElement = chart.canvas.parentNode as HTMLElement;
+    if (!containerElement) return;
+
+    let tooltipEl = containerElement.querySelector(
       'div[data-tooltip-id]'
     ) as HTMLElement;
 
@@ -103,26 +107,62 @@ const PriceChart: React.FC<PriceChartProps> = ({ period, onPeriodChange }) => {
       tooltipEl = document.createElement('div');
       tooltipEl.setAttribute('data-tooltip-id', 'chartjs-tooltip');
       tooltipEl.className = styles.tooltip;
-      chart.canvas.parentNode?.appendChild(tooltipEl);
+      containerElement.appendChild(tooltipEl);
     }
 
     if (tooltip.opacity === 0) {
       tooltipEl.style.opacity = '0';
+      tooltipEl.style.visibility = 'hidden';
       return;
     }
+
     const title = tooltip.title || [];
     const body = tooltip.body.map((b: { lines: string[] }) => b.lines);
-
     tooltipEl.innerHTML = `
       <div class="${styles.tooltipDate}">${title[0]}</div>
       <div class="${styles.tooltipPrice}">${body[0][0]}</div>
     `;
 
-    const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
+    const activeElement = tooltip.dataPoints?.[0];
+    if (!activeElement) {
+      tooltipEl.style.opacity = '0';
+      tooltipEl.style.visibility = 'hidden';
+      return;
+    }
 
+    const pointX = activeElement.element.x;
+
+    const chartArea = chart.chartArea;
+    const chartWidth = chartArea.right - chartArea.left;
+    const pointXInChartArea = pointX - chartArea.left;
+    const isRightEdge = pointXInChartArea > chartWidth * 0.7;
+
+    const tooltipWidth = 122;
+    const margin = 15;
+    const containerWidth = containerElement.offsetWidth;
+
+    const tooltipRightEdge = pointX + tooltipWidth + margin;
+    const wouldOverflowRight = tooltipRightEdge > containerWidth - 20;
+    const tooltipLeftEdge = pointX - tooltipWidth - margin;
+    const wouldOverflowLeft = tooltipLeftEdge < 10;
+
+    tooltipEl.style.position = 'absolute';
+    tooltipEl.style.pointerEvents = 'none';
+    tooltipEl.style.zIndex = '9999';
+    tooltipEl.style.margin = '0';
+    tooltipEl.style.padding = '0';
     tooltipEl.style.opacity = '1';
-    tooltipEl.style.left = positionX + tooltip.caretX + 15 + 'px';
-    tooltipEl.style.top = positionY + tooltip.caretY + 20 + 'px';
+    tooltipEl.style.visibility = 'visible';
+
+    if (isRightEdge || wouldOverflowRight) {
+      tooltipEl.style.left = wouldOverflowLeft
+        ? '10px'
+        : tooltipLeftEdge + 'px';
+    } else {
+      tooltipEl.style.left = pointX + margin + 'px';
+    }
+
+    tooltipEl.style.top = '171px';
   };
 
   const options: ChartOptions<'line'> = {
