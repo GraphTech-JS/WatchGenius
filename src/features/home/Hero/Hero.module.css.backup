@@ -12,7 +12,6 @@
 }
 
 
-
 @media (min-width: 40rem /* 640px */) {
   .heroBgImage {
     object-position: 65% 50%; 
@@ -165,3 +164,4 @@
     font-size: 48px;
   }
 }
+
