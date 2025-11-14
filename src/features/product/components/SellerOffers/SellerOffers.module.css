@@ -1,6 +1,8 @@
 .filterDropdown {
   position: relative;
   width: 211px;
+  max-width: 100%;
+  flex-shrink: 0;
 }
 
 .filterDropdownButton {
@@ -224,13 +226,13 @@
   
   .safetyBlock {
     padding: 16px 25px 16px 10px;
-    width: 350px;
     height: 109px;
     font-size: 16px;
   }
   
   .filterDropdown {
     width: 235px;
+    max-width: calc(100% - 20px);
   }
   
   .starIcon {
