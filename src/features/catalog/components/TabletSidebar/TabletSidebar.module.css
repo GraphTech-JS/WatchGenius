@@ -16,7 +16,7 @@
   pointer-events: auto;
   border-radius: 20px;
   margin-left: 16px;
-  z-index: 2;
+  z-index: 12 !important;
 }
 
 .handle {
@@ -31,7 +31,7 @@
   cursor: grab;
   touch-action: none;
   pointer-events: auto;
-  z-index: 12;
+  z-index: 12 !important;
   border-right: 1px solid rgba(0, 0, 0, 0.1);
 }
 
