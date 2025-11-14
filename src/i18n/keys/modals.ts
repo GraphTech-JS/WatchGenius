@@ -1,0 +1,48 @@
+export const modalsKeys = {
+  comparison: {
+    added: "modals.comparison.added",
+    removed: "modals.comparison.removed",
+  },
+  priceAlert: {
+    title: "modals.priceAlert.title",
+    modelLabel: "modals.priceAlert.modelLabel",
+    priceLabel: "modals.priceAlert.priceLabel",
+    emailLabel: "modals.priceAlert.emailLabel",
+    currency: "modals.priceAlert.currency",
+    placeholderPrice: "modals.priceAlert.placeholderPrice",
+    placeholderEmail: "modals.priceAlert.placeholderEmail",
+    consentText: "modals.priceAlert.consentText",
+    consentLink: "modals.priceAlert.consentLink",
+    consentError: "modals.priceAlert.consentError",
+    button: "modals.priceAlert.button",
+    success: "modals.priceAlert.success",
+  },
+  getQuote: {
+    title: "modals.getQuote.title",
+    nameLabel: "modals.getQuote.nameLabel",
+    namePlaceholder: "modals.getQuote.namePlaceholder",
+    emailLabel: "modals.getQuote.emailLabel",
+    emailPlaceholder: "modals.getQuote.emailPlaceholder",
+    phoneLabel: "modals.getQuote.phoneLabel",
+    phonePlaceholder: "modals.getQuote.phonePlaceholder",
+    button: "modals.getQuote.button",
+    success: "modals.getQuote.success",
+    errors: {
+      nameRequired: "modals.getQuote.errors.nameRequired",
+      emailRequired: "modals.getQuote.errors.emailRequired",
+      emailInvalid: "modals.getQuote.errors.emailInvalid",
+      phoneRequired: "modals.getQuote.errors.phoneRequired",
+      phoneInvalid: "modals.getQuote.errors.phoneInvalid",
+    },
+  },
+  feedback: {
+    title: "modals.feedback.title",
+    success: "modals.feedback.success",
+    errors: {
+      nameRequired: "modals.feedback.errors.nameRequired",
+      emailRequired: "modals.feedback.errors.emailRequired",
+      emailInvalid: "modals.feedback.errors.emailInvalid",
+      messageRequired: "modals.feedback.errors.messageRequired",
+    },
+  },
+};

@@ -12,14 +12,15 @@ import {
   BellIcon,
   CopyIcon,
   ShareIcon,
-} from '@/product-icons';
-import HeartIcon from '/public/icons/Heart.svg';
-import styles from './ProductHero.module.css';
-import { ComparisonModal } from '../../index';
-import { PriceAlertModal, GetQuoteModal } from '../ProductModals';
-import { FeedbackModal } from '@/components/FeedbackModal/FeedbackModal';
-import { useScreenWidth } from '@/hooks/useScreenWidth';
-import { useLocale } from '@/hooks/useLocale';
+} from "@/product-icons";
+import HeartIcon from "/public/icons/Heart.svg";
+import styles from "./ProductHero.module.css";
+import { ComparisonModal } from "../../index";
+import { PriceAlertModal, GetQuoteModal } from "../ProductModals";
+import { FeedbackModal } from "@/components/FeedbackModal/FeedbackModal";
+import { useScreenWidth } from "@/hooks/useScreenWidth";
+import { useLocale } from "@/hooks/useLocale";
+import { productKeys } from "@/i18n/keys/product";
 
 const mainButtonTextStyle = {
   background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
@@ -172,9 +173,9 @@ const ProductHero: React.FC<ProductHeroProps> = ({
                     </span>
                   </div>
                   <div className={styles.indexTooltip}>
-                    {productIndex === 'A' && 'Топ-сегмент'}
-                    {productIndex === 'B' && 'Середній сегмент'}
-                    {productIndex === 'C' && 'Базовий сегмент'}
+                    {productIndex === "A" && t(productKeys.index.A)}
+                    {productIndex === "B" && t(productKeys.index.B)}
+                    {productIndex === "C" && t(productKeys.index.C)}
                   </div>
                 </div>
               </div>
@@ -287,7 +288,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
               className='font-inter text-[15px] font-normal text-[#05873b]'
               style={{ fontWeight: 400, fontSize: '15px', color: '#05873b' }}
             >
-              за 30 днів
+              {t(productKeys.hero.trendDays)}
             </span>
           </div>
         </div>
@@ -305,7 +306,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             >
               <Image
                 src={HeartIcon}
-                alt=''
+                alt={t(productKeys.hero.save)}
                 width={24}
                 height={24}
                 className={`${styles.actionButtonIcon} ${
@@ -318,7 +319,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
                   isSaved ? styles.savedText : ''
                 }`}
               >
-                {isSaved ? 'Збережено' : 'Зберегти'}
+                {isSaved ? t(productKeys.hero.saved) : t(productKeys.hero.save)}
               </span>
             </button>
           </div>
@@ -331,14 +332,14 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             >
               <Image
                 src={BellIcon}
-                alt=''
+                alt={t(productKeys.hero.priceAlert)}
                 width={24}
                 height={24}
                 className={styles.actionButtonIcon}
                 aria-hidden='true'
               />
               <span className={styles.actionButtonText}>
-                Сповіщення про ціну
+                {t(productKeys.hero.priceAlert)}
               </span>
             </button>
           </div>
@@ -413,7 +414,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
                 >
                   <Image
                     src={ScalesIcon}
-                    alt=''
+                    alt={t(productKeys.hero.compare)}
                     width={24}
                     height={24}
                     className={`${styles.actionButtonIcon} ${
@@ -426,7 +427,9 @@ const ProductHero: React.FC<ProductHeroProps> = ({
                       isInComparison ? styles.addedToCompareText : ''
                     }`}
                   >
-                    {isInComparison ? 'Прибрати з порівняння' : 'Порівняти'}
+                    {isInComparison
+                      ? t(productKeys.hero.removeCompare)
+                      : t(productKeys.hero.compare)}
                   </span>
                 </button>
               </div>
@@ -439,13 +442,15 @@ const ProductHero: React.FC<ProductHeroProps> = ({
                 >
                   <Image
                     src={LinkIcon}
-                    alt=''
+                    alt={t(productKeys.hero.share)}
                     width={24}
                     height={24}
                     className={styles.actionButtonIcon}
                     aria-hidden='true'
                   />
-                  <span className={styles.actionButtonText}>Поширити</span>
+                  <span className={styles.actionButtonText}>
+                    {t(productKeys.hero.share)}
+                  </span>
                 </button>
               </div>
             </>
@@ -461,16 +466,14 @@ const ProductHero: React.FC<ProductHeroProps> = ({
               className='font-inter text-[16px] font-bold'
               style={mainButtonTextStyle}
             >
-              Купити в Chrono24
+              {t(productKeys.hero.buy)}
             </span>
           </button>
 
-          <button
-            onClick={handleGetQuote}
-            className={styles.secondaryButton}
-            aria-label={t(a11yKeys.product.getQuote)}
-          >
-            <span className={styles.secondaryButtonText}>Get Quote</span>
+          <button onClick={handleGetQuote} className={styles.secondaryButton} aria-label={t(a11yKeys.product.getQuote)}>
+            <span className={styles.secondaryButtonText}>
+              {t(productKeys.hero.getQuote)}
+            </span>
           </button>
         </div>
       </div>

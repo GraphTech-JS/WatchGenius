@@ -1,8 +1,9 @@
-'use client';
-import React, { useEffect, useRef, useState, useId, useMemo } from 'react';
-import { ChevronDown } from 'lucide-react';
-import styles from './SortDropdown.module.css';
-import { SortOption } from '@/types/sorting';
+"use client";
+import React, { useEffect, useRef, useState, useId, useMemo } from "react";
+import { ChevronDown } from "lucide-react";
+import styles from "./SortDropdown.module.css";
+import { SortOption } from "@/types/sorting";
+import { sortLabels } from "@/i18n/mappers/sortLabels";
 
 interface SortDropdownProps {
   value?: SortOption;
@@ -43,14 +44,14 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
       }
     };
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsOpen(false);
+      if (e.key === "Escape") setIsOpen(false);
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEsc);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEsc);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEsc);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEsc);
     };
   }, []);
 
@@ -61,12 +62,12 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
 
   return (
     <div
-      className='relative w-full md:w-[194px] lg:w-[252px]'
+      className="relative w-full md:w-[194px] lg:w-[252px]"
       ref={dropdownRef}
     >
       <button
-        type='button'
-        aria-haspopup='listbox'
+        type="button"
+        aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-controls={listId}
         onClick={() => setIsOpen((o) => !o)}
@@ -78,10 +79,10 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
                     py-[11px] 
                     font-medium text-[#000] flex items-center cursor-pointer 
                     ${styles.sortDropdownButton} 
-                    ${isOpen ? 'rounded-b-none border-b-0' : ''}`}
+                    ${isOpen ? "rounded-b-none border-b-0" : ""}`}
       >
-        <span className='truncate text-[16px] md:text-[14px] lg:text-[16px]'>
-          {value}
+        <span className="truncate text-[16px] md:text-[14px] lg:text-[16px]">
+          {sortLabels[value]}
         </span>
         <ChevronDown
           size={26}
@@ -91,30 +92,30 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
                       transition-all duration-300 ease-in-out 
                       ${
                         isOpen
-                          ? 'rotate-180 text-black'
-                          : 'rotate-0 text-[#8b8b8b]'
+                          ? "rotate-180 text-black"
+                          : "rotate-0 text-[#8b8b8b]"
                       }`}
         />
       </button>
 
       <div
         id={listId}
-        role='listbox'
+        role="listbox"
         className={`absolute top-full left-0 right-0 z-50 bg-white
                     ${styles.dropdownList} rounded-b-[15px] overflow-hidden
                     divide-y divide-[var(--text-dark)]
                     transform origin-top transition-all duration-150 cursor-pointer
                     ${
                       isOpen
-                        ? 'opacity-100 scale-y-100 translate-y-0 visible pointer-events-auto'
-                        : 'opacity-0 scale-y-95 -translate-y-1 invisible pointer-events-none'
+                        ? "opacity-100 scale-y-100 translate-y-0 visible pointer-events-auto"
+                        : "opacity-0 scale-y-95 -translate-y-1 invisible pointer-events-none"
                     }`}
       >
         {optionsToRender.map((option) => (
           <button
             key={option}
-            type='button'
-            role='option'
+            type="button"
+            role="option"
             aria-selected={option === value}
             onClick={() => handleOptionClick(option)}
             className={`w-full text-left 
@@ -125,7 +126,7 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
                         transition-colors cursor-pointer
                         ${styles.sortDropdownButton}`}
           >
-            {option}
+            {sortLabels[option]}
           </button>
         ))}
       </div>

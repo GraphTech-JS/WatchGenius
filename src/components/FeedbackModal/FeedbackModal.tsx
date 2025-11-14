@@ -1,9 +1,10 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { FeedbackModalProps, FeedbackFormData } from '@/types/feedback';
-import { FeedbackForm } from '@/components/FeedbackForm/FeedbackForm';
-import { t } from '@/i18n';
-import { formKeys } from '@/i18n/keys/common';
-import styles from './FeedbackModal.module.css';
+import React, { useEffect, useCallback, useState } from "react";
+import { FeedbackModalProps, FeedbackFormData } from "@/types/feedback";
+import { FeedbackForm } from "@/components/FeedbackForm/FeedbackForm";
+import { t } from "@/i18n";
+import { formKeys } from "@/i18n/keys/common";
+import { modalsKeys } from "@/i18n/keys/modals";
+import styles from "./FeedbackModal.module.css";
 
 export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   isOpen,
@@ -11,47 +12,47 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   watchTitle,
 }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
     consent: false,
   });
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [nameError, setNameError] = useState('');
-  const [emailError, setEmailError] = useState('');
-  const [messageError, setMessageError] = useState('');
-  const [consentError, setConsentError] = useState('');
+  const [nameError, setNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [messageError, setMessageError] = useState("");
+  const [consentError, setConsentError] = useState("");
 
   const validateName = (value: string): boolean => {
     if (!value.trim()) {
-      setNameError("Ім'я обов'язкове");
+      setNameError(t(modalsKeys.feedback.errors.nameRequired));
       return false;
     }
-    setNameError('');
+    setNameError("");
     return true;
   };
 
   const validateEmail = (value: string): boolean => {
     if (!value) {
-      setEmailError("Email обов'язковий");
+      setEmailError(t(modalsKeys.feedback.errors.emailRequired));
       return false;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) {
-      setEmailError('Введіть коректний email');
+      setEmailError(t(modalsKeys.feedback.errors.emailInvalid));
       return false;
     }
-    setEmailError('');
+    setEmailError("");
     return true;
   };
 
   const validateMessage = (value: string): boolean => {
     if (!value.trim()) {
-      setMessageError("Повідомлення обов'язкове");
+      setMessageError(t(modalsKeys.feedback.errors.messageRequired));
       return false;
     }
-    setMessageError('');
+    setMessageError("");
     return true;
   };
 
@@ -60,17 +61,17 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
       setConsentError(t(formKeys.consent.error));
       return false;
     }
-    setConsentError('');
+    setConsentError("");
     return true;
   };
 
   useEffect(() => {
     if (isOpen) {
-      setFormData({ name: '', email: '', message: '', consent: false });
-      setNameError('');
-      setEmailError('');
-      setMessageError('');
-      setConsentError('');
+      setFormData({ name: "", email: "", message: "", consent: false });
+      setNameError("");
+      setEmailError("");
+      setMessageError("");
+      setConsentError("");
       setShowSuccessModal(false);
     }
   }, [isOpen]);
@@ -87,19 +88,19 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
+      if (e.key === "Escape" && isOpen) {
         handleClose();
       }
     };
 
     if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
     }
 
     return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
     };
   }, [isOpen, handleClose]);
 
@@ -124,35 +125,35 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
     }
 
     try {
-      console.log('Відправка форми:', formData);
+      console.log("Відправка форми:", formData);
 
       setShowSuccessModal(true);
 
       setTimeout(() => {
         setShowSuccessModal(false);
         handleClose();
-        setFormData({ name: '', email: '', message: '', consent: false });
-        setNameError('');
-        setEmailError('');
-        setMessageError('');
-        setConsentError('');
+        setFormData({ name: "", email: "", message: "", consent: false });
+        setNameError("");
+        setEmailError("");
+        setMessageError("");
+        setConsentError("");
       }, 3000);
     } catch (error) {
-      console.error('Помилка відправки форми:', error);
+      console.error("Помилка відправки форми:", error);
     }
   };
 
-  const handleClearError = (field: keyof FeedbackFormData | 'consent') => {
-    if (field === 'name') setNameError('');
-    if (field === 'email') setEmailError('');
-    if (field === 'message') setMessageError('');
-    if (field === 'consent') setConsentError('');
+  const handleClearError = (field: keyof FeedbackFormData | "consent") => {
+    if (field === "name") setNameError("");
+    if (field === "email") setEmailError("");
+    if (field === "message") setMessageError("");
+    if (field === "consent") setConsentError("");
   };
 
   const handleBlur = (field: keyof FeedbackFormData) => {
-    if (field === 'name') validateName(formData.name);
-    if (field === 'email') validateEmail(formData.email);
-    if (field === 'message') validateMessage(formData.message);
+    if (field === "name") validateName(formData.name);
+    if (field === "email") validateEmail(formData.email);
+    if (field === "message") validateMessage(formData.message);
   };
 
   if (!isOpen) return null;
@@ -163,7 +164,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
         <button
           className={styles.closeButton}
           onClick={handleClose}
-          aria-label='Закрити модальне вікно'
+          aria-label="Закрити модальне вікно"
         >
           ×
         </button>
@@ -187,8 +188,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
           <div className={styles.successModalOverlay}>
             <div className={styles.successModal}>
               <span className={styles.successModalText}>
-                Дякуємо за ваше повідомлення! Ми зв&apos;яжемось з вами
-                найближчим часом!
+                {t(modalsKeys.feedback.success)}
               </span>
             </div>
           </div>

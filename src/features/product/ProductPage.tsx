@@ -7,9 +7,11 @@ import {
   ProductAnalytics,
   SimilarModels,
   SellerOffers,
-} from './index';
-import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
-import styles from '@/app/[locale]/product/[slug]/page.module.css';
+} from "./index";
+import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
+import styles from "@/app/[locale]/product/[slug]/page.module.css";
+import { t } from "@/i18n";
+import { productKeys } from "@/i18n/keys/product";
 
 interface ProductPageProps {
   product: Product;
@@ -21,10 +23,10 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
   >('trend');
 
   const breadcrumbItems = [
-    { label: 'Каталог', href: '/catalog' },
+    { label: t(productKeys.breadcrumbs.catalog), href: "/catalog" },
     { label: product.brand, href: `/catalog?brand=${product.brand}` },
-    { label: 'Submariner', href: `/catalog?model=Submariner` },
-    { label: 'Модель' },
+    { label: "Submariner", href: `/catalog?model=Submariner` },
+    { label: t(productKeys.breadcrumbs.model) },
   ];
   const handleSave = () => {
     console.log('Зберегти продукт');
@@ -73,7 +75,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
   return (
     <main className='bg-white pt-[27px] pb-[60px] xl:pb-[90px] min-h-screen mx-auto mt-[80px]'>
       <div className={styles.productPage}>
-        <div className='hidden sm:block'>
+        <div className="hidden sm:block">
           <Breadcrumbs items={breadcrumbItems} />
         </div>
 

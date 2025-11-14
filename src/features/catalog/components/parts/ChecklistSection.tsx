@@ -4,6 +4,7 @@ import React from "react";
 import { FilterCheckbox } from "@/components/FilterCheckbox/FilterCheckbox";
 import { t } from "@/i18n";
 import { catalogKeys } from "@/i18n/keys/catalog";
+import { filterData } from "@/mock/filterData";
 
 interface ShowAllConfig {
   initialCount: number;
@@ -31,16 +32,34 @@ export const ChecklistSection: React.FC<Props> = ({
       : options.slice(0, showAllConfig.initialCount)
     : options;
 
+  const getTranslationNamespace = (opt: string): string | null => {
+    if (filterData.conditions.includes(opt))
+      return catalogKeys.filterData.conditions;
+    if (filterData.mechanisms.includes(opt))
+      return catalogKeys.filterData.mechanisms;
+    if (filterData.materials.includes(opt))
+      return catalogKeys.filterData.materials;
+    if (filterData.documents.includes(opt))
+      return catalogKeys.filterData.documents;
+    if (filterData.locations.includes(opt))
+      return catalogKeys.filterData.locations;
+    return null;
+  };
   return (
     <div className="space-y-3">
-      {list.map((opt) => (
-        <FilterCheckbox
-          key={opt}
-          label={opt}
-          checked={selected.includes(opt)}
-          onChange={() => onToggle(opt)}
-        />
-      ))}
+      {list.map((opt) => {
+        const ns = getTranslationNamespace(opt);
+        const label = ns ? t(`${ns}.${opt}`) : opt;
+
+        return (
+          <FilterCheckbox
+            key={opt}
+            label={label}
+            checked={selected.includes(opt)}
+            onChange={() => onToggle(opt)}
+          />
+        );
+      })}
 
       {showAllConfig && (
         <button

@@ -1,9 +1,10 @@
-'use client';
-import React from 'react';
-import styles from './CatalogSearch.module.css';
-import Image from 'next/image';
-import { CatalogSearchIcon } from '../../../../../public/catalogPage';
-import { t } from '@/i18n';
+"use client";
+import React from "react";
+import styles from "./CatalogSearch.module.css";
+import Image from "next/image";
+import { CatalogSearchIcon } from "../../../../../public/catalogPage";
+import { t } from "@/i18n";
+import { catalogKeys } from "@/i18n/keys/catalog";
 import { a11yKeys } from '@/i18n/keys/accessibility';
 
 interface CatalogSearchProps {
@@ -15,7 +16,7 @@ interface CatalogSearchProps {
 export const CatalogSearch: React.FC<CatalogSearchProps> = ({
   value,
   onChange,
-  placeholder = 'Пошук бренду, моделі або референсу...',
+  placeholder = t(catalogKeys.controls.searchPlaceholder),
 }) => {
   return (
     <div className='relative w-full'>
@@ -34,7 +35,7 @@ export const CatalogSearch: React.FC<CatalogSearchProps> = ({
       <div className={styles.iconWrapper} aria-hidden='true'>
         <Image
           src={CatalogSearchIcon}
-          alt=''
+          alt="CatalogSearchIcon"
           width={20}
           height={20}
           className={styles.icon}
