@@ -6,7 +6,6 @@ import {
   GetWatchesParams,
 } from '@/interfaces/api';
 
-const API_URL = '';
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
