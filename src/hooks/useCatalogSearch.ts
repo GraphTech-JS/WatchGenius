@@ -6,6 +6,8 @@ import { SortOption } from '@/types/sorting';
 import { applySorting } from '@/utils/sortingUtils';
 import { convertFiltersToApiParams } from '@/lib/api';
 import { GetWatchesParams } from '@/interfaces/api';
+import { t } from '@/i18n';
+import { catalogKeys } from '@/i18n/keys/catalog';
 
 
 type ActiveFilterChip ={
@@ -13,6 +15,31 @@ type ActiveFilterChip ={
   group: 'index'|'brand'|'condition'|'mechanism'|'material'|'document'|'location'|'price'|'year';
   value: string;
   label: string;
+}
+
+function translateFilterValue(group: ActiveFilterChip['group'], value: string): string {
+  const translationKeyMap: Record<ActiveFilterChip['group'], string | null> = {
+    'brand': catalogKeys.filterData.brands,
+    'condition': catalogKeys.filterData.conditions,
+    'mechanism': catalogKeys.filterData.mechanisms,
+    'material': catalogKeys.filterData.materials,
+    'document': catalogKeys.filterData.documents,
+    'location': catalogKeys.filterData.locations,
+    'index': null,
+    'price': null,
+    'year': null,
+  };
+
+  const translationKey = translationKeyMap[group];
+  
+  if (!translationKey) {
+    return value;
+  }
+
+  const fullKey = `${translationKey}.${value}`;
+  const translation = t(fullKey);
+  
+  return translation !== fullKey ? translation : value;
 }
 
 
@@ -44,22 +71,52 @@ export const useCatalogSearch = () => {
     const f = sidebarFilters;
 
     f.selectedBrands?.forEach(b =>
-      chips.push({ id: `brand:${b}`, group: 'brand', value: b, label: b })
+      chips.push({ 
+        id: `brand:${b}`, 
+        group: 'brand', 
+        value: b, 
+        label: translateFilterValue('brand', b)
+      })
     );
     f.selectedConditions?.forEach(c =>
-      chips.push({ id: `condition:${c}`, group: 'condition', value: c, label: c })
+      chips.push({ 
+        id: `condition:${c}`, 
+        group: 'condition', 
+        value: c, 
+        label: translateFilterValue('condition', c)
+      })
     );
     f.selectedMechanisms?.forEach(m =>
-      chips.push({ id: `mechanism:${m}`, group: 'mechanism', value: m, label: m })
+      chips.push({ 
+        id: `mechanism:${m}`, 
+        group: 'mechanism', 
+        value: m, 
+        label: translateFilterValue('mechanism', m)
+      })
     );
     f.selectedMaterials?.forEach(m =>
-      chips.push({ id: `material:${m}`, group: 'material', value: m, label: m })
+      chips.push({ 
+        id: `material:${m}`, 
+        group: 'material', 
+        value: m, 
+        label: translateFilterValue('material', m)
+      })
     );
     f.selectedDocuments?.forEach(d =>
-      chips.push({ id: `document:${d}`, group: 'document', value: d, label: d })
+      chips.push({ 
+        id: `document:${d}`, 
+        group: 'document', 
+        value: d, 
+        label: translateFilterValue('document', d)
+      })
     );
     f.selectedLocations?.forEach(l =>
-      chips.push({ id: `location:${l}`, group: 'location', value: l, label: l })
+      chips.push({ 
+        id: `location:${l}`, 
+        group: 'location', 
+        value: l, 
+        label: translateFilterValue('location', l)
+      })
     );
 
     if (f.priceFrom !== '0' || f.priceTo !== '50000') {

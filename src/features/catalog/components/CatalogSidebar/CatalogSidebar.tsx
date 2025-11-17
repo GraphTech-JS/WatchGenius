@@ -76,7 +76,7 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
           onClick={() => onApply?.(filters)}
           className='w-[269px] h-[40px] bg-[#04694f] text-white rounded-[10px]
                      font-[var(--font-inter)] text-[20px]
-                     hover:bg-[#035a3f] transition-colors flex items-center justify-center'
+                     hover:bg-[#035a3f] transition-colors flex items-center justify-center cursor-pointer'
           aria-label='Застосувати фільтри до каталогу'
         >
           {t(catalogKeys.sidebar.apply)}
@@ -86,7 +86,7 @@ export const CatalogSidebar: React.FC<CatalogSidebarProps> = ({
           onClick={handleReset}
           className='w-[269px] h-[40px] text-[#04694f] border border-[#04694f] rounded-[10px]
                      font-[var(--font-inter)] text-[20px]
-                     hover:bg-white transition-colors flex items-center justify-center'
+                     hover:bg-white transition-colors flex items-center justify-center cursor-pointer'
           style={{
             background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
           }}

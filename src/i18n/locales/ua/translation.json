@@ -232,7 +232,15 @@
         "Audemars Piguet": "Audemars Piguet",
         "Omega": "Omega",
         "Tudor": "Tudor",
-        "Cartier": "Cartier"
+        "Cartier": "Cartier",
+        "A. Lange & Söhne": "A. Lange & Söhne",
+        "Breitling": "Breitling",
+        "Franck Muller": "Franck Muller",
+        "Grand Seiko": "Grand Seiko",
+        "Hublot": "Hublot",
+        "IWC": "IWC",
+        "Panerai": "Panerai",
+        "Van Cleef & Arpels": "Van Cleef & Arpels"
       },
       "conditions": {
         "new": "Новий",
@@ -244,21 +252,34 @@
         "quartz": "Кварцовий",
         "kinetic": "Кінетичний",
         "automatic": "Автоматичний",
+        "Automatic": "Автоматичний",
+        "Manual winding": "Ручний завід",
         "springDrive": "Spring Drive"
       },
       "materials": {
         "gold": "Золото",
         "silver": "Срібло",
         "titanium": "Титан",
-        "ceramic": "Кераміка"
+        "ceramic": "Кераміка",
+        "Gold": "Золото",
+        "Ceramic": "Кераміка",
+        "Platinum": "Платина",
+        "Rose": "Рожеве золото",
+        "Steel": "Сталь",
+        "White": "Біле золото",
+        "Yellow": "Жовте золото"
       },
       "documents": {
-        "fullSet": "Тільки з документами і коробкою"
+        "fullSet": "Тільки з документами і коробкою",
+        "Original box, original papers": "З коробкою та документами",
+        "Original box, no original papers": "З коробкою, без документів",
+        "No original box, no original papers": "Без коробки та документів"
       },
       "locations": {
         "europe": "Європа",
         "asia": "Азія",
-        "america": "Америка"
+        "america": "Америка",
+        "United States of America": "Сполучені Штати Америки"
       }
     },
     "filterSections": {

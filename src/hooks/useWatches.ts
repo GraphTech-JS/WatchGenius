@@ -6,7 +6,7 @@ import { transformApiWatch } from '@/lib/transformers';
 
 export function useWatches(initialFilters?: GetWatchesParams) {
   const [watches, setWatches] = useState<WatchItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [currentFilters, setCurrentFilters] = useState<GetWatchesParams>({});
@@ -69,6 +69,7 @@ export function useWatches(initialFilters?: GetWatchesParams) {
     
     isLoadingRef.current = true;
     setLoading(true);
+    setWatches([]); 
     
     const hasFilters = Object.keys(filters).filter(k => k !== 'page' && k !== 'pageSize').length > 0;
     const pageSize = hasFilters ? 100 : 12;

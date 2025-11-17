@@ -53,6 +53,12 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
     toggleDocument,
     selectedLocations,
     toggleLocation,
+
+    conditions,
+    mechanisms,
+    materials,
+    documents,
+    locations,
   } = filters;
 
   const [isFromFocused, setIsFromFocused] = useState(false);
@@ -65,17 +71,24 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
     title: t(`catalog.filterSections.${section}`),
     content: (
       <>
-        {section === "brand" && (
+        {section === 'brand' && (
           <>
             <div className='space-y-3'>
-              {visibleBrands.map((brand) => (
-                <FilterCheckbox
-                  key={brand}
-                  label={t(`${catalogKeys.filterData.brands}.${brand}`)}
-                  checked={selectedBrands.includes(brand)}
-                  onChange={() => toggleBrand(brand)}
-                />
-              ))}
+              {visibleBrands.map((brand) => {
+                const translationKey = `${catalogKeys.filterData.brands}.${brand}`;
+                const translatedLabel = t(translationKey);
+                const label =
+                  translatedLabel !== translationKey ? translatedLabel : brand;
+
+                return (
+                  <FilterCheckbox
+                    key={brand}
+                    label={label}
+                    checked={selectedBrands.includes(brand)}
+                    onChange={() => toggleBrand(brand)}
+                  />
+                );
+              })}
 
               <button
                 type='button'
@@ -91,8 +104,8 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           </>
         )}
 
-        {section === "price" && (
-          <div className="flex items-center gap-x-2 gap-y-2 max-w-[269px]">
+        {section === 'price' && (
+          <div className='flex items-center gap-x-2 gap-y-2 max-w-[269px]'>
             <label
               htmlFor='price-from'
               className='text-[14px] text-[rgba(23,20,20,0.6)]'
@@ -139,8 +152,8 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           </div>
         )}
 
-        {section === "index" && (
-          <div className="flex gap-2 items-center">
+        {section === 'index' && (
+          <div className='flex gap-2 items-center'>
             {filterData.indexButtons.map((btn) => {
               const active = selectedIndexes.includes(btn);
               return (
@@ -164,17 +177,17 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           </div>
         )}
 
-        {section === "condition" && (
+        {section === 'condition' && (
           <ChecklistSection
-            options={filterData.conditions}
+            options={conditions}
             selected={selectedConditions}
             onToggle={toggleCondition}
           />
         )}
 
-        {section === "mechanism" && (
+        {section === 'mechanism' && (
           <ChecklistSection
-            options={filterData.mechanisms}
+            options={mechanisms}
             selected={selectedMechanisms}
             onToggle={toggleMechanism}
             showAllConfig={{
@@ -186,16 +199,16 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           />
         )}
 
-        {section === "material" && (
+        {section === 'material' && (
           <ChecklistSection
-            options={filterData.materials}
+            options={materials}
             selected={selectedMaterials}
             onToggle={toggleMaterial}
           />
         )}
 
-        {section === "year" && (
-          <div className="flex items-center gap-x-2 gap-y-2 max-w-[269px]">
+        {section === 'year' && (
+          <div className='flex items-center gap-x-2 gap-y-2 max-w-[269px]'>
             <label
               htmlFor='year-from'
               className='text-[14px] text-[rgba(23,20,20,0.6)]'
@@ -241,17 +254,17 @@ export const FilterAccordion: React.FC<Props> = ({ filters }) => {
           </div>
         )}
 
-        {section === "documents" && (
+        {section === 'documents' && (
           <ChecklistSection
-            options={filterData.documents}
+            options={documents}
             selected={selectedDocuments}
             onToggle={toggleDocument}
           />
         )}
 
-        {section === "location" && (
+        {section === 'location' && (
           <ChecklistSection
-            options={filterData.locations}
+            options={locations}
             selected={selectedLocations}
             onToggle={toggleLocation}
           />

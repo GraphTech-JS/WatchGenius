@@ -66,6 +66,49 @@ export async function getFilters(): Promise<ApiFiltersResponse> {
   }
 }
 
+const MECHANISM_MAP: Record<string, string> = {
+  'automatic': 'Automatic',
+  'mechanical': 'Manual winding',
+  'manual': 'Manual winding',
+  'manual winding': 'Manual winding',
+};
+
+const MATERIAL_MAP: Record<string, string> = {
+  'gold': 'Gold',
+  'ceramic': 'Ceramic',
+  'silver': 'Steel', 
+  'steel': 'Steel',
+  'platinum': 'Platinum',
+  'rose': 'Rose',
+  'white': 'White',
+  'yellow': 'Yellow',
+  'titanium': 'Steel', 
+};
+
+const LOCATION_MAP: Record<string, string> = {
+  'america': 'United States of America',
+  'united states of america': 'United States of America',
+  'usa': 'United States of America',
+  'us': 'United States of America',
+};
+
+const DOCUMENT_MAP: Record<string, string> = {
+  'fullset': 'Original box, original papers',
+  'full set': 'Original box, original papers',
+  'original box, original papers': 'Original box, original papers',
+  'original box, no original papers': 'Original box, no original papers',
+  'no original box, no original papers': 'No original box, no original papers',
+};
+
+function normalizeValue(value: string, map: Record<string, string>): string | null {
+  const normalized = value.toLowerCase().trim();
+  return map[normalized] || null;
+}
+
+function capitalizeFirst(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
 export function convertFiltersToApiParams(
   filters: UseCatalogFiltersReturn
 ): GetWatchesParams {
@@ -86,19 +129,48 @@ export function convertFiltersToApiParams(
   }
 
   if (filters.selectedConditions?.length) {
-    params.conditions = filters.selectedConditions.join('/');
+    const validConditions = filters.selectedConditions
+      .map(c => c.toUpperCase())
+      .filter(c => c === 'NEW' || c === 'USED');
+    if (validConditions.length > 0) {
+      params.conditions = validConditions.join('/');
+    }
   }
 
   if (filters.selectedMechanisms?.length) {
-    params.mechanisms = filters.selectedMechanisms.join('/');
+    const validMechanisms = filters.selectedMechanisms
+      .map(m => {
+        const mapped = normalizeValue(m, MECHANISM_MAP);
+        return mapped || capitalizeFirst(m);
+      })
+      .filter(Boolean) as string[];
+    if (validMechanisms.length > 0) {
+      params.mechanisms = validMechanisms.join('/');
+    }
   }
 
   if (filters.selectedMaterials?.length) {
-    params.materials = filters.selectedMaterials.join('/');
+    const validMaterials = filters.selectedMaterials
+      .map(m => {
+        const mapped = normalizeValue(m, MATERIAL_MAP);
+        return mapped || capitalizeFirst(m);
+      })
+      .filter(Boolean) as string[];
+    if (validMaterials.length > 0) {
+      params.materials = validMaterials.join('/');
+    }
   }
 
   if (filters.selectedLocations?.length) {
-    params.locations = filters.selectedLocations.join('/');
+    const validLocations = filters.selectedLocations
+      .map(l => {
+        const mapped = normalizeValue(l, LOCATION_MAP);
+        return mapped || capitalizeFirst(l);
+      })
+      .filter(Boolean) as string[];
+    if (validLocations.length > 0) {
+      params.locations = validLocations.join('/');
+    }
   }
 
   if (yearFrom !== defaultYearFrom || yearTo !== defaultYearTo) {
@@ -110,7 +182,15 @@ export function convertFiltersToApiParams(
   }
 
   if (filters.selectedDocuments?.length) {
-    params.hasDocumentsOptions = filters.selectedDocuments.join('/');
+    const validDocuments = filters.selectedDocuments
+      .map(d => {
+        const mapped = normalizeValue(d, DOCUMENT_MAP);
+        return mapped || d;
+      })
+      .filter(Boolean) as string[];
+    if (validDocuments.length > 0) {
+      params.hasDocumentsOptions = validDocuments.join('/');
+    }
   }
 
   return params;

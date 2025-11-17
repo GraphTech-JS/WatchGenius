@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import { FilterCheckbox } from "@/components/FilterCheckbox/FilterCheckbox";
-import { t } from "@/i18n";
-import { catalogKeys } from "@/i18n/keys/catalog";
-import { filterData } from "@/mock/filterData";
+import React from 'react';
+import { FilterCheckbox } from '@/components/FilterCheckbox/FilterCheckbox';
+import { t } from '@/i18n';
+import { catalogKeys } from '@/i18n/keys/catalog';
 
 interface ShowAllConfig {
   initialCount: number;
@@ -33,23 +32,72 @@ export const ChecklistSection: React.FC<Props> = ({
     : options;
 
   const getTranslationNamespace = (opt: string): string | null => {
-    if (filterData.conditions.includes(opt))
+    const normalizedOpt = opt.toLowerCase();
+
+    if (
+      normalizedOpt === 'new' ||
+      normalizedOpt === 'used' ||
+      normalizedOpt === 'excellent'
+    )
       return catalogKeys.filterData.conditions;
-    if (filterData.mechanisms.includes(opt))
+
+    if (
+      normalizedOpt === 'automatic' ||
+      normalizedOpt.includes('automatic') ||
+      normalizedOpt === 'manual winding' ||
+      normalizedOpt.includes('manual') ||
+      normalizedOpt === 'mechanical' ||
+      normalizedOpt.includes('mechanical') ||
+      normalizedOpt === 'quartz' ||
+      normalizedOpt.includes('quartz') ||
+      normalizedOpt === 'kinetic' ||
+      normalizedOpt.includes('kinetic') ||
+      normalizedOpt.includes('spring')
+    )
       return catalogKeys.filterData.mechanisms;
-    if (filterData.materials.includes(opt))
+
+    if (
+      normalizedOpt === 'gold' ||
+      normalizedOpt === 'ceramic' ||
+      normalizedOpt === 'steel' ||
+      normalizedOpt === 'silver' ||
+      normalizedOpt === 'titanium' ||
+      normalizedOpt === 'platinum' ||
+      normalizedOpt === 'rose' ||
+      normalizedOpt === 'white' ||
+      normalizedOpt === 'yellow'
+    )
       return catalogKeys.filterData.materials;
-    if (filterData.documents.includes(opt))
+
+    if (
+      normalizedOpt.includes('box') ||
+      normalizedOpt.includes('papers') ||
+      normalizedOpt.includes('fullset') ||
+      normalizedOpt.includes('full set')
+    )
       return catalogKeys.filterData.documents;
-    if (filterData.locations.includes(opt))
+
+    if (
+      normalizedOpt === 'europe' ||
+      normalizedOpt === 'asia' ||
+      normalizedOpt === 'america' ||
+      normalizedOpt.includes('united states')
+    )
       return catalogKeys.filterData.locations;
+
     return null;
   };
   return (
-    <div className="space-y-3">
+    <div className='space-y-3'>
       {list.map((opt) => {
         const ns = getTranslationNamespace(opt);
-        const label = ns ? t(`${ns}.${opt}`) : opt;
+        let label = opt;
+
+        if (ns) {
+          const translationKey = `${ns}.${opt}`;
+          const translation = t(translationKey);
+          label = translation !== translationKey ? translation : opt;
+        }
 
         return (
           <FilterCheckbox
@@ -63,13 +111,13 @@ export const ChecklistSection: React.FC<Props> = ({
 
       {showAllConfig && (
         <button
-          type="button"
+          type='button'
           onClick={showAllConfig.onToggleShowAll}
           disabled={
             options.length <=
             (showAllConfig.disabledThreshold ?? showAllConfig.initialCount)
           }
-          className="w-full text-center text-[14px] font-[var(--font-inter)] text-[#8b8b8b] underline disabled:opacity-60"
+          className='w-full text-center text-[14px] font-[var(--font-inter)] text-[#8b8b8b] underline disabled:opacity-60'
         >
           {showAllConfig.showAll
             ? showAllConfig.labels?.less ?? t(catalogKeys.filter.showLess)
