@@ -1,9 +1,13 @@
-import { useState, useMemo, useCallback, useLayoutEffect, useRef } from 'react';
+import { useState, useMemo, useCallback, useLayoutEffect, useRef, useEffect } from 'react';
 import { useWatches } from '@/hooks/useWatches';
 import { WatchIndex, WatchItem } from '@/interfaces'; 
 import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
 import { SortOption } from '@/types/sorting';
 import { applySorting } from '@/utils/sortingUtils';
+import { convertFiltersToApiParams } from '@/lib/api';
+import { GetWatchesParams } from '@/interfaces/api';
+import { t } from '@/i18n';
+import { catalogKeys } from '@/i18n/keys/catalog';
 
 
 type ActiveFilterChip ={
@@ -11,6 +15,31 @@ type ActiveFilterChip ={
   group: 'index'|'brand'|'condition'|'mechanism'|'material'|'document'|'location'|'price'|'year';
   value: string;
   label: string;
+}
+
+function translateFilterValue(group: ActiveFilterChip['group'], value: string): string {
+  const translationKeyMap: Record<ActiveFilterChip['group'], string | null> = {
+    'brand': catalogKeys.filterData.brands,
+    'condition': catalogKeys.filterData.conditions,
+    'mechanism': catalogKeys.filterData.mechanisms,
+    'material': catalogKeys.filterData.materials,
+    'document': catalogKeys.filterData.documents,
+    'location': catalogKeys.filterData.locations,
+    'index': null,
+    'price': null,
+    'year': null,
+  };
+
+  const translationKey = translationKeyMap[group];
+  
+  if (!translationKey) {
+    return value;
+  }
+
+  const fullKey = `${translationKey}.${value}`;
+  const translation = t(fullKey);
+  
+  return translation !== fullKey ? translation : value;
 }
 
 
@@ -23,7 +52,7 @@ export const useCatalogSearch = () => {
   const [sortOption, setSortOption] = useState<SortOption>(SortOption.DEFAULT);
   const chipsRef = useRef<HTMLDivElement | null>(null);
   const [chipsHeight, setChipsHeight] = useState(0);
-    const { getAll } = useWatches();
+  const { watches, loadMore, hasMore, reloadWithFilters, loading } = useWatches(); 
 
   const activeFilters = useMemo<ActiveFilterChip[]>(() => {
   const chips: ActiveFilterChip[] = [];
@@ -42,22 +71,52 @@ export const useCatalogSearch = () => {
     const f = sidebarFilters;
 
     f.selectedBrands?.forEach(b =>
-      chips.push({ id: `brand:${b}`, group: 'brand', value: b, label: b })
+      chips.push({ 
+        id: `brand:${b}`, 
+        group: 'brand', 
+        value: b, 
+        label: translateFilterValue('brand', b)
+      })
     );
     f.selectedConditions?.forEach(c =>
-      chips.push({ id: `condition:${c}`, group: 'condition', value: c, label: c })
+      chips.push({ 
+        id: `condition:${c}`, 
+        group: 'condition', 
+        value: c, 
+        label: translateFilterValue('condition', c)
+      })
     );
     f.selectedMechanisms?.forEach(m =>
-      chips.push({ id: `mechanism:${m}`, group: 'mechanism', value: m, label: m })
+      chips.push({ 
+        id: `mechanism:${m}`, 
+        group: 'mechanism', 
+        value: m, 
+        label: translateFilterValue('mechanism', m)
+      })
     );
     f.selectedMaterials?.forEach(m =>
-      chips.push({ id: `material:${m}`, group: 'material', value: m, label: m })
+      chips.push({ 
+        id: `material:${m}`, 
+        group: 'material', 
+        value: m, 
+        label: translateFilterValue('material', m)
+      })
     );
     f.selectedDocuments?.forEach(d =>
-      chips.push({ id: `document:${d}`, group: 'document', value: d, label: d })
+      chips.push({ 
+        id: `document:${d}`, 
+        group: 'document', 
+        value: d, 
+        label: translateFilterValue('document', d)
+      })
     );
     f.selectedLocations?.forEach(l =>
-      chips.push({ id: `location:${l}`, group: 'location', value: l, label: l })
+      chips.push({ 
+        id: `location:${l}`, 
+        group: 'location', 
+        value: l, 
+        label: translateFilterValue('location', l)
+      })
     );
 
     if (f.priceFrom !== '0' || f.priceTo !== '50000') {
@@ -140,75 +199,14 @@ const clearAllFilters = useCallback(() => {
   }, []);
 
   const filteredItems = useMemo(() => {
-    let items: WatchItem[] = getAll();
-
-    if (searchTerm.trim()) {
-      const term = searchTerm.trim().toLowerCase();
-      items = items.filter((w) => w.title.toLowerCase().includes(term));
-    }
+    let items: WatchItem[] = watches;
 
     if (selectedIndexes.length > 0) {
       items = items.filter((w) => selectedIndexes.includes(w.index));
     }
 
-    if (sidebarFilters) {
-      if (sidebarFilters.selectedIndexes?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedIndexes.includes(w.index)
-        );
-      }
-
-      if (sidebarFilters.selectedBrands?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedBrands.includes(w.brand)
-        );
-      }
-
-      if (sidebarFilters.selectedConditions?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedConditions.includes(w.condition)
-        );
-      }
-
-      if (sidebarFilters.selectedMechanisms?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedMechanisms.includes(w.mechanism)
-        );
-      }
-
-      if (sidebarFilters.selectedMaterials?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedMaterials.includes(w.material)
-        );
-      }
-
-      if (sidebarFilters.selectedDocuments?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedDocuments.includes(w.documents)
-        );
-      }
-
-      if (sidebarFilters.selectedLocations?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedLocations.includes(w.location)
-        );
-      }
-
-      if (sidebarFilters.priceFrom || sidebarFilters.priceTo) {
-        const from = parseFloat(sidebarFilters.priceFrom) || 0;
-        const to = parseFloat(sidebarFilters.priceTo) || Infinity;
-        items = items.filter((w) => w.price >= from && w.price <= to);
-      }
-
-      if (sidebarFilters.yearFrom || sidebarFilters.yearTo) {
-        const from = parseInt(sidebarFilters.yearFrom) || 0;
-        const to = parseInt(sidebarFilters.yearTo) || Infinity;
-        items = items.filter((w) => w.year >= from && w.year <= to);
-      }
-    }
-
     return applySorting(items, sortOption);
-  }, [searchTerm, selectedIndexes, sidebarFilters, sortOption]);
+  }, [watches, selectedIndexes, sortOption]);  
 
   useLayoutEffect(() => {
     if (!chipsRef.current) {
@@ -226,6 +224,17 @@ const clearAllFilters = useCallback(() => {
     };
   }, [activeFilters]);
 
+useEffect(() => {
+  const apiParams: GetWatchesParams = !searchTerm.trim() && !sidebarFilters 
+    ? { pageSize: 12 }
+    : {
+        ...(searchTerm.trim() && { search: searchTerm.trim() }),
+        ...(sidebarFilters ? convertFiltersToApiParams(sidebarFilters) : {})
+      };
+  
+  reloadWithFilters(apiParams);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [searchTerm, sidebarFilters]);
   return {
     searchTerm,
     setSearchTerm,
@@ -244,5 +253,9 @@ const clearAllFilters = useCallback(() => {
 
     chipsRef,
     chipsHeight,
+
+    loadMore,
+    hasMore,
+    loading,
   };
 };

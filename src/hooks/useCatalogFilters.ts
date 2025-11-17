@@ -1,10 +1,19 @@
 'use client';
 
 import { useCallback, useMemo, useState, useEffect } from 'react';
-import { filterData, type IndexButton } from '../mock/filterData';
-import { toggleInArray } from '../utils/array';
+import { filterData, type IndexButton } from '@/mock/filterData';
+import { toggleInArray } from '@/utils/array';
+import { getFilters } from '@/lib/api';
+import type { ApiFiltersResponse } from '@/interfaces/api';
 
 type Currency = '€' | '$' | '₴';
+
+function normalizeForDisplay(value: string): string {
+  if (value.toUpperCase() === 'NEW' || value.toUpperCase() === 'USED') {
+    return value.toLowerCase();
+  }
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
 
 export const useCatalogFilters = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -30,12 +39,59 @@ export const useCatalogFilters = () => {
   const [selectedIndexes, setSelectedIndexes] = useState<IndexButton[]>([]);
   const toggleIndex = useCallback((index: IndexButton)=> setSelectedIndexes((prev) => toggleInArray(prev, index)), [])
 
+  const [apiFilters, setApiFilters] = useState<ApiFiltersResponse | null>(null);
+  const [filtersLoading, setFiltersLoading] = useState(false);
+
+  useEffect(() => {
+    async function loadFilters() {
+      try {
+        setFiltersLoading(true);
+        const filters = await getFilters();
+        setApiFilters(filters);
+        if (filters.priceRange) {
+          setPriceFrom(filters.priceRange.min.toString());
+          setPriceTo(filters.priceRange.max.toString());
+        }
+      } catch (error) {
+        console.error('Failed to load filters:', error);
+      } finally {
+        setFiltersLoading(false);
+      }
+    }
+    loadFilters();
+  }, []);
+
+  const brands = useMemo(() => apiFilters?.brands || filterData.brands, [apiFilters]);
+  const conditions = useMemo(() => {
+    if (!apiFilters?.conditions) return filterData.conditions;
+    const normalized = apiFilters.conditions.map(normalizeForDisplay);
+    return Array.from(new Set(normalized));
+  }, [apiFilters]);
+  const mechanisms = useMemo(() => 
+    apiFilters?.mechanisms || filterData.mechanisms, 
+    [apiFilters]
+  );
+  const materials = useMemo(() => {
+    if (!apiFilters?.materials) return filterData.materials;
+    const normalized = apiFilters.materials.map(normalizeForDisplay);
+    return Array.from(new Set(normalized));
+  }, [apiFilters]);
+  const documents = useMemo(() => 
+    apiFilters?.hasDocumentsOptions || filterData.documents, 
+    [apiFilters]
+  );
+  const locations = useMemo(() => {
+    if (!apiFilters?.locations) return filterData.locations;
+    const normalized = apiFilters.locations.map(normalizeForDisplay);
+    return Array.from(new Set(normalized));
+  }, [apiFilters]);
+
   const filteredBrands = useMemo(
     () =>
-      filterData.brands.filter((b) =>
+      brands.filter((b) =>
         b.toLowerCase().includes(searchTerm.toLowerCase())
       ),
-    [searchTerm]
+    [brands, searchTerm]
   );
 
   const visibleBrands = useMemo(
@@ -72,14 +128,14 @@ export const useCatalogFilters = () => {
     const isOpenBrands = 
     searchTerm.trim().length > 0 &&
     filteredBrands.length > 0 &&
-    filteredBrands.length < filterData.brands.length;
+    filteredBrands.length < brands.length;
 
     if(isOpenBrands){
       setOpenKeys( prev => prev.includes('Бренд') ? prev : [...prev,'Бренд']);
     }else{
       setOpenKeys(prev => prev.filter(key => key !== 'Бренд'))
     }
-  }, [searchTerm, filteredBrands]);
+  }, [searchTerm, filteredBrands, brands]);
 
   const reset = useCallback(() => {
     setSelectedBrands([]);
@@ -124,6 +180,14 @@ export const useCatalogFilters = () => {
 
     filteredBrands,
     visibleBrands,
+
+    brands,
+    conditions,
+    mechanisms,
+    materials,
+    documents,
+    locations,
+    filtersLoading,
 
     setSearchTerm,
     setShowAllBrands,

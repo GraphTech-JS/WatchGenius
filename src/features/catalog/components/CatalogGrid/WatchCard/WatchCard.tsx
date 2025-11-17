@@ -102,7 +102,7 @@ export const WatchCard: React.FC<Props> = ({
       <h4 className={`${styles.watchTitle} mt-[8px] mb-[8px]`}>{item.title}</h4>
 
       <div className='flex flex-col items-center gap-[9px] sm:flex-row sm:justify-between'>
-        <div className='text-[16px] font-medium text-[var(--text-dark,#171414)]'>
+        <div className='text-[16px] font-medium text-[var(--text-dark,#171414)] whitespace-nowrap'>
           {item.price.toLocaleString('uk-UA')} {item.currency}
         </div>
 

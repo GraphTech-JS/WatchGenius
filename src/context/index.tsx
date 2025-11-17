@@ -65,19 +65,20 @@ export const MainContextProvider = ({ children }: { children: ReactNode }) => {
   const [menuOpened, setMenuOpened] = useState(false);
   const [sideChatOpened, setSideChatOpened] = useState(false);
 
-  const [messages, setMessagesState] = useState<Message[]>(() => {
+  const [messages, setMessagesState] = useState<Message[]>(DEFAULT_MESSAGES);
+
+  useEffect(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('chatMessages');
       if (saved) {
         try {
-          return JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          setMessagesState(parsed);
         } catch {
-          return DEFAULT_MESSAGES;
         }
       }
     }
-    return DEFAULT_MESSAGES;
-  });
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -93,7 +94,7 @@ export const MainContextProvider = ({ children }: { children: ReactNode }) => {
   const [message, setMessage] = useState<Message>({
     content: '',
     by: 'me',
-    id: messages.length + 1,
+    id: 1,
   });
   const [savedCatalogFilters, setSavedCatalogFilters] = useState<{
     searchTerm: string;

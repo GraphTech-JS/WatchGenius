@@ -9,15 +9,15 @@ export const filterData = {
     "Cartier",
   ],
 
-  conditions: ["new", "excellent", "used"],
+  conditions: ["new", "used"], 
 
-  mechanisms: ["mechanical", "quartz", "kinetic", "automatic", "springDrive"],
+  mechanisms: ["automatic", "mechanical"], 
 
-  materials: ["gold", "silver", "titanium", "ceramic"],
+  materials: ["gold", "ceramic", "steel", "platinum"], 
 
   documents: ["fullSet"],
 
-  locations: ["europe", "asia", "america"],
+  locations: ["america"], 
 
   indexButtons: ["A", "B", "C"] as const,
 
