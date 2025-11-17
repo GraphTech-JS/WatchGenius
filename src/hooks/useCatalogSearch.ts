@@ -1,9 +1,11 @@
-import { useState, useMemo, useCallback, useLayoutEffect, useRef } from 'react';
+import { useState, useMemo, useCallback, useLayoutEffect, useRef, useEffect } from 'react';
 import { useWatches } from '@/hooks/useWatches';
 import { WatchIndex, WatchItem } from '@/interfaces'; 
 import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
 import { SortOption } from '@/types/sorting';
 import { applySorting } from '@/utils/sortingUtils';
+import { convertFiltersToApiParams } from '@/lib/api';
+import { GetWatchesParams } from '@/interfaces/api';
 
 
 type ActiveFilterChip ={
@@ -23,7 +25,7 @@ export const useCatalogSearch = () => {
   const [sortOption, setSortOption] = useState<SortOption>(SortOption.DEFAULT);
   const chipsRef = useRef<HTMLDivElement | null>(null);
   const [chipsHeight, setChipsHeight] = useState(0);
-    const { getAll } = useWatches();
+  const { watches, loadMore, hasMore, reloadWithFilters, loading } = useWatches(); 
 
   const activeFilters = useMemo<ActiveFilterChip[]>(() => {
   const chips: ActiveFilterChip[] = [];
@@ -140,75 +142,14 @@ const clearAllFilters = useCallback(() => {
   }, []);
 
   const filteredItems = useMemo(() => {
-    let items: WatchItem[] = getAll();
-
-    if (searchTerm.trim()) {
-      const term = searchTerm.trim().toLowerCase();
-      items = items.filter((w) => w.title.toLowerCase().includes(term));
-    }
+    let items: WatchItem[] = watches;
 
     if (selectedIndexes.length > 0) {
       items = items.filter((w) => selectedIndexes.includes(w.index));
     }
 
-    if (sidebarFilters) {
-      if (sidebarFilters.selectedIndexes?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedIndexes.includes(w.index)
-        );
-      }
-
-      if (sidebarFilters.selectedBrands?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedBrands.includes(w.brand)
-        );
-      }
-
-      if (sidebarFilters.selectedConditions?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedConditions.includes(w.condition)
-        );
-      }
-
-      if (sidebarFilters.selectedMechanisms?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedMechanisms.includes(w.mechanism)
-        );
-      }
-
-      if (sidebarFilters.selectedMaterials?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedMaterials.includes(w.material)
-        );
-      }
-
-      if (sidebarFilters.selectedDocuments?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedDocuments.includes(w.documents)
-        );
-      }
-
-      if (sidebarFilters.selectedLocations?.length) {
-        items = items.filter((w) =>
-          sidebarFilters.selectedLocations.includes(w.location)
-        );
-      }
-
-      if (sidebarFilters.priceFrom || sidebarFilters.priceTo) {
-        const from = parseFloat(sidebarFilters.priceFrom) || 0;
-        const to = parseFloat(sidebarFilters.priceTo) || Infinity;
-        items = items.filter((w) => w.price >= from && w.price <= to);
-      }
-
-      if (sidebarFilters.yearFrom || sidebarFilters.yearTo) {
-        const from = parseInt(sidebarFilters.yearFrom) || 0;
-        const to = parseInt(sidebarFilters.yearTo) || Infinity;
-        items = items.filter((w) => w.year >= from && w.year <= to);
-      }
-    }
-
     return applySorting(items, sortOption);
-  }, [searchTerm, selectedIndexes, sidebarFilters, sortOption]);
+  }, [watches, selectedIndexes, sortOption]);  
 
   useLayoutEffect(() => {
     if (!chipsRef.current) {
@@ -226,6 +167,17 @@ const clearAllFilters = useCallback(() => {
     };
   }, [activeFilters]);
 
+useEffect(() => {
+  const apiParams: GetWatchesParams = !searchTerm.trim() && !sidebarFilters 
+    ? { pageSize: 12 }
+    : {
+        ...(searchTerm.trim() && { search: searchTerm.trim() }),
+        ...(sidebarFilters ? convertFiltersToApiParams(sidebarFilters) : {})
+      };
+  
+  reloadWithFilters(apiParams);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [searchTerm, sidebarFilters]);
   return {
     searchTerm,
     setSearchTerm,
@@ -244,5 +196,9 @@ const clearAllFilters = useCallback(() => {
 
     chipsRef,
     chipsHeight,
+
+    loadMore,
+    hasMore,
+    loading,
   };
 };

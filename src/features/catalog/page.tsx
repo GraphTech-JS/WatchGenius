@@ -168,6 +168,9 @@ const CatalogPage = () => {
             onResetFilters={handleResetFilters}
             onAskGeni={handleAskGeni}
             onOpenFeedback={feedbackModal.openModal}
+            onLoadMore={search.loadMore}
+            hasMore={search.hasMore}
+            loading={search.loading}
           />
         </div>
       </div>
