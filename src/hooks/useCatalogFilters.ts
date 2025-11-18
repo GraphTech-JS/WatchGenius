@@ -30,7 +30,7 @@ export const useCatalogFilters = () => {
   const [selectedLocations, setSelectedLocations] = useState<string[]>([]);
 
   const [priceFrom, setPriceFrom] = useState<string>('0');
-  const [priceTo, setPriceTo] = useState<string>('50000');
+  const [priceTo, setPriceTo] = useState<string>('150000');
   const [currency] = useState<Currency>('€');
 
   const [yearFrom, setYearFrom] = useState<string>('2000');
@@ -48,10 +48,7 @@ export const useCatalogFilters = () => {
         setFiltersLoading(true);
         const filters = await getFilters();
         setApiFilters(filters);
-        if (filters.priceRange) {
-          setPriceFrom(filters.priceRange.min.toString());
-          setPriceTo(filters.priceRange.max.toString());
-        }
+       
       } catch (error) {
         console.error('Failed to load filters:', error);
       } finally {

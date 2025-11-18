@@ -73,7 +73,7 @@ const CatalogPage = () => {
           selectedDocuments,
           selectedLocations,
           priceFrom: '0',
-          priceTo: '50000',
+          priceTo: '150000',
           yearFrom: '2000',
           yearTo: '2005',
         } as UseCatalogFiltersReturn);
