@@ -115,7 +115,7 @@ export function convertFiltersToApiParams(
   const defaultYearFrom = '2000';
   const defaultYearTo = '2005';
   const defaultPriceFrom = '0';
-  const defaultPriceTo = '50000';
+  const defaultPriceTo = '150000';
 
   const priceFrom = filters.priceFrom || defaultPriceFrom;
   const priceTo = filters.priceTo || defaultPriceTo;
