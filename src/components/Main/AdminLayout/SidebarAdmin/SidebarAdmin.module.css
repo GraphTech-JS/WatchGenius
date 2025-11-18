@@ -123,7 +123,6 @@
 .switchWrapper span {
   color: var(--white);
   font-size: 1rem;
-  font-family: "Inter", sans-serif;
 }
 
 .switchButton {

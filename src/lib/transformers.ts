@@ -12,7 +12,7 @@ export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
     brand: apiWatch.brand.name,
     index: calculateIndex(apiWatch.brand.brandIndex),
     image: apiWatch.image,
-    
+    chronoUrl: apiWatch.chronoUrl,    
     buttonLabel: 'Buy on Chrono24',  
     trend: calculateTrend(apiWatch.price, apiWatch.defaultPrice),  
     variant: undefined,  

@@ -24,5 +24,6 @@ export type WatchItem = {
   reference?: string;
   diameterMm: number;         
   waterResistance: boolean;   
-  chronograph: boolean;       
+  chronograph: boolean;     
+  chronoUrl?:string;  
 };
