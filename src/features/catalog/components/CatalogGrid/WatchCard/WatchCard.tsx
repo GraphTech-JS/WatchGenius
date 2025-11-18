@@ -46,6 +46,16 @@ export const WatchCard: React.FC<Props> = ({
     router.push(`/${locale}/product/${item.slug}`);
   };
 
+
+  const handleBuyClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if(item.chronoUrl){
+      window.open(item.chronoUrl, '_blank');
+    }else{
+      onOpenFeedback?.(item.title);
+    }
+  };
+
   return (
     <div
       className={`${styles.watchCard} border border-[rgba(23,20,20,0.15)] bg-white p-3`}
@@ -133,10 +143,7 @@ export const WatchCard: React.FC<Props> = ({
 
       <button
         className={`${styles.buyButton} mt-[27px]`}
-        onClick={(e) => {
-          e.stopPropagation();
-          onOpenFeedback?.(item.title);
-        }}
+        onClick={handleBuyClick}
       >
         {item.buttonLabel}
       </button>
