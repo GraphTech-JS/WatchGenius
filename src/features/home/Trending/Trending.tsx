@@ -1,12 +1,12 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import styles from "./Trending.module.css";
-import { ThemedText } from "@/components/ThemedText/ThemedText";
-import { mockTrending } from "@/mock/watch";
-import { ProductCarousel } from "@/components/ProductsTable/ProductCarousel/ProductCarousel";
-import { SettingsIcon } from "../../../../public/social/Icon";
-import { t } from "@/i18n";
-import { trendingKeys } from "@/i18n/keys/home";
+'use client';
+import React, { useEffect, useRef, useState } from 'react';
+import styles from './Trending.module.css';
+import { ThemedText } from '@/components/ThemedText/ThemedText';
+import { mockTrending } from '@/mock/watch';
+import { ProductCarousel } from '@/components/ProductsTable/ProductCarousel/ProductCarousel';
+import { SettingsIcon } from '../../../../public/social/Icon';
+import { t } from '@/i18n';
+import { trendingKeys } from '@/i18n/keys/home';
 
 export const Trending = () => {
   const [open, setOpen] = useState(false);
@@ -20,23 +20,24 @@ export const Trending = () => {
         setOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
   }, []);
   return (
     <section
-      id="treands"
+      id='treands'
       className={`${styles.trending} max-w-[90rem] mx-auto px-[1.25rem] lg:px-[6.25rem] pt-6 lg:pt-12 pb-10 lg:pb-16`}
+      suppressHydrationWarning
     >
       <div className={styles.trendingContainer}>
         <div
           className={`${styles.trendingTitle} relative flex mb-6 lg:mb-[30xp] justify-between items-center`}
         >
-          <ThemedText type="h2">Trending now</ThemedText>
-          <div ref={menuRef} className="relative">
+          <ThemedText type='h2'>Trending now</ThemedText>
+          <div ref={menuRef} className='relative'>
             <SettingsIcon
               onClick={toggleMenu}
-              className="mr-2 w-[24px] h-[24px] cursor-pointer"
+              className='mr-2 w-[24px] h-[24px] cursor-pointer'
             />
 
             <div
@@ -44,16 +45,14 @@ export const Trending = () => {
                 styles.trendingSettings
               } absolute right-[-10px] top-[-8px] z-10 min-w-[12.5rem] flex flex-col text-center rounded-xl border-1 transition-all duration-300 ${
                 open
-                  ? "opacity-100 scale-100"
-                  : "opacity-0 scale-95 pointer-events-none"
-              }`}
-            >
+                  ? 'opacity-100 scale-100'
+                  : 'opacity-0 scale-95 pointer-events-none'
+              }`}>
               <div
                 className={`${styles.trendingSettingsItem} py-2 px-5 flex items-center justify-end gap-6 border-b cursor-pointer`}
-                onClick={toggleMenu}
-              >
+                onClick={toggleMenu}>
                 <span>{t(trendingKeys.sort.trend)}</span>
-                <SettingsIcon className="w-[24px] h-[24px] cursor-pointer" />
+                <SettingsIcon className='w-[24px] h-[24px] cursor-pointer' />
               </div>
               <div
                 className={`${styles.trendingSettingsItem} py-2 border-b cursor-pointer`}

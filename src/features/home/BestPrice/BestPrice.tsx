@@ -131,6 +131,7 @@ export const BestPrice = () => {
     <section
       id='bestPrice'
       className={`${styles.best} max-w-[90rem] mx-auto px-[1.25rem] md:pl-[50px] md:pr-[32px] lg:px-[6rem] pb-12 md:pb-15`}
+      suppressHydrationWarning
     >
       <div className={`${styles.bestContainer} w-full`}>
         <div
@@ -270,7 +271,7 @@ export const BestPrice = () => {
                   <div>{t(bestPriceKeys.form.button)}</div>
                 </button>
                 <div className='flex flex-col gap-2'>
-                  <label className='flex items-start gap-2 cursor-pointer'>
+                  <label className='flex gap-2 items-start cursor-pointer'>
                     <input
                       type='checkbox'
                       checked={consent}

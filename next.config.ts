@@ -16,6 +16,19 @@ const nextConfig: NextConfig = {
         hostname: 'img.chrono24.com',
         pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.chrono24.com',
+        pathname: '/**',
+      },
+      
+
+      {
+        protocol: 'https',
+        hostname: 'gusvillajewelry.com',
+        pathname: '/**',
+      },
+     
     ],
   },
 

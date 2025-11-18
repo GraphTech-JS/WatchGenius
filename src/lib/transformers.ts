@@ -1,6 +1,7 @@
 
-import { ApiWatchResponse } from '@/interfaces/api';
+import { ApiWatchResponse, ApiDealerResponse } from '@/interfaces/api';
 import { Currency, WatchItem, WatchIndex } from '@/interfaces/watch';
+import { DealerData } from '@/types/dealers';
 
 export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
   return {
@@ -54,4 +55,38 @@ function generateSlug(name: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
+}
+
+export function transformApiDealer(apiDealer: ApiDealerResponse): DealerData {
+  const isValidImageUrl = (url: string): boolean => {
+    if (!url) return false;
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.svg', '.avif'];
+    const lowerUrl = url.toLowerCase();
+    return imageExtensions.some(ext => lowerUrl.includes(ext));
+  };
+
+  const imageUrl = apiDealer.logoUrl && isValidImageUrl(apiDealer.logoUrl)
+    ? apiDealer.logoUrl
+    : '/dealers/Dealer.webp';
+
+  return {
+    id: uuidToNumber(apiDealer.id),
+    name: apiDealer.name,
+    description: apiDealer.description,
+    address: apiDealer.location,
+    rating: `${apiDealer.rating}/5 рейтинг`,
+    listings: `${apiDealer.reviewsCount}+ активних оголошень`,
+    image: imageUrl,
+    websiteUrl: apiDealer.websiteUrl,
+  };
+}
+
+function uuidToNumber(uuid: string): number {
+  let hash = 0;
+  for (let i = 0; i < uuid.length; i++) {
+    const char = uuid.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash);
 }

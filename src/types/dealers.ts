@@ -6,4 +6,5 @@ export interface DealerData {
   rating: string;
   listings: string;
   image: string;
+  websiteUrl?: string;
 }

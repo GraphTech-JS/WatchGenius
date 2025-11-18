@@ -1,24 +1,24 @@
-"use client";
-import React from "react";
-import styles from "./DealerCard.module.css";
-import Image from "next/image";
-import { LocalizedLink } from "@/components/LocalizedLink";
-import { DetailsIcon, LetterIcon } from "../../../../public/dealers/Icon";
-import { DealerData } from "@/types/dealers";
-import { t } from "@/i18n";
-import { dealerCardKeys } from "@/i18n/keys/home";
+'use client';
+import React from 'react';
+import styles from './DealerCard.module.css';
+import { LocalizedLink } from '@/components/LocalizedLink';
+import { DetailsIcon, LetterIcon } from '../../../../public/dealers/Icon';
+import { DealerData } from '@/types/dealers';
+import { t } from '@/i18n';
+import { dealerCardKeys } from '@/i18n/keys/home';
 
 export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
   return (
     <div
       className={`${styles.dealerCard} flex flex-col lg:flex-row items-center px-4 lg:px-11.5 py-7 rounded-[20px] gap-7`}
     >
-      <Image
+      <img
         src={dealer.image}
         alt={dealer.name}
         width={240}
         height={240}
-        className="w-[92px] h-[92px] rounded-full lg:self-start"
+        className='w-[92px] h-[92px] rounded-full lg:self-start object-cover'
+        loading='lazy'
       />
       <div className={`${styles.CardContent} flex flex-col lg:flex-row gap-6`}>
         <div
@@ -51,20 +51,36 @@ export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
         <div
           className={`${styles.CardButtons} w-full lg:max-w-[14rem] flex flex-col gap-4 text-center`}
         >
-          <LocalizedLink
-            href="/dealer"
-            prefetch={false}
-            className={`${styles.dealerCardLink} w-full `}
-          >
-            <button
-              className={`${styles.dealerBtn} w-full py-4 lg:py-[16px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
+          {dealer.websiteUrl ? (
+            <a
+              href={dealer.websiteUrl}
+              target='_blank'
+              rel='noopener noreferrer'
+              className={`${styles.dealerCardLink} w-full `}
             >
-              <DetailsIcon className={`${styles.DealerIcon} w-4 h-4`} />
-              <div>{t(dealerCardKeys.visit)}</div>
-            </button>
-          </LocalizedLink>
+              <button
+                className={`${styles.dealerBtn} w-full py-4 lg:py-[16px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
+              >
+                <DetailsIcon className={`${styles.DealerIcon} w-4 h-4`} />
+                <div>{t(dealerCardKeys.visit)}</div>
+              </button>
+            </a>
+          ) : (
+            <LocalizedLink
+              href='/dealer'
+              prefetch={false}
+              className={`${styles.dealerCardLink} w-full `}
+            >
+              <button
+                className={`${styles.dealerBtn} w-full py-4 lg:py-[16px] flex items-center justify-center rounded-[10px] gap-[10px] cursor-pointer`}
+              >
+                <DetailsIcon className={`${styles.DealerIcon} w-4 h-4`} />
+                <div>{t(dealerCardKeys.visit)}</div>
+              </button>
+            </LocalizedLink>
+          )}
           <LocalizedLink
-            href="/price"
+            href='/price'
             prefetch={false}
             className={`${styles.dealerCardLink} w-full `}
           >

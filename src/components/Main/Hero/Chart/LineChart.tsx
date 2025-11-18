@@ -30,9 +30,6 @@ export const LineChart: React.FC<LineChartProps> = ({
 
   const { fill: fillColor, line: lineColor } = colorSchemes[variant];
 
-  // const base = data[0];
-  // const normalized = data.map((d) => d - base);
-
   const min = Math.min(...data);
   const max = Math.max(...data);
 

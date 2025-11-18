@@ -1,15 +1,7 @@
-// src/components/ProductsTable/ProductsTable.tsx
-
 'use client';
 import React from 'react';
 import { Table } from '../Table/Table';
 import styles from './ProductsTable.module.css';
-// import {
-//   BoxDarkIcon,
-//   DocDark,
-//   DocsDark,
-//   SessionDark,
-// } from "../../../public/icons";
 import { Button } from '../Button/Button';
 import { Plus } from 'lucide-react';
 import { IProduct } from '@/types/product';
@@ -33,13 +25,11 @@ export const ProductsTable: React.FC<ProductsTableProps> = ({
 }) => {
   const showAdd = ['products', 'knowledge-base', 'prompts'].includes(type);
 
-  // Определяем колонки
   const ordersCols = ['Назва', 'Категорія', 'Ціна', 'Кількість'];
   const kbCols = ['Назва', 'Категорія', 'Ціна', 'Опис'];
   const promptCols = ['Назва', 'Категорія', 'Ціна', 'Останнє використання'];
   const sessCols = ['Дата/час', 'Користувач', 'Сесія', 'Тривалість'];
 
-  // Мапим данные, обязательно передаём id:string
   const ordersData = products.map((p) => ({
     id: p.id!,
     Назва: p.name,

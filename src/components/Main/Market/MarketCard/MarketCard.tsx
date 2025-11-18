@@ -58,13 +58,13 @@ export const MarketCard: React.FC<IWatch & { priority?: boolean }> = ({
       const width = window.innerWidth;
 
       if (width >= 1024) {
-        setChartHeight(90); // desktop
+        setChartHeight(90);
       } else if (width >= 834) {
-        setChartHeight(70); // tablets large
+        setChartHeight(70);
       } else if (width >= 768) {
-        setChartHeight(70); // tablets small
+        setChartHeight(70);
       } else {
-        setChartHeight(79); // mobile
+        setChartHeight(79);
       }
     };
 
@@ -99,7 +99,7 @@ export const MarketCard: React.FC<IWatch & { priority?: boolean }> = ({
             className={`${styles.cardImage}`}
             priority={priority}
           />
-          <div className='flex flex-col h-full justify-between items-center gap-2 md:gap-2 lg:gap-3'>
+          <div className='flex flex-col gap-2 justify-between items-center h-full md:gap-2 lg:gap-3'>
             <div
               className={`${styles.cardWatchName} text-center max-h-[54px] md:max-h-[36px]  max-w-[164px] lg:max-w-[212px] overflow-hidden`}
             >
