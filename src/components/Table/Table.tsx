@@ -1,9 +1,7 @@
-// src/components/Table/Table.tsx
 'use client';
 
 import React from 'react';
 import styles from './Table.module.css';
-// import { Delete, DownloadIcon, EditIcon } from "../../../public/icons";
 
 interface TableProps {
   columns: string[];
@@ -44,7 +42,6 @@ export const Table: React.FC<TableProps> = ({
                 const cellKey = `${rowKey}-${col}`;
                 const value = row[col];
 
-                // Ячейки с кнопками «Редагувати» + «Завантажити» + «Видалити»
                 if (
                   col === 'Кількість' ||
                   col === 'Опис' ||
@@ -60,27 +57,21 @@ export const Table: React.FC<TableProps> = ({
                               onClick={() => onEdit(rowKey)}
                               className={styles.editButton}
                               title='Редагувати'
-                            >
-                              {/* <img src={EditIcon.src} alt="edit" /> */}
-                            </button>
+                            ></button>
                           )}
                           {onDownload && (
                             <button
                               onClick={() => onDownload(rowKey)}
                               className={styles.downloadButton}
                               title='Завантажити'
-                            >
-                              {/* <img src={DownloadIcon.src} alt="download" /> */}
-                            </button>
+                            ></button>
                           )}
                           {onDelete && (
                             <button
                               onClick={() => onDelete(rowKey)}
                               className={styles.deleteButton}
                               title='Видалити'
-                            >
-                              {/* <img src={Delete.src} alt="delete" /> */}
-                            </button>
+                            ></button>
                           )}
                         </div>
                       </div>
@@ -88,7 +79,6 @@ export const Table: React.FC<TableProps> = ({
                   );
                 }
 
-                // Ячейки «Тривалість» — только «Завантажити» + «Видалити»
                 if (col === 'Тривалість') {
                   return (
                     <td key={cellKey} className={styles.tableCell}>
@@ -100,18 +90,14 @@ export const Table: React.FC<TableProps> = ({
                               onClick={() => onDownload(rowKey)}
                               className={styles.downloadButton}
                               title='Завантажити'
-                            >
-                              {/* <img src={DownloadIcon.src} alt="download" /> */}
-                            </button>
+                            ></button>
                           )}
                           {onDelete && (
                             <button
                               onClick={() => onDelete(rowKey)}
                               className={styles.deleteButton}
                               title='Видалити'
-                            >
-                              {/* <img src={Delete.src} alt="delete" /> */}
-                            </button>
+                            ></button>
                           )}
                         </div>
                       </div>
@@ -119,7 +105,6 @@ export const Table: React.FC<TableProps> = ({
                   );
                 }
 
-                // Остальные колонки — просто значение
                 return (
                   <td key={cellKey} className={styles.tableCell}>
                     {value}

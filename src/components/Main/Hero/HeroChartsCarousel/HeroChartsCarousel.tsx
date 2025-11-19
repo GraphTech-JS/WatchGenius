@@ -67,7 +67,6 @@ export const HeroChartsCarousel = () => {
     return () => clearInterval(interval);
   }, [isDesktop, isTablet]);
 
-  // Mobile drag + snap + sync
   useEffect(() => {
     if (isDesktop) return;
     const el = swipeRef.current;
@@ -101,7 +100,6 @@ export const HeroChartsCarousel = () => {
         pointerId = null;
       }
 
-      // mobile snap
       if (!isTablet) {
         const vw = el.clientWidth;
         const idx = Math.round(el.scrollLeft / vw);

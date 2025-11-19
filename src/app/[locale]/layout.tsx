@@ -4,7 +4,6 @@ import { MainContextProvider } from '@/context';
 import { Akatab, Inter, Roboto_Flex } from 'next/font/google';
 import { CompareProvider } from '@/context/CompareContext';
 import { notFound } from 'next/navigation';
-// import { NextIntlClientProvider } from "next-intl";
 import { languages, type Locale } from '@/i18n/settings';
 import { BackdropDistortionDefs } from '@/components/Chat/components/BackdropDistortionDefs';
 import { OrganizationJsonLd, WebSiteJsonLd } from '@/components/JsonLd';
@@ -100,9 +99,6 @@ export default async function RootLayout({
   const locale = resolvedParams.locale;
 
   if (!languages.includes(locale)) notFound();
-
-  // const messages = (await import(`@/i18n/locales/${locale}/translation.json`))
-  //   .default;
 
   return (
     <>

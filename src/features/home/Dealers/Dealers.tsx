@@ -3,17 +3,19 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './Dealers.module.css';
 import { ArrowIcon } from '../../../../public/social/Icon';
 import { DealerCard } from '@/components/Main/Dealers/DealerCard';
-import { mockDealers } from '@/mock/dealers';
+import { useDealers } from '@/hooks/useDealers';
 
 export const Dealers = () => {
   const [cols, setCols] = useState<1 | 2>(1);
   const [page, setPage] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
-  // Only need the setter; value is not read
+  const [isMounted, setIsMounted] = useState(false);
   const [, setDirection] = useState<'next' | 'prev' | null>(null);
   const swipeRef = useRef<HTMLDivElement | null>(null);
+  const { dealers, error } = useDealers();
 
   useEffect(() => {
+    setIsMounted(true);
     const onResize = () => {
       const w = window.innerWidth;
       if (w >= 1024) {
@@ -33,7 +35,7 @@ export const Dealers = () => {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  const totalPages = Math.max(1, Math.ceil(mockDealers.length / cols));
+  const totalPages = Math.max(1, Math.ceil(dealers.length / cols));
 
   const scrollToPage = (idx: number) => {
     const el = swipeRef.current;
@@ -55,8 +57,8 @@ export const Dealers = () => {
     }
   };
 
-  // Enable mouse drag / touch swipe to change page with smooth dragging
   useEffect(() => {
+    if (!isMounted) return;
     const el = swipeRef.current;
     if (!el) return;
     let startX = 0;
@@ -84,7 +86,6 @@ export const Dealers = () => {
         } catch {}
         pointerId = null;
       }
-      // snap to nearest page
       const viewport = el.clientWidth;
       const newPage = Math.round(el.scrollLeft / viewport);
       setPage(newPage);
@@ -100,10 +101,10 @@ export const Dealers = () => {
       el.removeEventListener('pointerup', onPointerUp);
       el.removeEventListener('pointercancel', onPointerUp);
     };
-  }, [page, totalPages]);
+  }, [page, totalPages, isMounted]);
 
-  // Track scroll to update pagination state
   useEffect(() => {
+    if (!isMounted) return;
     const el = swipeRef.current;
     if (!el) return;
     let raf = 0;
@@ -120,10 +121,21 @@ export const Dealers = () => {
       el.removeEventListener('scroll', onScroll);
       cancelAnimationFrame(raf);
     };
-  }, [page]);
+  }, [page, isMounted]);
+
+  if (error) {
+    return (
+      <div className='flex flex-col items-center justify-center min-h-[400px] gap-4'>
+        <p className='text-red-500 text-[20px]'>Помилка: {error}</p>
+        <button onClick={() => window.location.reload()}>
+          Спробувати ще раз
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <section id='dealers' className={styles.dealers}>
+    <section id='dealers' className={styles.dealers} suppressHydrationWarning>
       <div
         className={`${styles.dealersContainer} w-full flex flex-col gap-6 max-w-[90rem] mx-auto px-5 md:px-10 lg:px-25 py-7 lg:py-9 mb-12.5 md:mb-12 lg:mb-15`}
       >
@@ -131,7 +143,7 @@ export const Dealers = () => {
           className={`${styles.dealersHead} relative flex items-center justify-center`}
         >
           <div className={`${styles.dealersTitle} mb-2.5`}>Featured dealer</div>
-          {isDesktop && (
+          {isMounted && isDesktop && (
             <div
               className={`${styles.dealersSlider} absolute right-0 flex items-center`}
             >
@@ -175,8 +187,8 @@ export const Dealers = () => {
             className={`flex gap-6 overflow-x-auto snap-x snap-mandatory scroll-smooth no-scrollbar ${styles.swipe}`}
             onAnimationEnd={() => setDirection(null)}
           >
-            {mockDealers.map((dealer) => {
-              const gap = '1.5rem'; // Tailwind gap-6
+            {dealers.map((dealer) => {
+              const gap = '1.5rem';
               const basis = `calc((100% - ${gap} * ${cols - 1}) / ${cols})`;
               return (
                 <div
@@ -200,7 +212,7 @@ export const Dealers = () => {
                   aria-current={i === page ? 'true' : 'false'}
                   className={`${styles.dot} ${
                     i === page ? styles.dotActive : ''
-                  } w-2 h-2 rounded-full cursor-pointer p-[17px]`}
+                  } w-2 h-2 rounded-full cursor-pointer p-1.5`}
                 />
               ))}
             </div>

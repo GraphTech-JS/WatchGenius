@@ -1,16 +1,20 @@
-"use client";
-import React from "react";
-import styles from "./BrandSpotlight.module.css";
-import Image from "next/image";
-import { RolexBrand, RolexBrandDark } from "../../../../public/watch";
-import { BrandCards } from "@/components/Main/BrandSpotlight/BrandCards/BrandCards";
-import { mockTrending } from "@/mock/watch";
-import { t } from "@/i18n";
-import { brandSpotlightKeys } from "@/i18n/keys/home";
+'use client';
+import React from 'react';
+import styles from './BrandSpotlight.module.css';
+import Image from 'next/image';
+import { RolexBrand, RolexBrandDark } from '../../../../public/watch';
+import { BrandCards } from '@/components/Main/BrandSpotlight/BrandCards/BrandCards';
+import { mockTrending } from '@/mock/watch';
+import { t } from '@/i18n';
+import { brandSpotlightKeys } from '@/i18n/keys/home';
 
 export const BrandSpotlight = () => {
   return (
-    <section id="brand" className={`${styles.brand} flex justify-center`}>
+    <section
+      id='brand'
+      className={`${styles.brand} flex justify-center`}
+      suppressHydrationWarning
+    >
       <div
         className={`${styles.brandWrap} max-w-[90rem] flex flex-col items-center px-5 md:px-10 lg:px-15 xl:px-25 py-9 md:py-6 lg:py-5.5`}
       >
@@ -27,17 +31,17 @@ export const BrandSpotlight = () => {
           >
             <Image
               src={RolexBrand}
-              alt="Rolex"
+              alt='Rolex'
               width={155}
               height={86}
-              className="w-[9.75rem] block lg:hidden "
+              className='w-[9.75rem] block lg:hidden '
             />
             <Image
               src={RolexBrandDark}
-              alt="Rolex"
+              alt='Rolex'
               width={155}
               height={86}
-              className="w-[8.75rem] hidden lg:block"
+              className='w-[8.75rem] hidden lg:block'
             />
             <div
               className={`${styles.DescriptionBrand} flex flex-col items-center gap-3`}

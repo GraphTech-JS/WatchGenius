@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { CompareProduct } from "@/interfaces/compare";
-import ProductHero from "../product/components/ProductHero/ProductHero";
-import ProductAnalytics from "../product/components/ProductAnalytics/ProductAnalytics";
-import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
-import styles from "./ComparePage.module.css";
-import { t } from "@/i18n";
-import { compareKeys } from "@/i18n/keys/compare";
+import React, { useState } from 'react';
+import { CompareProduct } from '@/interfaces/compare';
+import ProductHero from '../product/components/ProductHero/ProductHero';
+import ProductAnalytics from '../product/components/ProductAnalytics/ProductAnalytics';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
+import styles from './ComparePage.module.css';
+import { t } from '@/i18n';
+import { compareKeys } from '@/i18n/keys/compare';
 
 interface ComparePageProps {
   products: CompareProduct[];
@@ -19,24 +19,24 @@ const ComparePage: React.FC<ComparePageProps> = ({
   onBackToCatalog,
 }) => {
   const [activeTab1, setActiveTab1] = useState<
-    "parameters" | "brand" | "price" | "trend"
-  >("price");
+    'parameters' | 'brand' | 'price' | 'trend'
+  >('price');
 
   const [activeTab2, setActiveTab2] = useState<
-    "parameters" | "brand" | "price" | "trend"
-  >("price");
+    'parameters' | 'brand' | 'price' | 'trend'
+  >('price');
 
   const breadcrumbItems =
     products.length > 0
       ? [
-          { label: t(compareKeys.breadcrumbs.catalog), href: "/catalog" },
+          { label: t(compareKeys.breadcrumbs.catalog), href: '/catalog' },
           {
             label: products[0].brand,
             href: `/catalog?brand=${products[0].brand}`,
           },
           {
-            label: products[0].model.split(" ")[0],
-            href: `/catalog?model=${products[0].model.split(" ")[0]}`,
+            label: products[0].model.split(' ')[0],
+            href: `/catalog?model=${products[0].model.split(' ')[0]}`,
           },
           {
             label: t(compareKeys.breadcrumbs.model),
@@ -45,23 +45,22 @@ const ComparePage: React.FC<ComparePageProps> = ({
           { label: t(compareKeys.breadcrumbs.compare) },
         ]
       : [
-          { label: t(compareKeys.breadcrumbs.catalog), href: "/catalog" },
+          { label: t(compareKeys.breadcrumbs.catalog), href: '/catalog' },
           { label: t(compareKeys.breadcrumbs.compare) },
         ];
 
   const handleSave = (productId: string) => {
-    console.log("Зберегти продукт:", productId);
+    console.log('Зберегти продукт:', productId);
   };
 
   const handlePriceNotification = (productId: string) => {
-    console.log("Сповіщення про ціну:", productId);
+    console.log('Сповіщення про ціну:', productId);
   };
 
   const handleBuy = (productId: string) => {
-    console.log("Купити продукт:", productId);
+    console.log('Купити продукт:', productId);
   };
 
-  // Якщо немає продуктів для порівняння
   if (products.length === 0) {
     return (
       <main
@@ -70,12 +69,12 @@ const ComparePage: React.FC<ComparePageProps> = ({
         <div className={styles.content}>
           <Breadcrumbs items={breadcrumbItems} />
 
-          <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-            <div className="mb-6">
-              <h2 className="mb-2 text-2xl font-semibold text-gray-900">
+          <div className='flex flex-col items-center justify-center min-h-[400px] text-center'>
+            <div className='mb-6'>
+              <h2 className='mb-2 text-2xl font-semibold text-gray-900'>
                 {t(compareKeys.empty.title)}
               </h2>
-              <p className="mb-8 text-gray-600">
+              <p className='mb-8 text-gray-600'>
                 {t(compareKeys.empty.subtitle)}
               </p>
             </div>
@@ -113,7 +112,7 @@ const ComparePage: React.FC<ComparePageProps> = ({
             >
               <ProductHero
                 product={products[0]}
-                layout="vertical"
+                layout='vertical'
                 onSave={() => handleSave(products[0].id)}
                 onCompare={() => {}}
                 onPriceNotification={() =>
@@ -142,7 +141,7 @@ const ComparePage: React.FC<ComparePageProps> = ({
             >
               <ProductHero
                 product={products[1]}
-                layout="vertical"
+                layout='vertical'
                 onSave={() => handleSave(products[1].id)}
                 onCompare={() => {}}
                 onPriceNotification={() =>
@@ -167,7 +166,11 @@ const ComparePage: React.FC<ComparePageProps> = ({
         </div>
 
         <div className={styles.backButtonContainer}>
-          <button onClick={onBackToCatalog} className={styles.backButton} aria-label='Повернутися до каталогу годинників'>
+          <button
+            onClick={onBackToCatalog}
+            className={styles.backButton}
+            aria-label='Повернутися до каталогу годинників'
+          >
             {t(compareKeys.backButton)}
           </button>
         </div>

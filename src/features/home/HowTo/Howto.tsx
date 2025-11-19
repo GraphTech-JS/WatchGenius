@@ -24,6 +24,7 @@ export const HowTo = () => {
     <section
       id='howTo'
       className={`${styles.howTo} max-w-[90rem] mx-auto pt-[3.25rem] pb-[3.75rem] px-[1.25rem] md:px-[2.5rem] lg:py-[3.75rem] lg:px-[6rem]`}
+      suppressHydrationWarning
     >
       <div className={`${styles.howToContainer} w-full flex flex-col gap-6`}>
         <div

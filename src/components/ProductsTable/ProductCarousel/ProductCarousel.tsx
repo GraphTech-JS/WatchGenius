@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useRef, useState } from 'react';
-// import Link from "next/link";
 import { LocalizedLink } from '@/components/LocalizedLink';
 import styles from './ProductCarousel.module.css';
 import { ProductCard } from '@/components/ProductsTable/ProductCard/ProductCard';
@@ -60,7 +59,6 @@ export const ProductCarousel: React.FC<Props> = ({
       return np;
     });
 
-  // Pointer drag with live move and snap to pages
   useEffect(() => {
     const el = swipeRef.current;
     if (!el) return;
@@ -105,7 +103,6 @@ export const ProductCarousel: React.FC<Props> = ({
     };
   }, [cols, totalPages]);
 
-  // Keep pagination in sync while scrolling
   useEffect(() => {
     const el = swipeRef.current;
     if (!el) return;

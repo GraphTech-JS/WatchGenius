@@ -23,7 +23,7 @@ const Dealers = lazy(() =>
 
 const HomePage = () => {
   return (
-    <main>
+    <main suppressHydrationWarning>
       <Hero />
       <Market />
       <Suspense fallback={<div style={{ minHeight: '400px' }} />}>

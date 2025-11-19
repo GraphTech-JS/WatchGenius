@@ -59,3 +59,17 @@ export interface ApiErrorResponse {
   message: string;
   error: Record<string, unknown>;  
 }
+
+export interface ApiDealerResponse {
+  id: string;
+  name: string;
+  description: string;
+  logoUrl: string;
+  websiteUrl: string;
+  location: string;
+  rating: number;
+  reviewsCount: number;
+  isVerified: boolean;
+  badges: Array<Record<string, unknown>>;
+  createdAt: string;
+}

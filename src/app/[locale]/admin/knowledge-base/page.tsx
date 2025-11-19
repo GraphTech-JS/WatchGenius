@@ -1,4 +1,3 @@
-// src/pages/admin/knowledge-base.tsx
 "use client";
 import React, { useState } from "react";
 import { AdminLayout } from "@/components/Main/AdminLayout/AdminLayout";
@@ -9,7 +8,6 @@ import styles from "../admin.module.css";
 import Modal from "@/components/Modal";
 
 export default function AdminKnowledgeBase() {
-  // 1. стейт записей
   const [items, setItems] = useState<IProduct[]>([
     {
       id: "235",
@@ -45,14 +43,12 @@ export default function AdminKnowledgeBase() {
   const [formMode, setFormMode] = useState<"add" | "edit">("add");
   const [currentItem, setCurrent] = useState<IProduct | null>(null);
 
-  // 2. добавить
   const handleAdd = () => {
     setFormMode("add");
     setCurrent(null);
     setModalOpen(true);
   };
 
-  // 3. редактировать
   const handleEdit = (id: string) => {
     const found = items.find((i) => i.id === id) || null;
     setFormMode("edit");
@@ -60,10 +56,8 @@ export default function AdminKnowledgeBase() {
     setModalOpen(true);
   };
 
-  // закрыть модалку
   const handleClose = () => setModalOpen(false);
 
-  // сабмит формы
   const handleFormSubmit = (data: IProduct) => {
     if (formMode === "add") {
       setItems((prev) => [...prev, { ...data, id: Date.now().toString() }]);

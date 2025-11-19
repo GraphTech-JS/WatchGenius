@@ -1,4 +1,3 @@
-// SidebarAdmin.tsx
 'use client';
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -24,7 +23,6 @@ export const Sidebar: React.FC = () => {
   const toggle = () => setIsOn((x) => !x);
   const toggleMenu = () => setIsOpen((x) => !x);
 
-  // Detect mobile on mount and resize
   React.useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);

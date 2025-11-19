@@ -1,5 +1,6 @@
 import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
 import {
+  ApiDealerResponse,
   ApiErrorResponse,
   ApiFiltersResponse,
   ApiWatchListResponse,
@@ -59,6 +60,45 @@ export async function getFilters(): Promise<ApiFiltersResponse> {
   try {
     const response = await fetch(url);
     return handleResponse<ApiFiltersResponse>(response);
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
+}
+
+export async function getDealers(): Promise<ApiDealerResponse[]> {
+  const url = `/api/dealers`;
+
+  try {
+    const response = await fetch(url);
+    return handleResponse<ApiDealerResponse[]>(response);
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
+}
+
+export async function getDealerById(id: string): Promise<ApiDealerResponse> {
+  const url = `/api/dealers/${id}`;
+
+  try {
+    const response = await fetch(url);
+    return handleResponse<ApiDealerResponse>(response);
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
+}
+
+export async function searchDealers(query: string): Promise<ApiDealerResponse[]> {
+  const searchParams = new URLSearchParams();
+  searchParams.set('query', query);
+
+  const url = `/api/dealers/search?${searchParams.toString()}`;
+
+  try {
+    const response = await fetch(url);
+    return handleResponse<ApiDealerResponse[]>(response);
   } catch (error) {
     console.error('Fetch error:', error);
     throw error;

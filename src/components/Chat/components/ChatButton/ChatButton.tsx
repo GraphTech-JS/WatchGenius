@@ -21,7 +21,6 @@ export const ChatButton: React.FC<IChatButton> = ({
       aria-label={t(a11yKeys.ai.chat)}
       onClick={onClick}
       style={{
-        // Respect dynamic bottom plus mobile safe area inset
         bottom: `calc(${
           dynamicPosition?.bottom || '20%'
         } + env(safe-area-inset-bottom))`,
