@@ -226,10 +226,11 @@ const clearAllFilters = useCallback(() => {
 
 useEffect(() => {
   const apiParams: GetWatchesParams = !searchTerm.trim() && !sidebarFilters 
-    ? { pageSize: 12 }
+    ? { pageSize: 12, currency: 'EUR' }
     : {
         ...(searchTerm.trim() && { search: searchTerm.trim() }),
-        ...(sidebarFilters ? convertFiltersToApiParams(sidebarFilters) : {})
+        ...(sidebarFilters ? convertFiltersToApiParams(sidebarFilters) : {}),
+        currency: 'EUR'
       };
   
   reloadWithFilters(apiParams);

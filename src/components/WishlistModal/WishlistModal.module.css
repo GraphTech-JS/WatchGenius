@@ -1,0 +1,131 @@
+.wishlistModal {
+  max-width: 950px;
+  width: 90vw;
+  margin-top: 100px;
+  margin-bottom: 40px;
+  overflow: hidden;
+  z-index: 1001;
+}
+
+@media (max-width: 768px) {
+  .wishlistModal {
+    margin-top: 60px;
+    margin-bottom: 20px;
+  }
+}
+
+
+
+.wishlistModal > div > div:last-child {
+  padding: 0 !important;
+  padding-bottom: 12px !important;
+}
+
+.wishlistModal > div > div.p-6 {
+  padding: 0 !important;
+}
+
+.wishlistModal > div > div:first-child {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.wishlistContent {
+  padding: 0;
+}
+
+.wishlistContent > .emptyState {
+  padding: 40px 20px;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.emptyStateTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #171414;
+  margin-bottom: 12px;
+}
+
+.emptyStateDescription {
+  font-size: 16px;
+  color: #8b8b8b;
+  max-width: 400px;
+}
+
+.wishlistContent {
+  padding: 0;
+  padding-right: 8px; 
+  padding-bottom: 40px; 
+  max-height: calc(90vh - 100px); 
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.wishlistContent > div:not(.emptyState) {
+  margin-bottom: 8px;
+}
+
+.wishlistContent::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+  border: 1px solid var(--black);
+  border-radius: 9px;
+  -webkit-appearance: none;
+}
+
+.wishlistContent::-webkit-scrollbar-track {
+  background: transparent;
+  border: none;
+}
+
+.wishlistContent::-webkit-scrollbar-button {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;
+  -webkit-appearance: none !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.wishlistContent::-webkit-scrollbar-button:vertical:start:decrement {
+  height: 0 !important;
+  width: 0 !important;
+  display: none !important;
+}
+
+.wishlistContent::-webkit-scrollbar-button:vertical:end:increment {
+  height: 0 !important;
+  width: 0 !important;
+  display: none !important;
+}
+
+.wishlistContent::-webkit-scrollbar-corner {
+  display: none;
+  background: transparent;
+}
+
+.wishlistContent::-webkit-scrollbar-thumb {
+  background-color: rgba(24, 35, 45, 1) !important;
+  border-radius: 9px;
+  min-height: 20px;
+}
+
+.wishlistContent {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(24, 35, 45, 1) transparent;
+}

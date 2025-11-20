@@ -9,6 +9,9 @@ import { useLocale } from '@/hooks/useLocale';
 import styles from './Header.module.css';
 import { t } from '@/i18n';
 import { a11yKeys } from '@/i18n/keys/accessibility';
+import { useWishlistContext } from '@/context/WishlistContext';
+import { WishlistModal } from '@/components/WishlistModal/WishlistModal';
+import { SuccessModal } from '@/components/SuccessModal/SuccessModal';
 import {
   SearchNormal,
   SearchWhite,
@@ -16,9 +19,9 @@ import {
   Robot,
   Close,
   Menu,
-} from "../../../../public/icons";
-import { HeartIcon } from "../../../../public/header/Icon";
-import { headerKeys } from "@/i18n/keys/header";
+} from '../../../../public/icons';
+import { HeartIcon } from '../../../../public/header/Icon';
+import { headerKeys } from '@/i18n/keys/header';
 
 export const Header = () => {
   const locale = useLocale();
@@ -28,6 +31,12 @@ export const Header = () => {
   const [showLang, setShowLang] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [menuClosing, setMenuClosing] = useState(false);
+  const [isWishlistModalOpen, setIsWishlistModalOpen] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const prevWishlistCountRef = useRef(0);
+  const { wishlistIds } = useWishlistContext();
+  const wishlistCount = wishlistIds.length;
 
   const openMenu = () => {
     setMenuClosing(false);
@@ -134,6 +143,20 @@ export const Header = () => {
     return () => clearTimeout(timer);
   }, [showSearch]);
 
+  useEffect(() => {
+    if (prevWishlistCountRef.current === 0) {
+      prevWishlistCountRef.current = wishlistCount;
+      return;
+    }
+
+    if (wishlistCount > prevWishlistCountRef.current) {
+      setSuccessMessage('Годинник додано до списку бажань');
+      setShowSuccessModal(true);
+    }
+
+    prevWishlistCountRef.current = wishlistCount;
+  }, [wishlistCount]);
+
   const currencies = ['EUR', 'USD', 'UAH', 'PL', 'KZT'];
   const languages = ['УКР', 'АНГЛ', 'ПЛ'];
 
@@ -157,22 +180,22 @@ export const Header = () => {
             {
               href: `/${locale}/catalog`,
               label: t(headerKeys.nav.catalog),
-              type: "page",
+              type: 'page',
             },
             {
-              href: "#dealers",
+              href: '#dealers',
               label: t(headerKeys.nav.dealers),
-              type: "section",
+              type: 'section',
             },
             {
-              href: "#treands",
+              href: '#treands',
               label: t(headerKeys.nav.trends),
-              type: "section",
+              type: 'section',
             },
             {
-              href: "#contacts",
+              href: '#contacts',
               label: t(headerKeys.nav.contacts),
-              type: "section",
+              type: 'section',
             },
           ].map(({ href, label, type }) => {
             const isCatalog = pathname === `/${locale}/catalog`;
@@ -364,13 +387,23 @@ export const Header = () => {
               />
             </button>
             <button
-              className={`${styles.headerLangSwitchBtn} shrink-0`}
+              className={`${styles.headerLangSwitchBtn} shrink-0 relative cursor-pointer`}
               aria-label={t(a11yKeys.favorites.view)}
+              onClick={() => setIsWishlistModalOpen(true)}
             >
               <HeartIcon
                 className={`w-5 h-5 text-green-800`}
                 aria-hidden='true'
               />
+
+              {wishlistCount > 0 && (
+                <span
+                  className='flex absolute -top-2 -right-2 justify-center items-center w-4 h-4 text-[10px] font-bold text-white bg-red-500 rounded-full'
+                  aria-label={`${wishlistCount} товарів у списку бажань`}
+                >
+                  {wishlistCount > 9 ? '9+' : wishlistCount}
+                </span>
+              )}
             </button>
           </div>
           <div className='flex ml-4 w-8 lg:hidden'>
@@ -554,6 +587,15 @@ export const Header = () => {
             document.body
           )}
       </div>
+      <WishlistModal
+        isOpen={isWishlistModalOpen}
+        onClose={() => setIsWishlistModalOpen(false)}
+      />
+      <SuccessModal
+        isVisible={showSuccessModal}
+        message={successMessage}
+        onClose={() => setShowSuccessModal(false)}
+      />
     </header>
   );
 };
