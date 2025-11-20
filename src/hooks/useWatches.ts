@@ -72,7 +72,7 @@ export function useWatches(initialFilters?: GetWatchesParams) {
     setWatches([]); 
     
     const hasFilters = Object.keys(filters).filter(k => k !== 'page' && k !== 'pageSize').length > 0;
-    const pageSize = hasFilters ? 100 : 12;
+    const pageSize = hasFilters ? 1000 : 12;
     
     try {
       

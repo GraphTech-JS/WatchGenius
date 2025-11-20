@@ -10,6 +10,7 @@ export interface ApiBrand {
 export interface ApiWatchResponse {
   id: string;
   name: string;
+  model?: string;
   chronoUrl: string;
   image: string;
   brand: ApiBrand;
