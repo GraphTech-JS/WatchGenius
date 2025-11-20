@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { WatchCard } from '@/features/catalog/components/CatalogGrid/WatchCard/WatchCard';
 import { EmptyState } from '@/features/catalog/components/CatalogGrid/EmptyState/EmptyState';
+import { useWishlistContext } from '@/context/WishlistContext';
 import type { WatchItem } from '@/interfaces';
 import { t } from '@/i18n';
 import { catalogKeys } from '@/i18n/keys/catalog';
@@ -33,7 +34,18 @@ export const CatalogGrid: React.FC<Props> = ({
   const [isLoading, setIsLoading] = useState(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const isLoadingRef = useRef(false);
-  const [liked, setLiked] = useState<Set<string>>(new Set());
+
+  /**
+   * Використовуємо контекст вішліста замість локального стану
+   *
+   * ЧОМУ замінити локальний стан:
+   * - Один джерело правди (single source of truth)
+   * - Синхронізація між каталогом та модалкою вішліста
+   * - Дані зберігаються в localStorage
+   * - Немає конфліктів між різними компонентами
+   */
+  const { isInWishlist, addToWishlist, removeFromWishlist } =
+    useWishlistContext();
 
   useEffect(() => {
     if (!hasMore && items.length > initialCount) {
@@ -53,16 +65,25 @@ export const CatalogGrid: React.FC<Props> = ({
     return items;
   }, [items, hasMore, showAll, initialCount]);
 
-  const toggleLike = (id: string) =>
-    setLiked((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
+  /**
+   * Обробник toggle like
+   *
+   * ЧОМУ така структура:
+   * - Якщо вже в вішлісті - видаляємо
+   * - Якщо немає - додаємо об'єкт WatchItem
+   * - Використовуємо методи з контексту
+   */
+  const handleToggleLike = (id: string) => {
+    if (isInWishlist(id)) {
+      removeFromWishlist(id);
+    } else {
+      // Знаходимо товар в списку items і додаємо його
+      const watch = items.find((item) => item.id === id);
+      if (watch) {
+        addToWishlist(watch);
       }
-      return next;
-    });
+    }
+  };
 
   useEffect(() => {
     if (!hasMore) return;
@@ -140,8 +161,8 @@ export const CatalogGrid: React.FC<Props> = ({
           <WatchCard
             key={item.id}
             item={item}
-            liked={liked.has(item.id)}
-            onToggleLike={toggleLike}
+            liked={isInWishlist(item.id)}
+            onToggleLike={handleToggleLike}
             onOpenFeedback={onOpenFeedback}
             priority={index === 0}
           />

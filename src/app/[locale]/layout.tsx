@@ -3,6 +3,7 @@ import '../globals.css';
 import { MainContextProvider } from '@/context';
 import { Akatab, Inter, Roboto_Flex } from 'next/font/google';
 import { CompareProvider } from '@/context/CompareContext';
+import { WishlistProvider } from '@/context/WishlistContext';
 import { notFound } from 'next/navigation';
 import { languages, type Locale } from '@/i18n/settings';
 import { BackdropDistortionDefs } from '@/components/Chat/components/BackdropDistortionDefs';
@@ -122,9 +123,11 @@ export default async function RootLayout({
         <BackdropDistortionDefs />
         <MainContextProvider>
           <CompareProvider>
-            {/* <NextIntlClientProvider locale={locale} messages={messages}> */}
-            <main>{children}</main>
-            {/* </NextIntlClientProvider> */}
+            <WishlistProvider>
+              {/* <NextIntlClientProvider locale={locale} messages={messages}> */}
+              <main>{children}</main>
+              {/* </NextIntlClientProvider> */}
+            </WishlistProvider>
           </CompareProvider>
         </MainContextProvider>
       </body>

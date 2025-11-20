@@ -5,6 +5,8 @@ import {
   ApiFiltersResponse,
   ApiWatchListResponse,
   GetWatchesParams,
+  ApiWatchFullResponse,
+  SearchSuggestion,
 } from '@/interfaces/api';
 
 
@@ -42,6 +44,7 @@ export async function getWatches(
     searchParams.set('hasDocumentsOptions', params.hasDocumentsOptions);
   if (params.priceRange) searchParams.set('priceRange', params.priceRange);
   if (params.years) searchParams.set('years', params.years);
+  if (params.currency) searchParams.set('currency', params.currency);
 
   const url = `/api/watches?${searchParams.toString()}`;
 
@@ -233,4 +236,84 @@ export function convertFiltersToApiParams(
   }
 
   return params;
+}
+
+export async function getWatchesByIds(
+  ids: string[],
+  currency?: string
+): Promise<ApiWatchFullResponse[]> {
+  if (ids.length === 0) {
+    return [];
+  }
+
+  const searchParams = new URLSearchParams();
+  searchParams.set('ids', ids.join(','));
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+
+  const url = `/api/watches/by-ids?${searchParams.toString()}`;
+
+  console.log('🌐 API Request:', url);
+  console.log('📋 Requesting IDs:', ids);
+
+  try {
+    const response = await fetch(url);
+    const data = await handleResponse<ApiWatchFullResponse[]>(response);
+    console.log('✅ API Response data:', data);
+    return data;
+  } catch (error) {
+    console.error('❌ Fetch error:', error);
+    throw error;
+  }
+}
+
+export async function getWatchById(
+  id: string,
+  currency?: string
+): Promise<ApiWatchFullResponse> {
+  if (!id) {
+    throw new Error('Watch ID is required');
+  }
+
+  const searchParams = new URLSearchParams();
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+
+  const url = `/api/watches/${id}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+
+  console.log('🌐 API Request (single watch):', url);
+  console.log('📋 Requesting ID:', id);
+
+  try {
+    const response = await fetch(url);
+    const data = await handleResponse<ApiWatchFullResponse>(response);
+    console.log('✅ API Response (single watch):', data);
+    return data;
+  } catch (error) {
+    console.error('❌ Fetch error:', error);
+    throw error;
+  }
+}
+
+export async function getSearchSuggestions(
+  query: string
+): Promise<SearchSuggestion[]> {
+  if (!query || query.trim().length === 0) {
+    return [];
+  }
+
+  const searchParams = new URLSearchParams();
+  searchParams.set('q', query.trim());
+
+  const url = `/api/search/suggestions?${searchParams.toString()}`;
+
+  try {
+    const response = await fetch(url);
+    return handleResponse<SearchSuggestion[]>(response);
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
 }

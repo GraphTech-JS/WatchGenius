@@ -46,12 +46,11 @@ export const WatchCard: React.FC<Props> = ({
     router.push(`/${locale}/product/${item.slug}`);
   };
 
-
   const handleBuyClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if(item.chronoUrl){
+    if (item.chronoUrl) {
       window.open(item.chronoUrl, '_blank');
-    }else{
+    } else {
       onOpenFeedback?.(item.title);
     }
   };
@@ -113,7 +112,7 @@ export const WatchCard: React.FC<Props> = ({
 
       <div className='flex flex-col items-center gap-[9px] sm:flex-row sm:justify-between'>
         <div className='text-[16px] font-medium text-[var(--text-dark,#171414)] whitespace-nowrap'>
-          {item.price.toLocaleString('uk-UA')} {item.currency}
+          {Math.round(item.price).toLocaleString('uk-UA')} {item.currency}
         </div>
 
         <div className='flex items-center gap-1 text-[14px] '>

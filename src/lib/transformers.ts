@@ -1,15 +1,23 @@
 
-import { ApiWatchResponse, ApiDealerResponse } from '@/interfaces/api';
+import { ApiWatchResponse, ApiDealerResponse, ApiWatchFullResponse } from '@/interfaces/api';
 import { Currency, WatchItem, WatchIndex } from '@/interfaces/watch';
 import { DealerData } from '@/types/dealers';
+
+function convertCurrency(currency: string): Currency {
+  const upperCurrency = currency.toUpperCase();
+  if (upperCurrency === 'EUR' || upperCurrency === '€') return '€';
+  if (upperCurrency === 'USD' || upperCurrency === '$') return '$';
+  if (upperCurrency === 'UAH' || upperCurrency === '₴') return '₴';
+  return '€';
+}
 
 export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
   return {
     id: apiWatch.id,
     title: apiWatch.name,
     slug: generateSlug(apiWatch.name),
-    price: apiWatch.price,
-    currency: apiWatch.currency as Currency,
+    price: Math.round(apiWatch.price),
+    currency: convertCurrency(apiWatch.currency),
     brand: apiWatch.brand.name,
     index: calculateIndex(apiWatch.brand.brandIndex),
     image: apiWatch.image,
@@ -89,4 +97,52 @@ function uuidToNumber(uuid: string): number {
     hash = hash & hash;
   }
   return Math.abs(hash);
+}
+
+export function transformApiWatchFull(apiWatch: ApiWatchFullResponse): WatchItem {
+  const latestPrice = apiWatch.priceHistory && apiWatch.priceHistory.length > 0
+    ? apiWatch.priceHistory[apiWatch.priceHistory.length - 1]
+    : null;
+
+  const price = Math.round(latestPrice?.price || 0);
+  const currencyCode = latestPrice?.currency || apiWatch.dealer?.location || 'EUR';
+  const currency = convertCurrency(currencyCode);
+  
+  const defaultPrice = apiWatch.priceHistory && apiWatch.priceHistory.length > 1
+    ? apiWatch.priceHistory[0].price
+    : price;
+
+  const imageUrl = apiWatch.imageUrls && apiWatch.imageUrls.length > 0
+    ? apiWatch.imageUrls[0]
+    : '';
+
+  const caseDiameter = apiWatch.caseDiameter 
+    ? parseFloat(apiWatch.caseDiameter.replace(/[^0-9.]/g, ''))
+    : 40;
+
+  return {
+    id: apiWatch.id,
+    title: apiWatch.name,
+    slug: generateSlug(apiWatch.name),
+    price: price,
+    currency: currency,
+    brand: apiWatch.brand.name,
+    index: calculateIndex(apiWatch.brand.brandIndex),
+    image: imageUrl,
+    chronoUrl: apiWatch.chronoUrl,
+    buttonLabel: 'Buy on Chrono24',
+    trend: calculateTrend(price, defaultPrice),
+    variant: undefined,
+    condition: apiWatch.condition || '',
+    mechanism: apiWatch.mechanism || '',
+    material: apiWatch.material || '',
+    documents: apiWatch.hasDocuments || '',
+    location: apiWatch.location || '',
+    year: apiWatch.year || 2020,
+    diameterMm: caseDiameter,
+    waterResistance: apiWatch.waterResistance || false,
+    chronograph: apiWatch.isChronograph || false,
+    brandLogo: undefined,
+    reference: apiWatch.ref || undefined,
+  };
 }

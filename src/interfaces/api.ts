@@ -40,7 +40,8 @@ export interface GetWatchesParams {
   locations?: string;
   hasDocumentsOptions?: string;
   priceRange?: string;  
-  years?: string;       
+  years?: string;
+  currency?: string;
 }
 
 export interface ApiFiltersResponse {
@@ -72,4 +73,52 @@ export interface ApiDealerResponse {
   isVerified: boolean;
   badges: Array<Record<string, unknown>>;
   createdAt: string;
+}
+
+export interface ApiDealerFullResponse {
+  id: string;
+  name: string;
+  description: string;
+  logoUrl: string;
+  websiteUrl: string;
+  location: string;
+  rating: number;
+  reviewsCount: number;
+  isVerified: boolean;
+  badges: Array<Record<string, unknown>>;
+  createdAt: string;
+}
+
+export interface ApiPriceHistory {
+  price: number;
+  currency: string;
+  recordedAt: string;
+}
+
+export interface ApiWatchFullResponse {
+  id: string;
+  name: string;
+  model: string;
+  description: string;
+  ref: string;
+  chronoUrl: string;
+  imageUrls: string[];
+  year: number;
+  mechanism: string;
+  material: string;
+  hasDocuments: string;
+  location: string;
+  condition: string;
+  braceletMaterial: string;
+  caseDiameter: string;
+  isChronograph: boolean;
+  waterResistance: boolean;
+  brand: ApiBrand;
+  dealer: ApiDealerFullResponse;
+  priceHistory: ApiPriceHistory[];
+}
+
+export interface SearchSuggestion {
+  type: 'brand' | 'model' | 'watch';
+  value: string;
 }
