@@ -13,7 +13,11 @@ import React, {
 import type { WatchItem } from '@/interfaces/watch';
 import { getWatchesByIds, getWatchById } from '@/lib/api';
 import { transformApiWatchFull } from '@/lib/transformers';
+import { Toast } from '@/components/Toast/Toast';
+import { t } from '@/i18n';
+import { wishlistKeys } from '@/i18n/keys/wishlist';
 
+const MAX_WISHLIST_ITEMS = 3;
 interface WishlistContextType {
   wishlistItems: WatchItem[];
   wishlistIds: string[];
@@ -23,6 +27,9 @@ interface WishlistContextType {
   removeFromWishlist: (watchId: string) => void;
   clearWishlist: () => void;
   isInWishlist: (watchId: string) => boolean;
+  showToast: boolean;
+  toastMessage: string;
+  setShowToast: (show: boolean) => void;
 }
 
 type WishlistAction =
@@ -65,6 +72,8 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
   const [wishlistItems, dispatch] = useReducer(wishlistReducer, []);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   const wishlistIds = useMemo(
     () => wishlistItems.map((item) => item.id),
@@ -73,68 +82,71 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
 
   useEffect(() => {
     if (typeof window === 'undefined') {
-      console.log('⚠️ [Wishlist] SSR - skipping localStorage load');
       return;
     }
 
-    console.log('🔍 [Wishlist] Checking localStorage...');
     const saved = localStorage.getItem('wishlist-watches');
-    console.log('📦 [Wishlist] localStorage value:', saved);
 
     if (!saved) {
-      console.log('ℹ️ [Wishlist] No saved wishlist data found');
       return;
     }
 
     try {
       const parsed = JSON.parse(saved);
-      console.log('📋 [Wishlist] Parsed data:', parsed);
 
       if (!Array.isArray(parsed)) {
-        console.log(
-          '⚠️ [Wishlist] Parsed data is not an array:',
-          typeof parsed
-        );
         return;
       }
 
-      const ids: string[] = parsed.filter(
-        (item): item is string => typeof item === 'string'
-      );
+      let cachedItems: WatchItem[] = [];
+      let ids: string[] = [];
 
-      console.log('🆔 [Wishlist] Extracted IDs:', ids);
+      if (parsed.length > 0) {
+        if (typeof parsed[0] === 'string') {
+          ids = parsed.filter(
+            (item): item is string => typeof item === 'string'
+          );
+        } else {
+          cachedItems = parsed.filter(
+            (item): item is WatchItem =>
+              typeof item === 'object' && item !== null && 'id' in item
+          );
+          ids = cachedItems.map((item) => item.id);
+        }
+      }
 
       if (ids.length === 0) {
-        console.log('ℹ️ [Wishlist] No valid IDs found');
         return;
+      }
+
+      if (cachedItems.length > 0) {
+        const itemsToShow = cachedItems.slice(0, MAX_WISHLIST_ITEMS);
+        dispatch({ type: 'SET_ITEMS', payload: itemsToShow });
       }
 
       setLoading(true);
       setError(null);
 
-      console.log('🔄 [Wishlist] Loading from API, IDs:', ids);
-
       getWatchesByIds(ids, 'EUR')
         .then((apiWatches) => {
-          console.log(
-            '✅ [Wishlist] API Response:',
-            apiWatches.length,
-            'watches'
-          );
-          console.log('📦 [Wishlist] First watch from API:', apiWatches[0]);
           const transformed = apiWatches.map(transformApiWatchFull);
-          console.log(
-            '🔄 [Wishlist] Transformed:',
-            transformed.length,
-            'watches'
-          );
-          dispatch({ type: 'SET_ITEMS', payload: transformed });
+
+          if (transformed.length > MAX_WISHLIST_ITEMS) {
+            dispatch({
+              type: 'SET_ITEMS',
+              payload: transformed.slice(0, MAX_WISHLIST_ITEMS),
+            });
+          } else {
+            dispatch({ type: 'SET_ITEMS', payload: transformed });
+          }
         })
         .catch((err) => {
           console.error('Failed to load wishlist from API:', err);
-          setError(
-            err instanceof Error ? err.message : 'Failed to load wishlist'
-          );
+          if (cachedItems.length === 0) {
+            setError(
+              err instanceof Error ? err.message : 'Failed to load wishlist'
+            );
+          }
         })
         .finally(() => {
           setLoading(false);
@@ -148,38 +160,30 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    const ids = wishlistItems.map((item) => item.id);
-    localStorage.setItem('wishlist-watches', JSON.stringify(ids));
+    if (wishlistItems.length === 0) {
+      localStorage.removeItem('wishlist-watches');
+      return;
+    }
+
+    localStorage.setItem('wishlist-watches', JSON.stringify(wishlistItems));
   }, [wishlistItems]);
 
   const addToWishlist = useCallback(
     (watch: WatchItem | string) => {
-      console.log(
-        '➕ [Wishlist] addToWishlist called:',
-        typeof watch === 'string' ? `ID: ${watch}` : `Watch object: ${watch.id}`
-      );
-
-      if (typeof watch === 'string') {
+      if (wishlistItems.length >= MAX_WISHLIST_ITEMS) {
+        setToastMessage(t(wishlistKeys.toast.maxItems));
+        setShowToast(true);
+        return;
+      } else if (typeof watch === 'string') {
         const id = watch;
         if (wishlistIds.includes(id)) return;
-
-        setLoading(true);
-        setError(null);
-
-        console.log('🔄 [Wishlist] Adding watch from API, ID:', id);
-
         getWatchById(id, 'EUR')
           .then((apiWatch) => {
-            console.log(
-              '✅ [Wishlist] API Response for single watch:',
-              apiWatch
-            );
             const transformed = transformApiWatchFull(apiWatch);
-            console.log('🔄 [Wishlist] Transformed watch:', transformed);
             dispatch({ type: 'ADD_TO_WISHLIST', payload: transformed });
           })
           .catch((err) => {
-            console.error('Failed to add watch to wishlist:', err);
+            console.error('❌ [Wishlist] Failed to add watch:', err);
             setError(
               err instanceof Error ? err.message : 'Failed to add watch'
             );
@@ -189,14 +193,12 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
           });
       } else {
         if (wishlistIds.includes(watch.id)) {
-          console.log('ℹ️ [Wishlist] Watch already in wishlist');
           return;
         }
-        console.log('✅ [Wishlist] Adding watch object directly:', watch.id);
         dispatch({ type: 'ADD_TO_WISHLIST', payload: watch });
       }
     },
-    [wishlistIds]
+    [wishlistIds, wishlistItems.length]
   );
 
   const removeFromWishlist = useCallback((watchId: string) => {
@@ -223,11 +225,20 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
     removeFromWishlist,
     clearWishlist,
     isInWishlist,
+    showToast,
+    toastMessage,
+    setShowToast,
   };
 
   return (
     <WishlistContext.Provider value={value}>
       {children}
+      <Toast
+        isVisible={showToast}
+        message={toastMessage}
+        onClose={() => setShowToast(false)}
+        duration={3000}
+      />
     </WishlistContext.Provider>
   );
 };

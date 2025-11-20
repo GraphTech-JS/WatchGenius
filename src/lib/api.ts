@@ -21,11 +21,12 @@ async function handleResponse<T>(response: Response): Promise<T> {
       errorMessage = `${response.status}: ${response.statusText}`;
     }
 
-    console.error('API Error:', errorMessage);
+    console.error('❌ [API] API Error:', errorMessage);
     throw new Error(errorMessage);
   }
 
-  return response.json();
+  const data = await response.json();
+  return data;
 }
 
 export async function getWatches(
@@ -254,16 +255,12 @@ export async function getWatchesByIds(
 
   const url = `/api/watches/by-ids?${searchParams.toString()}`;
 
-  console.log('🌐 API Request:', url);
-  console.log('📋 Requesting IDs:', ids);
-
   try {
     const response = await fetch(url);
     const data = await handleResponse<ApiWatchFullResponse[]>(response);
-    console.log('✅ API Response data:', data);
     return data;
   } catch (error) {
-    console.error('❌ Fetch error:', error);
+    console.error('❌ [API] Failed to fetch watches by IDs:', error);
     throw error;
   }
 }
@@ -283,16 +280,12 @@ export async function getWatchById(
 
   const url = `/api/watches/${id}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
 
-  console.log('🌐 API Request (single watch):', url);
-  console.log('📋 Requesting ID:', id);
-
   try {
     const response = await fetch(url);
     const data = await handleResponse<ApiWatchFullResponse>(response);
-    console.log('✅ API Response (single watch):', data);
     return data;
   } catch (error) {
-    console.error('❌ Fetch error:', error);
+    console.error('❌ [API] Failed to fetch watch by ID:', error);
     throw error;
   }
 }

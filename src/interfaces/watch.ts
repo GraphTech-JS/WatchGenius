@@ -18,6 +18,7 @@ export type WatchItem = {
   condition: string;
   mechanism: string;
   material: string;
+  braceletMaterial: string;
   documents: string;
   location: string;
   year: number;
