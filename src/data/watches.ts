@@ -7,6 +7,7 @@ const createWatches = (): WatchItem[] => {
   const conditions = ['Новий', 'Відмінний', 'Б/у'];
   const mechanisms = ['Механічний', 'Кварцовий', 'Автоматичний'];
   const materials = ['Золото', 'Срібло', 'Титан', 'Кераміка'];
+  const braceletMaterials = ['Сталь', 'Золото', 'Кераміка', 'Титан', 'Шкіра'];
   const documents = ['Тільки з документами і коробкою'];
   const locations = ['Європа', 'Азія', 'Америка'];
   const years = [2000, 2001, 2002, 2003, 2004, 2005];
@@ -20,6 +21,7 @@ const createWatches = (): WatchItem[] => {
     const condition = conditions[i % conditions.length];
     const mechanism = mechanisms[i % mechanisms.length];
     const material = materials[i % materials.length];
+    const braceletMaterial = braceletMaterials[i % braceletMaterials.length];
     const location = locations[i % locations.length];
     const year = years[i % years.length];
 
@@ -53,6 +55,7 @@ const createWatches = (): WatchItem[] => {
       condition,
       mechanism,
       material,
+      braceletMaterial,
       documents: documents[0],
       location,
       year,
