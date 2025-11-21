@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode } from 'react';
 
 interface FloatingButtonProps {
   watchedIds: string[];
@@ -33,7 +33,7 @@ export function FloatingButton({
       const vw = window.innerWidth;
 
       if (vw < 768) {
-        setBottom("80px");
+        setBottom('80px');
         return;
       }
 
@@ -70,15 +70,15 @@ export function FloatingButton({
       }
     };
     updatePosition();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", updatePosition, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', updatePosition, { passive: true });
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", updatePosition);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', updatePosition);
       clearTimeout(scrollTimeout);
     };
-  }, [watchedIds.join(","), safeOffset, initialOffsetPercent, extraOffset]);
+  }, [watchedIds, safeOffset, initialOffsetPercent, extraOffset]);
 
   return (
     <div
