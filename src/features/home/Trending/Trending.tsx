@@ -56,18 +56,11 @@ export const Trending = () => {
         setError(null);
 
         const currency = getCurrencyFromStorage();
-        console.log('💰 [Trending] Using currency:', currency);
         const data = await getPopularWatches(currency);
-
-        console.log('📊 [Trending] API Response:', data);
-        console.log('📊 [Trending] Response length:', data.length);
 
         const transformed = data.map((item) =>
           transformApiPopularWatchItem(item.watch)
         );
-
-        console.log('📊 [Trending] Transformed watches:', transformed);
-        console.log('📊 [Trending] Transformed length:', transformed.length);
 
         const iWatchItems = transformed.map((watch, index) =>
           convertWatchItemToIWatch(watch, index)
@@ -75,9 +68,7 @@ export const Trending = () => {
 
         setWatches(iWatchItems);
       } catch (err) {
-        console.error('❌ [Trending] Failed to load popular watches:', err);
         setError(err instanceof Error ? err.message : 'Failed to load watches');
-        console.log('⚠️ [Trending] Using mockTrending as fallback');
         setWatches(mockTrending);
       } finally {
         setLoading(false);
@@ -86,16 +77,11 @@ export const Trending = () => {
 
     loadPopularWatches();
 
-    // Слухаємо зміни валюти в localStorage
     const handleStorageChange = () => {
-      const newCurrency = getCurrencyFromStorage();
-      console.log('💰 [Trending] Currency changed to:', newCurrency);
       loadPopularWatches();
     };
 
     window.addEventListener('storage', handleStorageChange);
-
-    // Також слухаємо custom event для змін валюти в тому ж вікні
     window.addEventListener('currencyChanged', handleStorageChange);
 
     return () => {

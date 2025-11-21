@@ -48,11 +48,7 @@ export const BrandSpotlight = () => {
 
         const data = await getPopularWatchesByBrand(currency);
 
-        console.log('📊 [BrandSpotlight] API Response:', data);
-        console.log('📊 [BrandSpotlight] Response length:', data.length);
-
         if (data.length === 0) {
-          console.log('⚠️ [BrandSpotlight] Empty response, using mockTrending');
           setBrandData({ brand: 'Rolex', watches: mockTrending });
           return;
         }
@@ -67,18 +63,12 @@ export const BrandSpotlight = () => {
           convertWatchItemToIWatch(watch, index)
         );
 
-        console.log('📊 [BrandSpotlight] First brand:', firstBrand.brand);
-        console.log('📊 [BrandSpotlight] Transformed watches:', transformed);
-        console.log('📊 [BrandSpotlight] IWatch items:', iWatchItems);
-
         setBrandData({
           brand: firstBrand.brand,
           watches: iWatchItems,
         });
       } catch (err) {
-        console.error('❌ [BrandSpotlight] Failed to load brand watches:', err);
         setError(err instanceof Error ? err.message : 'Failed to load watches');
-        console.log('⚠️ [BrandSpotlight] Using mockTrending as fallback');
         setBrandData({ brand: 'Rolex', watches: mockTrending });
       } finally {
         setLoading(false);

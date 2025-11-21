@@ -154,16 +154,19 @@ export default function ProductClient({
           });
 
         setSimilarModels(transformed);
-      } catch (err) {
-        console.error('❌ [ProductClient] Failed to load similar models:', err);
+      } catch {
         setSimilarModels([]);
       }
     };
 
-    loadSimilarModels();
+    if (watch?.id && watch?.brand) {
+      loadSimilarModels();
+    }
 
     const handleCurrencyChange = () => {
-      loadSimilarModels();
+      if (watch?.id && watch?.brand) {
+        loadSimilarModels();
+      }
     };
 
     window.addEventListener('currencyChanged', handleCurrencyChange);
@@ -173,6 +176,7 @@ export default function ProductClient({
       window.removeEventListener('currencyChanged', handleCurrencyChange);
       window.removeEventListener('storage', handleCurrencyChange);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watch?.id, watch?.brand]);
 
   const sellerOffers = useMemo(() => {
