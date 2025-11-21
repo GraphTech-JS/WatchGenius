@@ -39,7 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# compiled dist folders (should not be in repo, Vercel builds them)
-**/dist/
-src/**/dist/

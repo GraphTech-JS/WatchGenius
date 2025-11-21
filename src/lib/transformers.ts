@@ -39,7 +39,7 @@ export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
     brand: apiWatch.brand.name,
     index: calculateIndex(apiWatch.brand.brandIndex),
     image: imageUrl,
-    chronoUrl: apiWatch.chronoUrl,
+    chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
     buttonLabel: 'Buy on Chrono24',
     trend: calculateTrend(apiWatch.price, apiWatch.defaultPrice),
     variant: undefined,
@@ -74,7 +74,7 @@ function calculateTrend(price: number, defaultPrice: number) {
   };
 }
 
-function cleanWatchTitle(title: string, condition?: string): string {
+function cleanWatchTitle(title: string, condition?: string, maxLength: number = 80): string {
   if (!title || title.trim() === '') return title;
   
   let cleaned = title.trim();
@@ -118,11 +118,11 @@ function cleanWatchTitle(title: string, condition?: string): string {
     .replace(/\s+/g, ' ') // Multiple spaces to single space
     .trim();
   
-  // Limit length to 60 characters, but try to cut at word boundary
-  if (cleaned.length > 60) {
-    const truncated = cleaned.substring(0, 60);
+  // Limit length, but try to cut at word boundary
+  if (cleaned.length > maxLength) {
+    const truncated = cleaned.substring(0, maxLength);
     const lastSpace = truncated.lastIndexOf(' ');
-    if (lastSpace > 30) {
+    if (lastSpace > maxLength * 0.5) {
       cleaned = truncated.substring(0, lastSpace) + '...';
     } else {
       cleaned = truncated + '...';
@@ -224,7 +224,7 @@ export function transformApiPopularWatchItem(
     brand: apiWatch.brand.name,
     index: calculateIndex(apiWatch.brand.brandIndex),
     image: imageUrl,
-    chronoUrl: apiWatch.chronoUrl,
+    chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
     buttonLabel: 'Buy on Chrono24',
     trend: calculateTrend(price, defaultPrice),
     variant: undefined,
@@ -304,7 +304,8 @@ export function transformApiWatchFull(
   }
   
   // Clean the title (remove duplicates, redundant info)
-  watchTitle = cleanWatchTitle(watchTitle, apiWatch.condition);
+  // Use 80 chars for cards to show more complete names
+  watchTitle = cleanWatchTitle(watchTitle, apiWatch.condition, 80);
   
   // If cleaned title is too short or empty, use ref as fallback
   if (!watchTitle || watchTitle.length < 3) {
@@ -322,7 +323,7 @@ export function transformApiWatchFull(
     brand: apiWatch.brand.name,
     index: calculateIndex(apiWatch.brand.brandIndex),
     image: imageUrl,
-    chronoUrl: apiWatch.chronoUrl,
+    chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
     buttonLabel: 'Buy on Chrono24',
     trend: calculateTrend(price, defaultPrice),
     variant: undefined,

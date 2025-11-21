@@ -439,9 +439,19 @@ export async function getPopularWatches(
     searchParams.toString() ? `?${searchParams.toString()}` : ''
   }`;
   
+  console.log('🔍 [API] getPopularWatches - URL:', url);
+  console.log('🔍 [API] getPopularWatches - currency:', currency);
+  
   try {
     const response = await fetch(url);
+    console.log('🔍 [API] getPopularWatches - Response status:', response.status);
+    console.log('🔍 [API] getPopularWatches - Response ok:', response.ok);
+    
     const data = await handleResponse<ApiPopularWatchResponse[]>(response);
+    console.log('🔍 [API] getPopularWatches - Response data:', data);
+    console.log('🔍 [API] getPopularWatches - Data type:', Array.isArray(data) ? 'array' : typeof data);
+    console.log('🔍 [API] getPopularWatches - Data length:', Array.isArray(data) ? data.length : 'not array');
+    
     return data;
   } catch (error) {
     console.error('❌ [API] Failed to fetch popular watches:', error);
@@ -459,9 +469,19 @@ export async function getPopularWatchesByBrand(
 
   const url = `/api/watches/popular-by-brand${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
 
+  console.log('🔍 [API] getPopularWatchesByBrand - URL:', url);
+  console.log('🔍 [API] getPopularWatchesByBrand - currency:', currency);
+
   try {
     const response = await fetch(url);
+    console.log('🔍 [API] getPopularWatchesByBrand - Response status:', response.status);
+    console.log('🔍 [API] getPopularWatchesByBrand - Response ok:', response.ok);
+    
     const data = await handleResponse<ApiPopularByBrandResponse[]>(response);
+    console.log('🔍 [API] getPopularWatchesByBrand - Response data:', data);
+    console.log('🔍 [API] getPopularWatchesByBrand - Data type:', Array.isArray(data) ? 'array' : typeof data);
+    console.log('🔍 [API] getPopularWatchesByBrand - Data length:', Array.isArray(data) ? data.length : 'not array');
+    
     return data;
   } catch (error) {
     console.error('❌ [API] Failed to fetch popular watches by brand:', error);

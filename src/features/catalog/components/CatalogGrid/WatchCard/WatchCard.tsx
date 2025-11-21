@@ -46,9 +46,21 @@ export const WatchCard: React.FC<Props> = ({
     router.push(`/${locale}/product/${item.slug}`);
   };
 
+  const hasValidImage = () => {
+    if (!item.image) return false;
+    const imageStr =
+      typeof item.image === 'string' ? item.image : item.image.src || '';
+    return (
+      imageStr.trim() !== '' &&
+      imageStr !== 'null' &&
+      imageStr !== 'undefined' &&
+      !imageStr.includes('/watch-random/')
+    );
+  };
+
   const handleBuyClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (item.chronoUrl) {
+    if (item.chronoUrl && hasValidImage()) {
       window.open(item.chronoUrl, '_blank');
     } else {
       onOpenFeedback?.(item.title);
@@ -144,7 +156,9 @@ export const WatchCard: React.FC<Props> = ({
         className={`${styles.buyButton} mt-[27px]`}
         onClick={handleBuyClick}
       >
-        {item.buttonLabel}
+        {item.chronoUrl && hasValidImage()
+          ? item.buttonLabel
+          : 'Get Quote'}
       </button>
     </div>
   );

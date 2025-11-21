@@ -68,6 +68,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   price,
   chartData,
   chartId,
+  slug,
+  index,
+  title,
   className,
   cardStyle,
   height,
@@ -76,21 +79,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   let variant: 'green' | 'orange' | 'red' | 'overall' = 'orange';
   let percentClass = styles.percentNeutral;
-  let score = 'B';
-  let scoreClass = styles.scoreNeutral;
   let ArrowIcon: React.FC | null = null;
+
+  const score =
+    index || (changePercent > 0 ? 'A' : changePercent < 0 ? 'C' : 'B');
+
+  let scoreClass = styles.scoreNeutral;
+  if (score === 'A') {
+    scoreClass = styles.scorePositive;
+  } else if (score === 'C') {
+    scoreClass = styles.scoreNegative;
+  }
 
   if (changePercent > 0) {
     variant = 'green';
     percentClass = styles.percentPositive;
-    score = 'A';
-    scoreClass = styles.scorePositive;
     ArrowIcon = ArrowUp;
   } else if (changePercent < 0) {
     variant = 'red';
     percentClass = styles.percentNegative;
-    score = 'C';
-    scoreClass = styles.scoreNegative;
     ArrowIcon = ArrowDown;
   }
 
@@ -107,11 +114,50 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     updateHeight();
     window.addEventListener('resize', updateHeight);
     return () => window.removeEventListener('resize', updateHeight);
-  }, []);
+  }, [dense]);
+
+  const getModelName = (): string => {
+    if (!title) return '';
+
+    let modelName = title.trim();
+    const brandRegex = new RegExp(`^${brand}\\s+`, 'i');
+    modelName = modelName.replace(brandRegex, '').trim();
+    modelName = modelName.replace(brandRegex, '').trim();
+
+    modelName = modelName.replace(/\b\d{6,}[A-Z0-9]*\b/g, '').trim();
+    modelName = modelName.replace(/\b(19|20)\d{2}\b/g, '').trim();
+
+    modelName = modelName
+      .replace(/\bNEW\b/gi, '')
+      .replace(/\bUNWORN\b/gi, '')
+      .replace(/\bOyster\s+Bracelet\b/gi, '')
+      .replace(/\b\[.*?\]\s*/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    const words = modelName.split(/\s+/).filter((word) => word.length > 0);
+    if (words.length > 3) {
+      modelName = words.slice(0, 3).join(' ');
+    } else {
+      modelName = words.join(' ');
+    }
+
+    if (modelName.length > 35) {
+      const truncated = modelName.substring(0, 35);
+      const lastSpace = truncated.lastIndexOf(' ');
+      if (lastSpace > 20) {
+        modelName = truncated.substring(0, lastSpace) + '...';
+      } else {
+        modelName = truncated + '...';
+      }
+    }
+
+    return modelName || brand;
+  };
 
   return (
     <LocalizedLink
-      href='/product/rolex-submariner-1'
+      href={slug ? `/product/${slug}` : '/catalog'}
       prefetch={false}
       aria-label={t(a11yKeys.card.product, {
         brand,
@@ -133,7 +179,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             : {}),
         }}
       >
-        {/* header */}
         <div
           className={`relative ${
             dense ? 'mb-1' : 'mb-1 md:mb-4'
@@ -170,7 +215,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             className={`w-auto  ${
               dense
                 ? 'max-h-[72px]'
-                : 'max-h-[84px] md:max-h-[125px] lg:max-h-[140px]'
+                : 'max-h-[84px] md:max-h-[110px] lg:max-h-[120px]'
             }`}
             priority={priority}
           />
@@ -184,7 +229,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         </div>
 
-        {/* body */}
         <div
           className={` mb-0 md:mb-1 flex ${
             dense ? 'gap-1' : 'gap-2'
@@ -194,9 +238,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             className={`flex flex-col ${dense ? 'gap-0' : 'gap-0 md:gap-2'}`}
           >
             <div
-              className={`${styles.cardWatchName} text-center max-h-[54px] overflow-hidden font-bold`}
+              className={`${styles.cardWatchName} text-center font-bold text-sm md:text-base leading-tight`}
             >
-              {brand}
+              <div className='text-base md:text-lg'>{brand}</div>
+              <div className='text-xs md:text-sm font-semibold text-gray-700 mt-0.5'>
+                {getModelName()}
+              </div>
             </div>
             <LineChart
               data={chartData || []}
@@ -215,7 +262,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         </div>
 
-        {/* footer */}
         <div className='flex gap-2 items-center w-full'>
           <div className='relative text-center max-h-[54px] w-full flex flex-row justify-between items-center'>
             <div className={`${styles.Price}`}>{price} €</div>

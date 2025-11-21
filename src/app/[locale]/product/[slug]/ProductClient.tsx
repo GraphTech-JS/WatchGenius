@@ -44,7 +44,6 @@ function translateDetailValue(
   return translation !== translationKey ? translation : value;
 }
 
-// Helper to get currency from localStorage
 function getCurrencyFromStorage(): string {
   if (typeof window === 'undefined') return 'EUR';
   const savedCurrency = localStorage.getItem('selectedCurrency');
@@ -52,6 +51,55 @@ function getCurrencyFromStorage(): string {
   return savedCurrency && validCurrencies.includes(savedCurrency)
     ? savedCurrency
     : 'EUR';
+}
+
+const PRODUCT_CACHE_PREFIX = 'product-cache-';
+const CACHE_TTL = 5 * 60 * 1000;
+
+function getProductCacheKey(slug: string, currency: string): string {
+  return `${PRODUCT_CACHE_PREFIX}${slug}-${currency}`;
+}
+
+function getCachedProduct(slug: string, currency: string): WatchItem | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = getProductCacheKey(slug, currency);
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedProduct(
+  slug: string,
+  currency: string,
+  watch: WatchItem
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = getProductCacheKey(slug, currency);
+    const cacheData = {
+      data: watch,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
 }
 
 export default function ProductClient({
@@ -72,6 +120,12 @@ export default function ProductClient({
         setError(null);
         const currency = getCurrencyFromStorage();
 
+        const cachedWatch = getCachedProduct(resolvedParams.slug, currency);
+        if (cachedWatch) {
+          setWatch(cachedWatch);
+          setLoading(false);
+        }
+
         const apiWatch = await getWatchBySlug(resolvedParams.slug, currency);
 
         if (!apiWatch) {
@@ -81,8 +135,8 @@ export default function ProductClient({
 
         const transformedWatch = transformApiWatchFull(apiWatch);
         setWatch(transformedWatch);
+        setCachedProduct(resolvedParams.slug, currency, transformedWatch);
       } catch (err) {
-        console.error('❌ [ProductClient] Failed to load watch:', err);
         setError(err instanceof Error ? err.message : 'Failed to load watch');
       } finally {
         setLoading(false);
@@ -91,7 +145,6 @@ export default function ProductClient({
 
     loadWatch();
 
-    // Listen for currency changes
     const handleCurrencyChange = () => {
       loadWatch();
     };
@@ -107,9 +160,7 @@ export default function ProductClient({
 
   useEffect(() => {
     if (watch?.id && !hasTrackedView.current) {
-      trackWatchView(watch.id).catch(() => {
-        // Silently fail if tracking endpoint is not available
-      });
+      trackWatchView(watch.id).catch(() => {});
       hasTrackedView.current = true;
     }
   }, [watch?.id]);
@@ -159,14 +210,10 @@ export default function ProductClient({
       }
     };
 
-    if (watch?.id && watch?.brand) {
-      loadSimilarModels();
-    }
+    loadSimilarModels();
 
     const handleCurrencyChange = () => {
-      if (watch?.id && watch?.brand) {
-        loadSimilarModels();
-      }
+      loadSimilarModels();
     };
 
     window.addEventListener('currencyChanged', handleCurrencyChange);
@@ -176,8 +223,7 @@ export default function ProductClient({
       window.removeEventListener('currencyChanged', handleCurrencyChange);
       window.removeEventListener('storage', handleCurrencyChange);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watch?.id, watch?.brand]);
+  }, [watch]);
 
   const sellerOffers = useMemo(() => {
     if (!watch) return [];
@@ -203,7 +249,10 @@ export default function ProductClient({
     brand: watch.brand,
     model: watch.title.split(' ').slice(1).join(' '),
     reference: watch.reference || `${watch.brand}-${watch.year}-${watch.id}`,
-    chronoUrl: watch.chronoUrl,
+    chronoUrl:
+      watch.chronoUrl && watch.chronoUrl.trim() !== ''
+        ? watch.chronoUrl
+        : undefined,
     price: {
       min: watch.price,
       max: watch.price,

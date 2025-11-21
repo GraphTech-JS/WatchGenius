@@ -92,14 +92,34 @@ const ProductHero: React.FC<ProductHeroProps> = ({
     onGetQuote();
   };
 
+  const hasValidImage = () => {
+    if (!product.image) return false;
+    const imageStr =
+      typeof product.image === 'string'
+        ? product.image
+        : product.image.src || '';
+    return (
+      imageStr.trim() !== '' &&
+      imageStr !== 'null' &&
+      imageStr !== 'undefined' &&
+      !imageStr.includes('/watch-random/')
+    );
+  };
+
   const handleBuy = () => {
-    if (product.chronoUrl) {
+    const hasChronoUrl =
+      product.chronoUrl &&
+      typeof product.chronoUrl === 'string' &&
+      product.chronoUrl.trim() !== '';
+    const hasImage = hasValidImage();
+
+    if (hasChronoUrl && hasImage) {
       window.open(product.chronoUrl, '_blank');
       onBuy();
       return;
     }
-    setShowBuyModal(true);
-    onBuy();
+    setShowGetQuoteModal(true);
+    onGetQuote();
   };
 
   const handleCopy = async () => {
@@ -473,25 +493,42 @@ const ProductHero: React.FC<ProductHeroProps> = ({
           <button
             onClick={handleBuy}
             className={styles.mainButton}
-            aria-label={t(a11yKeys.product.buy)}
+            aria-label={
+              product.chronoUrl &&
+              typeof product.chronoUrl === 'string' &&
+              product.chronoUrl.trim() !== '' &&
+              hasValidImage()
+                ? t(a11yKeys.product.buy)
+                : t(a11yKeys.product.getQuote)
+            }
           >
             <span
               className='font-inter text-[16px] font-bold'
               style={mainButtonTextStyle}
             >
-              {t(productKeys.hero.buy)}
+              {product.chronoUrl &&
+              typeof product.chronoUrl === 'string' &&
+              product.chronoUrl.trim() !== '' &&
+              hasValidImage()
+                ? t(productKeys.hero.buy)
+                : t(productKeys.hero.getQuote)}
             </span>
           </button>
 
-          <button
-            onClick={handleGetQuote}
-            className={styles.secondaryButton}
-            aria-label={t(a11yKeys.product.getQuote)}
-          >
-            <span className={styles.secondaryButtonText}>
-              {t(productKeys.hero.getQuote)}
-            </span>
-          </button>
+          {product.chronoUrl &&
+            typeof product.chronoUrl === 'string' &&
+            product.chronoUrl.trim() !== '' &&
+            hasValidImage() && (
+              <button
+                onClick={handleGetQuote}
+                className={styles.secondaryButton}
+                aria-label={t(a11yKeys.product.getQuote)}
+              >
+                <span className={styles.secondaryButtonText}>
+                  {t(productKeys.hero.getQuote)}
+                </span>
+              </button>
+            )}
         </div>
       </div>
 
