@@ -21,7 +21,7 @@ export interface Product {
   image: string | StaticImageData;
   thumbnails: (string | StaticImageData)[];
   description?: string;
-
+  chronoUrl?: string;
   details: ProductDetail[];
   
   analytics: ProductAnalytics;
@@ -83,7 +83,8 @@ export interface ProductHeroProps {
   onShare: () => void;
   onBuy: () => void;
   onGetQuote: () => void;
-  layout?: 'horizontal' | 'vertical'; 
+  layout?: 'horizontal' | 'vertical';
+  isSaved?: boolean;
 }
 
 export interface ProductAnalyticsProps {

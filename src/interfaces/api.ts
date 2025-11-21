@@ -119,7 +119,43 @@ export interface ApiWatchFullResponse {
   priceHistory: ApiPriceHistory[];
 }
 
+export interface ApiPopularWatchItem {
+  id: string;
+  name: string;
+  chronoUrl: string;
+  imageUrls: string[];
+  brand: ApiBrand;
+  dealer: ApiDealerFullResponse;
+  priceHistory: ApiPriceHistory[];
+}
+
+export interface ApiPopularWatchResponse {
+  popularity: number;
+  watch: ApiPopularWatchItem;
+}
+
+export interface ApiPopularByBrandResponse {
+  brand: string;
+  watches: ApiWatchFullResponse[];
+}
+
 export interface SearchSuggestion {
   type: 'brand' | 'model' | 'watch';
   value: string;
+}
+
+export interface ApiWatchAnalytics {
+  id: string;
+  watchId: string;
+  trend90d: number;
+  trend30d: number;
+  volatility: number;
+  liquidity: string;
+  popularity: number;
+  updatedAt: string; 
+}
+
+export interface ApiWatchAnalyticsResponse {
+  success: boolean;
+  analytics: ApiWatchAnalytics;
 }

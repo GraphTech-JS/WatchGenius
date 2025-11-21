@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { ProductHeroProps } from '@/interfaces/product';
 import { useCompareContext } from '@/context/CompareContext';
@@ -12,15 +12,15 @@ import {
   BellIcon,
   CopyIcon,
   ShareIcon,
-} from "@/product-icons";
-import HeartIcon from "/public/icons/Heart.svg";
-import styles from "./ProductHero.module.css";
-import { ComparisonModal } from "../../index";
-import { PriceAlertModal, GetQuoteModal } from "../ProductModals";
-import { FeedbackModal } from "@/components/FeedbackModal/FeedbackModal";
-import { useScreenWidth } from "@/hooks/useScreenWidth";
-import { useLocale } from "@/hooks/useLocale";
-import { productKeys } from "@/i18n/keys/product";
+} from '@/product-icons';
+import HeartIcon from '/public/icons/Heart.svg';
+import styles from './ProductHero.module.css';
+import { ComparisonModal } from '../../index';
+import { PriceAlertModal, GetQuoteModal } from '../ProductModals';
+import { FeedbackModal } from '@/components/FeedbackModal/FeedbackModal';
+import { useScreenWidth } from '@/hooks/useScreenWidth';
+import { useLocale } from '@/hooks/useLocale';
+import { productKeys } from '@/i18n/keys/product';
 
 const mainButtonTextStyle = {
   background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
@@ -36,6 +36,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
   onBuy,
   onGetQuote,
   layout = 'horizontal',
+  isSaved = false,
 }) => {
   const locale = useLocale();
   const [selectedImage, setSelectedImage] = useState(0);
@@ -44,10 +45,18 @@ const ProductHero: React.FC<ProductHeroProps> = ({
   const [showPriceAlertModal, setShowPriceAlertModal] = useState(false);
   const [showGetQuoteModal, setShowGetQuoteModal] = useState(false);
   const [showBuyModal, setShowBuyModal] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
   const screenWidth = useScreenWidth();
   const { addToCompare, removeFromCompare, isInCompare } = useCompareContext();
   const isInComparison = isInCompare(product.id);
+
+  useEffect(() => {
+    setShowComparisonModal(false);
+    setShowShareModal(false);
+    setShowPriceAlertModal(false);
+    setShowGetQuoteModal(false);
+    setShowBuyModal(false);
+    setSelectedImage(0);
+  }, [product.id]);
 
   const getIndexBadgeClasses = (index: string) => {
     switch (index) {
@@ -70,7 +79,6 @@ const ProductHero: React.FC<ProductHeroProps> = ({
   const handleShare = () => setShowShareModal(true);
 
   const handleSave = () => {
-    setIsSaved(!isSaved);
     onSave();
   };
 
@@ -85,6 +93,11 @@ const ProductHero: React.FC<ProductHeroProps> = ({
   };
 
   const handleBuy = () => {
+    if (product.chronoUrl) {
+      window.open(product.chronoUrl, '_blank');
+      onBuy();
+      return;
+    }
     setShowBuyModal(true);
     onBuy();
   };
@@ -173,9 +186,9 @@ const ProductHero: React.FC<ProductHeroProps> = ({
                     </span>
                   </div>
                   <div className={styles.indexTooltip}>
-                    {productIndex === "A" && t(productKeys.index.A)}
-                    {productIndex === "B" && t(productKeys.index.B)}
-                    {productIndex === "C" && t(productKeys.index.C)}
+                    {productIndex === 'A' && t(productKeys.index.A)}
+                    {productIndex === 'B' && t(productKeys.index.B)}
+                    {productIndex === 'C' && t(productKeys.index.C)}
                   </div>
                 </div>
               </div>
@@ -470,7 +483,11 @@ const ProductHero: React.FC<ProductHeroProps> = ({
             </span>
           </button>
 
-          <button onClick={handleGetQuote} className={styles.secondaryButton} aria-label={t(a11yKeys.product.getQuote)}>
+          <button
+            onClick={handleGetQuote}
+            className={styles.secondaryButton}
+            aria-label={t(a11yKeys.product.getQuote)}
+          >
             <span className={styles.secondaryButtonText}>
               {t(productKeys.hero.getQuote)}
             </span>

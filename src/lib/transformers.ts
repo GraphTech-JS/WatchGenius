@@ -2,6 +2,7 @@ import {
   ApiWatchResponse,
   ApiDealerResponse,
   ApiWatchFullResponse,
+  ApiPopularWatchItem,
 } from '@/interfaces/api';
 import { Currency, WatchItem, WatchIndex } from '@/interfaces/watch';
 import { DealerData } from '@/types/dealers';
@@ -16,8 +17,18 @@ function convertCurrency(currency: string): Currency {
 }
 
 export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
-  const watchTitle = apiWatch.model || apiWatch.name;
+  let watchTitle = apiWatch.model || apiWatch.name || '';
+  watchTitle = cleanWatchTitle(watchTitle);
   const fullTitle = `${apiWatch.brand.name} ${watchTitle}`.trim();
+  
+  const hasValidImage = apiWatch.image &&
+    apiWatch.image.trim() !== '' &&
+    apiWatch.image !== 'null' &&
+    apiWatch.image !== 'undefined';
+  
+  const imageUrl = hasValidImage
+    ? apiWatch.image
+    : getRandomWatchImage(apiWatch.id);
   
   return {
     id: apiWatch.id,
@@ -27,7 +38,7 @@ export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
     currency: convertCurrency(apiWatch.currency),
     brand: apiWatch.brand.name,
     index: calculateIndex(apiWatch.brand.brandIndex),
-    image: getRandomWatchImage(apiWatch.id),
+    image: imageUrl,
     chronoUrl: apiWatch.chronoUrl,
     buttonLabel: 'Buy on Chrono24',
     trend: calculateTrend(apiWatch.price, apiWatch.defaultPrice),
@@ -63,7 +74,65 @@ function calculateTrend(price: number, defaultPrice: number) {
   };
 }
 
-function generateSlug(name: string): string {
+function cleanWatchTitle(title: string, condition?: string): string {
+  if (!title || title.trim() === '') return title;
+  
+  let cleaned = title.trim();
+  
+  // Remove duplicate words/phrases (case-insensitive)
+  const words = cleaned.split(/\s+/);
+  const seen = new Set<string>();
+  const uniqueWords: string[] = [];
+  
+  for (const word of words) {
+    const lowerWord = word.toLowerCase();
+    if (!seen.has(lowerWord)) {
+      seen.add(lowerWord);
+      uniqueWords.push(word);
+    }
+  }
+  
+  cleaned = uniqueWords.join(' ');
+  
+  // Remove phrases that are redundant with condition
+  if (condition) {
+    const conditionUpper = condition.toUpperCase();
+    cleaned = cleaned
+      .replace(/\bNEW\/UNWORN\b/gi, '')
+      .replace(/\bNEW\s+UNWORN\b/gi, '')
+      .replace(/\bUNWORN\b/gi, '');
+    
+    if (conditionUpper === 'NEW') {
+      cleaned = cleaned.replace(/\bNEW\b/gi, '');
+    }
+  }
+  
+  // Remove redundant phrases
+  cleaned = cleaned
+    .replace(/\bwith\s+New\s+style\s+box\b/gi, '')
+    .replace(/\bwith\s+box\b/gi, '')
+    .replace(/\bwith\s+papers\b/gi, '')
+    .replace(/\bwith\s+original\s+box\b/gi, '')
+    .replace(/\bwith\s+original\s+papers\b/gi, '')
+    .replace(/\b\[.*?\]\s*/g, '') // Remove text in brackets like [Bruce Wayne]
+    .replace(/\s+/g, ' ') // Multiple spaces to single space
+    .trim();
+  
+  // Limit length to 60 characters, but try to cut at word boundary
+  if (cleaned.length > 60) {
+    const truncated = cleaned.substring(0, 60);
+    const lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > 30) {
+      cleaned = truncated.substring(0, lastSpace) + '...';
+    } else {
+      cleaned = truncated + '...';
+    }
+  }
+  
+  return cleaned.trim();
+}
+
+export function generateSlug(name: string): string {
   return name
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
@@ -113,6 +182,67 @@ function uuidToNumber(uuid: string): number {
   return Math.abs(hash);
 }
 
+export function transformApiPopularWatchItem(
+  apiWatch: ApiPopularWatchItem
+): WatchItem {
+  const latestPrice =
+    apiWatch.priceHistory && apiWatch.priceHistory.length > 0
+      ? apiWatch.priceHistory[apiWatch.priceHistory.length - 1]
+      : null;
+
+  const price = Math.round(latestPrice?.price || 0);
+  const currencyCode =
+    latestPrice?.currency || apiWatch.dealer?.location || 'EUR';
+  const currency = convertCurrency(currencyCode);
+
+  const defaultPrice =
+    apiWatch.priceHistory && apiWatch.priceHistory.length > 1
+      ? apiWatch.priceHistory[0].price
+      : price;
+
+  const hasValidImage = apiWatch.imageUrls && 
+    apiWatch.imageUrls.length > 0 && 
+    apiWatch.imageUrls[0] && 
+    apiWatch.imageUrls[0].trim() !== '' &&
+    apiWatch.imageUrls[0] !== 'null' &&
+    apiWatch.imageUrls[0] !== 'undefined';
+  
+  const imageUrl = hasValidImage
+    ? apiWatch.imageUrls[0]
+    : getRandomWatchImage(apiWatch.id);
+
+  let watchTitle = apiWatch.name || apiWatch.id;
+  watchTitle = cleanWatchTitle(watchTitle);
+  const fullTitle = `${apiWatch.brand.name} ${watchTitle}`.trim();
+
+  return {
+    id: apiWatch.id,
+    title: fullTitle,
+    slug: generateSlug(apiWatch.name),
+    price: price,
+    currency: currency,
+    brand: apiWatch.brand.name,
+    index: calculateIndex(apiWatch.brand.brandIndex),
+    image: imageUrl,
+    chronoUrl: apiWatch.chronoUrl,
+    buttonLabel: 'Buy on Chrono24',
+    trend: calculateTrend(price, defaultPrice),
+    variant: undefined,
+    condition: '',
+    mechanism: '',
+    material: '',
+    braceletMaterial: '',
+    documents: '',
+    location: apiWatch.dealer?.location || '',
+    year: 2020,
+    diameterMm: 40,
+    waterResistance: false,
+    chronograph: false,
+    brandLogo: undefined,
+    reference: undefined,
+  };
+}
+
 export function transformApiWatchFull(
   apiWatch: ApiWatchFullResponse
 ): WatchItem {
@@ -148,21 +278,37 @@ export function transformApiWatchFull(
 
   let watchTitle = '';
   
-  if (apiWatch.name && apiWatch.name.trim() !== '' && apiWatch.name.length > 5) {
+  // Prefer model if it exists and is meaningful
+  if (apiWatch.model && apiWatch.model.trim() !== '' && apiWatch.model.length > 3) {
+    watchTitle = apiWatch.model;
+  } else if (apiWatch.name && apiWatch.name.trim() !== '' && apiWatch.name.length > 5) {
+    // Check if name is just a reference (only uppercase letters, numbers, dashes)
     if (!/^[A-Z0-9-]+$/.test(apiWatch.name)) {
       watchTitle = apiWatch.name;
-    } else if (apiWatch.model && apiWatch.model.trim() !== '' && apiWatch.model.length > 5) {
-      watchTitle = apiWatch.model;
     } else {
-      watchTitle = apiWatch.name;
+      // If name is just a ref, try to use model or description
+      if (apiWatch.model && apiWatch.model.trim() !== '') {
+        watchTitle = apiWatch.model;
+      } else if (apiWatch.description) {
+        const descWords = apiWatch.description.split(' ').slice(0, 5).join(' ');
+        watchTitle = descWords.length > 10 ? descWords : apiWatch.ref || apiWatch.name;
+      } else {
+        watchTitle = apiWatch.ref || apiWatch.name;
+      }
     }
-  } else if (apiWatch.model && apiWatch.model.trim() !== '') {
-    watchTitle = apiWatch.model;
   } else if (apiWatch.description) {
-    const descWords = apiWatch.description.split(' ').slice(0, 6).join(' ');
+    const descWords = apiWatch.description.split(' ').slice(0, 5).join(' ');
     watchTitle = descWords.length > 10 ? descWords : apiWatch.ref || '';
   } else {
     watchTitle = apiWatch.ref || apiWatch.id;
+  }
+  
+  // Clean the title (remove duplicates, redundant info)
+  watchTitle = cleanWatchTitle(watchTitle, apiWatch.condition);
+  
+  // If cleaned title is too short or empty, use ref as fallback
+  if (!watchTitle || watchTitle.length < 3) {
+    watchTitle = apiWatch.ref || apiWatch.model || apiWatch.name || '';
   }
   
   const fullTitle = `${apiWatch.brand.name} ${watchTitle}`.trim();

@@ -93,4 +93,16 @@ export const productKeys = {
     noOffers: "product.offers.noOffers",
     requestOffer: "product.offers.requestOffer",
   },
+  details: {
+    mechanism: "product.details.mechanism",
+    year: "product.details.year",
+    material: "product.details.material",
+    diameter: "product.details.diameter",
+    condition: "product.details.condition",
+    bracelet: "product.details.bracelet",
+    waterResistance: "product.details.waterResistance",
+    chronograph: "product.details.chronograph",
+    yes: "product.details.yes",
+    no: "product.details.no",
+  },
 };

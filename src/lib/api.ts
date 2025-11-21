@@ -6,9 +6,13 @@ import {
   ApiWatchListResponse,
   GetWatchesParams,
   ApiWatchFullResponse,
+  ApiWatchResponse,
   SearchSuggestion,
+  ApiWatchAnalyticsResponse,
+  ApiPopularWatchResponse,
+  ApiPopularByBrandResponse,
 } from '@/interfaces/api';
-
+import { generateSlug } from '@/lib/transformers';
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
@@ -94,7 +98,9 @@ export async function getDealerById(id: string): Promise<ApiDealerResponse> {
   }
 }
 
-export async function searchDealers(query: string): Promise<ApiDealerResponse[]> {
+export async function searchDealers(
+  query: string
+): Promise<ApiDealerResponse[]> {
   const searchParams = new URLSearchParams();
   searchParams.set('query', query);
 
@@ -110,40 +116,43 @@ export async function searchDealers(query: string): Promise<ApiDealerResponse[]>
 }
 
 const MECHANISM_MAP: Record<string, string> = {
-  'automatic': 'Automatic',
-  'mechanical': 'Manual winding',
-  'manual': 'Manual winding',
+  automatic: 'Automatic',
+  mechanical: 'Manual winding',
+  manual: 'Manual winding',
   'manual winding': 'Manual winding',
 };
 
 const MATERIAL_MAP: Record<string, string> = {
-  'gold': 'Gold',
-  'ceramic': 'Ceramic',
-  'silver': 'Steel', 
-  'steel': 'Steel',
-  'platinum': 'Platinum',
-  'rose': 'Rose',
-  'white': 'White',
-  'yellow': 'Yellow',
-  'titanium': 'Steel', 
+  gold: 'Gold',
+  ceramic: 'Ceramic',
+  silver: 'Steel',
+  steel: 'Steel',
+  platinum: 'Platinum',
+  rose: 'Rose',
+  white: 'White',
+  yellow: 'Yellow',
+  titanium: 'Steel',
 };
 
 const LOCATION_MAP: Record<string, string> = {
-  'america': 'United States of America',
+  america: 'United States of America',
   'united states of america': 'United States of America',
-  'usa': 'United States of America',
-  'us': 'United States of America',
+  usa: 'United States of America',
+  us: 'United States of America',
 };
 
 const DOCUMENT_MAP: Record<string, string> = {
-  'fullset': 'Original box, original papers',
+  fullset: 'Original box, original papers',
   'full set': 'Original box, original papers',
   'original box, original papers': 'Original box, original papers',
   'original box, no original papers': 'Original box, no original papers',
   'no original box, no original papers': 'No original box, no original papers',
 };
 
-function normalizeValue(value: string, map: Record<string, string>): string | null {
+function normalizeValue(
+  value: string,
+  map: Record<string, string>
+): string | null {
   const normalized = value.toLowerCase().trim();
   return map[normalized] || null;
 }
@@ -173,8 +182,8 @@ export function convertFiltersToApiParams(
 
   if (filters.selectedConditions?.length) {
     const validConditions = filters.selectedConditions
-      .map(c => c.toUpperCase())
-      .filter(c => c === 'NEW' || c === 'USED');
+      .map((c) => c.toUpperCase())
+      .filter((c) => c === 'NEW' || c === 'USED');
     if (validConditions.length > 0) {
       params.conditions = validConditions.join('/');
     }
@@ -182,7 +191,7 @@ export function convertFiltersToApiParams(
 
   if (filters.selectedMechanisms?.length) {
     const validMechanisms = filters.selectedMechanisms
-      .map(m => {
+      .map((m) => {
         const mapped = normalizeValue(m, MECHANISM_MAP);
         return mapped || capitalizeFirst(m);
       })
@@ -194,7 +203,7 @@ export function convertFiltersToApiParams(
 
   if (filters.selectedMaterials?.length) {
     const validMaterials = filters.selectedMaterials
-      .map(m => {
+      .map((m) => {
         const mapped = normalizeValue(m, MATERIAL_MAP);
         return mapped || capitalizeFirst(m);
       })
@@ -206,7 +215,7 @@ export function convertFiltersToApiParams(
 
   if (filters.selectedLocations?.length) {
     const validLocations = filters.selectedLocations
-      .map(l => {
+      .map((l) => {
         const mapped = normalizeValue(l, LOCATION_MAP);
         return mapped || capitalizeFirst(l);
       })
@@ -226,7 +235,7 @@ export function convertFiltersToApiParams(
 
   if (filters.selectedDocuments?.length) {
     const validDocuments = filters.selectedDocuments
-      .map(d => {
+      .map((d) => {
         const mapped = normalizeValue(d, DOCUMENT_MAP);
         return mapped || d;
       })
@@ -278,7 +287,9 @@ export async function getWatchById(
     searchParams.set('currency', currency);
   }
 
-  const url = `/api/watches/${id}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+  const url = `/api/watches/${id}${
+    searchParams.toString() ? `?${searchParams.toString()}` : ''
+  }`;
 
   try {
     const response = await fetch(url);
@@ -287,6 +298,87 @@ export async function getWatchById(
   } catch (error) {
     console.error('❌ [API] Failed to fetch watch by ID:', error);
     throw error;
+  }
+}
+
+export async function getWatchBySlug(
+  slug: string,
+  currency?: string
+): Promise<ApiWatchFullResponse | null> {
+  if (!slug || slug.trim().length === 0) {
+    return null;
+  }
+
+  try {
+    const searchStrategies = [
+      slug,
+      slug.split('-').slice(0, 3).join('-'),
+      slug.split('-').slice(0, 2).join('-'),
+      slug.split('-')[0],
+    ];
+
+    let matchedWatch: ApiWatchResponse | null = null;
+    let searchResponse: ApiWatchListResponse | null = null;
+
+    for (const searchQuery of searchStrategies) {
+      if (!searchQuery || searchQuery.trim().length === 0) continue;
+
+      try {
+        searchResponse = await getWatches({
+          search: searchQuery,
+          pageSize: 100,
+          currency: currency,
+        });
+
+        if (!searchResponse?.data || searchResponse.data.length === 0) {
+          continue;
+        }
+
+        for (const watch of searchResponse.data) {
+          const generatedSlug = generateSlug(watch.name);
+
+          if (generatedSlug === slug) {
+            matchedWatch = watch;
+            break;
+          }
+        }
+
+        if (matchedWatch) break;
+
+        const slugWords = slug.split('-').filter(word => word.length > 0);
+
+        for (const watch of searchResponse.data) {
+          const watchSlug = generateSlug(watch.name);
+          const watchSlugWords = watchSlug.split('-').filter(word => word.length > 0);
+
+          const allWordsMatch = slugWords.every(word =>
+            watchSlugWords.some(watchWord =>
+              watchWord.includes(word) || word.includes(watchWord)
+            )
+          );
+
+          if (allWordsMatch && slugWords.length > 0) {
+            matchedWatch = watch;
+            break;
+          }
+        }
+
+        if (matchedWatch) break;
+      } catch (searchError) {
+        console.error('❌ [API] getWatchBySlug - Search error:', searchError);
+        continue;
+      }
+    }
+
+    if (!matchedWatch) {
+      return null;
+    }
+
+    const fullWatch = await getWatchById(matchedWatch.id, currency);
+    return fullWatch;
+  } catch (error) {
+    console.error('❌ [API] getWatchBySlug - Error:', error);
+    return null;
   }
 }
 
@@ -307,6 +399,72 @@ export async function getSearchSuggestions(
     return handleResponse<SearchSuggestion[]>(response);
   } catch (error) {
     console.error('Fetch error:', error);
+    throw error;
+  }
+}
+
+export async function trackWatchView(
+  id: string
+): Promise<ApiWatchAnalyticsResponse> {
+  if (!id) {
+    throw new Error('Watch ID is required');
+  }
+
+  const url = `/api/watches/${id}/view`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await handleResponse<ApiWatchAnalyticsResponse>(response);
+    return data;
+  } catch (error) {
+    console.error('❌ [API] Failed to track watch view:', error);
+    throw error;
+  }
+}
+
+export async function getPopularWatches(
+  currency?: string
+): Promise<ApiPopularWatchResponse[]> {
+  const searchParams = new URLSearchParams();
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+  const url = `/api/watches/popular${
+    searchParams.toString() ? `?${searchParams.toString()}` : ''
+  }`;
+  
+  try {
+    const response = await fetch(url);
+    const data = await handleResponse<ApiPopularWatchResponse[]>(response);
+    return data;
+  } catch (error) {
+    console.error('❌ [API] Failed to fetch popular watches:', error);
+    throw error;
+  }
+}
+
+export async function getPopularWatchesByBrand(
+  currency?: string
+): Promise<ApiPopularByBrandResponse[]> {
+  const searchParams = new URLSearchParams();
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+
+  const url = `/api/watches/popular-by-brand${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await handleResponse<ApiPopularByBrandResponse[]>(response);
+    return data;
+  } catch (error) {
+    console.error('❌ [API] Failed to fetch popular watches by brand:', error);
     throw error;
   }
 }
