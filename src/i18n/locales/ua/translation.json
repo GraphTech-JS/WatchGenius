@@ -246,8 +246,10 @@
       },
       "conditions": {
         "new": "Новий",
+        "NEW": "Новий",
         "excellent": "Відмінний",
-        "used": "Б/у"
+        "used": "Б/у",
+        "USED": "Б/у"
       },
       "mechanisms": {
         "mechanical": "Механічний",
@@ -403,6 +405,18 @@
       "purchase": "Перейти до покупки",
       "noOffers": "Нажаль на цей час немає активних пропозицій від дилерів.",
       "requestOffer": "Запросити пропозицію"
+    },
+    "details": {
+      "mechanism": "Механізм",
+      "year": "Рік",
+      "material": "Матеріал",
+      "diameter": "Діаметр",
+      "condition": "Стан",
+      "bracelet": "Ремінець",
+      "waterResistance": "Водостійкість",
+      "chronograph": "Хронограф",
+      "yes": "Так",
+      "no": "Ні"
     }
   },
   "compare": {

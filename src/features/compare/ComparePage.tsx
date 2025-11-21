@@ -8,6 +8,8 @@ import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
 import styles from './ComparePage.module.css';
 import { t } from '@/i18n';
 import { compareKeys } from '@/i18n/keys/compare';
+import { useWishlistContext } from '@/context/WishlistContext';
+import { Toast } from '@/components/Toast/Toast';
 
 interface ComparePageProps {
   products: CompareProduct[];
@@ -25,6 +27,15 @@ const ComparePage: React.FC<ComparePageProps> = ({
   const [activeTab2, setActiveTab2] = useState<
     'parameters' | 'brand' | 'price' | 'trend'
   >('price');
+
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+    showToast,
+    toastMessage,
+    setShowToast,
+  } = useWishlistContext();
 
   const breadcrumbItems =
     products.length > 0
@@ -50,15 +61,21 @@ const ComparePage: React.FC<ComparePageProps> = ({
         ];
 
   const handleSave = (productId: string) => {
-    console.log('Зберегти продукт:', productId);
+    if (isInWishlist(productId)) {
+      removeFromWishlist(productId);
+    } else {
+      addToWishlist(productId);
+    }
   };
 
   const handlePriceNotification = (productId: string) => {
     console.log('Сповіщення про ціну:', productId);
   };
 
-  const handleBuy = (productId: string) => {
-    console.log('Купити продукт:', productId);
+  const handleBuy = (product: CompareProduct) => {
+    if (product.chronoUrl) {
+      window.open(product.chronoUrl, '_blank');
+    }
   };
 
   if (products.length === 0) {
@@ -97,6 +114,13 @@ const ComparePage: React.FC<ComparePageProps> = ({
       className={`${styles.container} bg-white pt-[27px] pb-[90px] min-h-screen mx-auto mt-[80px] px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16`}
     >
       <div className={styles.content}>
+        <Toast
+          isVisible={showToast}
+          message={toastMessage}
+          onClose={() => setShowToast(false)}
+          duration={3000}
+        />
+
         <Breadcrumbs items={breadcrumbItems} />
 
         <h1 className='sr-only'>Порівняння годинників</h1>
@@ -119,8 +143,9 @@ const ComparePage: React.FC<ComparePageProps> = ({
                   handlePriceNotification(products[0].id)
                 }
                 onShare={() => {}}
-                onBuy={() => handleBuy(products[0].id)}
-                onGetQuote={() => handleBuy(products[0].id)}
+                onBuy={() => handleBuy(products[0])}
+                onGetQuote={() => handleBuy(products[0])}
+                isSaved={isInWishlist(products[0].id)}
               />
               <div className={styles.analyticsWrapper}>
                 <ProductAnalytics
@@ -148,8 +173,9 @@ const ComparePage: React.FC<ComparePageProps> = ({
                   handlePriceNotification(products[1].id)
                 }
                 onShare={() => {}}
-                onBuy={() => handleBuy(products[1].id)}
-                onGetQuote={() => handleBuy(products[1].id)}
+                onBuy={() => handleBuy(products[1])}
+                onGetQuote={() => handleBuy(products[1])}
+                isSaved={isInWishlist(products[1].id)}
               />
               <div className={styles.analyticsWrapper}>
                 <ProductAnalytics

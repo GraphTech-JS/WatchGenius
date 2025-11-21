@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { ProductAnalyticsProps } from "@/interfaces/product";
-import styles from "./ProductAnalytics.module.css";
-import { useScreenWidth } from "@/hooks/useScreenWidth";
-import { t } from "@/i18n";
-import { productKeys } from "@/i18n/keys/product";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { ProductAnalyticsProps } from '@/interfaces/product';
+import styles from './ProductAnalytics.module.css';
+import { useScreenWidth } from '@/hooks/useScreenWidth';
+import { t } from '@/i18n';
+import { productKeys } from '@/i18n/keys/product';
 
 import {
   MechanismIcon,
@@ -26,24 +26,11 @@ import {
   DugaIcon,
   PolygonIcon,
   EllipseIcon,
-} from "@/product-icons";
+} from '@/product-icons';
 
-import PriceChart from "./components/PriceChart";
-import TrendGauge from "./components/TrendGauge";
-import { BRAND_CONTENT } from "@/data/brands";
-
-const iconFor = (label: string) => {
-  const l = label.toLowerCase();
-  if (l.includes("механізм")) return MechanismIcon;
-  if (l.includes("матеріал")) return MaterialIcon;
-  if (l.includes("стан")) return StanIcon;
-  if (l.includes("водостій")) return WaterIcon;
-  if (l.includes("рік")) return YearIcon;
-  if (l.includes("діаметр")) return DiameterIcon;
-  if (l.includes("ремінець")) return StrapIcon;
-  if (l.includes("хронограф")) return ChronographIcon;
-  return MechanismIcon;
-};
+import PriceChart from './components/PriceChart';
+import TrendGauge from './components/TrendGauge';
+import { BRAND_CONTENT } from '@/data/brands';
 
 const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   analytics,
@@ -53,7 +40,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   brand,
   isCompare = false,
 }) => {
-  const [activeChartPeriod, setActiveChartPeriod] = useState<"3M" | "1P">("3M");
+  const [activeChartPeriod, setActiveChartPeriod] = useState<'3M' | '1P'>('3M');
   const [isVolatilityHovered, setIsVolatilityHovered] = useState(false);
   const [isDemandHovered, setIsDemandHovered] = useState(false);
   const [isLiquidityHovered, setIsLiquidityHovered] = useState(false);
@@ -63,20 +50,74 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   const [isPopularityHovered, setIsPopularityHovered] = useState(false);
   const screenWidth = useScreenWidth();
 
+  const iconFor = (label: string) => {
+    const l = label.toLowerCase();
+    const mechanismKey = t(productKeys.details.mechanism).toLowerCase();
+    const materialKey = t(productKeys.details.material).toLowerCase();
+    const conditionKey = t(productKeys.details.condition).toLowerCase();
+    const waterKey = t(productKeys.details.waterResistance).toLowerCase();
+    const yearKey = t(productKeys.details.year).toLowerCase();
+    const diameterKey = t(productKeys.details.diameter).toLowerCase();
+    const braceletKey = t(productKeys.details.bracelet).toLowerCase();
+    const chronographKey = t(productKeys.details.chronograph).toLowerCase();
+
+    if (
+      l.includes(mechanismKey) ||
+      l.includes('mechanism') ||
+      l.includes('механізм')
+    )
+      return MechanismIcon;
+    if (
+      l.includes(materialKey) ||
+      l.includes('material') ||
+      l.includes('матеріал')
+    )
+      return MaterialIcon;
+    if (
+      l.includes(conditionKey) ||
+      l.includes('condition') ||
+      l.includes('стан')
+    )
+      return StanIcon;
+    if (l.includes(waterKey) || l.includes('water') || l.includes('водостій'))
+      return WaterIcon;
+    if (l.includes(yearKey) || l.includes('year') || l.includes('рік'))
+      return YearIcon;
+    if (
+      l.includes(diameterKey) ||
+      l.includes('diameter') ||
+      l.includes('діаметр')
+    )
+      return DiameterIcon;
+    if (
+      l.includes(braceletKey) ||
+      l.includes('bracelet') ||
+      l.includes('ремінець')
+    )
+      return StrapIcon;
+    if (
+      l.includes(chronographKey) ||
+      l.includes('chronograph') ||
+      l.includes('хронограф')
+    )
+      return ChronographIcon;
+    return MechanismIcon;
+  };
+
   const isDesktop = (screenWidth ?? 1280) >= 1280;
   const gaugeW = isDesktop ? 372 : 310;
   const gaugeH = isDesktop ? 338 : 281;
 
   const tabs = [
-    { id: "parameters", label: t(productKeys.analytics.tabs.parameters) },
-    { id: "brand", label: t(productKeys.analytics.tabs.brand) },
-    { id: "price", label: t(productKeys.analytics.tabs.price) },
-    { id: "trend", label: t(productKeys.analytics.tabs.trend) },
+    { id: 'parameters', label: t(productKeys.analytics.tabs.parameters) },
+    { id: 'brand', label: t(productKeys.analytics.tabs.brand) },
+    { id: 'price', label: t(productKeys.analytics.tabs.price) },
+    { id: 'trend', label: t(productKeys.analytics.tabs.trend) },
   ] as const;
 
   const visibleTabs =
     screenWidth && screenWidth < 1279
-      ? tabs.filter((t) => t.id !== "parameters")
+      ? tabs.filter((t) => t.id !== 'parameters')
       : tabs;
 
   return (
@@ -87,7 +128,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
             key={tab.id}
             onClick={() => onTabChange(tab.id)}
             className={`${styles.tabButton} ${
-              activeTab === tab.id ? styles.active : ""
+              activeTab === tab.id ? styles.active : ''
             }`}
           >
             {tab.label}
@@ -96,7 +137,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
       </div>
 
       <div className={styles.contentContainer}>
-        {activeTab === "trend" && (
+        {activeTab === 'trend' && (
           <div>
             <h3 className={styles.trendTitle}>{brand}</h3>
             <p
@@ -262,20 +303,20 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   fontFamily: "'Inter', sans-serif",
                   labelFontSizePx: 20,
                   labelFontWeight: 600,
-                  labelColor: "#000",
+                  labelColor: '#000',
 
                   valueFontSizePx: 24,
-                  valueColor: "#04694f",
+                  valueColor: '#04694f',
 
                   lastUpdatedFontSizePx: 12,
-                  lastUpdatedColor: "rgba(0,0,0,0.6)",
+                  lastUpdatedColor: 'rgba(0,0,0,0.6)',
                 }}
               />
             </div>
           </div>
         )}
 
-        {activeTab === "parameters" && (
+        {activeTab === 'parameters' && (
           <div>
             <div className={styles.parametersContainer}>
               <div className={styles.parametersGrid}>
@@ -300,14 +341,14 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
           </div>
         )}
 
-        {activeTab === "brand" &&
+        {activeTab === 'brand' &&
           (() => {
             const content = BRAND_CONTENT[brand] ?? BRAND_CONTENT.default;
             return (
               <div className={styles.brandContent}>
                 <div
                   className={`${styles.brandBackground} ${
-                    isCompare ? styles.brandBackgroundCompare : ""
+                    isCompare ? styles.brandBackgroundCompare : ''
                   }`}
                 >
                   <Image
@@ -330,7 +371,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
             );
           })()}
 
-        {activeTab === "price" && (
+        {activeTab === 'price' && (
           <div>
             <PriceChart
               period={activeChartPeriod}
@@ -448,7 +489,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     {t(productKeys.analytics.price.report.peak)}
                   </span>
                   <span className={styles.reportItemValue}>
-                    €{analytics.reportPeak.toLocaleString("uk-UA")}
+                    €{analytics.reportPeak.toLocaleString('uk-UA')}
                   </span>
                 </div>
                 <div className={styles.reportItem}>
@@ -456,7 +497,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     {t(productKeys.analytics.price.report.min)}
                   </span>
                   <span className={styles.reportItemValue}>
-                    €{analytics.reportMin.toLocaleString("uk-UA")}
+                    €{analytics.reportMin.toLocaleString('uk-UA')}
                   </span>
                 </div>
                 <div className={styles.reportItem}>
@@ -470,7 +511,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                         : styles.reportItemValueRed
                     }`}
                   >
-                    {analytics.reportChangePct >= 0 ? "+" : ""}
+                    {analytics.reportChangePct >= 0 ? '+' : ''}
                     {Math.abs(analytics.reportChangePct * 100).toFixed(1)}%
                   </span>
                 </div>

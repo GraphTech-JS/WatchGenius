@@ -7,11 +7,14 @@ import {
   ProductAnalytics,
   SimilarModels,
   SellerOffers,
-} from "./index";
-import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
-import styles from "@/app/[locale]/product/[slug]/page.module.css";
-import { t } from "@/i18n";
-import { productKeys } from "@/i18n/keys/product";
+} from './index';
+import Breadcrumbs from '@/components/Breadcrumbs/Breadcrumbs';
+import styles from '@/app/[locale]/product/[slug]/page.module.css';
+import { t } from '@/i18n';
+import { productKeys } from '@/i18n/keys/product';
+import { useWishlistContext } from '@/context/WishlistContext';
+import { useCompareContext } from '@/context/CompareContext';
+import { Toast } from '@/components/Toast/Toast';
 
 interface ProductPageProps {
   product: Product;
@@ -22,18 +25,38 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
     'parameters' | 'brand' | 'price' | 'trend'
   >('trend');
 
+  const {
+    addToWishlist,
+    removeFromWishlist,
+    isInWishlist,
+    showToast,
+    toastMessage,
+    setShowToast,
+  } = useWishlistContext();
+
+  const { addToCompare, removeFromCompare, isInCompare } = useCompareContext();
+
   const breadcrumbItems = [
-    { label: t(productKeys.breadcrumbs.catalog), href: "/catalog" },
+    { label: t(productKeys.breadcrumbs.catalog), href: '/catalog' },
     { label: product.brand, href: `/catalog?brand=${product.brand}` },
-    { label: "Submariner", href: `/catalog?model=Submariner` },
+    { label: 'Submariner', href: `/catalog?model=Submariner` },
     { label: t(productKeys.breadcrumbs.model) },
   ];
+
   const handleSave = () => {
-    console.log('Зберегти продукт');
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product.id);
+    }
   };
 
   const handleCompare = () => {
-    console.log('Порівняти продукт');
+    if (isInCompare(product.id)) {
+      removeFromCompare(product.id);
+    } else {
+      addToCompare(product.id);
+    }
   };
 
   const handlePriceNotification = () => {
@@ -45,7 +68,9 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
   };
 
   const handleBuy = () => {
-    console.log('Купити продукт');
+    if (product.chronoUrl) {
+      window.open(product.chronoUrl, '_blank');
+    }
   };
 
   const handleGetQuote = () => {
@@ -75,7 +100,14 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
   return (
     <main className='bg-white pt-[27px] pb-[60px] xl:pb-[90px] min-h-screen mx-auto mt-[80px]'>
       <div className={styles.productPage}>
-        <div className="hidden sm:block">
+        <Toast
+          isVisible={showToast}
+          message={toastMessage}
+          onClose={() => setShowToast(false)}
+          duration={3000}
+        />
+
+        <div className='hidden sm:block'>
           <Breadcrumbs items={breadcrumbItems} />
         </div>
 
@@ -89,6 +121,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
           onShare={handleShare}
           onBuy={handleBuy}
           onGetQuote={handleGetQuote}
+          isSaved={isInWishlist(product.id)}
         />
 
         <div className='flex flex-col-reverse sm:flex-col-reverse md:flex-row lg:flex-row xl:flex-row gap-[20px] sm:gap-[25px] md:gap-[60px] lg:gap-[60px] xl:gap-[60px] mb-8'>

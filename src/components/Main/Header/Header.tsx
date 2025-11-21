@@ -64,7 +64,15 @@ export const Header = () => {
     }, 400);
   };
 
-  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
+  const [selectedCurrency, setSelectedCurrency] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('selectedCurrency');
+      if (stored && ['EUR', 'USD', 'PLN', 'UAH'].includes(stored)) {
+        return stored;
+      }
+    }
+    return 'EUR';
+  });
   const [selectedLang, setSelectedLang] = useState('УКР');
 
   const currencyRef = useRef<HTMLDivElement>(null);
@@ -262,6 +270,12 @@ export const Header = () => {
                       onClick={() => {
                         setSelectedCurrency(cur);
                         setShowCurrency(false);
+                        // Зберігаємо в localStorage
+                        if (typeof window !== 'undefined') {
+                          localStorage.setItem('selectedCurrency', cur);
+                          // Відправляємо custom event для оновлення компонентів
+                          window.dispatchEvent(new Event('currencyChanged'));
+                        }
                       }}
                       className={`${
                         styles.headerLangSwitchBtn
@@ -488,6 +502,14 @@ export const Header = () => {
                             onClick={() => {
                               setSelectedCurrency(cur);
                               setShowCurrency(false);
+                              // Зберігаємо в localStorage
+                              if (typeof window !== 'undefined') {
+                                localStorage.setItem('selectedCurrency', cur);
+                                // Відправляємо custom event для оновлення компонентів
+                                window.dispatchEvent(
+                                  new Event('currencyChanged')
+                                );
+                              }
                             }}
                             className={`${
                               styles.headerLangSwitchBtn
