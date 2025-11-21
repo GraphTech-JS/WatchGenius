@@ -54,6 +54,66 @@ function getCurrencyFromStorage(): string {
     : 'EUR';
 }
 
+const COMPARE_CACHE_PREFIX = 'compare-cache-';
+const CACHE_TTL = 5 * 60 * 1000;
+
+function getCompareCacheKey(ids: string[], currency: string): string {
+  const sortedIds = [...ids].sort().join(',');
+  return `${COMPARE_CACHE_PREFIX}${sortedIds}-${currency}`;
+}
+
+function getCachedWatches(ids: string[], currency: string): WatchItem[] | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = getCompareCacheKey(ids, currency);
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    const cachedIds = data.map((w: WatchItem) => w.id).sort();
+    const requestedIds = [...ids].sort();
+
+    if (
+      cachedIds.length !== requestedIds.length ||
+      !cachedIds.every((id: string, i: number) => id === requestedIds[i])
+    ) {
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedWatches(
+  ids: string[],
+  currency: string,
+  watches: WatchItem[]
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = getCompareCacheKey(ids, currency);
+    const cacheData = {
+      data: watches,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
+}
+
 const convertWatchToCompareProduct = (
   watch: WatchItem,
   t: (key: string) => string
@@ -176,11 +236,17 @@ const ComparePageWrapper = () => {
         setError(null);
         const currency = getCurrencyFromStorage();
 
+        const cachedWatches = getCachedWatches(selectedWatches, currency);
+        if (cachedWatches) {
+          setWatches(cachedWatches);
+          setLoading(false);
+        }
+
         const apiWatches = await getWatchesByIds(selectedWatches, currency);
         const transformed = apiWatches.map(transformApiWatchFull);
         setWatches(transformed);
+        setCachedWatches(selectedWatches, currency, transformed);
       } catch (err) {
-        console.error('❌ [Compare] Failed to load watches:', err);
         setError(err instanceof Error ? err.message : 'Failed to load watches');
       } finally {
         setLoading(false);

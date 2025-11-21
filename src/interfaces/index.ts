@@ -49,6 +49,7 @@ interface IWatch {
   chartColor?: string;
   chartId?: string;
   caliber?: string;
+  index?: 'A' | 'B' | 'C'; 
 }
 
 interface ISearchProps extends React.HTMLAttributes<HTMLInputElement> {

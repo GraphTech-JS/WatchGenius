@@ -12,6 +12,63 @@ import { transformApiWatchFull } from '@/lib/transformers';
 import type { WatchItem } from '@/interfaces/watch';
 import { IWatch } from '@/interfaces';
 
+function getCurrencyFromStorage(): string {
+  if (typeof window === 'undefined') return 'EUR';
+  const stored = localStorage.getItem('selectedCurrency');
+  const validCurrencies = ['EUR', 'USD', 'PLN', 'UAH'];
+  return stored && validCurrencies.includes(stored) ? stored : 'EUR';
+}
+
+const BRANDSPOTLIGHT_CACHE_PREFIX = 'brandspotlight-cache-';
+const CACHE_TTL = 5 * 60 * 1000;
+
+function getBrandSpotlightCacheKey(currency: string): string {
+  return `${BRANDSPOTLIGHT_CACHE_PREFIX}${currency}`;
+}
+
+function getCachedBrandSpotlight(
+  currency: string
+): { brand: string; watches: IWatch[] } | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = getBrandSpotlightCacheKey(currency);
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedBrandSpotlight(
+  currency: string,
+  brandData: { brand: string; watches: IWatch[] }
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = getBrandSpotlightCacheKey(currency);
+    const cacheData = {
+      data: brandData,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
+}
+
 function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
   const imageUrl =
     typeof watch.image === 'string' ? watch.image : watch.image?.src || '';
@@ -28,6 +85,7 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: watch.trend.value > 0 ? '#22c55e' : '#EED09D',
     chartId: `brand-chart-${watch.id}`,
+    index: watch.index,
   };
 }
 
@@ -44,7 +102,13 @@ export const BrandSpotlight = () => {
       try {
         setLoading(true);
         setError(null);
-        const currency = 'EUR';
+        const currency = getCurrencyFromStorage();
+
+        const cachedData = getCachedBrandSpotlight(currency);
+        if (cachedData) {
+          setBrandData(cachedData);
+          setLoading(false);
+        }
 
         const data = await getPopularWatchesByBrand(currency);
 
@@ -63,10 +127,13 @@ export const BrandSpotlight = () => {
           convertWatchItemToIWatch(watch, index)
         );
 
-        setBrandData({
+        const brandData = {
           brand: firstBrand.brand,
           watches: iWatchItems,
-        });
+        };
+
+        setBrandData(brandData);
+        setCachedBrandSpotlight(currency, brandData);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load watches');
         setBrandData({ brand: 'Rolex', watches: mockTrending });
@@ -76,6 +143,18 @@ export const BrandSpotlight = () => {
     };
 
     loadBrandWatches();
+
+    const handleCurrencyChange = () => {
+      loadBrandWatches();
+    };
+
+    window.addEventListener('currencyChanged', handleCurrencyChange);
+    window.addEventListener('storage', handleCurrencyChange);
+
+    return () => {
+      window.removeEventListener('currencyChanged', handleCurrencyChange);
+      window.removeEventListener('storage', handleCurrencyChange);
+    };
   }, []);
 
   return (

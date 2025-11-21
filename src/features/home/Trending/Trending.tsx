@@ -23,6 +23,51 @@ function getCurrencyFromStorage(): string {
   return 'EUR';
 }
 
+const TRENDING_CACHE_PREFIX = 'trending-cache-';
+const CACHE_TTL = 5 * 60 * 1000;
+
+function getTrendingCacheKey(currency: string): string {
+  return `${TRENDING_CACHE_PREFIX}${currency}`;
+}
+
+function getCachedTrending(currency: string): IWatch[] | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = getTrendingCacheKey(currency);
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedTrending(currency: string, watches: IWatch[]): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = getTrendingCacheKey(currency);
+    const cacheData = {
+      data: watches,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
+}
+
 function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
   const imageUrl =
     typeof watch.image === 'string' ? watch.image : watch.image?.src || '';
@@ -39,6 +84,7 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: watch.trend.value > 0 ? '#22c55e' : '#EED09D',
     chartId: `trending-chart-${watch.id}`,
+    index: watch.index,
   };
 }
 
@@ -56,6 +102,13 @@ export const Trending = () => {
         setError(null);
 
         const currency = getCurrencyFromStorage();
+
+        const cachedWatches = getCachedTrending(currency);
+        if (cachedWatches) {
+          setWatches(cachedWatches);
+          setLoading(false);
+        }
+
         const data = await getPopularWatches(currency);
 
         const transformed = data.map((item) =>
@@ -67,6 +120,7 @@ export const Trending = () => {
         );
 
         setWatches(iWatchItems);
+        setCachedTrending(currency, iWatchItems);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load watches');
         setWatches(mockTrending);
