@@ -13,6 +13,7 @@ import type { SimilarModel } from '@/interfaces/product';
 import { t } from '@/i18n';
 import { productKeys } from '@/i18n/keys/product';
 import { catalogKeys } from '@/i18n/keys/catalog';
+import { ProductLoading } from '@/features/product/ProductLoading/ProductLoading';
 
 function translateDetailValue(
   type: 'condition' | 'mechanism' | 'material',
@@ -133,7 +134,7 @@ export default function ProductClient({
           return;
         }
 
-        const transformedWatch = transformApiWatchFull(apiWatch);
+        const transformedWatch = transformApiWatchFull(apiWatch, currency);
         setWatch(transformedWatch);
         setCachedProduct(resolvedParams.slug, currency, transformedWatch);
       } catch (err) {
@@ -231,16 +232,22 @@ export default function ProductClient({
   }, [watch]);
 
   if (loading) {
-    return (
-      <div className='flex justify-center items-center min-h-screen'>
-        <div className='text-gray-500'>Loading...</div>
-      </div>
-    );
+    return <ProductLoading />;
   }
 
   if (error || !watch) {
     notFound();
   }
+
+  const currency = getCurrencyFromStorage();
+  const currencySymbol =
+    currency === 'EUR'
+      ? '€'
+      : currency === 'USD'
+      ? '$'
+      : currency === 'UAH'
+      ? '₴'
+      : '€';
 
   const product: Product = {
     id: watch.id,
@@ -256,12 +263,21 @@ export default function ProductClient({
     price: {
       min: watch.price,
       max: watch.price,
-      currency: watch.currency,
+      currency: currencySymbol as '€' | '$' | '₴',
     },
     priceTrend: {
-      value: watch.trend.value,
-      period: watch.trend.period,
-      isPositive: watch.trend.value > 0,
+      value:
+        watch.trend30d !== undefined && watch.trend30d !== null
+          ? watch.trend30d
+          : watch.trend.value,
+      period:
+        watch.trend30d !== undefined && watch.trend30d !== null
+          ? '30d'
+          : watch.trend.period,
+      isPositive:
+        (watch.trend30d !== undefined && watch.trend30d !== null
+          ? watch.trend30d
+          : watch.trend.value) > 0,
     },
     image: typeof watch.image === 'string' ? watch.image : watch.image.src,
     thumbnails: [

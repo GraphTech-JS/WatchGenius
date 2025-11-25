@@ -265,7 +265,7 @@ var ProductHero = function (_a) {
                             color: '#05873b'
                         } },
                         "\u2191 ",
-                        Math.abs(product.priceTrend.value),
+                        Math.abs(Math.round(product.priceTrend.value * 10) / 10),
                         "%"),
                     react_1["default"].createElement("span", { className: 'font-inter text-[15px] font-normal text-[#05873b]', style: { fontWeight: 400, fontSize: '15px', color: '#05873b' } }, i18n_1.t(product_1.productKeys.hero.trendDays)))),
             react_1["default"].createElement("div", { className: 'flex flex-col md:grid md:grid-cols-2 xl:grid-cols-2 gap-[17px]' },

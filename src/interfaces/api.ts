@@ -17,6 +17,9 @@ export interface ApiWatchResponse {
   price: number;
   defaultPrice: number; 
   currency: string;
+  analytics?: ApiWatchAnalytics;
+  trend90d?: number;
+  priceHistory?: ApiPriceHistory[]; 
 }
 
 export interface ApiWatchListResponse {
@@ -117,6 +120,10 @@ export interface ApiWatchFullResponse {
   brand: ApiBrand;
   dealer: ApiDealerFullResponse;
   priceHistory: ApiPriceHistory[];
+  analytics?: ApiWatchAnalytics;
+  price?: number; 
+  defaultPrice?: number; 
+  currency?: string; 
 }
 
 export interface ApiPopularWatchItem {

@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
+exports.getLiquidWatch = exports.getStableWatch = exports.getTrendingWatch90d = exports.getTrendingWatch30d = exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
 var transformers_1 = require("@/lib/transformers");
 function handleResponse(response) {
     return __awaiter(this, void 0, Promise, function () {
@@ -450,7 +450,9 @@ function getWatchBySlug(slug, currency) {
                     slugWords = slug.split('-').filter(function (word) { return word.length > 0; });
                     _loop_1 = function (watch) {
                         var watchSlug = transformers_1.generateSlug(watch.name);
-                        var watchSlugWords = watchSlug.split('-').filter(function (word) { return word.length > 0; });
+                        var watchSlugWords = watchSlug
+                            .split('-')
+                            .filter(function (word) { return word.length > 0; });
                         var allWordsMatch = slugWords.every(function (word) {
                             return watchSlugWords.some(function (watchWord) {
                                 return watchWord.includes(word) || word.includes(watchWord);
@@ -484,6 +486,11 @@ function getWatchBySlug(slug, currency) {
                     return [4 /*yield*/, getWatchById(matchedWatch.id, currency)];
                 case 8:
                     fullWatch = _e.sent();
+                    if (fullWatch && matchedWatch.price) {
+                        fullWatch.price = matchedWatch.price;
+                        fullWatch.defaultPrice = matchedWatch.defaultPrice;
+                        fullWatch.currency = matchedWatch.currency;
+                    }
                     return [2 /*return*/, fullWatch];
                 case 9:
                     error_8 = _e.sent();
@@ -570,22 +577,15 @@ function getPopularWatches(currency) {
                         searchParams.set('currency', currency);
                     }
                     url = "/api/watches/popular" + (searchParams.toString() ? "?" + searchParams.toString() : '');
-                    console.log('🔍 [API] getPopularWatches - URL:', url);
-                    console.log('🔍 [API] getPopularWatches - currency:', currency);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
                     return [4 /*yield*/, fetch(url)];
                 case 2:
                     response = _a.sent();
-                    console.log('🔍 [API] getPopularWatches - Response status:', response.status);
-                    console.log('🔍 [API] getPopularWatches - Response ok:', response.ok);
                     return [4 /*yield*/, handleResponse(response)];
                 case 3:
                     data = _a.sent();
-                    console.log('🔍 [API] getPopularWatches - Response data:', data);
-                    console.log('🔍 [API] getPopularWatches - Data type:', Array.isArray(data) ? 'array' : typeof data);
-                    console.log('🔍 [API] getPopularWatches - Data length:', Array.isArray(data) ? data.length : 'not array');
                     return [2 /*return*/, data];
                 case 4:
                     error_11 = _a.sent();
@@ -608,22 +608,15 @@ function getPopularWatchesByBrand(currency) {
                         searchParams.set('currency', currency);
                     }
                     url = "/api/watches/popular-by-brand" + (searchParams.toString() ? "?" + searchParams.toString() : '');
-                    console.log('🔍 [API] getPopularWatchesByBrand - URL:', url);
-                    console.log('🔍 [API] getPopularWatchesByBrand - currency:', currency);
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 4, , 5]);
                     return [4 /*yield*/, fetch(url)];
                 case 2:
                     response = _a.sent();
-                    console.log('🔍 [API] getPopularWatchesByBrand - Response status:', response.status);
-                    console.log('🔍 [API] getPopularWatchesByBrand - Response ok:', response.ok);
                     return [4 /*yield*/, handleResponse(response)];
                 case 3:
                     data = _a.sent();
-                    console.log('🔍 [API] getPopularWatchesByBrand - Response data:', data);
-                    console.log('🔍 [API] getPopularWatchesByBrand - Data type:', Array.isArray(data) ? 'array' : typeof data);
-                    console.log('🔍 [API] getPopularWatchesByBrand - Data length:', Array.isArray(data) ? data.length : 'not array');
                     return [2 /*return*/, data];
                 case 4:
                     error_12 = _a.sent();
@@ -635,3 +628,139 @@ function getPopularWatchesByBrand(currency) {
     });
 }
 exports.getPopularWatchesByBrand = getPopularWatchesByBrand;
+function getTrendingWatch30d(currency) {
+    return __awaiter(this, void 0, Promise, function () {
+        var searchParams, url, response, data, error_13;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    searchParams = new URLSearchParams();
+                    if (currency) {
+                        searchParams.set('currency', currency);
+                    }
+                    url = "/api/watches/trending/30d" + (searchParams.toString() ? "?" + searchParams.toString() : '');
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, , 5]);
+                    return [4 /*yield*/, fetch(url)];
+                case 2:
+                    response = _a.sent();
+                    if (response.status === 404) {
+                        return [2 /*return*/, null];
+                    }
+                    return [4 /*yield*/, handleResponse(response)];
+                case 3:
+                    data = _a.sent();
+                    return [2 /*return*/, data];
+                case 4:
+                    error_13 = _a.sent();
+                    console.error('❌ [API] Failed to fetch trending watch (30d):', error_13);
+                    throw error_13;
+                case 5: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getTrendingWatch30d = getTrendingWatch30d;
+function getTrendingWatch90d(currency) {
+    return __awaiter(this, void 0, Promise, function () {
+        var searchParams, url, response, data, error_14;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    searchParams = new URLSearchParams();
+                    if (currency) {
+                        searchParams.set('currency', currency);
+                    }
+                    url = "/api/watches/trending/90d" + (searchParams.toString() ? "?" + searchParams.toString() : '');
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, , 5]);
+                    return [4 /*yield*/, fetch(url)];
+                case 2:
+                    response = _a.sent();
+                    if (response.status === 404) {
+                        return [2 /*return*/, null];
+                    }
+                    return [4 /*yield*/, handleResponse(response)];
+                case 3:
+                    data = _a.sent();
+                    return [2 /*return*/, data];
+                case 4:
+                    error_14 = _a.sent();
+                    console.error('❌ [API] Failed to fetch trending watch (90d):', error_14);
+                    throw error_14;
+                case 5: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getTrendingWatch90d = getTrendingWatch90d;
+function getStableWatch(currency) {
+    return __awaiter(this, void 0, Promise, function () {
+        var searchParams, url, response, data, error_15;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    searchParams = new URLSearchParams();
+                    if (currency) {
+                        searchParams.set('currency', currency);
+                    }
+                    url = "/api/watches/stable" + (searchParams.toString() ? "?" + searchParams.toString() : '');
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, , 5]);
+                    return [4 /*yield*/, fetch(url)];
+                case 2:
+                    response = _a.sent();
+                    if (response.status === 404) {
+                        return [2 /*return*/, null];
+                    }
+                    return [4 /*yield*/, handleResponse(response)];
+                case 3:
+                    data = _a.sent();
+                    return [2 /*return*/, data];
+                case 4:
+                    error_15 = _a.sent();
+                    console.error('❌ [API] Failed to fetch stable watch:', error_15);
+                    throw error_15;
+                case 5: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getStableWatch = getStableWatch;
+function getLiquidWatch(currency) {
+    return __awaiter(this, void 0, Promise, function () {
+        var searchParams, url, response, data, error_16;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    searchParams = new URLSearchParams();
+                    if (currency) {
+                        searchParams.set('currency', currency);
+                    }
+                    url = "/api/watches/liquid" + (searchParams.toString() ? "?" + searchParams.toString() : '');
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, , 5]);
+                    return [4 /*yield*/, fetch(url)];
+                case 2:
+                    response = _a.sent();
+                    if (response.status === 404) {
+                        return [2 /*return*/, null];
+                    }
+                    return [4 /*yield*/, handleResponse(response)];
+                case 3:
+                    data = _a.sent();
+                    return [2 /*return*/, data];
+                case 4:
+                    error_16 = _a.sent();
+                    console.error('❌ [API] Failed to fetch liquid watch:', error_16);
+                    throw error_16;
+                case 5: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getLiquidWatch = getLiquidWatch;

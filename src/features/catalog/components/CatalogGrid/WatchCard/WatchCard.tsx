@@ -38,9 +38,14 @@ export const WatchCard: React.FC<Props> = ({
 }) => {
   const router = useRouter();
   const locale = useLocale();
-  const trendValue = Number(item.trend.value);
+  const trendValue =
+    item.trend90d !== undefined && item.trend90d !== null
+      ? item.trend90d
+      : item.trend?.value ?? 0;
   const isUp = trendValue > 0;
-  const isFlat = trendValue === 0;
+  const isFlat = Math.abs(trendValue) < 0.01;
+
+  const trendPeriod = '90d';
 
   const handleCardClick = () => {
     router.push(`/${locale}/product/${item.slug}`);
@@ -132,21 +137,18 @@ export const WatchCard: React.FC<Props> = ({
             <span
               className={`${styles.trendBadge} ${styles.trendValue} ${styles.trendValueZero}`}
             >
-              0 %{' '}
-              <span className={styles.trendPeriod}>{item.trend.period}</span>
+              0 % <span className={styles.trendPeriod}>{trendPeriod}</span>
             </span>
           ) : (
             <span
               className={`${styles.trendBadge} ${styles.trendValue} ${
                 isUp ? styles.trendValuePositive : styles.trendValueNegative
               }`}
-              title={`${isUp ? 'Зростання' : 'Падіння'} за ${
-                item.trend.period
-              }`}
+              title={`${isUp ? 'Зростання' : 'Падіння'} за 90 днів`}
             >
               {isUp ? <ArrowUp size={12} /> : <ArrowDown size={12} />}
-              {Math.abs(trendValue)} %{' '}
-              <span className={styles.trendPeriod}>{item.trend.period}</span>
+              {Math.abs(Math.round(trendValue * 10) / 10)} %{' '}
+              <span className={styles.trendPeriod}>{trendPeriod}</span>
             </span>
           )}
         </div>
@@ -156,9 +158,7 @@ export const WatchCard: React.FC<Props> = ({
         className={`${styles.buyButton} mt-[27px]`}
         onClick={handleBuyClick}
       >
-        {item.chronoUrl && hasValidImage()
-          ? item.buttonLabel
-          : 'Get Quote'}
+        {item.chronoUrl && hasValidImage() ? item.buttonLabel : 'Get Quote'}
       </button>
     </div>
   );

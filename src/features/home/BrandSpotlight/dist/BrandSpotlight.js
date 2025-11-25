@@ -119,20 +119,20 @@ exports.BrandSpotlight = function () {
     var _c = react_1.useState(null), error = _c[0], setError = _c[1];
     react_1.useEffect(function () {
         var loadBrandWatches = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var currency, cachedData, data, firstBrand, transformed, iWatchItems, brandData_1, err_1;
+            var currency_1, cachedData, data, firstBrand, transformed, iWatchItems, brandData_1, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, 3, 4]);
                         setLoading(true);
                         setError(null);
-                        currency = getCurrencyFromStorage();
-                        cachedData = getCachedBrandSpotlight(currency);
+                        currency_1 = getCurrencyFromStorage();
+                        cachedData = getCachedBrandSpotlight(currency_1);
                         if (cachedData) {
                             setBrandData(cachedData);
                             setLoading(false);
                         }
-                        return [4 /*yield*/, api_1.getPopularWatchesByBrand(currency)];
+                        return [4 /*yield*/, api_1.getPopularWatchesByBrand(currency_1)];
                     case 1:
                         data = _a.sent();
                         if (data.length === 0) {
@@ -141,7 +141,7 @@ exports.BrandSpotlight = function () {
                         }
                         firstBrand = data[0];
                         transformed = firstBrand.watches.map(function (watch) {
-                            return transformers_1.transformApiWatchFull(watch);
+                            return transformers_1.transformApiWatchFull(watch, currency_1);
                         });
                         iWatchItems = transformed.map(function (watch, index) {
                             return convertWatchItemToIWatch(watch, index);
@@ -151,7 +151,7 @@ exports.BrandSpotlight = function () {
                             watches: iWatchItems
                         };
                         setBrandData(brandData_1);
-                        setCachedBrandSpotlight(currency, brandData_1);
+                        setCachedBrandSpotlight(currency_1, brandData_1);
                         return [3 /*break*/, 4];
                     case 2:
                         err_1 = _a.sent();

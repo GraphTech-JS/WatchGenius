@@ -315,7 +315,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
                 color: '#05873b',
               }}
             >
-              ↑ {Math.abs(product.priceTrend.value)}%
+              ↑ {Math.abs(Math.round(product.priceTrend.value * 10) / 10)}%
             </span>
             <span
               className='font-inter text-[15px] font-normal text-[#05873b]'

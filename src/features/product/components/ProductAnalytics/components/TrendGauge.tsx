@@ -6,26 +6,26 @@ import type { StaticImageData } from 'next/image';
 type ImgSrc = string | StaticImageData;
 
 type GaugeConfig = {
-  pivotYR: number; 
-  labelsYR: number; 
-  valueYR: number; 
-  lastUpdatedYR: number; 
+  pivotYR: number;
+  labelsYR: number;
+  valueYR: number;
+  lastUpdatedYR: number;
 
-  labelsLeftXR: number; 
-  labelsRightXR: number; 
+  labelsLeftXR: number;
+  labelsRightXR: number;
 
-  pointerWidthR: number; 
-  pointerHeightR: number; 
-  pointerAnchorX: number; 
-  pointerAnchorY: number; 
-  pointerOffsetX: number; 
+  pointerWidthR: number;
+  pointerHeightR: number;
+  pointerAnchorX: number;
+  pointerAnchorY: number;
+  pointerOffsetX: number;
   pointerOffsetY: number;
 
   centerSizeR: number;
   centerOffsetYR: number;
 
   fontFamily: string;
-  labelFontSizePx?: number; 
+  labelFontSizePx?: number;
   labelFontWeight: number;
   labelColor: string;
 
@@ -37,15 +37,15 @@ type GaugeConfig = {
 };
 
 type TrendGaugeProps = {
-  value: number; 
+  value: number;
   arcSrc: ImgSrc;
   pointerSrc: ImgSrc;
   centerSrc: ImgSrc;
   lastUpdated?: string;
   className?: string;
 
-  width: number; 
-  height: number; 
+  width: number;
+  height: number;
 
   config?: Partial<GaugeConfig>;
 };
@@ -58,17 +58,17 @@ function getHref(src: ImgSrc) {
 }
 
 const defaultConfig: GaugeConfig = {
-  pivotYR: 0.69, 
+  pivotYR: 0.69,
   labelsYR: 0.825,
-  valueYR: 0.8, 
+  valueYR: 0.8,
   lastUpdatedYR: 0.94,
 
-  labelsLeftXR: 0.14, 
-  labelsRightXR: 0.86, 
+  labelsLeftXR: 0.14,
+  labelsRightXR: 0.86,
 
   pointerWidthR: 58 / 338,
   pointerHeightR: 111 / 338,
-  pointerAnchorX: 0.468, 
+  pointerAnchorX: 0.468,
   pointerAnchorY: 0.915,
   pointerOffsetX: 1,
   pointerOffsetY: -1,
@@ -77,7 +77,7 @@ const defaultConfig: GaugeConfig = {
   centerOffsetYR: 0,
 
   fontFamily: "'Inter', sans-serif",
-  labelFontSizePx: undefined, 
+  labelFontSizePx: undefined,
   labelFontWeight: 600,
   labelColor: '#000',
 
@@ -99,7 +99,7 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
   height,
   config,
 }) => {
-  const v = clamp(Number(value) || 0);
+  const v = Math.round(clamp(Number(value) || 0) * 10) / 10;
   const angle = -90 + (v / 100) * 180;
 
   const vbW = width;
@@ -125,10 +125,10 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
   const valueY = vbH * cfg.valueYR;
   const lastUpdatedY = vbH * cfg.lastUpdatedYR;
 
-  const labelFontSize = cfg.labelFontSizePx ?? Math.round(vbH * 0.059); 
-  const valueFontSize = cfg.valueFontSizePx ?? Math.round(vbH * 0.071); 
+  const labelFontSize = cfg.labelFontSizePx ?? Math.round(vbH * 0.059);
+  const valueFontSize = cfg.valueFontSizePx ?? Math.round(vbH * 0.071);
   const lastUpdatedFontSize =
-    cfg.lastUpdatedFontSizePx ?? Math.round(vbH * 0.035); 
+    cfg.lastUpdatedFontSizePx ?? Math.round(vbH * 0.035);
 
   const leftLabelX = vbW * cfg.labelsLeftXR;
   const rightLabelX = vbW * cfg.labelsRightXR;

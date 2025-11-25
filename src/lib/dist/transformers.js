@@ -12,10 +12,36 @@ function convertCurrency(currency) {
         return '₴';
     return '€';
 }
+function convertVolatilityToLabel(volatility) {
+    if (volatility === undefined || volatility === null) {
+        return 'Середня';
+    }
+    if (volatility < 10)
+        return 'Низька';
+    if (volatility < 30)
+        return 'Середня';
+    return 'Висока';
+}
+function convertLiquidityToLabel(liquidity) {
+    if (!liquidity) {
+        return 'Середня';
+    }
+    var num = parseFloat(liquidity);
+    if (isNaN(num)) {
+        return 'Середня';
+    }
+    if (num < 50)
+        return 'Низька';
+    if (num < 80)
+        return 'Середня';
+    return 'Висока';
+}
 function transformApiWatch(apiWatch) {
+    var _a;
     var watchTitle = apiWatch.model || apiWatch.name || '';
     watchTitle = cleanWatchTitle(watchTitle);
     var fullTitle = (apiWatch.brand.name + " " + watchTitle).trim();
+    var analytics = apiWatch.analytics;
     var hasValidImage = apiWatch.image &&
         apiWatch.image.trim() !== '' &&
         apiWatch.image !== 'null' &&
@@ -23,19 +49,55 @@ function transformApiWatch(apiWatch) {
     var imageUrl = hasValidImage
         ? apiWatch.image
         : imageUtils_1.getRandomWatchImage(apiWatch.id);
+    var trendValue;
+    if ((analytics === null || analytics === void 0 ? void 0 : analytics.trend90d) !== undefined && (analytics === null || analytics === void 0 ? void 0 : analytics.trend90d) !== null) {
+        trendValue = analytics.trend90d;
+    }
+    else if (apiWatch.trend90d !== undefined && apiWatch.trend90d !== null) {
+        trendValue = apiWatch.trend90d;
+    }
+    else if (apiWatch.priceHistory && apiWatch.priceHistory.length >= 2) {
+        var firstPrice = apiWatch.priceHistory[0].price;
+        var lastPrice = apiWatch.priceHistory[apiWatch.priceHistory.length - 1].price;
+        if (firstPrice > 0) {
+            trendValue = ((lastPrice - firstPrice) / firstPrice) * 100;
+        }
+        else {
+            trendValue = calculateTrend(apiWatch.price, apiWatch.defaultPrice).value;
+        }
+    }
+    else {
+        trendValue = calculateTrend(apiWatch.price, apiWatch.defaultPrice).value;
+    }
+    var latestPriceFromHistory = apiWatch.priceHistory && apiWatch.priceHistory.length > 0
+        ? apiWatch.priceHistory[apiWatch.priceHistory.length - 1]
+        : null;
+    var finalPrice = Math.round((latestPriceFromHistory === null || latestPriceFromHistory === void 0 ? void 0 : latestPriceFromHistory.price) || apiWatch.price || 0);
+    var finalCurrencyCode = (latestPriceFromHistory === null || latestPriceFromHistory === void 0 ? void 0 : latestPriceFromHistory.currency) || apiWatch.currency || 'EUR';
+    var finalCurrency = convertCurrency(finalCurrencyCode);
     return {
         id: apiWatch.id,
         title: fullTitle,
         slug: generateSlug(apiWatch.name),
-        price: Math.round(apiWatch.price),
-        currency: convertCurrency(apiWatch.currency),
+        price: finalPrice,
+        currency: finalCurrency,
         brand: apiWatch.brand.name,
         index: calculateIndex(apiWatch.brand.brandIndex),
         image: imageUrl,
         chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
         buttonLabel: 'Buy on Chrono24',
-        trend: calculateTrend(apiWatch.price, apiWatch.defaultPrice),
+        trend: {
+            value: trendValue,
+            period: '90d'
+        },
         variant: undefined,
+        volatility: analytics === null || analytics === void 0 ? void 0 : analytics.volatility,
+        volatilityLabel: convertVolatilityToLabel(analytics === null || analytics === void 0 ? void 0 : analytics.volatility),
+        liquidity: analytics === null || analytics === void 0 ? void 0 : analytics.liquidity,
+        liquidityLabel: convertLiquidityToLabel(analytics === null || analytics === void 0 ? void 0 : analytics.liquidity),
+        trend30d: analytics === null || analytics === void 0 ? void 0 : analytics.trend30d,
+        trend90d: (_a = analytics === null || analytics === void 0 ? void 0 : analytics.trend90d) !== null && _a !== void 0 ? _a : apiWatch.trend90d,
+        popularity: analytics === null || analytics === void 0 ? void 0 : analytics.popularity,
         condition: '',
         mechanism: '',
         material: '',
@@ -59,6 +121,12 @@ function calculateIndex(brandIndex) {
     return 'C';
 }
 function calculateTrend(price, defaultPrice) {
+    if (!defaultPrice || defaultPrice === 0) {
+        return {
+            value: 0,
+            period: '90d'
+        };
+    }
     var change = ((price - defaultPrice) / defaultPrice) * 100;
     return {
         value: Math.round(change * 10) / 10,
@@ -70,7 +138,6 @@ function cleanWatchTitle(title, condition, maxLength) {
     if (!title || title.trim() === '')
         return title;
     var cleaned = title.trim();
-    // Remove duplicate words/phrases (case-insensitive)
     var words = cleaned.split(/\s+/);
     var seen = new Set();
     var uniqueWords = [];
@@ -83,7 +150,6 @@ function cleanWatchTitle(title, condition, maxLength) {
         }
     }
     cleaned = uniqueWords.join(' ');
-    // Remove phrases that are redundant with condition
     if (condition) {
         var conditionUpper = condition.toUpperCase();
         cleaned = cleaned
@@ -94,17 +160,15 @@ function cleanWatchTitle(title, condition, maxLength) {
             cleaned = cleaned.replace(/\bNEW\b/gi, '');
         }
     }
-    // Remove redundant phrases
     cleaned = cleaned
         .replace(/\bwith\s+New\s+style\s+box\b/gi, '')
         .replace(/\bwith\s+box\b/gi, '')
         .replace(/\bwith\s+papers\b/gi, '')
         .replace(/\bwith\s+original\s+box\b/gi, '')
         .replace(/\bwith\s+original\s+papers\b/gi, '')
-        .replace(/\b\[.*?\]\s*/g, '') // Remove text in brackets like [Bruce Wayne]
-        .replace(/\s+/g, ' ') // Multiple spaces to single space
+        .replace(/\b\[.*?\]\s*/g, '')
+        .replace(/\s+/g, ' ')
         .trim();
-    // Limit length, but try to cut at word boundary
     if (cleaned.length > maxLength) {
         var truncated = cleaned.substring(0, maxLength);
         var lastSpace = truncated.lastIndexOf(' ');
@@ -215,17 +279,20 @@ function transformApiPopularWatchItem(apiWatch) {
     };
 }
 exports.transformApiPopularWatchItem = transformApiPopularWatchItem;
-function transformApiWatchFull(apiWatch) {
+function transformApiWatchFull(apiWatch, requestedCurrency) {
     var _a;
     var latestPrice = apiWatch.priceHistory && apiWatch.priceHistory.length > 0
         ? apiWatch.priceHistory[apiWatch.priceHistory.length - 1]
         : null;
-    var price = Math.round((latestPrice === null || latestPrice === void 0 ? void 0 : latestPrice.price) || 0);
-    var currencyCode = (latestPrice === null || latestPrice === void 0 ? void 0 : latestPrice.currency) || ((_a = apiWatch.dealer) === null || _a === void 0 ? void 0 : _a.location) || 'EUR';
+    var apiPrice = apiWatch.price;
+    var historyPrice = latestPrice === null || latestPrice === void 0 ? void 0 : latestPrice.price;
+    var price = Math.round(apiPrice || historyPrice || 0);
+    var currencyCode = apiWatch.currency || (latestPrice === null || latestPrice === void 0 ? void 0 : latestPrice.currency) || requestedCurrency || ((_a = apiWatch.dealer) === null || _a === void 0 ? void 0 : _a.location) || 'EUR';
     var currency = convertCurrency(currencyCode);
-    var defaultPrice = apiWatch.priceHistory && apiWatch.priceHistory.length > 1
-        ? apiWatch.priceHistory[0].price
-        : price;
+    var defaultPrice = apiWatch.defaultPrice ||
+        (apiWatch.priceHistory && apiWatch.priceHistory.length > 1
+            ? apiWatch.priceHistory[0].price
+            : price);
     var hasValidImage = apiWatch.imageUrls &&
         apiWatch.imageUrls.length > 0 &&
         apiWatch.imageUrls[0] &&
@@ -239,17 +306,14 @@ function transformApiWatchFull(apiWatch) {
         ? parseFloat(apiWatch.caseDiameter.replace(/[^0-9.]/g, ''))
         : 40;
     var watchTitle = '';
-    // Prefer model if it exists and is meaningful
     if (apiWatch.model && apiWatch.model.trim() !== '' && apiWatch.model.length > 3) {
         watchTitle = apiWatch.model;
     }
     else if (apiWatch.name && apiWatch.name.trim() !== '' && apiWatch.name.length > 5) {
-        // Check if name is just a reference (only uppercase letters, numbers, dashes)
         if (!/^[A-Z0-9-]+$/.test(apiWatch.name)) {
             watchTitle = apiWatch.name;
         }
         else {
-            // If name is just a ref, try to use model or description
             if (apiWatch.model && apiWatch.model.trim() !== '') {
                 watchTitle = apiWatch.model;
             }
@@ -269,14 +333,12 @@ function transformApiWatchFull(apiWatch) {
     else {
         watchTitle = apiWatch.ref || apiWatch.id;
     }
-    // Clean the title (remove duplicates, redundant info)
-    // Use 80 chars for cards to show more complete names
     watchTitle = cleanWatchTitle(watchTitle, apiWatch.condition, 80);
-    // If cleaned title is too short or empty, use ref as fallback
     if (!watchTitle || watchTitle.length < 3) {
         watchTitle = apiWatch.ref || apiWatch.model || apiWatch.name || '';
     }
     var fullTitle = (apiWatch.brand.name + " " + watchTitle).trim();
+    var analytics = apiWatch.analytics;
     return {
         id: apiWatch.id,
         title: fullTitle,
@@ -288,8 +350,20 @@ function transformApiWatchFull(apiWatch) {
         image: imageUrl,
         chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
         buttonLabel: 'Buy on Chrono24',
-        trend: calculateTrend(price, defaultPrice),
+        trend: {
+            value: (analytics === null || analytics === void 0 ? void 0 : analytics.trend90d) !== undefined
+                ? analytics.trend90d
+                : calculateTrend(price, defaultPrice).value,
+            period: '90d'
+        },
         variant: undefined,
+        volatility: analytics === null || analytics === void 0 ? void 0 : analytics.volatility,
+        volatilityLabel: convertVolatilityToLabel(analytics === null || analytics === void 0 ? void 0 : analytics.volatility),
+        liquidity: analytics === null || analytics === void 0 ? void 0 : analytics.liquidity,
+        liquidityLabel: convertLiquidityToLabel(analytics === null || analytics === void 0 ? void 0 : analytics.liquidity),
+        trend30d: analytics === null || analytics === void 0 ? void 0 : analytics.trend30d,
+        trend90d: analytics === null || analytics === void 0 ? void 0 : analytics.trend90d,
+        popularity: analytics === null || analytics === void 0 ? void 0 : analytics.popularity,
         condition: apiWatch.condition || '',
         mechanism: apiWatch.mechanism || '',
         material: apiWatch.material || '',

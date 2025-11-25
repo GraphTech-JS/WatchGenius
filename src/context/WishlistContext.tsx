@@ -129,7 +129,9 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
 
       getWatchesByIds(ids, 'EUR')
         .then((apiWatches) => {
-          const transformed = apiWatches.map(transformApiWatchFull);
+          const transformed = apiWatches.map((watch) =>
+            transformApiWatchFull(watch, 'EUR')
+          );
 
           if (transformed.length > MAX_WISHLIST_ITEMS) {
             dispatch({
@@ -179,7 +181,7 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
         if (wishlistIds.includes(id)) return;
         getWatchById(id, 'EUR')
           .then((apiWatch) => {
-            const transformed = transformApiWatchFull(apiWatch);
+            const transformed = transformApiWatchFull(apiWatch, 'EUR');
             dispatch({ type: 'ADD_TO_WISHLIST', payload: transformed });
           })
           .catch((err) => {

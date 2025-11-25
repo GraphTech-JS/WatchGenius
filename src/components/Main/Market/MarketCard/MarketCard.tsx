@@ -32,6 +32,7 @@ export const MarketCard: React.FC<IWatch & { priority?: boolean }> = ({
   brand,
   chartData,
   chartId,
+  slug,
   priority = false,
 }) => {
   let percentColor = '#BA790F';
@@ -74,7 +75,10 @@ export const MarketCard: React.FC<IWatch & { priority?: boolean }> = ({
   }, []);
 
   return (
-    <LocalizedLink href='/product/rolex-submariner-1' prefetch={false}>
+    <LocalizedLink
+      href={slug ? `/product/${slug}` : '/catalog'}
+      prefetch={false}
+    >
       <div
         className={`${styles.marketCard} flex flex-col gap-4 md:gap-2 rounded-2xl h-[12.5rem] md:h-[10rem] lg:h-[13.5rem] px-[1.25rem] md:px-[0.6rem] lg:px-[1.25rem] py-[1rem] md:py-[0.6rem] lg:py-[1rem] max-w-[30rem]`}
       >
@@ -87,17 +91,18 @@ export const MarketCard: React.FC<IWatch & { priority?: boolean }> = ({
             style={{ color: percentColor }}
           >
             {ArrowIcon && <ArrowIcon />}
-            {changePercent}%
+            {Math.round(changePercent * 10) / 10}%
           </div>
         </div>
         <div className={`${styles.marketCardBody} flex gap-2 items-center`}>
           <Image
-            src={image}
+            src={image || '/watch/watch-random/img_1.webp'}
             alt={brand}
             width={134}
             height={142}
             className={`${styles.cardImage}`}
             priority={priority}
+            unoptimized={typeof image === 'string' && image.startsWith('http')}
           />
           <div className='flex flex-col gap-2 justify-between items-center h-full md:gap-2 lg:gap-3'>
             <div

@@ -14,6 +14,14 @@ export type WatchItem = {
   trend: { value: number; period: string };
   variant?: 'product' | 'brand';
 
+  volatility?: number;        
+  volatilityLabel?: 'Низька' | 'Середня' | 'Висока'; 
+  liquidity?: string;          
+  liquidityLabel?: 'Низька' | 'Середня' | 'Висока'; 
+  trend30d?: number;          
+  trend90d?: number;          
+  popularity?: number;        
+
   brand: string;
   condition: string;
   mechanism: string;

@@ -2,14 +2,203 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styles from './Market.module.css';
 import { ThemedText } from '@/components/ThemedText/ThemedText';
-import { mockCards } from '@/mock/watch';
 import { MarketCard } from '@/components/Main/Market/MarketCard/MarketCard';
 import { MarketTotal } from '@/components/Main/Market/MarketCard/MarketTotal';
+import { getTrendingWatch90d, getStableWatch } from '@/lib/api';
+
+import { transformApiWatchFull } from '@/lib/transformers';
+import type { WatchItem } from '@/interfaces/watch';
+import { IWatch } from '@/interfaces';
+
+function getCurrencyFromStorage(): string {
+  if (typeof window === 'undefined') return 'EUR';
+  const stored = localStorage.getItem('selectedCurrency');
+  if (stored && ['EUR', 'USD', 'PLN', 'UAH'].includes(stored)) {
+    return stored;
+  }
+  return 'EUR';
+}
+
+const MARKET_CACHE_PREFIX = 'market-cache-';
+const CACHE_TTL = 5 * 60 * 1000;
+
+function getMarketCacheKey(currency: string): string {
+  return `${MARKET_CACHE_PREFIX}${currency}`;
+}
+
+function getCachedMarket(currency: string): WatchItem | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = getMarketCacheKey(currency);
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedMarket(currency: string, watch: WatchItem): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = getMarketCacheKey(currency);
+    const cacheData = {
+      data: watch,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
+}
+
+const MARKET_STABLE_CACHE_PREFIX = 'market-stable-cache-';
+
+function getCachedStable(currency: string): WatchItem | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = `${MARKET_STABLE_CACHE_PREFIX}${currency}`;
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedStable(currency: string, watch: WatchItem): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = `${MARKET_STABLE_CACHE_PREFIX}${currency}`;
+    const cacheData = {
+      data: watch,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
+}
+
+function convertWatchToMarketCard(
+  watch: WatchItem | null,
+  title: string,
+  chartId: string
+): IWatch | null {
+  if (!watch) return null;
+
+  const imageUrl =
+    typeof watch.image === 'string' ? watch.image : watch.image?.src || '';
+
+  const changePercent = watch.trend?.value
+    ? Math.round(watch.trend.value * 10) / 10
+    : 0;
+
+  const chartData = [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7];
+
+  return {
+    id: parseInt(watch.id.replace(/\D/g, '')) || 1,
+    slug: watch.slug,
+    title: title,
+    image: imageUrl,
+    brand: watch.title || watch.brand,
+    price: watch.price,
+    rating: Math.abs(changePercent) % 11,
+    changePercent: changePercent,
+    chartData: chartData,
+    chartColor: changePercent > 0 ? '#22c55e' : '#EED09D',
+    chartId: chartId,
+    index: watch.index,
+  };
+}
 
 export const Market = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
   const swipeRef = useRef<HTMLDivElement | null>(null);
+  const [topGainer90d, setTopGainer90d] = useState<WatchItem | null>(null);
+  const [stable90d, setStable90d] = useState<WatchItem | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadMarketData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        const currency = getCurrencyFromStorage();
+
+        const cachedTop = getCachedMarket(currency);
+        const cachedStable = getCachedStable(currency);
+        if (cachedTop) setTopGainer90d(cachedTop);
+        if (cachedStable) setStable90d(cachedStable);
+
+        if (cachedTop || cachedStable) {
+          setLoading(false);
+        }
+
+        const [trending90d, stable] = await Promise.all([
+          getTrendingWatch90d(currency),
+          getStableWatch(currency),
+        ]);
+
+        if (trending90d) {
+          const transformed = transformApiWatchFull(trending90d, currency);
+          setTopGainer90d(transformed);
+          setCachedMarket(currency, transformed);
+        }
+
+        if (stable) {
+          const transformed = transformApiWatchFull(stable, currency);
+          setStable90d(transformed);
+          setCachedStable(currency, transformed);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadMarketData();
+
+    const handleStorageChange = () => {
+      loadMarketData();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('currencyChanged', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('currencyChanged', handleStorageChange);
+    };
+  }, []);
 
   useEffect(() => {
     const checkSize = () => setIsDesktop(window.innerWidth >= 768);
@@ -19,19 +208,50 @@ export const Market = () => {
   }, []);
 
   const desktopCards = [
-    ...mockCards.map((card, idx) => ({
-      type: 'card' as const,
-      content: (
-        <MarketCard
-          key={`desktop-card-${idx}`}
-          {...{
-            ...card,
-            chartId: `${card.chartId}-desktop`,
-            priority: idx === 0,
-          }}
-        />
-      ),
-    })),
+    ...(topGainer90d
+      ? (() => {
+          const marketCard = convertWatchToMarketCard(
+            topGainer90d,
+            'Top Gainers 90d',
+            'market-gainer-90d-desktop'
+          );
+          return marketCard
+            ? [
+                {
+                  type: 'card' as const,
+                  content: (
+                    <MarketCard
+                      key='desktop-gainer-90d'
+                      {...marketCard}
+                      priority={true}
+                    />
+                  ),
+                },
+              ]
+            : [];
+        })()
+      : []),
+
+    ...(stable90d
+      ? (() => {
+          const marketCard = convertWatchToMarketCard(
+            stable90d,
+            'Stable Picks 90d',
+            'market-stable-90d-desktop'
+          );
+          return marketCard
+            ? [
+                {
+                  type: 'card' as const,
+                  content: (
+                    <MarketCard key='desktop-stable-90d' {...marketCard} />
+                  ),
+                },
+              ]
+            : [];
+        })()
+      : []),
+
     {
       type: 'total' as const,
       content: (
@@ -48,19 +268,44 @@ export const Market = () => {
   ];
 
   const mobileCards = [
-    ...mockCards.map((card, idx) => ({
-      type: 'card' as const,
-      content: (
-        <MarketCard
-          key={`mobile-card-${idx}`}
-          {...{
-            ...card,
-            chartId: `${card.chartId}-mobile`,
-            priority: idx === 0,
-          }}
-        />
-      ),
-    })),
+    ...(topGainer90d
+      ? (() => {
+          const marketCard = convertWatchToMarketCard(
+            topGainer90d,
+            'Top Gainers 90d',
+            'market-gainer-90d-mobile'
+          );
+          return marketCard
+            ? [
+                {
+                  type: 'card' as const,
+                  content: (
+                    <MarketCard key='mobile-gainer-90d' {...marketCard} />
+                  ),
+                },
+              ]
+            : [];
+        })()
+      : []),
+    ...(stable90d
+      ? (() => {
+          const marketCard = convertWatchToMarketCard(
+            stable90d,
+            'Stable Picks 90d',
+            'market-stable-90d-mobile'
+          );
+          return marketCard
+            ? [
+                {
+                  type: 'card' as const,
+                  content: (
+                    <MarketCard key='mobile-stable-90d' {...marketCard} />
+                  ),
+                },
+              ]
+            : [];
+        })()
+      : []),
     {
       type: 'total' as const,
       content: (
@@ -83,7 +328,7 @@ export const Market = () => {
     el.scrollTo({ left: idx * viewport, behavior: 'smooth' });
   };
   useEffect(() => {
-    if (isDesktop) return; 
+    if (isDesktop) return;
     const el = swipeRef.current;
     if (!el) return;
     let isDown = false;
@@ -127,7 +372,7 @@ export const Market = () => {
     };
   }, [isDesktop]);
   useEffect(() => {
-    if (isDesktop) return; 
+    if (isDesktop) return;
     const el = swipeRef.current;
     if (!el) return;
     let raf = 0;
@@ -156,41 +401,55 @@ export const Market = () => {
           <ThemedText type='h2'>Market overview</ThemedText>
         </div>
 
-        <div
-          className={`${styles.marketContent} hidden md:grid md:grid-cols-3 gap-6`}
-        >
-          {desktopCards.map((card) => card.content)}
-        </div>
+        {loading ? (
+          <div className='flex justify-center items-center py-12'>
+            <div className='text-gray-500'>Loading...</div>
+          </div>
+        ) : error ? (
+          <div className='flex justify-center items-center py-12'>
+            <div className='text-red-500'>Error: {error}</div>
+          </div>
+        ) : (
+          <>
+            <div
+              className={`${styles.marketContent} hidden md:grid md:grid-cols-3 gap-6`}
+            >
+              {desktopCards.map((card) => card.content)}
+            </div>
 
-        <div className='md:hidden'>
-          <div
-            ref={swipeRef}
-            className={`${styles.marketContent} flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth ${styles.swipe} ${styles.noScrollbar}`}
-          >
-            {mobileCards.map((card, idx) => (
+            <div className='md:hidden'>
               <div
-                key={`mob-${idx}`}
-                className='flex justify-center snap-start shrink-0'
-                style={{ flex: '0 0 100%', maxWidth: '100%' }}
+                ref={swipeRef}
+                className={`${styles.marketContent} flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth ${styles.swipe} ${styles.noScrollbar}`}
               >
-                {card.content}
+                {mobileCards.map((card, idx) => (
+                  <div
+                    key={`mob-${idx}`}
+                    className='flex justify-center snap-start shrink-0'
+                    style={{ flex: '0 0 100%', maxWidth: '100%' }}
+                  >
+                    {card.content}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          <div className='flex gap-2 justify-center mt-4'>
-            {mobileCards.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={() => scrollToIndex(idx)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  activeIndex === idx ? 'bg-[#04694F] scale-110' : 'bg-gray-300'
-                }`}
-                aria-label={`Показати товар ${idx + 1}`}
-              />
-            ))}
-          </div>
-        </div>
+              <div className='flex gap-2 justify-center mt-4'>
+                {mobileCards.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => scrollToIndex(idx)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      activeIndex === idx
+                        ? 'bg-[#04694F] scale-110'
+                        : 'bg-gray-300'
+                    }`}
+                    aria-label={`Показати товар ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

@@ -78,7 +78,9 @@ exports.WishlistProvider = function (_a) {
             setError(null);
             api_1.getWatchesByIds(ids, 'EUR')
                 .then(function (apiWatches) {
-                var transformed = apiWatches.map(transformers_1.transformApiWatchFull);
+                var transformed = apiWatches.map(function (watch) {
+                    return transformers_1.transformApiWatchFull(watch, 'EUR');
+                });
                 if (transformed.length > MAX_WISHLIST_ITEMS) {
                     dispatch({
                         type: 'SET_ITEMS',
@@ -123,7 +125,7 @@ exports.WishlistProvider = function (_a) {
                 return;
             api_1.getWatchById(id, 'EUR')
                 .then(function (apiWatch) {
-                var transformed = transformers_1.transformApiWatchFull(apiWatch);
+                var transformed = transformers_1.transformApiWatchFull(apiWatch, 'EUR');
                 dispatch({ type: 'ADD_TO_WISHLIST', payload: transformed });
             })["catch"](function (err) {
                 console.error('❌ [Wishlist] Failed to add watch:', err);
