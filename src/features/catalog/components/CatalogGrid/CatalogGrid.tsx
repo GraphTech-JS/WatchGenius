@@ -8,6 +8,7 @@ import { useWishlistContext } from '@/context/WishlistContext';
 import type { WatchItem } from '@/interfaces';
 import { t } from '@/i18n';
 import { catalogKeys } from '@/i18n/keys/catalog';
+import { WatchCardSkeleton } from '@/features/catalog/components/CatalogGrid/WatchCard/WatchCardSkeleton';
 
 type Props = {
   items: WatchItem[];
@@ -35,15 +36,6 @@ export const CatalogGrid: React.FC<Props> = ({
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const isLoadingRef = useRef(false);
 
-  /**
-   * Використовуємо контекст вішліста замість локального стану
-   *
-   * ЧОМУ замінити локальний стан:
-   * - Один джерело правди (single source of truth)
-   * - Синхронізація між каталогом та модалкою вішліста
-   * - Дані зберігаються в localStorage
-   * - Немає конфліктів між різними компонентами
-   */
   const { isInWishlist, addToWishlist, removeFromWishlist } =
     useWishlistContext();
 
@@ -65,19 +57,11 @@ export const CatalogGrid: React.FC<Props> = ({
     return items;
   }, [items, hasMore, showAll, initialCount]);
 
-  /**
-   * Обробник toggle like
-   *
-   * ЧОМУ така структура:
-   * - Якщо вже в вішлісті - видаляємо
-   * - Якщо немає - додаємо об'єкт WatchItem
-   * - Використовуємо методи з контексту
-   */
+
   const handleToggleLike = (id: string) => {
     if (isInWishlist(id)) {
       removeFromWishlist(id);
     } else {
-      // Знаходимо товар в списку items і додаємо його
       const watch = items.find((item) => item.id === id);
       if (watch) {
         addToWishlist(watch);
@@ -117,16 +101,15 @@ export const CatalogGrid: React.FC<Props> = ({
     return () => io.disconnect();
   }, [hasMore, onLoadMore, isLoading]);
 
-  if (loading && items.length === 0) {
-    return (
-      <div className='flex flex-col items-center justify-center min-h-[400px] gap-4'>
-        <ClipLoader size={50} color={'#04694f'} speedMultiplier={0.9} />
-        <p className='text-[#8b8b8b] text-[20px] font-[var(--font-inter)]'>
-          Завантаження годинників...
-        </p>
-      </div>
-    );
-  }
+ if (loading && items.length === 0) {
+   return (
+     <div className='grid max-[375px]:gap-y-[17px] max-[375px]:gap-[17px] gap-[17px] gap-y-[25px] grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4'>
+       {Array.from({ length: 12 }).map((_, index) => (
+         <WatchCardSkeleton key={`skeleton-${index}`} />
+       ))}
+     </div>
+   );
+ }
 
   if (items.length === 0) {
     return (
@@ -168,6 +151,7 @@ export const CatalogGrid: React.FC<Props> = ({
           />
         ))}
       </div>
+   
 
       {showButton && (
         <div className='flex justify-center mt-6'>

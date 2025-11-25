@@ -225,15 +225,42 @@ const clearAllFilters = useCallback(() => {
   }, [activeFilters]);
 
 useEffect(() => {
-  const apiParams: GetWatchesParams = !searchTerm.trim() && !sidebarFilters 
-    ? { pageSize: 12, currency: 'EUR' }
-    : {
-        ...(searchTerm.trim() && { search: searchTerm.trim() }),
-        ...(sidebarFilters ? convertFiltersToApiParams(sidebarFilters) : {}),
-        currency: 'EUR'
-      };
-  
-  reloadWithFilters(apiParams);
+  const getCurrencyFromStorage = (): string => {
+    if (typeof window === 'undefined') return 'EUR';
+    const savedCurrency = localStorage.getItem('selectedCurrency');
+    const validCurrencies = ['EUR', 'USD', 'PLN', 'UAH'];
+    return savedCurrency && validCurrencies.includes(savedCurrency)
+      ? savedCurrency
+      : 'EUR';
+  };
+
+  const loadWatches = () => {
+    const currency = getCurrencyFromStorage();
+    
+    const apiParams: GetWatchesParams = !searchTerm.trim() && !sidebarFilters 
+      ? { pageSize: 12, currency: currency }
+      : {
+          ...(searchTerm.trim() && { search: searchTerm.trim() }),
+          ...(sidebarFilters ? convertFiltersToApiParams(sidebarFilters) : {}),
+          currency: currency
+        };
+    
+    reloadWithFilters(apiParams);
+  };
+
+  loadWatches();
+
+  const handleCurrencyChange = () => {
+    loadWatches();
+  };
+
+  window.addEventListener('currencyChanged', handleCurrencyChange);
+  window.addEventListener('storage', handleCurrencyChange);
+
+  return () => {
+    window.removeEventListener('currencyChanged', handleCurrencyChange);
+    window.removeEventListener('storage', handleCurrencyChange);
+  };
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [searchTerm, sidebarFilters]);
   return {

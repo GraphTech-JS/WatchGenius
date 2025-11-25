@@ -21,12 +21,16 @@ var indexBadgeClass = function (idx) {
     }
 };
 exports.WatchCard = function (_a) {
-    var item = _a.item, liked = _a.liked, onToggleLike = _a.onToggleLike, onOpenFeedback = _a.onOpenFeedback, _b = _a.priority, priority = _b === void 0 ? false : _b;
+    var _b, _c;
+    var item = _a.item, liked = _a.liked, onToggleLike = _a.onToggleLike, onOpenFeedback = _a.onOpenFeedback, _d = _a.priority, priority = _d === void 0 ? false : _d;
     var router = navigation_1.useRouter();
     var locale = useLocale_1.useLocale();
-    var trendValue = Number(item.trend.value);
+    var trendValue = item.trend90d !== undefined && item.trend90d !== null
+        ? item.trend90d
+        : (_c = (_b = item.trend) === null || _b === void 0 ? void 0 : _b.value) !== null && _c !== void 0 ? _c : 0;
     var isUp = trendValue > 0;
-    var isFlat = trendValue === 0;
+    var isFlat = Math.abs(trendValue) < 0.01;
+    var trendPeriod = '90d';
     var handleCardClick = function () {
         router.push("/" + locale + "/product/" + item.slug);
     };
@@ -72,15 +76,12 @@ exports.WatchCard = function (_a) {
                 " ",
                 item.currency),
             react_1["default"].createElement("div", { className: 'flex items-center gap-1 text-[14px] ' }, isFlat ? (react_1["default"].createElement("span", { className: WatchCard_module_css_1["default"].trendBadge + " " + WatchCard_module_css_1["default"].trendValue + " " + WatchCard_module_css_1["default"].trendValueZero },
-                "0 %",
-                ' ',
-                react_1["default"].createElement("span", { className: WatchCard_module_css_1["default"].trendPeriod }, item.trend.period))) : (react_1["default"].createElement("span", { className: WatchCard_module_css_1["default"].trendBadge + " " + WatchCard_module_css_1["default"].trendValue + " " + (isUp ? WatchCard_module_css_1["default"].trendValuePositive : WatchCard_module_css_1["default"].trendValueNegative), title: (isUp ? 'Зростання' : 'Падіння') + " \u0437\u0430 " + item.trend.period },
+                "0 % ",
+                react_1["default"].createElement("span", { className: WatchCard_module_css_1["default"].trendPeriod }, trendPeriod))) : (react_1["default"].createElement("span", { className: WatchCard_module_css_1["default"].trendBadge + " " + WatchCard_module_css_1["default"].trendValue + " " + (isUp ? WatchCard_module_css_1["default"].trendValuePositive : WatchCard_module_css_1["default"].trendValueNegative), title: (isUp ? 'Зростання' : 'Падіння') + " \u0437\u0430 90 \u0434\u043D\u0456\u0432" },
                 isUp ? react_1["default"].createElement(lucide_react_1.ArrowUp, { size: 12 }) : react_1["default"].createElement(lucide_react_1.ArrowDown, { size: 12 }),
-                Math.abs(trendValue),
+                Math.abs(Math.round(trendValue * 10) / 10),
                 " %",
                 ' ',
-                react_1["default"].createElement("span", { className: WatchCard_module_css_1["default"].trendPeriod }, item.trend.period))))),
-        react_1["default"].createElement("button", { className: WatchCard_module_css_1["default"].buyButton + " mt-[27px]", onClick: handleBuyClick }, item.chronoUrl && hasValidImage()
-            ? item.buttonLabel
-            : 'Get Quote')));
+                react_1["default"].createElement("span", { className: WatchCard_module_css_1["default"].trendPeriod }, trendPeriod))))),
+        react_1["default"].createElement("button", { className: WatchCard_module_css_1["default"].buyButton + " mt-[27px]", onClick: handleBuyClick }, item.chronoUrl && hasValidImage() ? item.buttonLabel : 'Get Quote')));
 };

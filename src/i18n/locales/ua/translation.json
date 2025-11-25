@@ -452,7 +452,7 @@
       "success": "Дякуємо за ваш запит! Ми повідомимо вас про зниження ціни!"
     },
     "getQuote": {
-      "title": "Запит вартості",
+      "title": "Get Quote",
       "nameLabel": "Введіть ім’я",
       "namePlaceholder": "Ваше ім’я",
       "emailLabel": "Введіть пошту",

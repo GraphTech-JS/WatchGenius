@@ -174,7 +174,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                       {t(productKeys.analytics.trend.demand)}
                     </span>
                     <span className={styles.trendValue}>
-                      {analytics.demand}%
+                      {Math.round(analytics.demand * 10) / 10}%
                     </span>
                   </div>
                 </div>
@@ -207,7 +207,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                       {t(productKeys.analytics.trend.liquidity)}
                     </span>
                     <span className={styles.trendValue}>
-                      {analytics.liquidity}%
+                      {Math.round(analytics.liquidity * 10) / 10}%
                     </span>
                   </div>
                 </div>
@@ -240,7 +240,8 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                       {t(productKeys.analytics.trend.dynamics)}
                     </span>
                     <span className={styles.trendValue}>
-                      +{analytics.dynamics}%
+                      {analytics.dynamics >= 0 ? '+' : ''}
+                      {Math.round(analytics.dynamics * 10) / 10}%
                     </span>
                   </div>
                 </div>
@@ -280,7 +281,7 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
 
             <div className={styles.trendGauge}>
               <TrendGauge
-                value={analytics.demand}
+                value={Math.round(analytics.demand * 10) / 10}
                 lastUpdated={analytics.lastUpdated}
                 arcSrc={DugaIcon}
                 pointerSrc={PolygonIcon}
@@ -398,7 +399,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                       {t(productKeys.analytics.price.volatility)}
                     </div>
                     <div className={styles.priceMetricValue}>
-                      {analytics.volatility}
+                      {typeof analytics.volatility === 'number'
+                        ? Math.round(analytics.volatility * 10) / 10
+                        : analytics.volatility}
                     </div>
                   </div>
                 </div>

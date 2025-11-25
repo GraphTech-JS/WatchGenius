@@ -243,7 +243,9 @@ const ComparePageWrapper = () => {
         }
 
         const apiWatches = await getWatchesByIds(selectedWatches, currency);
-        const transformed = apiWatches.map(transformApiWatchFull);
+        const transformed = apiWatches.map((watch) =>
+          transformApiWatchFull(watch, currency)
+        );
         setWatches(transformed);
         setCachedWatches(selectedWatches, currency, transformed);
       } catch (err) {

@@ -217,10 +217,32 @@ exports.useCatalogSearch = function () {
         };
     }, [activeFilters]);
     react_1.useEffect(function () {
-        var apiParams = !searchTerm.trim() && !sidebarFilters
-            ? { pageSize: 12, currency: 'EUR' }
-            : __assign(__assign(__assign({}, (searchTerm.trim() && { search: searchTerm.trim() })), (sidebarFilters ? api_1.convertFiltersToApiParams(sidebarFilters) : {})), { currency: 'EUR' });
-        reloadWithFilters(apiParams);
+        var getCurrencyFromStorage = function () {
+            if (typeof window === 'undefined')
+                return 'EUR';
+            var savedCurrency = localStorage.getItem('selectedCurrency');
+            var validCurrencies = ['EUR', 'USD', 'PLN', 'UAH'];
+            return savedCurrency && validCurrencies.includes(savedCurrency)
+                ? savedCurrency
+                : 'EUR';
+        };
+        var loadWatches = function () {
+            var currency = getCurrencyFromStorage();
+            var apiParams = !searchTerm.trim() && !sidebarFilters
+                ? { pageSize: 12, currency: currency }
+                : __assign(__assign(__assign({}, (searchTerm.trim() && { search: searchTerm.trim() })), (sidebarFilters ? api_1.convertFiltersToApiParams(sidebarFilters) : {})), { currency: currency });
+            reloadWithFilters(apiParams);
+        };
+        loadWatches();
+        var handleCurrencyChange = function () {
+            loadWatches();
+        };
+        window.addEventListener('currencyChanged', handleCurrencyChange);
+        window.addEventListener('storage', handleCurrencyChange);
+        return function () {
+            window.removeEventListener('currencyChanged', handleCurrencyChange);
+            window.removeEventListener('storage', handleCurrencyChange);
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchTerm, sidebarFilters]);
     return {

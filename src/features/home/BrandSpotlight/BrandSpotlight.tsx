@@ -120,7 +120,7 @@ export const BrandSpotlight = () => {
         const firstBrand = data[0];
 
         const transformed = firstBrand.watches.map((watch) =>
-          transformApiWatchFull(watch)
+          transformApiWatchFull(watch, currency)
         );
 
         const iWatchItems = transformed.map((watch, index) =>

@@ -345,15 +345,18 @@ export async function getWatchBySlug(
 
         if (matchedWatch) break;
 
-        const slugWords = slug.split('-').filter(word => word.length > 0);
+        const slugWords = slug.split('-').filter((word) => word.length > 0);
 
         for (const watch of searchResponse.data) {
           const watchSlug = generateSlug(watch.name);
-          const watchSlugWords = watchSlug.split('-').filter(word => word.length > 0);
+          const watchSlugWords = watchSlug
+            .split('-')
+            .filter((word) => word.length > 0);
 
-          const allWordsMatch = slugWords.every(word =>
-            watchSlugWords.some(watchWord =>
-              watchWord.includes(word) || word.includes(watchWord)
+          const allWordsMatch = slugWords.every((word) =>
+            watchSlugWords.some(
+              (watchWord) =>
+                watchWord.includes(word) || word.includes(watchWord)
             )
           );
 
@@ -375,6 +378,14 @@ export async function getWatchBySlug(
     }
 
     const fullWatch = await getWatchById(matchedWatch.id, currency);
+    
+
+    if (fullWatch && matchedWatch.price) {
+      fullWatch.price = matchedWatch.price;
+      fullWatch.defaultPrice = matchedWatch.defaultPrice;
+      fullWatch.currency = matchedWatch.currency;
+    }
+    
     return fullWatch;
   } catch (error) {
     console.error('❌ [API] getWatchBySlug - Error:', error);
@@ -438,20 +449,10 @@ export async function getPopularWatches(
   const url = `/api/watches/popular${
     searchParams.toString() ? `?${searchParams.toString()}` : ''
   }`;
-  
-  console.log('🔍 [API] getPopularWatches - URL:', url);
-  console.log('🔍 [API] getPopularWatches - currency:', currency);
-  
+
   try {
     const response = await fetch(url);
-    console.log('🔍 [API] getPopularWatches - Response status:', response.status);
-    console.log('🔍 [API] getPopularWatches - Response ok:', response.ok);
-    
     const data = await handleResponse<ApiPopularWatchResponse[]>(response);
-    console.log('🔍 [API] getPopularWatches - Response data:', data);
-    console.log('🔍 [API] getPopularWatches - Data type:', Array.isArray(data) ? 'array' : typeof data);
-    console.log('🔍 [API] getPopularWatches - Data length:', Array.isArray(data) ? data.length : 'not array');
-    
     return data;
   } catch (error) {
     console.error('❌ [API] Failed to fetch popular watches:', error);
@@ -467,24 +468,129 @@ export async function getPopularWatchesByBrand(
     searchParams.set('currency', currency);
   }
 
-  const url = `/api/watches/popular-by-brand${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
-
-  console.log('🔍 [API] getPopularWatchesByBrand - URL:', url);
-  console.log('🔍 [API] getPopularWatchesByBrand - currency:', currency);
+  const url = `/api/watches/popular-by-brand${
+    searchParams.toString() ? `?${searchParams.toString()}` : ''
+  }`;
 
   try {
     const response = await fetch(url);
-    console.log('🔍 [API] getPopularWatchesByBrand - Response status:', response.status);
-    console.log('🔍 [API] getPopularWatchesByBrand - Response ok:', response.ok);
-    
     const data = await handleResponse<ApiPopularByBrandResponse[]>(response);
-    console.log('🔍 [API] getPopularWatchesByBrand - Response data:', data);
-    console.log('🔍 [API] getPopularWatchesByBrand - Data type:', Array.isArray(data) ? 'array' : typeof data);
-    console.log('🔍 [API] getPopularWatchesByBrand - Data length:', Array.isArray(data) ? data.length : 'not array');
-    
     return data;
   } catch (error) {
     console.error('❌ [API] Failed to fetch popular watches by brand:', error);
+    throw error;
+  }
+}
+
+export async function getTrendingWatch30d(
+  currency?: string
+): Promise<ApiWatchFullResponse | null> {
+  const searchParams = new URLSearchParams();
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+
+  const url = `/api/watches/trending/30d${
+    searchParams.toString() ? `?${searchParams.toString()}` : ''
+  }`;
+
+  try {
+    const response = await fetch(url);
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    const data = await handleResponse<ApiWatchFullResponse>(response);
+
+    return data;
+  } catch (error) {
+    console.error('❌ [API] Failed to fetch trending watch (30d):', error);
+    throw error;
+  }
+}
+
+export async function getTrendingWatch90d(
+  currency?: string
+): Promise<ApiWatchFullResponse | null> {
+  const searchParams = new URLSearchParams();
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+
+  const url = `/api/watches/trending/90d${
+    searchParams.toString() ? `?${searchParams.toString()}` : ''
+  }`;
+
+  try {
+    const response = await fetch(url);
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    const data = await handleResponse<ApiWatchFullResponse>(response);
+
+    return data;
+  } catch (error) {
+    console.error('❌ [API] Failed to fetch trending watch (90d):', error);
+    throw error;
+  }
+}
+
+
+export async function getStableWatch(
+  currency?: string
+): Promise<ApiWatchFullResponse | null> {
+  const searchParams = new URLSearchParams();
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+
+  const url = `/api/watches/stable${
+    searchParams.toString() ? `?${searchParams.toString()}` : ''
+  }`;
+
+  try {
+    const response = await fetch(url);
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    const data = await handleResponse<ApiWatchFullResponse>(response);
+
+    return data;
+  } catch (error) {
+    console.error('❌ [API] Failed to fetch stable watch:', error);
+    throw error;
+  }
+}
+
+export async function getLiquidWatch(
+  currency?: string
+): Promise<ApiWatchFullResponse | null> {
+  const searchParams = new URLSearchParams();
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+
+  const url = `/api/watches/liquid${
+    searchParams.toString() ? `?${searchParams.toString()}` : ''
+  }`;
+
+  try {
+    const response = await fetch(url);
+
+    if (response.status === 404) {
+      return null;
+    }
+
+    const data = await handleResponse<ApiWatchFullResponse>(response);
+
+    return data;
+  } catch (error) {
+    console.error('❌ [API] Failed to fetch liquid watch:', error);
     throw error;
   }
 }
