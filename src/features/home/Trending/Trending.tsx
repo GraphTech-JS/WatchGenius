@@ -207,9 +207,6 @@ export const Trending = () => {
         {loading ? (
           <div className='flex justify-center items-center py-12'>
             <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} /> 
-            <p className='text-[#8b8b8b] text-[20px] font-[var(--font-inter)]'>
-              Завантаження...
-            </p>
           </div>
         ) : error && watches.length === 0 ? (
           <div className='flex justify-center items-center py-12'>
