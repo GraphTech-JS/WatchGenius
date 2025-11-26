@@ -66,14 +66,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', sans-serif;
   font-weight: 700;
   font-size: 12px;
   text-align: center;
   z-index: 1;
 }
 
-/* карта має position: relative; вже є у .similarCard */
 .indexBadgeWrap {
   position: absolute;
   top: 12px;
@@ -81,9 +79,8 @@
   z-index: 2;
 }
 
-/* бейдж більше НЕ позиціонуємо абсолютом */
 .indexBadge {
-  position: static; /* прибрати top/left звідси, залишити стилі вигляду */
+  position: static; 
 }
 
 .indexTooltip {
@@ -190,7 +187,7 @@
   align-items: center;
   gap: 4px;
   background: #FEECEC;
-  font-size: 14px;
+  font-size: 13px;
 }
 .similarTrendValueNegative {
   color: #C73D3D;
