@@ -57,6 +57,7 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
     const value = trend.replace(/[↑↓+%]/g, "");
     const period = "90d";
     return { isPositive, value, period };
+
   };
 
   return (
@@ -92,16 +93,16 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                   {model.index}
                 </div>
                 <div className={styles.indexTooltip}>
-                  {model.index === "A" && t(productKeys.index.A)}
-                  {model.index === "B" && t(productKeys.index.B)}
-                  {model.index === "C" && t(productKeys.index.C)}
+                  {model.index === 'A' && t(productKeys.index.A)}
+                  {model.index === 'B' && t(productKeys.index.B)}
+                  {model.index === 'C' && t(productKeys.index.C)}
                 </div>
               </div>
               <div
                 className={`${styles.comparisonIcon} ${
                   selectedModels.has(model.id)
                     ? styles.comparisonIconSelected
-                    : ""
+                    : ''
                 }`}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -134,7 +135,7 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                 <div className={styles.similarTrendContainer}>
                   <span
                     className={`${styles.similarTrendBadge} ${
-                      !trend.isPositive ? styles.similarTrendBadgeNegative : ""
+                      !trend.isPositive ? styles.similarTrendBadgeNegative : ''
                     }`}
                   >
                     <span
@@ -149,7 +150,7 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
                       ) : (
                         <ArrowDown size={12} />
                       )}
-                      {trend.value}%
+                      {parseFloat(trend.value).toFixed(1)}%
                       <span className={styles.similarTrendPeriod}>
                         {trend.period}
                       </span>

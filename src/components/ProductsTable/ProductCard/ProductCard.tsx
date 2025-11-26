@@ -190,7 +190,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               e.stopPropagation();
               setIsFavorite((prev) => !prev);
             }}
-            className={`${styles.productCardScore} absolute top-0 left-0 flex items-center justify-center w-8 h-8`}
+            className={`${styles.productCardScore} absolute top-0 left-0 z-10 flex items-center justify-center w-8 h-8`}
             aria-label={
               isFavorite
                 ? t(a11yKeys.favorites.remove)
@@ -207,18 +207,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             />
           </button>
 
-          <Image
-            src={image}
-            alt={brand}
-            width={134}
-            height={142}
-            className={`w-auto  ${
-              dense
-                ? 'max-h-[72px]'
-                : 'max-h-[84px] md:max-h-[110px] lg:max-h-[120px]'
-            }`}
-            priority={priority}
-          />
+          <div className='relative w-[90px] h-[90px] md:w-[110px] md:h-[110px] lg:w-[120px] lg:h-[120px] mx-auto overflow-hidden rounded-lg'>
+            <Image
+              src={image}
+              alt={brand}
+              fill
+              sizes='(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw'
+              className={styles.productCardImage}
+              priority={priority}
+            />
+          </div>
 
           <div
             className={`${styles.productCardScore} ${scoreClass} absolute top-0 right-0 flex items-center justify-center w-6 md:w-8 h-6 md:h-8 rounded-md font-bold`}

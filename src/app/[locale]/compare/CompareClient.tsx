@@ -14,6 +14,7 @@ import { transformApiWatchFull } from '@/lib/transformers';
 import { t } from '@/i18n';
 import { productKeys } from '@/i18n/keys/product';
 import { catalogKeys } from '@/i18n/keys/catalog';
+import { ClockLoader } from 'react-spinners';
 
 function translateDetailValue(
   type: 'condition' | 'mechanism' | 'material',
@@ -284,8 +285,11 @@ const ComparePageWrapper = () => {
 
   if (loading) {
     return (
-      <div className='flex justify-center items-center min-h-screen'>
-        <div className='text-gray-500'>Loading...</div>
+      <div className='flex flex-col gap-6 justify-center items-center min-h-screen'>
+        <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+        <p className='text-[#8b8b8b] text-[20px] font-[var(--font-inter)]'>
+          Завантаження...
+        </p>
       </div>
     );
   }

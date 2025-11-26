@@ -5,6 +5,7 @@ import { ThemedText } from '@/components/ThemedText/ThemedText';
 import { MarketCard } from '@/components/Main/Market/MarketCard/MarketCard';
 import { MarketTotal } from '@/components/Main/Market/MarketCard/MarketTotal';
 import { getTrendingWatch90d, getStableWatch } from '@/lib/api';
+import { ClockLoader } from 'react-spinners';
 
 import { transformApiWatchFull } from '@/lib/transformers';
 import type { WatchItem } from '@/interfaces/watch';
@@ -402,9 +403,12 @@ export const Market = () => {
         </div>
 
         {loading ? (
-          <div className='flex justify-center items-center py-12'>
-            <div className='text-gray-500'>Loading...</div>
-          </div>
+                <div className='flex justify-center items-center py-12'>
+                  <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+                  <p className='text-[#8b8b8b] text-[20px] font-[var(--font-inter)]'>
+                    Завантаження...
+                  </p>
+                </div>
         ) : error ? (
           <div className='flex justify-center items-center py-12'>
             <div className='text-red-500'>Error: {error}</div>

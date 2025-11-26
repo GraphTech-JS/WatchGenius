@@ -11,7 +11,7 @@ import { t } from '@/i18n';
 import { trendingKeys } from '@/i18n/keys/home';
 import { IWatch } from '@/interfaces';
 import { mockTrending } from '@/mock/watch';
-
+import { ClockLoader } from 'react-spinners';
 function getCurrencyFromStorage(): string {
   if (typeof window === 'undefined') return 'EUR';
 
@@ -206,7 +206,10 @@ export const Trending = () => {
 
         {loading ? (
           <div className='flex justify-center items-center py-12'>
-            <div className='text-gray-500'>Loading...</div>
+            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} /> 
+            <p className='text-[#8b8b8b] text-[20px] font-[var(--font-inter)]'>
+              Завантаження...
+            </p>
           </div>
         ) : error && watches.length === 0 ? (
           <div className='flex justify-center items-center py-12'>
