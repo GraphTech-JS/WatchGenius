@@ -199,8 +199,7 @@ exports.Trending = function () {
                         react_1["default"].createElement("div", { className: Trending_module_css_1["default"].trendingSettingsItem + " py-2 cursor-pointer", onClick: toggleMenu },
                             react_1["default"].createElement("span", null, i18n_1.t(home_1.trendingKeys.sort.rating)))))),
             loading ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
-                react_1["default"].createElement(react_spinners_1.ClockLoader, { size: 60, color: '#04694f', speedMultiplier: 0.9 }),
-                react_1["default"].createElement("p", { className: 'text-[#8b8b8b] text-[20px] font-[var(--font-inter)]' }, "\u0417\u0430\u0432\u0430\u043D\u0442\u0430\u0436\u0435\u043D\u043D\u044F..."))) : error && watches.length === 0 ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
+                react_1["default"].createElement(react_spinners_1.ClockLoader, { size: 60, color: '#04694f', speedMultiplier: 0.9 }))) : error && watches.length === 0 ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
                 react_1["default"].createElement("div", { className: 'text-red-500' },
                     "Error: ",
                     error))) : (react_1["default"].createElement(ProductCarousel_1.ProductCarousel, { items: watches, ctaLabel: i18n_1.t(home_1.trendingKeys.carousel.cta) })))));
