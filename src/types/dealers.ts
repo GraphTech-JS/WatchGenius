@@ -1,6 +1,6 @@
 export interface DealerData {
   id: number;
-  originalId: string;
+  originalId?: string;
   name: string;
   description: string;
   address: string;
