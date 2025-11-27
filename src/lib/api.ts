@@ -9,7 +9,6 @@ import {
   ApiWatchResponse,
   SearchSuggestion,
   ApiWatchAnalyticsResponse,
-  ApiPopularWatchResponse,
   ApiPopularByBrandResponse,
 } from '@/interfaces/api';
 import { generateSlug } from '@/lib/transformers';
@@ -440,9 +439,11 @@ export async function trackWatchView(
 }
 
 export async function getPopularWatches(
+  type: 'popular' | 'liquidity' | 'trend90' = 'popular',
   currency?: string
-): Promise<ApiPopularWatchResponse[]> {
+): Promise<ApiWatchFullResponse[]> {
   const searchParams = new URLSearchParams();
+  searchParams.set('type', type);
   if (currency) {
     searchParams.set('currency', currency);
   }
@@ -452,7 +453,7 @@ export async function getPopularWatches(
 
   try {
     const response = await fetch(url);
-    const data = await handleResponse<ApiPopularWatchResponse[]>(response);
+    const data = await handleResponse<ApiWatchFullResponse[]>(response);
     return data;
   } catch (error) {
     console.error('❌ [API] Failed to fetch popular watches:', error);
@@ -592,5 +593,30 @@ export async function getLiquidWatch(
   } catch (error) {
     console.error('❌ [API] Failed to fetch liquid watch:', error);
     throw error;
+  }
+}
+
+
+export async function trackDealerVisit(
+  dealerId: string
+): Promise<{ success: boolean; visits: number }> {
+  if (!dealerId) {
+    throw new Error('Dealer ID is required');
+  }
+
+  const url = `/api/dealers/${dealerId}/visit`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return handleResponse<{ success: boolean; visits: number }>(response);
+  } catch (error) {
+    console.error('❌ [API] Failed to track dealer visit:', error);
+    throw error; 
   }
 }

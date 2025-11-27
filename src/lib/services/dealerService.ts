@@ -28,6 +28,17 @@ export class DealerService extends BaseApiService {
     const endpoint = `/api/dealers/search?query=${encodeURIComponent(query)}`;
     return this.handleApiRequest(endpoint);
   }
+
+  async trackDealerVisit(id: string): Promise<NextResponse> {
+    if (!id) {
+      return this.createErrorResponse('Missing id parameter', 400);
+    }
+
+    const endpoint = `/api/dealers/${id}/visit`;
+    return this.handleApiRequest(endpoint, {
+      method: 'POST',
+    });
+  }
 }
 
 export const dealerService = new DealerService();

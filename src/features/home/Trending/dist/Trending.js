@@ -60,14 +60,14 @@ function getCurrencyFromStorage() {
 }
 var TRENDING_CACHE_PREFIX = 'trending-cache-';
 var CACHE_TTL = 5 * 60 * 1000;
-function getTrendingCacheKey(currency) {
-    return "" + TRENDING_CACHE_PREFIX + currency;
+function getTrendingCacheKey(currency, filterType) {
+    return "" + TRENDING_CACHE_PREFIX + currency + "-" + filterType;
 }
-function getCachedTrending(currency) {
+function getCachedTrending(currency, filterType) {
     if (typeof window === 'undefined')
         return null;
     try {
-        var cacheKey = getTrendingCacheKey(currency);
+        var cacheKey = getTrendingCacheKey(currency, filterType);
         var cached = localStorage.getItem(cacheKey);
         if (!cached)
             return null;
@@ -83,11 +83,11 @@ function getCachedTrending(currency) {
         return null;
     }
 }
-function setCachedTrending(currency, watches) {
+function setCachedTrending(currency, filterType, watches) {
     if (typeof window === 'undefined')
         return;
     try {
-        var cacheKey = getTrendingCacheKey(currency);
+        var cacheKey = getTrendingCacheKey(currency, filterType);
         var cacheData = {
             data: watches,
             timestamp: Date.now()
@@ -109,7 +109,7 @@ function convertWatchItemToIWatch(watch, index) {
         brand: watch.brand,
         price: watch.price,
         rating: Math.abs(watch.trend.value) % 11,
-        changePercent: watch.trend.value,
+        changePercent: Math.round(watch.trend.value * 10) / 10,
         chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
         chartColor: watch.trend.value > 0 ? '#22c55e' : '#EED09D',
         chartId: "trending-chart-" + watch.id,
@@ -122,32 +122,46 @@ exports.Trending = function () {
     var _b = react_1.useState([]), watches = _b[0], setWatches = _b[1];
     var _c = react_1.useState(true), loading = _c[0], setLoading = _c[1];
     var _d = react_1.useState(null), error = _d[0], setError = _d[1];
+    var _e = react_1.useState('popular'), filterType = _e[0], setFilterType = _e[1];
     react_1.useEffect(function () {
         var loadPopularWatches = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var currency, cachedWatches, data, transformed, iWatchItems, err_1;
+            var currency_1, cachedWatches, data, transformed, iWatchItems, err_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, 3, 4]);
                         setLoading(true);
                         setError(null);
-                        currency = getCurrencyFromStorage();
-                        cachedWatches = getCachedTrending(currency);
-                        if (cachedWatches) {
+                        currency_1 = getCurrencyFromStorage();
+                        cachedWatches = getCachedTrending(currency_1, filterType);
+                        if (cachedWatches && cachedWatches.length > 0) {
                             setWatches(cachedWatches);
-                            setLoading(false);
                         }
-                        return [4 /*yield*/, api_1.getPopularWatches(currency)];
+                        return [4 /*yield*/, api_1.getPopularWatches(filterType, currency_1)];
                     case 1:
                         data = _a.sent();
-                        transformed = data.map(function (item) {
-                            return transformers_1.transformApiPopularWatchItem(item.watch);
-                        });
+                        if (!data || data.length === 0) {
+                            setError('No watches found');
+                            setWatches(watch_1.mockTrending);
+                            setLoading(false);
+                            return [2 /*return*/];
+                        }
+                        transformed = data
+                            .filter(function (item) { return item && item.id; })
+                            .map(function (item) {
+                            try {
+                                return transformers_1.transformApiWatchFull(item, currency_1);
+                            }
+                            catch (_a) {
+                                return null;
+                            }
+                        })
+                            .filter(function (watch) { return watch !== null; });
                         iWatchItems = transformed.map(function (watch, index) {
                             return convertWatchItemToIWatch(watch, index);
                         });
                         setWatches(iWatchItems);
-                        setCachedTrending(currency, iWatchItems);
+                        setCachedTrending(currency_1, filterType, iWatchItems);
                         return [3 /*break*/, 4];
                     case 2:
                         err_1 = _a.sent();
@@ -171,7 +185,7 @@ exports.Trending = function () {
             window.removeEventListener('storage', handleStorageChange);
             window.removeEventListener('currencyChanged', handleStorageChange);
         };
-    }, []);
+    }, [filterType]);
     var toggleMenu = function () { return setOpen(function (prev) { return !prev; }); };
     react_1.useEffect(function () {
         var handleClick = function (e) {
@@ -191,12 +205,21 @@ exports.Trending = function () {
                     react_1["default"].createElement("div", { className: Trending_module_css_1["default"].trendingSettings + " absolute right-[-10px] top-[-8px] z-10 min-w-[12.5rem] flex flex-col text-center rounded-xl border-1 transition-all duration-300 " + (open
                             ? 'opacity-100 scale-100'
                             : 'opacity-0 scale-95 pointer-events-none') },
-                        react_1["default"].createElement("div", { className: Trending_module_css_1["default"].trendingSettingsItem + " py-2 px-5 flex items-center justify-end gap-6 border-b cursor-pointer", onClick: toggleMenu },
+                        react_1["default"].createElement("div", { className: Trending_module_css_1["default"].trendingSettingsItem + " py-2 px-5 flex items-center justify-end gap-6 border-b cursor-pointer", onClick: function () {
+                                setFilterType('trend90');
+                                toggleMenu();
+                            } },
                             react_1["default"].createElement("span", null, i18n_1.t(home_1.trendingKeys.sort.trend)),
                             react_1["default"].createElement(Icon_1.SettingsIcon, { className: 'w-[24px] h-[24px] cursor-pointer' })),
-                        react_1["default"].createElement("div", { className: Trending_module_css_1["default"].trendingSettingsItem + " py-2 border-b cursor-pointer", onClick: toggleMenu },
+                        react_1["default"].createElement("div", { className: Trending_module_css_1["default"].trendingSettingsItem + " py-2 border-b cursor-pointer", onClick: function () {
+                                setFilterType('liquidity');
+                                toggleMenu();
+                            } },
                             react_1["default"].createElement("span", null, i18n_1.t(home_1.trendingKeys.sort.price))),
-                        react_1["default"].createElement("div", { className: Trending_module_css_1["default"].trendingSettingsItem + " py-2 cursor-pointer", onClick: toggleMenu },
+                        react_1["default"].createElement("div", { className: Trending_module_css_1["default"].trendingSettingsItem + " py-2 cursor-pointer", onClick: function () {
+                                setFilterType('popular');
+                                toggleMenu();
+                            } },
                             react_1["default"].createElement("span", null, i18n_1.t(home_1.trendingKeys.sort.rating)))))),
             loading ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
                 react_1["default"].createElement(react_spinners_1.ClockLoader, { size: 60, color: '#04694f', speedMultiplier: 0.9 }))) : error && watches.length === 0 ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },

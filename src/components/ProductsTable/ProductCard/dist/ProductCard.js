@@ -142,7 +142,7 @@ exports.ProductCard = function (_a) {
                         " \u20AC"),
                     react_1["default"].createElement("div", { className: ProductCard_module_css_1["default"].marketCardHeadPercent + " " + percentClass + " absolute " + (dense ? 'bottom-3 left-14' : 'bottom-3 left-16') + " flex items-center justify-center gap-1 min-w-14  font-bold" },
                         ArrowIcon && react_1["default"].createElement(ArrowIcon, null),
-                        changePercent,
+                        Math.abs(Math.round(changePercent * 10) / 10),
                         " %"),
                     react_1["default"].createElement("button", { onClick: function (e) {
                             e.preventDefault();

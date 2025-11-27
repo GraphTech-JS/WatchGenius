@@ -6,8 +6,22 @@ import { DetailsIcon, LetterIcon } from '../../../../public/dealers/Icon';
 import { DealerData } from '@/types/dealers';
 import { t } from '@/i18n';
 import { dealerCardKeys } from '@/i18n/keys/home';
+import { trackDealerVisit } from '@/lib/api';
 
 export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
+  const handleVisitClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (dealer.originalId && dealer.websiteUrl) {
+      try {
+        await trackDealerVisit(dealer.originalId);
+      } catch (error) {
+        console.error('❌ [DealerCard] Failed to track dealer visit:', error);
+      }
+
+      window.open(dealer.websiteUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
   return (
     <div
       className={`${styles.dealerCard} flex flex-col lg:flex-row items-center px-4 lg:px-11.5 py-7 rounded-[20px] gap-7`}
@@ -56,6 +70,7 @@ export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
               href={dealer.websiteUrl}
               target='_blank'
               rel='noopener noreferrer'
+              onClick={handleVisitClick}
               className={`${styles.dealerCardLink} w-full `}
             >
               <button
