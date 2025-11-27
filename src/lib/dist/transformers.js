@@ -209,6 +209,7 @@ function transformApiDealer(apiDealer) {
         : '/dealers/Dealer.webp';
     return {
         id: uuidToNumber(apiDealer.id),
+        originalId: apiDealer.id,
         name: apiDealer.name,
         description: apiDealer.description,
         address: apiDealer.location,
@@ -229,47 +230,67 @@ function uuidToNumber(uuid) {
     return Math.abs(hash);
 }
 function transformApiPopularWatchItem(apiWatch) {
-    var _a, _b;
-    var latestPrice = apiWatch.priceHistory && apiWatch.priceHistory.length > 0
-        ? apiWatch.priceHistory[apiWatch.priceHistory.length - 1]
+    var _a, _b, _c, _d;
+    // Безпечна обробка priceHistory
+    var priceHistory = apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.priceHistory;
+    var latestPrice = priceHistory && Array.isArray(priceHistory) && priceHistory.length > 0
+        ? priceHistory[priceHistory.length - 1]
         : null;
     var price = Math.round((latestPrice === null || latestPrice === void 0 ? void 0 : latestPrice.price) || 0);
-    var currencyCode = (latestPrice === null || latestPrice === void 0 ? void 0 : latestPrice.currency) || ((_a = apiWatch.dealer) === null || _a === void 0 ? void 0 : _a.location) || 'EUR';
+    var currencyCode = (latestPrice === null || latestPrice === void 0 ? void 0 : latestPrice.currency) || ((_a = apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.dealer) === null || _a === void 0 ? void 0 : _a.location) || 'EUR';
     var currency = convertCurrency(currencyCode);
-    var defaultPrice = apiWatch.priceHistory && apiWatch.priceHistory.length > 1
-        ? apiWatch.priceHistory[0].price
+    var defaultPrice = priceHistory && Array.isArray(priceHistory) && priceHistory.length > 1
+        ? priceHistory[0].price
         : price;
-    var hasValidImage = apiWatch.imageUrls &&
-        apiWatch.imageUrls.length > 0 &&
-        apiWatch.imageUrls[0] &&
-        apiWatch.imageUrls[0].trim() !== '' &&
-        apiWatch.imageUrls[0] !== 'null' &&
-        apiWatch.imageUrls[0] !== 'undefined';
+    var imageUrls = apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.imageUrls;
+    var hasValidImage = imageUrls &&
+        Array.isArray(imageUrls) &&
+        imageUrls.length > 0 &&
+        imageUrls[0] &&
+        typeof imageUrls[0] === 'string' &&
+        imageUrls[0].trim() !== '' &&
+        imageUrls[0] !== 'null' &&
+        imageUrls[0] !== 'undefined';
     var imageUrl = hasValidImage
-        ? apiWatch.imageUrls[0]
-        : imageUtils_1.getRandomWatchImage(apiWatch.id);
-    var watchTitle = apiWatch.name || apiWatch.id;
+        ? imageUrls[0]
+        : imageUtils_1.getRandomWatchImage((apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.id) || 'unknown');
+    var watchTitle = (apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.name) || (apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.id) || 'Unknown Watch';
     watchTitle = cleanWatchTitle(watchTitle);
-    var fullTitle = (apiWatch.brand.name + " " + watchTitle).trim();
+    var brandName = ((_b = apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.brand) === null || _b === void 0 ? void 0 : _b.name) || 'Unknown Brand';
+    var fullTitle = (brandName + " " + watchTitle).trim();
+    var analytics = apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.analytics;
+    var trendValue = (analytics === null || analytics === void 0 ? void 0 : analytics.trend90d) !== undefined && (analytics === null || analytics === void 0 ? void 0 : analytics.trend90d) !== null
+        ? analytics.trend90d
+        : calculateTrend(price, defaultPrice).value;
     return {
-        id: apiWatch.id,
+        id: (apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.id) || 'unknown',
         title: fullTitle,
-        slug: generateSlug(apiWatch.name),
+        slug: generateSlug((apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.name) || 'unknown'),
         price: price,
         currency: currency,
-        brand: apiWatch.brand.name,
-        index: calculateIndex(apiWatch.brand.brandIndex),
+        brand: brandName,
+        index: calculateIndex((_c = apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.brand) === null || _c === void 0 ? void 0 : _c.brandIndex),
         image: imageUrl,
-        chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
+        chronoUrl: (apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.chronoUrl) && typeof apiWatch.chronoUrl === 'string' && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
         buttonLabel: 'Buy on Chrono24',
-        trend: calculateTrend(price, defaultPrice),
+        trend: {
+            value: trendValue,
+            period: '90d'
+        },
         variant: undefined,
+        volatility: analytics === null || analytics === void 0 ? void 0 : analytics.volatility,
+        volatilityLabel: convertVolatilityToLabel(analytics === null || analytics === void 0 ? void 0 : analytics.volatility),
+        liquidity: analytics === null || analytics === void 0 ? void 0 : analytics.liquidity,
+        liquidityLabel: convertLiquidityToLabel(analytics === null || analytics === void 0 ? void 0 : analytics.liquidity),
+        trend30d: analytics === null || analytics === void 0 ? void 0 : analytics.trend30d,
+        trend90d: analytics === null || analytics === void 0 ? void 0 : analytics.trend90d,
+        popularity: analytics === null || analytics === void 0 ? void 0 : analytics.popularity,
         condition: '',
         mechanism: '',
         material: '',
         braceletMaterial: '',
         documents: '',
-        location: ((_b = apiWatch.dealer) === null || _b === void 0 ? void 0 : _b.location) || '',
+        location: ((_d = apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.dealer) === null || _d === void 0 ? void 0 : _d.location) || '',
         year: 2020,
         diameterMm: 40,
         waterResistance: false,

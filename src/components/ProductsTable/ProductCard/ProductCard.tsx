@@ -271,7 +271,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               } flex items-center justify-center gap-1 min-w-14  font-bold`}
             >
               {ArrowIcon && <ArrowIcon />}
-              {changePercent} %
+              {Math.abs(Math.round(changePercent * 10) / 10)} %
             </div>
             <button
               onClick={(e) => {

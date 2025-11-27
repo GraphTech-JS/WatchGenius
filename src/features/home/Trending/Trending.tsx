@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './Trending.module.css';
 import { ThemedText } from '@/components/ThemedText/ThemedText';
 import { getPopularWatches } from '@/lib/api';
-import { transformApiPopularWatchItem } from '@/lib/transformers';
+import { transformApiWatchFull } from '@/lib/transformers';
 import type { WatchItem } from '@/interfaces/watch';
 import { ProductCarousel } from '@/components/ProductsTable/ProductCarousel/ProductCarousel';
 import { SettingsIcon } from '../../../../public/social/Icon';
@@ -26,15 +26,18 @@ function getCurrencyFromStorage(): string {
 const TRENDING_CACHE_PREFIX = 'trending-cache-';
 const CACHE_TTL = 5 * 60 * 1000;
 
-function getTrendingCacheKey(currency: string): string {
-  return `${TRENDING_CACHE_PREFIX}${currency}`;
+function getTrendingCacheKey(currency: string, filterType: string): string {
+  return `${TRENDING_CACHE_PREFIX}${currency}-${filterType}`;
 }
 
-function getCachedTrending(currency: string): IWatch[] | null {
+function getCachedTrending(
+  currency: string,
+  filterType: string
+): IWatch[] | null {
   if (typeof window === 'undefined') return null;
 
   try {
-    const cacheKey = getTrendingCacheKey(currency);
+    const cacheKey = getTrendingCacheKey(currency, filterType);
     const cached = localStorage.getItem(cacheKey);
 
     if (!cached) return null;
@@ -53,11 +56,15 @@ function getCachedTrending(currency: string): IWatch[] | null {
   }
 }
 
-function setCachedTrending(currency: string, watches: IWatch[]): void {
+function setCachedTrending(
+  currency: string,
+  filterType: string,
+  watches: IWatch[]
+): void {
   if (typeof window === 'undefined') return;
 
   try {
-    const cacheKey = getTrendingCacheKey(currency);
+    const cacheKey = getTrendingCacheKey(currency, filterType);
     const cacheData = {
       data: watches,
       timestamp: Date.now(),
@@ -80,7 +87,7 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
     brand: watch.brand,
     price: watch.price,
     rating: Math.abs(watch.trend.value) % 11,
-    changePercent: watch.trend.value,
+    changePercent: Math.round(watch.trend.value * 10) / 10,
     chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: watch.trend.value > 0 ? '#22c55e' : '#EED09D',
     chartId: `trending-chart-${watch.id}`,
@@ -94,6 +101,9 @@ export const Trending = () => {
   const [watches, setWatches] = useState<IWatch[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [filterType, setFilterType] = useState<
+    'popular' | 'liquidity' | 'trend90'
+  >('popular');
 
   useEffect(() => {
     const loadPopularWatches = async () => {
@@ -103,24 +113,37 @@ export const Trending = () => {
 
         const currency = getCurrencyFromStorage();
 
-        const cachedWatches = getCachedTrending(currency);
-        if (cachedWatches) {
+        const cachedWatches = getCachedTrending(currency, filterType);
+        if (cachedWatches && cachedWatches.length > 0) {
           setWatches(cachedWatches);
-          setLoading(false);
         }
 
-        const data = await getPopularWatches(currency);
+        const data = await getPopularWatches(filterType, currency);
 
-        const transformed = data.map((item) =>
-          transformApiPopularWatchItem(item.watch)
-        );
+        if (!data || data.length === 0) {
+          setError('No watches found');
+          setWatches(mockTrending);
+          setLoading(false);
+          return;
+        }
+
+        const transformed = data
+          .filter((item) => item && item.id)
+          .map((item) => {
+            try {
+              return transformApiWatchFull(item, currency);
+            } catch {
+              return null;
+            }
+          })
+          .filter((watch) => watch !== null) as WatchItem[];
 
         const iWatchItems = transformed.map((watch, index) =>
           convertWatchItemToIWatch(watch, index)
         );
 
         setWatches(iWatchItems);
-        setCachedTrending(currency, iWatchItems);
+        setCachedTrending(currency, filterType, iWatchItems);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load watches');
         setWatches(mockTrending);
@@ -142,7 +165,7 @@ export const Trending = () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('currencyChanged', handleStorageChange);
     };
-  }, []);
+  }, [filterType]);
 
   const toggleMenu = () => setOpen((prev) => !prev);
 
@@ -183,20 +206,30 @@ export const Trending = () => {
             >
               <div
                 className={`${styles.trendingSettingsItem} py-2 px-5 flex items-center justify-end gap-6 border-b cursor-pointer`}
-                onClick={toggleMenu}
+                onClick={() => {
+                  setFilterType('trend90');
+                  toggleMenu();
+                }}
               >
                 <span>{t(trendingKeys.sort.trend)}</span>
                 <SettingsIcon className='w-[24px] h-[24px] cursor-pointer' />
               </div>
               <div
                 className={`${styles.trendingSettingsItem} py-2 border-b cursor-pointer`}
-                onClick={toggleMenu}
+                onClick={() => {
+                  setFilterType('liquidity');
+                  toggleMenu();
+                }}
               >
                 <span>{t(trendingKeys.sort.price)}</span>
               </div>
               <div
                 className={`${styles.trendingSettingsItem} py-2 cursor-pointer`}
-                onClick={toggleMenu}
+                
+                onClick={() => {
+                  setFilterType('popular');
+                  toggleMenu();
+                }}
               >
                 <span>{t(trendingKeys.sort.rating)}</span>
               </div>
@@ -206,7 +239,7 @@ export const Trending = () => {
 
         {loading ? (
           <div className='flex justify-center items-center py-12'>
-            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} /> 
+            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
           </div>
         ) : error && watches.length === 0 ? (
           <div className='flex justify-center items-center py-12'>

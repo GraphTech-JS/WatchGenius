@@ -134,6 +134,13 @@ export interface ApiPopularWatchItem {
   brand: ApiBrand;
   dealer: ApiDealerFullResponse;
   priceHistory: ApiPriceHistory[];
+  analytics?: {
+    trend90d?: number;
+    trend30d?: number;
+    liquidity?: string;
+    popularity?: number;
+    volatility?: number;
+  };
 }
 
 export interface ApiPopularWatchResponse {

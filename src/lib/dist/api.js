@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getLiquidWatch = exports.getStableWatch = exports.getTrendingWatch90d = exports.getTrendingWatch30d = exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
+exports.trackDealerVisit = exports.getLiquidWatch = exports.getStableWatch = exports.getTrendingWatch90d = exports.getTrendingWatch30d = exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
 var transformers_1 = require("@/lib/transformers");
 function handleResponse(response) {
     return __awaiter(this, void 0, Promise, function () {
@@ -566,13 +566,15 @@ function trackWatchView(id) {
     });
 }
 exports.trackWatchView = trackWatchView;
-function getPopularWatches(currency) {
+function getPopularWatches(type, currency) {
+    if (type === void 0) { type = 'popular'; }
     return __awaiter(this, void 0, Promise, function () {
         var searchParams, url, response, data, error_11;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     searchParams = new URLSearchParams();
+                    searchParams.set('type', type);
                     if (currency) {
                         searchParams.set('currency', currency);
                     }
@@ -764,3 +766,35 @@ function getLiquidWatch(currency) {
     });
 }
 exports.getLiquidWatch = getLiquidWatch;
+function trackDealerVisit(dealerId) {
+    return __awaiter(this, void 0, Promise, function () {
+        var url, response, error_17;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!dealerId) {
+                        throw new Error('Dealer ID is required');
+                    }
+                    url = "/api/dealers/" + dealerId + "/visit";
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })];
+                case 2:
+                    response = _a.sent();
+                    return [2 /*return*/, handleResponse(response)];
+                case 3:
+                    error_17 = _a.sent();
+                    console.error('❌ [API] Failed to track dealer visit:', error_17);
+                    throw error_17;
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.trackDealerVisit = trackDealerVisit;

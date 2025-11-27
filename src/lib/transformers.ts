@@ -232,6 +232,7 @@ export function transformApiDealer(apiDealer: ApiDealerResponse): DealerData {
 
   return {
     id: uuidToNumber(apiDealer.id),
+    originalId: apiDealer.id,
     name: apiDealer.name,
     description: apiDealer.description,
     address: apiDealer.location,
@@ -255,55 +256,77 @@ function uuidToNumber(uuid: string): number {
 export function transformApiPopularWatchItem(
   apiWatch: ApiPopularWatchItem
 ): WatchItem {
+  // Безпечна обробка priceHistory
+  const priceHistory = apiWatch?.priceHistory;
   const latestPrice =
-    apiWatch.priceHistory && apiWatch.priceHistory.length > 0
-      ? apiWatch.priceHistory[apiWatch.priceHistory.length - 1]
+    priceHistory && Array.isArray(priceHistory) && priceHistory.length > 0
+      ? priceHistory[priceHistory.length - 1]
       : null;
 
   const price = Math.round(latestPrice?.price || 0);
   const currencyCode =
-    latestPrice?.currency || apiWatch.dealer?.location || 'EUR';
+    latestPrice?.currency || apiWatch?.dealer?.location || 'EUR';
   const currency = convertCurrency(currencyCode);
 
   const defaultPrice =
-    apiWatch.priceHistory && apiWatch.priceHistory.length > 1
-      ? apiWatch.priceHistory[0].price
+    priceHistory && Array.isArray(priceHistory) && priceHistory.length > 1
+      ? priceHistory[0].price
       : price;
 
-  const hasValidImage = apiWatch.imageUrls && 
-    apiWatch.imageUrls.length > 0 && 
-    apiWatch.imageUrls[0] && 
-    apiWatch.imageUrls[0].trim() !== '' &&
-    apiWatch.imageUrls[0] !== 'null' &&
-    apiWatch.imageUrls[0] !== 'undefined';
+  const imageUrls = apiWatch?.imageUrls;
+  const hasValidImage = imageUrls && 
+    Array.isArray(imageUrls) &&
+    imageUrls.length > 0 && 
+    imageUrls[0] && 
+    typeof imageUrls[0] === 'string' &&
+    imageUrls[0].trim() !== '' &&
+    imageUrls[0] !== 'null' &&
+    imageUrls[0] !== 'undefined';
   
   const imageUrl = hasValidImage
-    ? apiWatch.imageUrls[0]
-    : getRandomWatchImage(apiWatch.id);
+    ? imageUrls[0]
+    : getRandomWatchImage(apiWatch?.id || 'unknown');
 
-  let watchTitle = apiWatch.name || apiWatch.id;
+  let watchTitle = apiWatch?.name || apiWatch?.id || 'Unknown Watch';
   watchTitle = cleanWatchTitle(watchTitle);
-  const fullTitle = `${apiWatch.brand.name} ${watchTitle}`.trim();
+  const brandName = apiWatch?.brand?.name || 'Unknown Brand';
+  const fullTitle = `${brandName} ${watchTitle}`.trim();
+
+  const analytics = apiWatch?.analytics;
+  
+  const trendValue = analytics?.trend90d !== undefined && analytics?.trend90d !== null
+    ? analytics.trend90d
+    : calculateTrend(price, defaultPrice).value;
 
   return {
-    id: apiWatch.id,
+    id: apiWatch?.id || 'unknown',
     title: fullTitle,
-    slug: generateSlug(apiWatch.name),
+    slug: generateSlug(apiWatch?.name || 'unknown'),
     price: price,
     currency: currency,
-    brand: apiWatch.brand.name,
-    index: calculateIndex(apiWatch.brand.brandIndex),
+    brand: brandName,
+    index: calculateIndex(apiWatch?.brand?.brandIndex),
     image: imageUrl,
-    chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
+    chronoUrl: apiWatch?.chronoUrl && typeof apiWatch.chronoUrl === 'string' && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
     buttonLabel: 'Buy on Chrono24',
-    trend: calculateTrend(price, defaultPrice),
+    trend: {
+      value: trendValue,
+      period: '90d',
+    },
     variant: undefined,
+    volatility: analytics?.volatility,
+    volatilityLabel: convertVolatilityToLabel(analytics?.volatility),
+    liquidity: analytics?.liquidity,
+    liquidityLabel: convertLiquidityToLabel(analytics?.liquidity),
+    trend30d: analytics?.trend30d,
+    trend90d: analytics?.trend90d,
+    popularity: analytics?.popularity,
     condition: '',
     mechanism: '',
     material: '',
     braceletMaterial: '',
     documents: '',
-    location: apiWatch.dealer?.location || '',
+    location: apiWatch?.dealer?.location || '',
     year: 2020,
     diameterMm: 40,
     waterResistance: false,
