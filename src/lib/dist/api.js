@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.trackDealerVisit = exports.getLiquidWatch = exports.getStableWatch = exports.getTrendingWatch90d = exports.getTrendingWatch30d = exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
+exports.trackDealerVisit = exports.getLiquidWatch = exports.getStableWatch = exports.getTrendingWatch90d = exports.getTrendingWatch30d = exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getSimilarWatches = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
 var transformers_1 = require("@/lib/transformers");
 function handleResponse(response) {
     return __awaiter(this, void 0, Promise, function () {
@@ -100,6 +100,8 @@ function getWatches(params) {
                         searchParams.set('years', params.years);
                     if (params.currency)
                         searchParams.set('currency', params.currency);
+                    if (params.segment)
+                        searchParams.set('segment', params.segment);
                     url = "/api/watches?" + searchParams.toString();
                     _a.label = 1;
                 case 1:
@@ -254,7 +256,7 @@ function capitalizeFirst(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 function convertFiltersToApiParams(filters) {
-    var _a, _b, _c, _d, _e, _f;
+    var _a, _b, _c, _d, _e, _f, _g;
     var params = {};
     var defaultYearFrom = '2000';
     var defaultYearTo = '2005';
@@ -323,6 +325,15 @@ function convertFiltersToApiParams(filters) {
             .filter(Boolean);
         if (validDocuments.length > 0) {
             params.hasDocumentsOptions = validDocuments.join('/');
+        }
+    }
+    if ((_g = filters.selectedIndexes) === null || _g === void 0 ? void 0 : _g.length) {
+        var validSegments = filters.selectedIndexes
+            .filter(function (index) {
+            return index === 'A' || index === 'B' || index === 'C';
+        });
+        if (validSegments.length > 0) {
+            params.segment = validSegments.join('/');
         }
     }
     return params;
@@ -397,9 +408,43 @@ function getWatchById(id, currency) {
     });
 }
 exports.getWatchById = getWatchById;
+function getSimilarWatches(id, currency) {
+    return __awaiter(this, void 0, Promise, function () {
+        var searchParams, url, response, data, error_8;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    if (!id) {
+                        throw new Error('Watch ID is required');
+                    }
+                    searchParams = new URLSearchParams();
+                    if (currency) {
+                        searchParams.set('currency', currency);
+                    }
+                    url = "/api/watches/" + id + "/similar" + (searchParams.toString() ? "?" + searchParams.toString() : '');
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 4, , 5]);
+                    return [4 /*yield*/, fetch(url)];
+                case 2:
+                    response = _a.sent();
+                    return [4 /*yield*/, handleResponse(response)];
+                case 3:
+                    data = _a.sent();
+                    return [2 /*return*/, data];
+                case 4:
+                    error_8 = _a.sent();
+                    console.error('❌ [API] Failed to fetch similar watches:', error_8);
+                    throw error_8;
+                case 5: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getSimilarWatches = getSimilarWatches;
 function getWatchBySlug(slug, currency) {
     return __awaiter(this, void 0, Promise, function () {
-        var searchStrategies, matchedWatch, searchResponse, _i, searchStrategies_1, searchQuery, _a, _b, watch, generatedSlug, slugWords, _loop_1, _c, _d, watch, state_1, searchError_1, fullWatch, error_8;
+        var searchStrategies, matchedWatch, searchResponse, _i, searchStrategies_1, searchQuery, _a, _b, watch, generatedSlug, slugWords, _loop_1, _c, _d, watch, state_1, searchError_1, fullWatch, error_9;
         return __generator(this, function (_e) {
             switch (_e.label) {
                 case 0:
@@ -493,8 +538,8 @@ function getWatchBySlug(slug, currency) {
                     }
                     return [2 /*return*/, fullWatch];
                 case 9:
-                    error_8 = _e.sent();
-                    console.error('❌ [API] getWatchBySlug - Error:', error_8);
+                    error_9 = _e.sent();
+                    console.error('❌ [API] getWatchBySlug - Error:', error_9);
                     return [2 /*return*/, null];
                 case 10: return [2 /*return*/];
             }
@@ -504,7 +549,7 @@ function getWatchBySlug(slug, currency) {
 exports.getWatchBySlug = getWatchBySlug;
 function getSearchSuggestions(query) {
     return __awaiter(this, void 0, Promise, function () {
-        var searchParams, url, response, error_9;
+        var searchParams, url, response, error_10;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -522,9 +567,9 @@ function getSearchSuggestions(query) {
                     response = _a.sent();
                     return [2 /*return*/, handleResponse(response)];
                 case 3:
-                    error_9 = _a.sent();
-                    console.error('Fetch error:', error_9);
-                    throw error_9;
+                    error_10 = _a.sent();
+                    console.error('Fetch error:', error_10);
+                    throw error_10;
                 case 4: return [2 /*return*/];
             }
         });
@@ -533,7 +578,7 @@ function getSearchSuggestions(query) {
 exports.getSearchSuggestions = getSearchSuggestions;
 function trackWatchView(id) {
     return __awaiter(this, void 0, Promise, function () {
-        var url, response, data, error_10;
+        var url, response, data, error_11;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -557,9 +602,9 @@ function trackWatchView(id) {
                     data = _a.sent();
                     return [2 /*return*/, data];
                 case 4:
-                    error_10 = _a.sent();
-                    console.error('❌ [API] Failed to track watch view:', error_10);
-                    throw error_10;
+                    error_11 = _a.sent();
+                    console.error('❌ [API] Failed to track watch view:', error_11);
+                    throw error_11;
                 case 5: return [2 /*return*/];
             }
         });
@@ -569,7 +614,7 @@ exports.trackWatchView = trackWatchView;
 function getPopularWatches(type, currency) {
     if (type === void 0) { type = 'popular'; }
     return __awaiter(this, void 0, Promise, function () {
-        var searchParams, url, response, data, error_11;
+        var searchParams, url, response, data, error_12;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -590,9 +635,9 @@ function getPopularWatches(type, currency) {
                     data = _a.sent();
                     return [2 /*return*/, data];
                 case 4:
-                    error_11 = _a.sent();
-                    console.error('❌ [API] Failed to fetch popular watches:', error_11);
-                    throw error_11;
+                    error_12 = _a.sent();
+                    console.error('❌ [API] Failed to fetch popular watches:', error_12);
+                    throw error_12;
                 case 5: return [2 /*return*/];
             }
         });
@@ -601,7 +646,7 @@ function getPopularWatches(type, currency) {
 exports.getPopularWatches = getPopularWatches;
 function getPopularWatchesByBrand(currency) {
     return __awaiter(this, void 0, Promise, function () {
-        var searchParams, url, response, data, error_12;
+        var searchParams, url, response, data, error_13;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -621,9 +666,9 @@ function getPopularWatchesByBrand(currency) {
                     data = _a.sent();
                     return [2 /*return*/, data];
                 case 4:
-                    error_12 = _a.sent();
-                    console.error('❌ [API] Failed to fetch popular watches by brand:', error_12);
-                    throw error_12;
+                    error_13 = _a.sent();
+                    console.error('❌ [API] Failed to fetch popular watches by brand:', error_13);
+                    throw error_13;
                 case 5: return [2 /*return*/];
             }
         });
@@ -632,7 +677,7 @@ function getPopularWatchesByBrand(currency) {
 exports.getPopularWatchesByBrand = getPopularWatchesByBrand;
 function getTrendingWatch30d(currency) {
     return __awaiter(this, void 0, Promise, function () {
-        var searchParams, url, response, data, error_13;
+        var searchParams, url, response, data, error_14;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -655,9 +700,9 @@ function getTrendingWatch30d(currency) {
                     data = _a.sent();
                     return [2 /*return*/, data];
                 case 4:
-                    error_13 = _a.sent();
-                    console.error('❌ [API] Failed to fetch trending watch (30d):', error_13);
-                    throw error_13;
+                    error_14 = _a.sent();
+                    console.error('❌ [API] Failed to fetch trending watch (30d):', error_14);
+                    throw error_14;
                 case 5: return [2 /*return*/];
             }
         });
@@ -666,7 +711,7 @@ function getTrendingWatch30d(currency) {
 exports.getTrendingWatch30d = getTrendingWatch30d;
 function getTrendingWatch90d(currency) {
     return __awaiter(this, void 0, Promise, function () {
-        var searchParams, url, response, data, error_14;
+        var searchParams, url, response, data, error_15;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -689,9 +734,9 @@ function getTrendingWatch90d(currency) {
                     data = _a.sent();
                     return [2 /*return*/, data];
                 case 4:
-                    error_14 = _a.sent();
-                    console.error('❌ [API] Failed to fetch trending watch (90d):', error_14);
-                    throw error_14;
+                    error_15 = _a.sent();
+                    console.error('❌ [API] Failed to fetch trending watch (90d):', error_15);
+                    throw error_15;
                 case 5: return [2 /*return*/];
             }
         });
@@ -700,7 +745,7 @@ function getTrendingWatch90d(currency) {
 exports.getTrendingWatch90d = getTrendingWatch90d;
 function getStableWatch(currency) {
     return __awaiter(this, void 0, Promise, function () {
-        var searchParams, url, response, data, error_15;
+        var searchParams, url, response, data, error_16;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -723,9 +768,9 @@ function getStableWatch(currency) {
                     data = _a.sent();
                     return [2 /*return*/, data];
                 case 4:
-                    error_15 = _a.sent();
-                    console.error('❌ [API] Failed to fetch stable watch:', error_15);
-                    throw error_15;
+                    error_16 = _a.sent();
+                    console.error('❌ [API] Failed to fetch stable watch:', error_16);
+                    throw error_16;
                 case 5: return [2 /*return*/];
             }
         });
@@ -734,7 +779,7 @@ function getStableWatch(currency) {
 exports.getStableWatch = getStableWatch;
 function getLiquidWatch(currency) {
     return __awaiter(this, void 0, Promise, function () {
-        var searchParams, url, response, data, error_16;
+        var searchParams, url, response, data, error_17;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -757,9 +802,9 @@ function getLiquidWatch(currency) {
                     data = _a.sent();
                     return [2 /*return*/, data];
                 case 4:
-                    error_16 = _a.sent();
-                    console.error('❌ [API] Failed to fetch liquid watch:', error_16);
-                    throw error_16;
+                    error_17 = _a.sent();
+                    console.error('❌ [API] Failed to fetch liquid watch:', error_17);
+                    throw error_17;
                 case 5: return [2 /*return*/];
             }
         });
@@ -768,7 +813,7 @@ function getLiquidWatch(currency) {
 exports.getLiquidWatch = getLiquidWatch;
 function trackDealerVisit(dealerId) {
     return __awaiter(this, void 0, Promise, function () {
-        var url, response, error_17;
+        var url, response, error_18;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -789,9 +834,9 @@ function trackDealerVisit(dealerId) {
                     response = _a.sent();
                     return [2 /*return*/, handleResponse(response)];
                 case 3:
-                    error_17 = _a.sent();
-                    console.error('❌ [API] Failed to track dealer visit:', error_17);
-                    throw error_17;
+                    error_18 = _a.sent();
+                    console.error('❌ [API] Failed to track dealer visit:', error_18);
+                    throw error_18;
                 case 4: return [2 /*return*/];
             }
         });

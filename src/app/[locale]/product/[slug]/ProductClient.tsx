@@ -5,15 +5,15 @@ import { notFound } from 'next/navigation';
 import ProductPage from '@/features/product/ProductPage';
 import { Product } from '@/interfaces/product';
 import { generateSellerOffers } from '@/data/sellerOffers';
-import { trackWatchView, getWatchBySlug, getWatches } from '@/lib/api';
-import type { GetWatchesParams } from '@/interfaces/api';
-import { transformApiWatchFull, transformApiWatch } from '@/lib/transformers';
+import { trackWatchView, getWatchBySlug, getSimilarWatches } from '@/lib/api';
+import { transformApiWatchFull } from '@/lib/transformers';
 import type { WatchItem } from '@/interfaces/watch';
 import type { SimilarModel } from '@/interfaces/product';
 import { t } from '@/i18n';
 import { productKeys } from '@/i18n/keys/product';
 import { catalogKeys } from '@/i18n/keys/catalog';
 import { ProductLoading } from '@/features/product/ProductLoading/ProductLoading';
+import type { ApiWatchFullResponse } from '@/interfaces/api';
 
 function translateDetailValue(
   type: 'condition' | 'mechanism' | 'material',
@@ -103,6 +103,57 @@ function setCachedProduct(
   }
 }
 
+const SIMILAR_CACHE_PREFIX = 'similar-cache-';
+
+function getSimilarCacheKey(watchId: string, currency: string): string {
+  return `${SIMILAR_CACHE_PREFIX}${watchId}-${currency}`;
+}
+
+function getCachedSimilar(
+  watchId: string,
+  currency: string
+): SimilarModel[] | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = getSimilarCacheKey(watchId, currency);
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedSimilar(
+  watchId: string,
+  currency: string,
+  models: SimilarModel[]
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = getSimilarCacheKey(watchId, currency);
+    const cacheData = {
+      data: models,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
+}
+
 export default function ProductClient({
   params,
 }: {
@@ -167,47 +218,68 @@ export default function ProductClient({
   }, [watch?.id]);
 
   const [similarModels, setSimilarModels] = useState<SimilarModel[]>([]);
+  const [loadingSimilar, setLoadingSimilar] = useState(false);
 
   useEffect(() => {
     const loadSimilarModels = async () => {
-      if (!watch) return;
+      if (!watch?.id) return;
 
       try {
+        setLoadingSimilar(true);
         const currency = getCurrencyFromStorage();
 
-        const params: GetWatchesParams = {
-          brands: watch.brand,
-          pageSize: 6,
-          currency: currency,
-        };
+        const cachedModels = getCachedSimilar(watch.id, currency);
+        if (cachedModels && cachedModels.length > 0) {
+          setSimilarModels(cachedModels);
+        }
 
-        const response = await getWatches(params);
-        const transformed = response.data
-          .filter((w) => w.id !== watch.id)
+        const similarWatches = await getSimilarWatches(watch.id, currency);
+
+        if (!similarWatches || !Array.isArray(similarWatches)) {
+          setSimilarModels([]);
+          return;
+        }
+
+        const transformed: SimilarModel[] = similarWatches
+          .filter((w: ApiWatchFullResponse) => w && w.id && w.id !== watch.id)
           .slice(0, 6)
-          .map((w) => {
-            const watchItem = transformApiWatch(w);
-            return {
-              id: watchItem.id,
-              slug: watchItem.slug,
-              title: watchItem.title,
-              price: `${watchItem.price.toLocaleString()} ${
-                watchItem.currency
-              }`,
-              priceTrend: `${watchItem.trend.value > 0 ? '+' : ''}${
-                watchItem.trend.value
-              }%`,
-              image:
+          .reduce<SimilarModel[]>((acc, w: ApiWatchFullResponse) => {
+            try {
+              const watchItem = transformApiWatchFull(w, currency);
+              const imageUrl =
                 typeof watchItem.image === 'string'
                   ? watchItem.image
-                  : watchItem.image.src,
-              index: watchItem.index,
-            };
-          });
+                  : watchItem.image.src;
+              acc.push({
+                id: watchItem.id,
+                slug: watchItem.slug,
+                title: watchItem.title,
+                price: `${watchItem.price.toLocaleString()} ${
+                  watchItem.currency
+                }`,
+                priceTrend: `${watchItem.trend.value > 0 ? '+' : ''}${
+                  watchItem.trend.value
+                }%`,
+                image: imageUrl,
+                index: watchItem.index,
+              });
+            } catch (error) {
+              console.error(
+                '⚠️ [SimilarModels] Error transforming watch:',
+                w.id,
+                error
+              );
+            }
+            return acc;
+          }, []);
 
         setSimilarModels(transformed);
-      } catch {
+        setCachedSimilar(watch.id, currency, transformed);
+      } catch (error) {
+        console.error('❌ [SimilarModels] Failed to load:', error);
         setSimilarModels([]);
+      } finally {
+        setLoadingSimilar(false);
       }
     };
 
@@ -224,7 +296,7 @@ export default function ProductClient({
       window.removeEventListener('currencyChanged', handleCurrencyChange);
       window.removeEventListener('storage', handleCurrencyChange);
     };
-  }, [watch]);
+  }, [watch?.id]);
 
   const sellerOffers = useMemo(() => {
     if (!watch) return [];
@@ -357,5 +429,5 @@ export default function ProductClient({
     sellerOffers,
   };
 
-  return <ProductPage product={product} />;
+  return <ProductPage product={product} loadingSimilar={loadingSimilar} />;
 }

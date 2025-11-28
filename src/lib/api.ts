@@ -49,6 +49,7 @@ export async function getWatches(
   if (params.priceRange) searchParams.set('priceRange', params.priceRange);
   if (params.years) searchParams.set('years', params.years);
   if (params.currency) searchParams.set('currency', params.currency);
+  if (params.segment) searchParams.set('segment', params.segment);
 
   const url = `/api/watches?${searchParams.toString()}`;
 
@@ -244,6 +245,16 @@ export function convertFiltersToApiParams(
     }
   }
 
+  if (filters.selectedIndexes?.length) {
+    const validSegments = filters.selectedIndexes
+      .filter((index): index is 'A' | 'B' | 'C' => 
+        index === 'A' || index === 'B' || index === 'C'
+      );
+    if (validSegments.length > 0) {
+      params.segment = validSegments.join('/');
+    }
+  }
+
   return params;
 }
 
@@ -296,6 +307,33 @@ export async function getWatchById(
     return data;
   } catch (error) {
     console.error('❌ [API] Failed to fetch watch by ID:', error);
+    throw error;
+  }
+}
+
+export async function getSimilarWatches(
+  id: string,
+  currency?: string
+): Promise<ApiWatchFullResponse[]> {
+  if (!id) {
+    throw new Error('Watch ID is required');
+  }
+
+  const searchParams = new URLSearchParams();
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+
+  const url = `/api/watches/${id}/similar${
+    searchParams.toString() ? `?${searchParams.toString()}` : ''
+  }`;
+
+  try {
+    const response = await fetch(url);
+    const data = await handleResponse<ApiWatchFullResponse[]>(response);
+    return data;
+  } catch (error) {
+    console.error('❌ [API] Failed to fetch similar watches:', error);
     throw error;
   }
 }
