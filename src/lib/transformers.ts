@@ -90,6 +90,12 @@ export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
     latestPriceFromHistory?.currency || apiWatch.currency || 'EUR';
   const finalCurrency = convertCurrency(finalCurrencyCode);
 
+  const brandSegment = apiWatch.brand.segment;
+  const watchIndex: WatchIndex = 
+    brandSegment && (brandSegment === 'A' || brandSegment === 'B' || brandSegment === 'C')
+      ? brandSegment
+      : calculateIndex(apiWatch.brand.brandIndex);
+
   return {
     id: apiWatch.id,
     title: fullTitle,
@@ -97,7 +103,7 @@ export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
     price: finalPrice,
     currency: finalCurrency,
     brand: apiWatch.brand.name,
-    index: calculateIndex(apiWatch.brand.brandIndex),
+    index: watchIndex,
     image: imageUrl,
     chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
     buttonLabel: 'Buy on Chrono24',
@@ -298,6 +304,13 @@ export function transformApiPopularWatchItem(
     ? analytics.trend90d
     : calculateTrend(price, defaultPrice).value;
 
+  const brandSegment = apiWatch?.brand?.segment;
+  const brandIndex = apiWatch?.brand?.brandIndex || 50;
+  const watchIndex: WatchIndex = 
+    brandSegment && (brandSegment === 'A' || brandSegment === 'B' || brandSegment === 'C')
+      ? brandSegment
+      : calculateIndex(brandIndex);
+
   return {
     id: apiWatch?.id || 'unknown',
     title: fullTitle,
@@ -305,7 +318,7 @@ export function transformApiPopularWatchItem(
     price: price,
     currency: currency,
     brand: brandName,
-    index: calculateIndex(apiWatch?.brand?.brandIndex),
+    index: watchIndex,
     image: imageUrl,
     chronoUrl: apiWatch?.chronoUrl && typeof apiWatch.chronoUrl === 'string' && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
     buttonLabel: 'Buy on Chrono24',
@@ -403,7 +416,23 @@ export function transformApiWatchFull(
     watchTitle = apiWatch.ref || apiWatch.model || apiWatch.name || '';
   }
   
-  const fullTitle = `${apiWatch.brand.name} ${watchTitle}`.trim();
+
+  let brandName = apiWatch.brand?.name;
+  if (!brandName && apiWatch.name) {
+    const nameParts = apiWatch.name.trim().split(/\s+/);
+    if (nameParts.length > 0) {
+      brandName = nameParts[0];
+    }
+  }
+  brandName = brandName || 'Unknown';
+  
+  const brandIndex = apiWatch.brand?.brandIndex || 50;
+  const brandSegment = apiWatch.brand?.segment;
+  const watchIndex: WatchIndex = 
+    brandSegment && (brandSegment === 'A' || brandSegment === 'B' || brandSegment === 'C')
+      ? brandSegment
+      : calculateIndex(brandIndex);
+  const fullTitle = `${brandName} ${watchTitle}`.trim();
   const analytics = apiWatch.analytics;
 
   return {
@@ -412,8 +441,8 @@ export function transformApiWatchFull(
     slug: generateSlug(apiWatch.name),
     price: price,
     currency: currency,
-    brand: apiWatch.brand.name,
-    index: calculateIndex(apiWatch.brand.brandIndex),
+    brand: brandName,
+    index: watchIndex,
     image: imageUrl,
     chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
     buttonLabel: 'Buy on Chrono24',

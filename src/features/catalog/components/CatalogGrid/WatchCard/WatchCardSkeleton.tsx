@@ -10,17 +10,16 @@ export const WatchCardSkeleton: React.FC = () => {
       className={`${styles.watchCard} border border-[rgba(23,20,20,0.15)] bg-white`}
     >
       <div className='flex justify-between items-center'>
-        <Skeleton height={27} width={34} borderRadius={5} />
+        <Skeleton height={27} width={27} borderRadius={5} />
         <Skeleton height={18} width={18} circle />
       </div>
 
-      <div className='relative h-[111px] md:h-[124px] xl:h-[123px] w-[150px]'>
+      <div className='relative h-[111px] md:h-[124px] xl:h-[123px] w-full'>
         <Skeleton
+          className={styles.skeletonImage}
           style={{
             position: 'absolute',
             top: 0,
-            left: '15%',
-            right: 0,
             bottom: 0,
           }}
         />

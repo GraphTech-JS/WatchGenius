@@ -98,6 +98,7 @@ export interface ProductAnalyticsProps {
 
 export interface SimilarModelsProps {
   models: SimilarModel[];
+  loading?: boolean;
   onCompare: () => void;
 }
 

@@ -18,9 +18,13 @@ import { Toast } from '@/components/Toast/Toast';
 
 interface ProductPageProps {
   product: Product;
+  loadingSimilar?: boolean;
 }
 
-const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
+const ProductPage: React.FC<ProductPageProps> = ({
+  product,
+  loadingSimilar = false,
+}) => {
   const [activeTab, setActiveTab] = useState<
     'parameters' | 'brand' | 'price' | 'trend'
   >('trend');
@@ -128,6 +132,7 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
           <div className='w-full sm:w-full md:w-[calc(50%-30px)] lg:w-[calc(50%-30px)] xl:w-auto'>
             <SimilarModels
               models={product.similarModels}
+              loading={loadingSimilar}
               onCompare={handleCompare}
             />
           </div>

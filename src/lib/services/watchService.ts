@@ -23,6 +23,19 @@ export class WatchService extends BaseApiService {
     return this.handleApiRequest(endpoint);
   }
 
+  async getSimilarWatches(id: string, currency?: string): Promise<NextResponse>
+  {
+    if(!id){
+      return this.createErrorResponse('Missing id parameter', 400);
+    }
+
+    const endpoint = currency
+    ? `/api/watches/${id}/similar?currency=${currency}`
+    : `/api/watches/${id}/similar`
+
+    return this.handleApiRequest(endpoint);
+  }
+
   async getWatchesByIds(
     ids: string[],
     currency?: string
@@ -50,5 +63,8 @@ export class WatchService extends BaseApiService {
     return this.handleApiRequest(endpoint);
   }
 }
+
+
+
 
 export const watchService = new WatchService();

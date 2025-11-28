@@ -46,6 +46,7 @@ export interface GetWatchesParams {
   priceRange?: string;  
   years?: string;
   currency?: string;
+  segment?: string;
 }
 
 export interface ApiFiltersResponse {

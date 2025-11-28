@@ -1,18 +1,22 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { SimilarModelsProps } from "@/interfaces/product";
-import { ArrowUp, ArrowDown } from "lucide-react";
-import { ScalesIcon } from "@/product-icons";
-import styles from "./SimilarModels.module.css";
-import { useCompareContext } from "@/context/CompareContext";
-import { useLocale } from "@/hooks/useLocale";
-import { t } from "@/i18n";
-import { productKeys } from "@/i18n/keys/product";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { SimilarModelsProps } from '@/interfaces/product';
+import { ArrowUp, ArrowDown } from 'lucide-react';
+import { ScalesIcon } from '@/product-icons';
+import { ClockLoader } from 'react-spinners';
+import styles from './SimilarModels.module.css';
+import { useCompareContext } from '@/context/CompareContext';
+import { useLocale } from '@/hooks/useLocale';
+import { t } from '@/i18n';
+import { productKeys } from '@/i18n/keys/product';
 
-const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
+const SimilarModels: React.FC<SimilarModelsProps> = ({
+  models,
+  loading = false,
+}) => {
   const router = useRouter();
   const locale = useLocale();
   const [selectedModels, setSelectedModels] = useState<Set<string>>(new Set());
@@ -41,11 +45,11 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
 
   const getIndexBadgeClass = (index: string) => {
     switch (index) {
-      case "A":
+      case 'A':
         return styles.indexBadgeA;
-      case "B":
+      case 'B':
         return styles.indexBadgeB;
-      case "C":
+      case 'C':
         return styles.indexBadgeC;
       default:
         return styles.indexBadgeA;
@@ -53,11 +57,10 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
   };
 
   const parseTrend = (trend: string) => {
-    const isPositive = trend.includes("+") || trend.includes("↑");
-    const value = trend.replace(/[↑↓+%]/g, "");
-    const period = "90d";
+    const isPositive = trend.includes('+') || trend.includes('↑');
+    const value = trend.replace(/[↑↓+%]/g, '');
+    const period = '90d';
     return { isPositive, value, period };
-
   };
 
   return (
@@ -75,93 +78,101 @@ const SimilarModels: React.FC<SimilarModelsProps> = ({ models }) => {
         </p>
       </div>
 
-      <div className={styles.similarGrid}>
-        {models.map((model) => {
-          const trend = parseTrend(model.priceTrend);
-          return (
-            <div
-              key={model.id}
-              className={styles.similarCard}
-              onClick={() => handleCardClick(model.slug)}
-            >
-              <div className={styles.indexBadgeWrap}>
-                <div
-                  className={`${styles.indexBadge} ${getIndexBadgeClass(
-                    model.index
-                  )}`}
-                >
-                  {model.index}
-                </div>
-                <div className={styles.indexTooltip}>
-                  {model.index === 'A' && t(productKeys.index.A)}
-                  {model.index === 'B' && t(productKeys.index.B)}
-                  {model.index === 'C' && t(productKeys.index.C)}
-                </div>
-              </div>
+      {loading ? (
+        <div className='flex justify-center items-center py-12'>
+          <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+        </div>
+      ) : (
+        <div className={styles.similarGrid}>
+          {models.map((model) => {
+            const trend = parseTrend(model.priceTrend);
+            return (
               <div
-                className={`${styles.comparisonIcon} ${
-                  selectedModels.has(model.id)
-                    ? styles.comparisonIconSelected
-                    : ''
-                }`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleModelSelect(model.id);
-                }}
+                key={model.id}
+                className={styles.similarCard}
+                onClick={() => handleCardClick(model.slug)}
               >
-                <Image
-                  src={ScalesIcon}
-                  alt={t(productKeys.similar.compareBtn)}
-                  width={20}
-                  height={20}
-                  unoptimized
-                />
-              </div>
-
-              <div className={styles.similarImage}>
-                <Image
-                  src={model.image}
-                  alt={model.title}
-                  fill
-                  className={styles.similarImage}
-                />
-              </div>
-
-              <h4 className={`${styles.similarTitle}`}>{model.title}</h4>
-
-              <div className={styles.similarPriceAndTrend}>
-                <div className={styles.similarPrice}>{model.price}</div>
-
-                <div className={styles.similarTrendContainer}>
-                  <span
-                    className={`${styles.similarTrendBadge} ${
-                      !trend.isPositive ? styles.similarTrendBadgeNegative : ''
-                    }`}
+                <div className={styles.indexBadgeWrap}>
+                  <div
+                    className={`${styles.indexBadge} ${getIndexBadgeClass(
+                      model.index
+                    )}`}
                   >
+                    {model.index}
+                  </div>
+                  <div className={styles.indexTooltip}>
+                    {model.index === 'A' && t(productKeys.index.A)}
+                    {model.index === 'B' && t(productKeys.index.B)}
+                    {model.index === 'C' && t(productKeys.index.C)}
+                  </div>
+                </div>
+                <div
+                  className={`${styles.comparisonIcon} ${
+                    selectedModels.has(model.id)
+                      ? styles.comparisonIconSelected
+                      : ''
+                  }`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleModelSelect(model.id);
+                  }}
+                >
+                  <Image
+                    src={ScalesIcon}
+                    alt={t(productKeys.similar.compareBtn)}
+                    width={20}
+                    height={20}
+                    unoptimized
+                  />
+                </div>
+
+                <div className={styles.similarImage}>
+                  <Image
+                    src={model.image}
+                    alt={model.title}
+                    fill
+                    className={styles.similarImage}
+                  />
+                </div>
+
+                <h4 className={`${styles.similarTitle}`}>{model.title}</h4>
+
+                <div className={styles.similarPriceAndTrend}>
+                  <div className={styles.similarPrice}>{model.price}</div>
+
+                  <div className={styles.similarTrendContainer}>
                     <span
-                      className={`${
-                        trend.isPositive
-                          ? styles.similarTrendValue
-                          : styles.similarTrendValueNegative
+                      className={`${styles.similarTrendBadge} ${
+                        !trend.isPositive
+                          ? styles.similarTrendBadgeNegative
+                          : ''
                       }`}
                     >
-                      {trend.isPositive ? (
-                        <ArrowUp size={12} />
-                      ) : (
-                        <ArrowDown size={12} />
-                      )}
-                      {parseFloat(trend.value).toFixed(1)}%
-                      <span className={styles.similarTrendPeriod}>
-                        {trend.period}
+                      <span
+                        className={`${
+                          trend.isPositive
+                            ? styles.similarTrendValue
+                            : styles.similarTrendValueNegative
+                        }`}
+                      >
+                        {trend.isPositive ? (
+                          <ArrowUp size={12} />
+                        ) : (
+                          <ArrowDown size={12} />
+                        )}
+                        {parseFloat(trend.value).toFixed(1)}%
+                        <span className={styles.similarTrendPeriod}>
+                          {trend.period}
+                        </span>
                       </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       <button onClick={handleCompareModels} className={styles.compareButton}>
         {t(productKeys.similar.compareBtn)}
