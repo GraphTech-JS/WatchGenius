@@ -13,7 +13,7 @@ import { t } from '@/i18n';
 import { productKeys } from '@/i18n/keys/product';
 import { catalogKeys } from '@/i18n/keys/catalog';
 import { ProductLoading } from '@/features/product/ProductLoading/ProductLoading';
-import type { ApiWatchFullResponse } from '@/interfaces/api';
+import type { ApiPriceHistory, ApiWatchFullResponse } from '@/interfaces/api';
 
 function translateDetailValue(
   type: 'condition' | 'mechanism' | 'material',
@@ -154,6 +154,130 @@ function setCachedSimilar(
   }
 }
 
+const PRICE_REPORT_CACHE_PREFIX = 'price-report-cache-';
+
+function getPriceReportCacheKey(
+  watchId: string,
+  currency: string,
+  period: '3M' | '1P'
+): string {
+  return `${PRICE_REPORT_CACHE_PREFIX}${watchId}-${currency}-${period}`;
+}
+
+function getCachedPriceReport(
+  watchId: string,
+  currency: string,
+  period: '3M' | '1P'
+): { reportPeak: number; reportMin: number; reportChangePct: number } | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = getPriceReportCacheKey(watchId, currency, period);
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedPriceReport(
+  watchId: string,
+  currency: string,
+  period: '3M' | '1P',
+  report: { reportPeak: number; reportMin: number; reportChangePct: number }
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = getPriceReportCacheKey(watchId, currency, period);
+    const cacheData = {
+      data: report,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
+}
+
+function calculatePriceReport(
+  priceHistory: ApiPriceHistory[] | undefined,
+  currentPrice: number,
+  trendValue: number,
+  watchId: string,
+  period: '3M' | '1P' = '3M'
+): { reportPeak: number; reportMin: number; reportChangePct: number } {
+  if (priceHistory && priceHistory.length > 0) {
+    const sorted = [...priceHistory].sort(
+      (a, b) =>
+        new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime()
+    );
+
+    // Фільтруємо дані за періодом (як в PriceChart)
+    const now = new Date();
+    let startDate: Date;
+
+    if (period === '3M') {
+      startDate = new Date(now);
+      startDate.setMonth(startDate.getMonth() - 3);
+    } else {
+      startDate = new Date(now);
+      startDate.setMonth(startDate.getMonth() - 1);
+    }
+
+    const filtered = sorted.filter((item) => {
+      const itemDate = new Date(item.recordedAt);
+      return itemDate >= startDate && itemDate <= now;
+    });
+
+    // Використовуємо відфільтровані дані, або всі якщо фільтр порожній
+    const dataToUse = filtered.length > 0 ? filtered : sorted;
+
+    const prices = dataToUse.map((h) => h.price).filter((p) => p > 0);
+
+    if (prices.length === 0) {
+      return {
+        reportPeak: Math.round(currentPrice * 1.03),
+        reportMin: Math.round(currentPrice * 0.97),
+        reportChangePct: 0,
+      };
+    }
+
+    const reportPeak = Math.max(...prices);
+    const reportMin = Math.min(...prices);
+
+    // Перша ціна (найстаріша) і остання (найновіша) ЗА ВИБРАНИЙ ПЕРІОД
+    const firstPrice = prices[0];
+    const lastPrice = prices[prices.length - 1];
+    const reportChangePct =
+      firstPrice > 0 ? (lastPrice - firstPrice) / firstPrice : 0;
+
+    return {
+      reportPeak: Math.round(reportPeak),
+      reportMin: Math.round(reportMin),
+      reportChangePct,
+    };
+  }
+
+  return {
+    reportPeak: Math.round(currentPrice * 1.03),
+    reportMin: Math.round(currentPrice * 0.97),
+    reportChangePct:
+      (Math.sign(trendValue) * (2 + ((watchId.charCodeAt(1) || 0) % 3))) / 10,
+  };
+}
+
 export default function ProductClient({
   params,
 }: {
@@ -164,6 +288,9 @@ export default function ProductClient({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const hasTrackedView = useRef(false);
+  const [apiWatchData, setApiWatchData] = useState<ApiWatchFullResponse | null>(
+    null
+  );
 
   useEffect(() => {
     const loadWatch = async () => {
@@ -184,6 +311,7 @@ export default function ProductClient({
           setError('Watch not found');
           return;
         }
+        setApiWatchData(apiWatch);
 
         const transformedWatch = transformApiWatchFull(apiWatch, currency);
         setWatch(transformedWatch);
@@ -321,6 +449,28 @@ export default function ProductClient({
       ? '₴'
       : '€';
 
+  const period = '3M';
+  const cachedPriceReport = getCachedPriceReport(watch.id, currency, period);
+
+  let priceReport: {
+    reportPeak: number;
+    reportMin: number;
+    reportChangePct: number;
+  };
+
+  if (cachedPriceReport) {
+    priceReport = cachedPriceReport;
+  } else {
+    priceReport = calculatePriceReport(
+      apiWatchData?.priceHistory,
+      watch.price,
+      watch.trend.value,
+      watch.id,
+      period
+    );
+    // Зберігаємо в кеш після обчислення
+    setCachedPriceReport(watch.id, currency, period, priceReport);
+  }
   const product: Product = {
     id: watch.id,
     slug: watch.slug,
@@ -418,16 +568,20 @@ export default function ProductClient({
           ? 'Середня'
           : 'Низька',
       popularity: 7.5 + ((watch.id.charCodeAt(2) || 0) % 20) / 10,
-      reportPeak: Math.round(watch.price * 1.03),
-      reportMin: Math.round(watch.price * 0.97),
-      reportChangePct:
-        (Math.sign(watch.trend.value) *
-          (2 + ((watch.id.charCodeAt(1) || 0) % 3))) /
-        10,
+      reportPeak: priceReport.reportPeak,
+      reportMin: priceReport.reportMin,
+      reportChangePct: priceReport.reportChangePct,
     },
+    index: watch.index,
     similarModels,
     sellerOffers,
   };
 
-  return <ProductPage product={product} loadingSimilar={loadingSimilar} />;
+  return (
+    <ProductPage
+      product={product}
+      loadingSimilar={loadingSimilar}
+      priceHistory={apiWatchData?.priceHistory}
+    />
+  );
 }

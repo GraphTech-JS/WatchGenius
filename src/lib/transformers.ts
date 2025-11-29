@@ -262,7 +262,6 @@ function uuidToNumber(uuid: string): number {
 export function transformApiPopularWatchItem(
   apiWatch: ApiPopularWatchItem
 ): WatchItem {
-  // Безпечна обробка priceHistory
   const priceHistory = apiWatch?.priceHistory;
   const latestPrice =
     priceHistory && Array.isArray(priceHistory) && priceHistory.length > 0
@@ -426,12 +425,11 @@ export function transformApiWatchFull(
   }
   brandName = brandName || 'Unknown';
   
-  const brandIndex = apiWatch.brand?.brandIndex || 50;
-  const brandSegment = apiWatch.brand?.segment;
-  const watchIndex: WatchIndex = 
-    brandSegment && (brandSegment === 'A' || brandSegment === 'B' || brandSegment === 'C')
-      ? brandSegment
-      : calculateIndex(brandIndex);
+ const brandSegment = apiWatch.brand?.segment;
+const watchIndex: WatchIndex = 
+  (brandSegment === 'A' || brandSegment === 'B' || brandSegment === 'C')
+    ? brandSegment
+    : 'A'
   const fullTitle = `${brandName} ${watchTitle}`.trim();
   const analytics = apiWatch.analytics;
 

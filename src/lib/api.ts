@@ -229,7 +229,12 @@ export function convertFiltersToApiParams(
     params.years = `${yearFrom}-${yearTo}`;
   }
 
-  if (priceFrom !== defaultPriceFrom || priceTo !== defaultPriceTo) {
+  const priceFromNum = Number(priceFrom);
+  const priceToNum = Number(priceTo);
+  const defaultPriceFromNum = Number(defaultPriceFrom);
+  const defaultPriceToNum = Number(defaultPriceTo);
+  
+  if (priceFromNum !== defaultPriceFromNum || priceToNum !== defaultPriceToNum) {
     params.priceRange = `${priceFrom}-${priceTo}`;
   }
 

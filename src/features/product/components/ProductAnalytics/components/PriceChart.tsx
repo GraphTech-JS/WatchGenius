@@ -16,6 +16,7 @@ import {
 import type { Chart, ChartOptions, TooltipItem, TooltipModel } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import styles from './PriceChart.module.css';
+import { ApiPriceHistory } from '@/interfaces/api';
 
 ChartJS.register(
   CategoryScale,
@@ -31,6 +32,8 @@ ChartJS.register(
 interface PriceChartProps {
   period: '3M' | '1P';
   onPeriodChange: (period: '3M' | '1P') => void;
+  priceHistory?: ApiPriceHistory[];
+  currency?: string;
 }
 
 function createGradient(ctx: CanvasRenderingContext2D, area: ChartArea) {
@@ -42,19 +45,101 @@ function createGradient(ctx: CanvasRenderingContext2D, area: ChartArea) {
   return gradient;
 }
 
-const PriceChart: React.FC<PriceChartProps> = ({ period, onPeriodChange }) => {
+function processPriceHistory(
+  priceHistory: ApiPriceHistory[] | undefined,
+  period: '3M' | '1P'
+): { labels: string[]; prices: number[] } {
+  if (!priceHistory || priceHistory.length === 0) {
+    return {
+      labels: [],
+      prices: [],
+    };
+  }
+
+  const sorted = [...priceHistory].sort(
+    (a, b) =>
+      new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime()
+  );
+
+  const now = new Date();
+  let startDate: Date;
+
+  if (period === '3M') {
+    startDate = new Date(now);
+    startDate.setMonth(startDate.getMonth() - 3);
+  } else {
+    startDate = new Date(now);
+    startDate.setMonth(startDate.getMonth() - 1);
+  }
+
+  const filtered = sorted.filter((item) => {
+    const itemDate = new Date(item.recordedAt);
+    return itemDate >= startDate && itemDate <= now;
+  });
+
+  const dataToUse = filtered.length > 0 ? filtered : sorted;
+
+  const labels: string[] = [];
+  const prices: number[] = [];
+
+  dataToUse.forEach((item) => {
+    const date = new Date(item.recordedAt);
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // 1-12
+
+    // Для 3M показуємо місяць і день, для 1P - тільки день
+    if (period === '3M') {
+      // Формат: "1.09сер." (день.місяцьсер.)
+      labels.push(`${day}.${month}сер.`);
+    } else {
+      // Формат: "1сер." (деньсер.)
+      labels.push(`${day}сер.`);
+    }
+    prices.push(item.price);
+  });
+
+  return { labels, prices };
+}
+
+const PriceChart: React.FC<PriceChartProps> = ({
+  period,
+  onPeriodChange,
+  priceHistory,
+  currency,
+}) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
 
-  const data = useMemo(
-    () => ({
-      labels: Array.from({ length: 27 }, (_, i) => `${i + 1}сер.`),
+  const chartData = useMemo(() => {
+    const processed = processPriceHistory(priceHistory, period);
+
+    if (processed.labels.length === 0 || processed.prices.length === 0) {
+      return {
+        labels: Array.from({ length: 27 }, (_, i) => `${i + 1}сер.`),
+        datasets: [
+          {
+            data: [
+              3000, 5500, 8000, 7500, 10000, 9500, 11000, 13000, 15500, 18000,
+              20000, 21000, 21500, 21000, 18500, 19500, 20000, 21000, 21500,
+              19000, 20500, 21800, 22000, 22500, 23000, 23200, 24000,
+            ],
+            borderWidth: 3,
+            fill: false,
+            tension: 0,
+            pointRadius: 0,
+            pointBackgroundColor: '#38D95B',
+            pointHoverRadius: 8,
+            pointHoverBorderColor: 'white',
+            pointHoverBorderWidth: 2,
+          },
+        ],
+      };
+    }
+
+    return {
+      labels: processed.labels,
       datasets: [
         {
-          data: [
-            3000, 5500, 8000, 7500, 10000, 9500, 11000, 13000, 15500, 18000,
-            20000, 21000, 21500, 21000, 18500, 19500, 20000, 21000, 21500,
-            19000, 20500, 21800, 22000, 22500, 23000, 23200, 24000,
-          ],
+          data: processed.prices,
           borderWidth: 3,
           fill: false,
           tension: 0.4,
@@ -65,9 +150,8 @@ const PriceChart: React.FC<PriceChartProps> = ({ period, onPeriodChange }) => {
           pointHoverBorderWidth: 2,
         },
       ],
-    }),
-    []
-  );
+    };
+  }, [priceHistory, period]);
 
   const hoverLinePlugin = {
     id: 'hoverLine',
@@ -179,10 +263,55 @@ const PriceChart: React.FC<PriceChartProps> = ({ period, onPeriodChange }) => {
         intersect: false,
         mode: 'index',
         callbacks: {
-          title: (context: TooltipItem<'line'>[]) =>
-            `2025-09-${context[0].label.replace('сер.', '').padStart(2, '0')}`,
-          label: (context: TooltipItem<'line'>) =>
-            `€ ${context.parsed.y?.toLocaleString('de-DE') ?? 0}`,
+          title: (context: TooltipItem<'line'>[]) => {
+            const label = context[0].label;
+
+            if (priceHistory && priceHistory.length > 0) {
+              const sorted = [...priceHistory].sort(
+                (a, b) =>
+                  new Date(a.recordedAt).getTime() -
+                  new Date(b.recordedAt).getTime()
+              );
+
+              let foundItem: ApiPriceHistory | undefined;
+
+              if (period === '3M') {
+                const parts = label.replace('сер.', '').split('.');
+                if (parts.length === 2) {
+                  const day = parseInt(parts[0]);
+                  const month = parseInt(parts[1]);
+                  foundItem = sorted.find((item) => {
+                    const date = new Date(item.recordedAt);
+                    return (
+                      date.getDate() === day && date.getMonth() + 1 === month
+                    );
+                  });
+                }
+              } else {
+                const day = parseInt(label.replace('сер.', '').trim());
+                foundItem = sorted.find((item) => {
+                  const date = new Date(item.recordedAt);
+                  return date.getDate() === day;
+                });
+              }
+
+              if (foundItem) {
+                const date = new Date(foundItem.recordedAt);
+                return `${date.getFullYear()}-${String(
+                  date.getMonth() + 1
+                ).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+              }
+            }
+
+            return label.replace('сер.', '').trim();
+          },
+          label: (context: TooltipItem<'line'>) => {
+            const currencySymbol =
+              currency === 'USD' ? '$' : currency === 'UAH' ? '₴' : '€';
+            return `${currencySymbol} ${
+              context.parsed.y?.toLocaleString('de-DE') ?? 0
+            }`;
+          },
         },
       },
     },
@@ -206,14 +335,17 @@ const PriceChart: React.FC<PriceChartProps> = ({ period, onPeriodChange }) => {
         },
       },
       y: {
-        beginAtZero: true,
+        beginAtZero: false,
         grid: {
           drawTicks: false,
           color: 'rgba(0, 0, 0, 0.08)',
         },
         ticks: {
-          callback: (value) => `€${Number(value) / 1000}k`,
-          stepSize: 7000,
+          callback: (value) => {
+            const currencySymbol =
+              currency === 'USD' ? '$' : currency === 'UAH' ? '₴' : '€';
+            return `${currencySymbol}${Number(value) / 1000}k`;
+          },
           color: 'rgba(0, 0, 0, 0.5)',
           font: { size: 12, family: 'Inter' },
           padding: 10,
@@ -237,8 +369,8 @@ const PriceChart: React.FC<PriceChartProps> = ({ period, onPeriodChange }) => {
     if (!chart || !chart.chartArea) return;
 
     const chartDataWithGradient = {
-      ...data,
-      datasets: data.datasets.map((dataset) => ({
+      ...chartData,
+      datasets: chartData.datasets.map((dataset) => ({
         ...dataset,
         borderColor: createGradient(chart.ctx, chart.chartArea),
       })),
@@ -246,7 +378,7 @@ const PriceChart: React.FC<PriceChartProps> = ({ period, onPeriodChange }) => {
 
     chart.data = chartDataWithGradient;
     chart.update();
-  }, [period, data]);
+  }, [period, chartData]);
 
   return (
     <div className={styles.chartContainer}>
@@ -270,7 +402,7 @@ const PriceChart: React.FC<PriceChartProps> = ({ period, onPeriodChange }) => {
       </div>
       <Line
         ref={chartRef}
-        data={data}
+        data={chartData}
         options={options}
         plugins={[hoverLinePlugin]}
       />

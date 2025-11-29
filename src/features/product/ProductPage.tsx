@@ -15,15 +15,18 @@ import { productKeys } from '@/i18n/keys/product';
 import { useWishlistContext } from '@/context/WishlistContext';
 import { useCompareContext } from '@/context/CompareContext';
 import { Toast } from '@/components/Toast/Toast';
+import type { ApiPriceHistory } from '@/interfaces/api';
 
 interface ProductPageProps {
   product: Product;
   loadingSimilar?: boolean;
+  priceHistory?: ApiPriceHistory[],
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({
   product,
   loadingSimilar = false,
+  priceHistory,
 }) => {
   const [activeTab, setActiveTab] = useState<
     'parameters' | 'brand' | 'price' | 'trend'
@@ -144,6 +147,8 @@ const ProductPage: React.FC<ProductPageProps> = ({
               onTabChange={handleTabChange}
               details={product.details}
               brand={product.brand}
+              priceHistory={priceHistory}
+             
             />
           </div>
         </div>

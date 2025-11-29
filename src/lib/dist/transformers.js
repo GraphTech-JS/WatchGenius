@@ -235,7 +235,6 @@ function uuidToNumber(uuid) {
 }
 function transformApiPopularWatchItem(apiWatch) {
     var _a, _b, _c, _d, _e;
-    // Безпечна обробка priceHistory
     var priceHistory = apiWatch === null || apiWatch === void 0 ? void 0 : apiWatch.priceHistory;
     var latestPrice = priceHistory && Array.isArray(priceHistory) && priceHistory.length > 0
         ? priceHistory[priceHistory.length - 1]
@@ -310,7 +309,7 @@ function transformApiPopularWatchItem(apiWatch) {
 }
 exports.transformApiPopularWatchItem = transformApiPopularWatchItem;
 function transformApiWatchFull(apiWatch, requestedCurrency) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c;
     var latestPrice = apiWatch.priceHistory && apiWatch.priceHistory.length > 0
         ? apiWatch.priceHistory[apiWatch.priceHistory.length - 1]
         : null;
@@ -375,11 +374,10 @@ function transformApiWatchFull(apiWatch, requestedCurrency) {
         }
     }
     brandName = brandName || 'Unknown';
-    var brandIndex = ((_c = apiWatch.brand) === null || _c === void 0 ? void 0 : _c.brandIndex) || 50;
-    var brandSegment = (_d = apiWatch.brand) === null || _d === void 0 ? void 0 : _d.segment;
-    var watchIndex = brandSegment && (brandSegment === 'A' || brandSegment === 'B' || brandSegment === 'C')
+    var brandSegment = (_c = apiWatch.brand) === null || _c === void 0 ? void 0 : _c.segment;
+    var watchIndex = (brandSegment === 'A' || brandSegment === 'B' || brandSegment === 'C')
         ? brandSegment
-        : calculateIndex(brandIndex);
+        : 'A';
     var fullTitle = (brandName + " " + watchTitle).trim();
     var analytics = apiWatch.analytics;
     return {

@@ -12,7 +12,7 @@ var PriceChart_1 = require("./components/PriceChart");
 var TrendGauge_1 = require("./components/TrendGauge");
 var brands_1 = require("@/data/brands");
 var ProductAnalytics = function (_a) {
-    var analytics = _a.analytics, activeTab = _a.activeTab, onTabChange = _a.onTabChange, details = _a.details, brand = _a.brand, _b = _a.isCompare, isCompare = _b === void 0 ? false : _b;
+    var analytics = _a.analytics, activeTab = _a.activeTab, onTabChange = _a.onTabChange, details = _a.details, brand = _a.brand, _b = _a.isCompare, isCompare = _b === void 0 ? false : _b, priceHistory = _a.priceHistory;
     var _c = react_1.useState('3M'), activeChartPeriod = _c[0], setActiveChartPeriod = _c[1];
     var _d = react_1.useState(false), isVolatilityHovered = _d[0], setIsVolatilityHovered = _d[1];
     var _e = react_1.useState(false), isDemandHovered = _e[0], setIsDemandHovered = _e[1];
@@ -158,7 +158,7 @@ var ProductAnalytics = function (_a) {
                             content.paragraphs.map(function (p, idx) { return (react_1["default"].createElement("p", { key: idx, className: ProductAnalytics_module_css_1["default"].brandText }, p)); }))));
                 })(),
             activeTab === 'price' && (react_1["default"].createElement("div", null,
-                react_1["default"].createElement(PriceChart_1["default"], { period: activeChartPeriod, onPeriodChange: setActiveChartPeriod }),
+                react_1["default"].createElement(PriceChart_1["default"], { period: activeChartPeriod, onPeriodChange: setActiveChartPeriod, priceHistory: priceHistory, currency: 'EUR' }),
                 react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].priceMetrics },
                     !isVolatilityHovered ? (react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].priceMetricCard, onMouseEnter: function () { return setIsVolatilityHovered(true); }, onMouseLeave: function () { return setIsVolatilityHovered(false); } },
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].priceMetricIcon },
