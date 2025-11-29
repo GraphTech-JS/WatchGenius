@@ -313,7 +313,11 @@ function convertFiltersToApiParams(filters) {
     if (yearFrom !== defaultYearFrom || yearTo !== defaultYearTo) {
         params.years = yearFrom + "-" + yearTo;
     }
-    if (priceFrom !== defaultPriceFrom || priceTo !== defaultPriceTo) {
+    var priceFromNum = Number(priceFrom);
+    var priceToNum = Number(priceTo);
+    var defaultPriceFromNum = Number(defaultPriceFrom);
+    var defaultPriceToNum = Number(defaultPriceTo);
+    if (priceFromNum !== defaultPriceFromNum || priceToNum !== defaultPriceToNum) {
         params.priceRange = priceFrom + "-" + priceTo;
     }
     if ((_f = filters.selectedDocuments) === null || _f === void 0 ? void 0 : _f.length) {

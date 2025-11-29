@@ -160,8 +160,7 @@ const ProductHero: React.FC<ProductHeroProps> = ({
     return `${currency} ${min.toLocaleString()}-${max.toLocaleString()}`;
   };
 
-  const productIndex =
-    product.index ?? product.similarModels?.[0]?.index ?? 'A';
+  const productIndex = product.index ?? 'A';
 
   return (
     <div

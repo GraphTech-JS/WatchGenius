@@ -1,4 +1,5 @@
 import type { StaticImageData } from 'next/image';
+import type { ApiPriceHistory } from './api';
 
 export interface Product {
   id: string;
@@ -94,6 +95,8 @@ export interface ProductAnalyticsProps {
   details: ProductDetail[];
   brand: string;
   isCompare?: boolean;
+  priceHistory?: ApiPriceHistory[];
+
 }
 
 export interface SimilarModelsProps {

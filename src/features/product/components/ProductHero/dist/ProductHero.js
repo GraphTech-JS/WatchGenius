@@ -58,17 +58,17 @@ var mainButtonTextStyle = {
     WebkitTextFillColor: 'transparent'
 };
 var ProductHero = function (_a) {
-    var _b, _c, _d, _e;
-    var product = _a.product, onSave = _a.onSave, onPriceNotification = _a.onPriceNotification, onBuy = _a.onBuy, onGetQuote = _a.onGetQuote, _f = _a.layout, layout = _f === void 0 ? 'horizontal' : _f, _g = _a.isSaved, isSaved = _g === void 0 ? false : _g;
+    var _b;
+    var product = _a.product, onSave = _a.onSave, onPriceNotification = _a.onPriceNotification, onBuy = _a.onBuy, onGetQuote = _a.onGetQuote, _c = _a.layout, layout = _c === void 0 ? 'horizontal' : _c, _d = _a.isSaved, isSaved = _d === void 0 ? false : _d;
     var locale = useLocale_1.useLocale();
-    var _h = react_1.useState(0), selectedImage = _h[0], setSelectedImage = _h[1];
-    var _j = react_1.useState(false), showComparisonModal = _j[0], setShowComparisonModal = _j[1];
-    var _k = react_1.useState(false), showShareModal = _k[0], setShowShareModal = _k[1];
-    var _l = react_1.useState(false), showPriceAlertModal = _l[0], setShowPriceAlertModal = _l[1];
-    var _m = react_1.useState(false), showGetQuoteModal = _m[0], setShowGetQuoteModal = _m[1];
-    var _o = react_1.useState(false), showBuyModal = _o[0], setShowBuyModal = _o[1];
+    var _e = react_1.useState(0), selectedImage = _e[0], setSelectedImage = _e[1];
+    var _f = react_1.useState(false), showComparisonModal = _f[0], setShowComparisonModal = _f[1];
+    var _g = react_1.useState(false), showShareModal = _g[0], setShowShareModal = _g[1];
+    var _h = react_1.useState(false), showPriceAlertModal = _h[0], setShowPriceAlertModal = _h[1];
+    var _j = react_1.useState(false), showGetQuoteModal = _j[0], setShowGetQuoteModal = _j[1];
+    var _k = react_1.useState(false), showBuyModal = _k[0], setShowBuyModal = _k[1];
     var screenWidth = useScreenWidth_1.useScreenWidth();
-    var _p = CompareContext_1.useCompareContext(), addToCompare = _p.addToCompare, removeFromCompare = _p.removeFromCompare, isInCompare = _p.isInCompare;
+    var _l = CompareContext_1.useCompareContext(), addToCompare = _l.addToCompare, removeFromCompare = _l.removeFromCompare, isInCompare = _l.isInCompare;
     var isInComparison = isInCompare(product.id);
     react_1.useEffect(function () {
         setShowComparisonModal(false);
@@ -186,7 +186,7 @@ var ProductHero = function (_a) {
         }
         return currency + " " + min.toLocaleString() + "-" + max.toLocaleString();
     };
-    var productIndex = (_e = (_b = product.index) !== null && _b !== void 0 ? _b : (_d = (_c = product.similarModels) === null || _c === void 0 ? void 0 : _c[0]) === null || _d === void 0 ? void 0 : _d.index) !== null && _e !== void 0 ? _e : 'A';
+    var productIndex = (_b = product.index) !== null && _b !== void 0 ? _b : 'A';
     return (react_1["default"].createElement("div", { className: "flex " + (layout === 'vertical'
             ? 'flex-col'
             : 'flex-col md:flex-row lg:flex-row xl:flex-row') + " gap-[20px] md:gap-[60px] lg:gap-[60px] xl:gap-[60px] mb-[20px]" },
