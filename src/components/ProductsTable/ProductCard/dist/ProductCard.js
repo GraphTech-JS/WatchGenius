@@ -22,12 +22,13 @@ var lucide_react_1 = require("lucide-react");
 var LocalizedLink_1 = require("@/components/LocalizedLink");
 var i18n_1 = require("@/i18n");
 var accessibility_1 = require("@/i18n/keys/accessibility");
+var WishlistContext_1 = require("@/context/WishlistContext");
 var ArrowUp = function () { return (react_1["default"].createElement("svg", { width: '16', height: '14', viewBox: '0 0 16 14', fill: 'none', "aria-hidden": 'true' },
     react_1["default"].createElement("path", { d: '\r\n      M8 1 V14\r\n      M8 2 L13 7\r\n      M8 1 L3 7\r\n      ', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'butt', strokeLinejoin: 'miter' }))); };
 var ArrowDown = function () { return (react_1["default"].createElement("svg", { width: '16', height: '14', viewBox: '0 0 16 14', fill: 'none', "aria-hidden": 'true' },
     react_1["default"].createElement("path", { d: '\r\n      M8 13 V1 \r\n      M8 12 L13 7 \r\n      M8 12 L3 7', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'butt', strokeLinejoin: 'miter' }))); };
 exports.ProductCard = function (_a) {
-    var image = _a.image, changePercent = _a.changePercent, brand = _a.brand, price = _a.price, chartData = _a.chartData, chartId = _a.chartId, slug = _a.slug, index = _a.index, title = _a.title, className = _a.className, cardStyle = _a.cardStyle, height = _a.height, _b = _a.dense, dense = _b === void 0 ? false : _b, _c = _a.priority, priority = _c === void 0 ? false : _c;
+    var image = _a.image, changePercent = _a.changePercent, brand = _a.brand, price = _a.price, chartData = _a.chartData, chartId = _a.chartId, slug = _a.slug, index = _a.index, title = _a.title, id = _a.id, originalId = _a.originalId, className = _a.className, cardStyle = _a.cardStyle, height = _a.height, _b = _a.dense, dense = _b === void 0 ? false : _b, _c = _a.priority, priority = _c === void 0 ? false : _c;
     var variant = 'orange';
     var percentClass = ProductCard_module_css_1["default"].percentNeutral;
     var ArrowIcon = null;
@@ -49,7 +50,9 @@ exports.ProductCard = function (_a) {
         percentClass = ProductCard_module_css_1["default"].percentNegative;
         ArrowIcon = ArrowDown;
     }
-    var _d = react_1.useState(false), isFavorite = _d[0], setIsFavorite = _d[1];
+    var _d = WishlistContext_1.useWishlistContext(), addToWishlist = _d.addToWishlist, removeFromWishlist = _d.removeFromWishlist, isInWishlist = _d.isInWishlist;
+    var watchId = originalId || id.toString();
+    var isFavorite = isInWishlist(watchId);
     var _e = react_1.useState(70), chartHeight = _e[0], setChartHeight = _e[1];
     react_1.useEffect(function () {
         var updateHeight = function () {
@@ -115,7 +118,12 @@ exports.ProductCard = function (_a) {
                 react_1["default"].createElement("button", { onClick: function (e) {
                         e.preventDefault();
                         e.stopPropagation();
-                        setIsFavorite(function (prev) { return !prev; });
+                        if (isFavorite) {
+                            removeFromWishlist(watchId);
+                        }
+                        else {
+                            addToWishlist(watchId);
+                        }
                     }, className: ProductCard_module_css_1["default"].productCardScore + " absolute top-0 left-0 z-10 flex items-center justify-center w-8 h-8", "aria-label": isFavorite
                         ? i18n_1.t(accessibility_1.a11yKeys.favorites.remove)
                         : i18n_1.t(accessibility_1.a11yKeys.favorites.add), "aria-pressed": isFavorite },

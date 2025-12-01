@@ -34,6 +34,8 @@ interface PriceChartProps {
   onPeriodChange: (period: '3M' | '1P') => void;
   priceHistory?: ApiPriceHistory[];
   currency?: string;
+  currentPrice?: number;
+  apiWatchCurrency?: string;
 }
 
 function createGradient(ctx: CanvasRenderingContext2D, area: ChartArea) {
@@ -47,7 +49,10 @@ function createGradient(ctx: CanvasRenderingContext2D, area: ChartArea) {
 
 function processPriceHistory(
   priceHistory: ApiPriceHistory[] | undefined,
-  period: '3M' | '1P'
+  period: '3M' | '1P',
+  currentPrice?: number,
+  requestedCurrency?: string,
+  apiWatchCurrency?: string
 ): { labels: string[]; prices: number[] } {
   if (!priceHistory || priceHistory.length === 0) {
     return {
@@ -60,6 +65,22 @@ function processPriceHistory(
     (a, b) =>
       new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime()
   );
+
+  const lastHistoryItem = sorted[sorted.length - 1];
+  const targetCurrency = requestedCurrency || apiWatchCurrency || 'EUR';
+
+  let conversionRate = 1;
+
+  if (
+    lastHistoryItem &&
+    lastHistoryItem.currency &&
+    lastHistoryItem.currency !== targetCurrency &&
+    currentPrice &&
+    currentPrice > 0 &&
+    lastHistoryItem.price > 0
+  ) {
+    conversionRate = currentPrice / lastHistoryItem.price;
+  }
 
   const now = new Date();
   let startDate: Date;
@@ -95,7 +116,12 @@ function processPriceHistory(
       // Формат: "1сер." (деньсер.)
       labels.push(`${day}сер.`);
     }
-    prices.push(item.price);
+
+    let price = item.price;
+    if (item.currency !== targetCurrency) {
+      price = item.price * conversionRate;
+    }
+    prices.push(price);
   });
 
   return { labels, prices };
@@ -106,11 +132,19 @@ const PriceChart: React.FC<PriceChartProps> = ({
   onPeriodChange,
   priceHistory,
   currency,
+  currentPrice,
+  apiWatchCurrency,
 }) => {
   const chartRef = useRef<ChartJS<'line'>>(null);
 
   const chartData = useMemo(() => {
-    const processed = processPriceHistory(priceHistory, period);
+    const processed = processPriceHistory(
+      priceHistory,
+      period,
+      currentPrice,
+      currency,
+      apiWatchCurrency
+    );
 
     if (processed.labels.length === 0 || processed.prices.length === 0) {
       return {
@@ -151,7 +185,7 @@ const PriceChart: React.FC<PriceChartProps> = ({
         },
       ],
     };
-  }, [priceHistory, period]);
+  }, [priceHistory, period, currentPrice, currency, apiWatchCurrency]);
 
   const hoverLinePlugin = {
     id: 'hoverLine',

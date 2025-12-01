@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.trackDealerVisit = exports.getLiquidWatch = exports.getStableWatch = exports.getTrendingWatch90d = exports.getTrendingWatch30d = exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getSimilarWatches = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
+exports.getCheapestWatches = exports.createPriceAlert = exports.getWatchModels = exports.trackDealerVisit = exports.getLiquidWatch = exports.getStableWatch = exports.getTrendingWatch90d = exports.getTrendingWatch30d = exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getSimilarWatches = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
 var transformers_1 = require("@/lib/transformers");
 function handleResponse(response) {
     return __awaiter(this, void 0, Promise, function () {
@@ -317,7 +317,8 @@ function convertFiltersToApiParams(filters) {
     var priceToNum = Number(priceTo);
     var defaultPriceFromNum = Number(defaultPriceFrom);
     var defaultPriceToNum = Number(defaultPriceTo);
-    if (priceFromNum !== defaultPriceFromNum || priceToNum !== defaultPriceToNum) {
+    if (priceFromNum !== defaultPriceFromNum ||
+        priceToNum !== defaultPriceToNum) {
         params.priceRange = priceFrom + "-" + priceTo;
     }
     if ((_f = filters.selectedDocuments) === null || _f === void 0 ? void 0 : _f.length) {
@@ -332,8 +333,7 @@ function convertFiltersToApiParams(filters) {
         }
     }
     if ((_g = filters.selectedIndexes) === null || _g === void 0 ? void 0 : _g.length) {
-        var validSegments = filters.selectedIndexes
-            .filter(function (index) {
+        var validSegments = filters.selectedIndexes.filter(function (index) {
             return index === 'A' || index === 'B' || index === 'C';
         });
         if (validSegments.length > 0) {
@@ -847,3 +847,87 @@ function trackDealerVisit(dealerId) {
     });
 }
 exports.trackDealerVisit = trackDealerVisit;
+function getWatchModels() {
+    return __awaiter(this, void 0, Promise, function () {
+        var url, response, error_19;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    url = "/api/watches/models";
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, fetch(url)];
+                case 2:
+                    response = _a.sent();
+                    return [2 /*return*/, handleResponse(response)];
+                case 3:
+                    error_19 = _a.sent();
+                    console.error(' [API] Failed to fetch watch models:', error_19);
+                    throw error_19;
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getWatchModels = getWatchModels;
+function createPriceAlert(data) {
+    return __awaiter(this, void 0, Promise, function () {
+        var url, response, error_20;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    url = "/api/alerts";
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })];
+                case 2:
+                    response = _a.sent();
+                    return [2 /*return*/, handleResponse(response)];
+                case 3:
+                    error_20 = _a.sent();
+                    console.error(' [API] Failed to create price alert:', error_20);
+                    throw error_20;
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.createPriceAlert = createPriceAlert;
+function getCheapestWatches(currency, limit) {
+    if (limit === void 0) { limit = 3; }
+    return __awaiter(this, void 0, Promise, function () {
+        var searchParams, url, response, error_21;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    searchParams = new URLSearchParams();
+                    if (currency) {
+                        searchParams.set('currency', currency);
+                    }
+                    searchParams.set('limit', limit.toString());
+                    url = "/api/watches/cheapest?" + searchParams.toString();
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, fetch(url)];
+                case 2:
+                    response = _a.sent();
+                    return [2 /*return*/, handleResponse(response)];
+                case 3:
+                    error_21 = _a.sent();
+                    console.error(' [API] Failed to fetch cheapest watches:', error_21);
+                    throw error_21;
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getCheapestWatches = getCheapestWatches;

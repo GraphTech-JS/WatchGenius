@@ -1,3 +1,5 @@
+export type ApiCurrency = 'USD' | 'EUR' | 'PLN' | 'UAH' | 'KZT';
+
 export interface ApiBrand {
   id: number;
   name: string;
@@ -173,4 +175,29 @@ export interface ApiWatchAnalytics {
 export interface ApiWatchAnalyticsResponse {
   success: boolean;
   analytics: ApiWatchAnalytics;
+}
+
+export interface ApiBrandModel{
+  brand: string;
+  model:string;
+}
+
+export interface CreatePriceAlertRequest {
+brand: string;
+model: string;
+targetPrice: number;
+currency: ApiCurrency;
+email: string;
+}
+
+export interface ApiPriceAlertResponse {
+    id: string;
+  brand: string;
+  model: string;
+  targetPrice: number;
+  currency: ApiCurrency;
+  email: string;
+  isActive: boolean;
+  triggered: boolean;
+  createdAt: string;
 }

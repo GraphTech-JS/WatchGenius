@@ -9,16 +9,111 @@ import { t } from '@/i18n';
 import { bestPriceKeys } from '@/i18n/keys/home';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { SuccessModal } from '@/components/SuccessModal/SuccessModal';
+import {
+  getWatchModels,
+  createPriceAlert,
+  getCheapestWatches,
+} from '@/lib/api';
+import { ClockLoader } from 'react-spinners';
+import {
+  ApiBrandModel,
+  ApiCurrency,
+  ApiWatchFullResponse,
+} from '@/interfaces/api';
+import { IWatch } from '@/interfaces';
+import { generateSlug } from '@/lib/transformers';
 
 export const BestPrice = () => {
-  const brands = [
-    'Rolex Submariner',
-    'Omega Speedmaster',
-    'Patek Philippe',
-    'Seiko 5',
-    'Seiko 5',
-    'Seiko 5',
-  ];
+  const WATCH_MODELS_CACHE_KEY = 'watch-models-cache';
+  const CACHE_TTL = 5 * 60 * 1000;
+
+  function getCachedModels(): string[] | null {
+    if (typeof window === 'undefined') return null;
+
+    try {
+      const cached = localStorage.getItem(WATCH_MODELS_CACHE_KEY);
+
+      if (!cached) return null;
+
+      const { data, timestamp } = JSON.parse(cached);
+
+      const now = Date.now();
+
+      if (now - timestamp > CACHE_TTL) {
+        localStorage.removeItem(WATCH_MODELS_CACHE_KEY);
+        return null;
+      }
+
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
+  function setCachedModels(models: string[]): void {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const cacheData = {
+        data: models,
+        timestamp: Date.now(),
+      };
+
+      localStorage.setItem(WATCH_MODELS_CACHE_KEY, JSON.stringify(cacheData));
+    } catch {
+      // Silent fail
+    }
+  }
+
+  const CHEAPEST_CACHE_PREFIX = 'cheapest-watches-cache-';
+
+  function getCachedCheapestWatches(currency: string): IWatch[] | null {
+    if (typeof window === 'undefined') return null;
+
+    try {
+      const cacheKey = `${CHEAPEST_CACHE_PREFIX}${currency}`;
+      const cached = localStorage.getItem(cacheKey);
+
+      if (!cached) return null;
+
+      const { data, timestamp } = JSON.parse(cached);
+      const now = Date.now();
+
+      if (now - timestamp > CACHE_TTL) {
+        localStorage.removeItem(cacheKey);
+        return null;
+      }
+
+      return data;
+    } catch {
+      return null;
+    }
+  }
+
+  function setCachedCheapestWatches(currency: string, watches: IWatch[]): void {
+    if (typeof window === 'undefined') return;
+
+    try {
+      const cacheKey = `${CHEAPEST_CACHE_PREFIX}${currency}`;
+      const cacheData = {
+        data: watches,
+        timestamp: Date.now(),
+      };
+
+      localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+    } catch {
+      // Silent fail
+    }
+  }
+
+  function getCurrencyFromStorage(): string {
+    if (typeof window === 'undefined') return 'EUR';
+    const savedCurrency = localStorage.getItem('selectedCurrency');
+    const validCurrencies = ['EUR', 'USD', 'PLN', 'UAH', 'KZT'];
+    return savedCurrency && validCurrencies.includes(savedCurrency)
+      ? savedCurrency
+      : 'EUR';
+  }
 
   const currencies = ['USD', 'EUR', 'UAH', 'PLN', 'KZT'];
 
@@ -30,6 +125,11 @@ export const BestPrice = () => {
   const [selectedModel, setSelectedModel] = useState('');
   const [consent, setConsent] = useState(false);
   const currencyRef = useRef<HTMLDivElement>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [models, setModels] = useState<string[]>([]);
+  const [cheapestWatches, setCheapestWatches] = useState<IWatch[]>([]);
+  const [loadingCheapest, setLoadingCheapest] = useState(false);
 
   const {
     errors,
@@ -56,6 +156,67 @@ export const BestPrice = () => {
   const handleEmailBlur = () => {
     validateEmail(email);
   };
+
+  useEffect(() => {
+    async function loadModels() {
+      const cached = getCachedModels();
+
+      if (cached) {
+        setModels(cached);
+        return;
+      }
+
+      try {
+        const data: ApiBrandModel[] = await getWatchModels();
+
+        const transformed = data.map((item) => `${item.brand} ${item.model}`);
+
+        setCachedModels(transformed);
+        setModels(transformed);
+      } catch (error) {
+        console.error('❌ [BestPrice] Failed to load models:', error);
+        setModels([]);
+      }
+    }
+    loadModels();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    async function loadCheapestWatches() {
+      const currency = getCurrencyFromStorage();
+
+      const cached = getCachedCheapestWatches(currency);
+
+      if (cached) {
+        setCheapestWatches(cached);
+        return;
+      }
+
+      setLoadingCheapest(true);
+
+      try {
+        const data: ApiWatchFullResponse[] = await getCheapestWatches(
+          currency,
+          3
+        );
+
+        const transformed = data.map((item, index) =>
+          transformCheapestWatchToIWatch(item, index)
+        );
+
+        setCachedCheapestWatches(currency, transformed);
+        setCheapestWatches(transformed);
+      } catch (error) {
+        console.error('❌ [BestPrice] Failed to load cheapest watches:', error);
+        setCheapestWatches([]);
+      } finally {
+        setLoadingCheapest(false);
+      }
+    }
+    loadCheapestWatches();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const formatNumber = (value: string): string => {
     const numbers = value.replace(/\D/g, '');
@@ -96,7 +257,7 @@ export const BestPrice = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const isConsentValid = validateConsent(consent);
@@ -110,22 +271,89 @@ export const BestPrice = () => {
       return;
     }
 
-    console.log({
-      model: selectedModel,
-      email,
-      price,
-      currency: selectedCurrency,
-    });
+    const parts = selectedModel.split(' ');
+    if (parts.length < 2) {
+      return;
+    }
 
-    setShowSuccessModal(true);
+    const brand = parts[0];
 
-    setEmail('');
-    setPrice('');
-    setSelectedModel('');
-    setSelectedCurrency('USD');
-    setConsent(false);
-    clearErrors();
+    const model = parts.slice(1).join(' ');
+
+    const priceWithoutSpaces = price.replace(/\s/g, '');
+    const targetPrice = Number(priceWithoutSpaces);
+
+    if (isNaN(targetPrice) || targetPrice <= 0) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const alertData = {
+        brand,
+        model,
+        targetPrice,
+        currency: selectedCurrency as ApiCurrency,
+        email,
+      };
+
+      await createPriceAlert(alertData);
+
+      setShowSuccessModal(true);
+
+      setEmail('');
+      setPrice('');
+      setSelectedModel('');
+      setSelectedCurrency('USD');
+      setConsent(false);
+      clearErrors();
+    } catch (error) {
+      console.error('❌ [BestPrice] Failed to create alert:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  function getCurrencySymbol(currencyCode: string): string {
+    const upperCurrency = currencyCode.toUpperCase();
+    if (upperCurrency === 'EUR') return '€';
+    if (upperCurrency === 'USD') return '$';
+    if (upperCurrency === 'UAH') return '₴';
+    if (upperCurrency === 'PLN') return 'zł';
+    if (upperCurrency === 'KZT') return '₸';
+    return '€';
+  }
+
+  function transformCheapestWatchToIWatch(
+    apiWatch: ApiWatchFullResponse,
+    index: number
+  ): IWatch & { currency?: string } {
+    const lastPriceHistory =
+      apiWatch.priceHistory?.[apiWatch.priceHistory.length - 1];
+    const price = lastPriceHistory?.price || apiWatch.price || 0;
+    const currencyCode =
+      lastPriceHistory?.currency || apiWatch.currency || 'EUR';
+    const currencySymbol = getCurrencySymbol(currencyCode);
+
+    const image = apiWatch.imageUrls?.[0] || '';
+
+    const brand = `${apiWatch.brand.name} ${apiWatch.model}`.trim();
+
+    const slug = generateSlug(apiWatch.name);
+
+    const id = parseInt(apiWatch.id.replace(/\D/g, '')) || index + 1;
+    return {
+      id,
+      slug,
+      image,
+      brand,
+      price: Math.round(price),
+      rating: 10,
+      changePercent: 0,
+      currency: currencySymbol,
+    } as IWatch & { currency?: string };
+  }
 
   return (
     <section
@@ -165,7 +393,7 @@ export const BestPrice = () => {
                 </div>
                 <div className='flex flex-col gap-1.5 w-full'>
                   <CustomSelect
-                    options={brands}
+                    options={models}
                     placeholder='Rolex Submariner Oyster Perpetual'
                     onChange={handleModelChange}
                   />
@@ -266,9 +494,18 @@ export const BestPrice = () => {
               <div className='flex flex-col gap-4 w-full'>
                 <button
                   type='submit'
-                  className={`${styles.FormBtn} flex items-center justify-center py-3.5 rounded-xl cursor-pointer `}
+                  className={`${
+                    styles.FormBtn
+                  } flex items-center justify-center py-3.5 rounded-xl cursor-pointer ${
+                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                  disabled={isSubmitting}
                 >
-                  <div>{t(bestPriceKeys.form.button)}</div>
+                  <div>
+                    {isSubmitting
+                      ? 'Відправка...'
+                      : t(bestPriceKeys.form.button)}
+                  </div>
                 </button>
                 <div className='flex flex-col gap-2'>
                   <label className='flex gap-2 items-start cursor-pointer'>
@@ -308,7 +545,21 @@ export const BestPrice = () => {
             className={`${styles.bestWatches} flex flex-col justify-center w-full md:min-w-[54%]`}
           >
             <div className={`${styles.bestWatchesContainer}`}>
-              <ProductBest items={mockBest} />
+              {loadingCheapest ? (
+                <div className='flex justify-center items-center py-8'>
+                  <ClockLoader
+                    size={60}
+                    color={'#04694f'}
+                    speedMultiplier={0.9}
+                  />
+                </div>
+              ) : (
+                <ProductBest
+                  items={
+                    cheapestWatches.length > 0 ? cheapestWatches : mockBest
+                  }
+                />
+              )}
             </div>
             <LocalizedLink
               href='./'
