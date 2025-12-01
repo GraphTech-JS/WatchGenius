@@ -96,7 +96,9 @@ export interface ProductAnalyticsProps {
   brand: string;
   isCompare?: boolean;
   priceHistory?: ApiPriceHistory[];
-
+  currentPrice?: number;
+  currency?: string;
+  apiWatchCurrency?: string;
 }
 
 export interface SimilarModelsProps {

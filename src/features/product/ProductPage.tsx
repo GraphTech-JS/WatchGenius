@@ -20,13 +20,19 @@ import type { ApiPriceHistory } from '@/interfaces/api';
 interface ProductPageProps {
   product: Product;
   loadingSimilar?: boolean;
-  priceHistory?: ApiPriceHistory[],
+  priceHistory?: ApiPriceHistory[];
+  currentPrice?: number;
+  currency?: string;
+  apiWatchCurrency?: string;
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({
   product,
   loadingSimilar = false,
   priceHistory,
+  currentPrice,
+  currency,
+  apiWatchCurrency,
 }) => {
   const [activeTab, setActiveTab] = useState<
     'parameters' | 'brand' | 'price' | 'trend'
@@ -148,7 +154,9 @@ const ProductPage: React.FC<ProductPageProps> = ({
               details={product.details}
               brand={product.brand}
               priceHistory={priceHistory}
-             
+              currentPrice={currentPrice}
+              currency={currency}
+              apiWatchCurrency={apiWatchCurrency}
             />
           </div>
         </div>

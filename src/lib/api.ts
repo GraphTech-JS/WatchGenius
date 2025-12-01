@@ -10,6 +10,9 @@ import {
   SearchSuggestion,
   ApiWatchAnalyticsResponse,
   ApiPopularByBrandResponse,
+  ApiBrandModel,
+  ApiPriceAlertResponse,
+  CreatePriceAlertRequest,
 } from '@/interfaces/api';
 import { generateSlug } from '@/lib/transformers';
 
@@ -233,8 +236,11 @@ export function convertFiltersToApiParams(
   const priceToNum = Number(priceTo);
   const defaultPriceFromNum = Number(defaultPriceFrom);
   const defaultPriceToNum = Number(defaultPriceTo);
-  
-  if (priceFromNum !== defaultPriceFromNum || priceToNum !== defaultPriceToNum) {
+
+  if (
+    priceFromNum !== defaultPriceFromNum ||
+    priceToNum !== defaultPriceToNum
+  ) {
     params.priceRange = `${priceFrom}-${priceTo}`;
   }
 
@@ -251,10 +257,10 @@ export function convertFiltersToApiParams(
   }
 
   if (filters.selectedIndexes?.length) {
-    const validSegments = filters.selectedIndexes
-      .filter((index): index is 'A' | 'B' | 'C' => 
+    const validSegments = filters.selectedIndexes.filter(
+      (index): index is 'A' | 'B' | 'C' =>
         index === 'A' || index === 'B' || index === 'C'
-      );
+    );
     if (validSegments.length > 0) {
       params.segment = validSegments.join('/');
     }
@@ -420,14 +426,13 @@ export async function getWatchBySlug(
     }
 
     const fullWatch = await getWatchById(matchedWatch.id, currency);
-    
 
     if (fullWatch && matchedWatch.price) {
       fullWatch.price = matchedWatch.price;
       fullWatch.defaultPrice = matchedWatch.defaultPrice;
       fullWatch.currency = matchedWatch.currency;
     }
-    
+
     return fullWatch;
   } catch (error) {
     console.error('❌ [API] getWatchBySlug - Error:', error);
@@ -582,7 +587,6 @@ export async function getTrendingWatch90d(
   }
 }
 
-
 export async function getStableWatch(
   currency?: string
 ): Promise<ApiWatchFullResponse | null> {
@@ -639,7 +643,6 @@ export async function getLiquidWatch(
   }
 }
 
-
 export async function trackDealerVisit(
   dealerId: string
 ): Promise<{ success: boolean; visits: number }> {
@@ -660,6 +663,60 @@ export async function trackDealerVisit(
     return handleResponse<{ success: boolean; visits: number }>(response);
   } catch (error) {
     console.error('❌ [API] Failed to track dealer visit:', error);
-    throw error; 
+    throw error;
+  }
+}
+
+export async function getWatchModels(): Promise<ApiBrandModel[]> {
+  const url = `/api/watches/models`;
+  try {
+    const response = await fetch(url);
+    return handleResponse<ApiBrandModel[]>(response);
+  } catch (error) {
+    console.error(' [API] Failed to fetch watch models:', error);
+    throw error;
+  }
+}
+
+export async function createPriceAlert(
+  data: CreatePriceAlertRequest
+): Promise<ApiPriceAlertResponse> {
+  const url = `/api/alerts`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return handleResponse<ApiPriceAlertResponse>(response);
+  } catch (error) {
+    console.error(' [API] Failed to create price alert:', error);
+    throw error;
+  }
+}
+
+export async function getCheapestWatches(
+  currency?: string,
+  limit: number = 3
+): Promise<ApiWatchFullResponse[]> {
+  const searchParams = new URLSearchParams();
+
+  if (currency) {
+    searchParams.set('currency', currency);
+  }
+
+  searchParams.set('limit', limit.toString());
+
+  const url = `/api/watches/cheapest?${searchParams.toString()}`;
+
+  try {
+    const response = await fetch(url);
+    return handleResponse<ApiWatchFullResponse[]>(response);
+  } catch (error) {
+    console.error(' [API] Failed to fetch cheapest watches:', error);
+    throw error;
   }
 }

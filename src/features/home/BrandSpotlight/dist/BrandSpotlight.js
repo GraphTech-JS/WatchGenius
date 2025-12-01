@@ -101,6 +101,7 @@ function convertWatchItemToIWatch(watch, index) {
     var imageUrl = typeof watch.image === 'string' ? watch.image : ((_a = watch.image) === null || _a === void 0 ? void 0 : _a.src) || '';
     return {
         id: parseInt(watch.id.replace(/\D/g, '')) || index + 1,
+        originalId: watch.id,
         slug: watch.slug,
         title: watch.title,
         image: imageUrl,

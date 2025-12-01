@@ -81,6 +81,7 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
 
   return {
     id: parseInt(watch.id.replace(/\D/g, '')) || index + 1,
+    originalId: watch.id,
     slug: watch.slug,
     title: watch.title,
     image: imageUrl,
@@ -225,7 +226,6 @@ export const Trending = () => {
               </div>
               <div
                 className={`${styles.trendingSettingsItem} py-2 cursor-pointer`}
-                
                 onClick={() => {
                   setFilterType('popular');
                   toggleMenu();

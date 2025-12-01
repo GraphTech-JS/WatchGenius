@@ -5,7 +5,12 @@ import { notFound } from 'next/navigation';
 import ProductPage from '@/features/product/ProductPage';
 import { Product } from '@/interfaces/product';
 import { generateSellerOffers } from '@/data/sellerOffers';
-import { trackWatchView, getWatchBySlug, getSimilarWatches } from '@/lib/api';
+import {
+  trackWatchView,
+  getWatchBySlug,
+  getSimilarWatches,
+  getWatchById,
+} from '@/lib/api';
 import { transformApiWatchFull } from '@/lib/transformers';
 import type { WatchItem } from '@/interfaces/watch';
 import type { SimilarModel } from '@/interfaces/product';
@@ -95,6 +100,46 @@ function setCachedProduct(
     const cacheKey = getProductCacheKey(slug, currency);
     const cacheData = {
       data: watch,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
+}
+
+const SLUG_TO_ID_CACHE_PREFIX = 'slug-to-id-cache-';
+
+function getCachedWatchId(slug: string): string | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = `${SLUG_TO_ID_CACHE_PREFIX}${slug}`;
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedWatchId(slug: string, id: string): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = `${SLUG_TO_ID_CACHE_PREFIX}${slug}`;
+    const cacheData = {
+      data: id,
       timestamp: Date.now(),
     };
     localStorage.setItem(cacheKey, JSON.stringify(cacheData));
@@ -216,7 +261,9 @@ function calculatePriceReport(
   currentPrice: number,
   trendValue: number,
   watchId: string,
-  period: '3M' | '1P' = '3M'
+  period: '3M' | '1P' = '3M',
+  requestedCurrency?: string,
+  apiWatchCurrency?: string
 ): { reportPeak: number; reportMin: number; reportChangePct: number } {
   if (priceHistory && priceHistory.length > 0) {
     const sorted = [...priceHistory].sort(
@@ -224,7 +271,21 @@ function calculatePriceReport(
         new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime()
     );
 
-    // Фільтруємо дані за періодом (як в PriceChart)
+    const lastHistoryItem = sorted[sorted.length - 1];
+    const targetCurrency = requestedCurrency || apiWatchCurrency || 'EUR';
+
+    let conversionRate = 1;
+
+    if (
+      lastHistoryItem &&
+      lastHistoryItem.currency &&
+      lastHistoryItem.currency !== targetCurrency &&
+      currentPrice > 0 &&
+      lastHistoryItem.price > 0
+    ) {
+      conversionRate = currentPrice / lastHistoryItem.price;
+    }
+
     const now = new Date();
     let startDate: Date;
 
@@ -241,10 +302,16 @@ function calculatePriceReport(
       return itemDate >= startDate && itemDate <= now;
     });
 
-    // Використовуємо відфільтровані дані, або всі якщо фільтр порожній
     const dataToUse = filtered.length > 0 ? filtered : sorted;
 
-    const prices = dataToUse.map((h) => h.price).filter((p) => p > 0);
+    const prices = dataToUse
+      .map((h) => {
+        if (h.currency === targetCurrency) {
+          return h.price;
+        }
+        return h.price * conversionRate;
+      })
+      .filter((p) => p > 0);
 
     if (prices.length === 0) {
       return {
@@ -302,7 +369,39 @@ export default function ProductClient({
         const cachedWatch = getCachedProduct(resolvedParams.slug, currency);
         if (cachedWatch) {
           setWatch(cachedWatch);
+          const watchId = cachedWatch.id;
+          if (watchId) {
+            try {
+              const apiWatch = await getWatchById(watchId, currency);
+              if (apiWatch) {
+                setApiWatchData(apiWatch);
+              }
+            } catch {
+              // If failed to load by ID, continue without apiWatchData
+            }
+          }
           setLoading(false);
+          return;
+        }
+
+        const cachedId = getCachedWatchId(resolvedParams.slug);
+        if (cachedId) {
+          try {
+            const apiWatch = await getWatchById(cachedId, currency);
+            if (apiWatch) {
+              setApiWatchData(apiWatch);
+              const transformedWatch = transformApiWatchFull(
+                apiWatch,
+                currency
+              );
+              setWatch(transformedWatch);
+              setCachedProduct(resolvedParams.slug, currency, transformedWatch);
+              setLoading(false);
+              return;
+            }
+          } catch {
+            // Якщо ID не валідний, продовжуємо з getWatchBySlug
+          }
         }
 
         const apiWatch = await getWatchBySlug(resolvedParams.slug, currency);
@@ -311,6 +410,8 @@ export default function ProductClient({
           setError('Watch not found');
           return;
         }
+
+        setCachedWatchId(resolvedParams.slug, apiWatch.id);
         setApiWatchData(apiWatch);
 
         const transformedWatch = transformApiWatchFull(apiWatch, currency);
@@ -466,9 +567,10 @@ export default function ProductClient({
       watch.price,
       watch.trend.value,
       watch.id,
-      period
+      period,
+      currency,
+      apiWatchData?.currency
     );
-    // Зберігаємо в кеш після обчислення
     setCachedPriceReport(watch.id, currency, period, priceReport);
   }
   const product: Product = {
@@ -582,6 +684,9 @@ export default function ProductClient({
       product={product}
       loadingSimilar={loadingSimilar}
       priceHistory={apiWatchData?.priceHistory}
+      currentPrice={watch.price}
+      currency={currency}
+      apiWatchCurrency={apiWatchData?.currency}
     />
   );
 }

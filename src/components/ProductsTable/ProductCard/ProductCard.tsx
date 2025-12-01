@@ -9,6 +9,7 @@ import { Heart } from 'lucide-react';
 import { LocalizedLink } from '@/components/LocalizedLink';
 import { t } from '@/i18n';
 import { a11yKeys } from '@/i18n/keys/accessibility';
+import { useWishlistContext } from '@/context/WishlistContext';
 
 const ArrowUp = () => (
   <svg
@@ -71,6 +72,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   slug,
   index,
   title,
+  id,
+  originalId,
   className,
   cardStyle,
   height,
@@ -101,7 +104,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     ArrowIcon = ArrowDown;
   }
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { addToWishlist, removeFromWishlist, isInWishlist } =
+    useWishlistContext();
+
+  const watchId = originalId || id.toString();
+  const isFavorite = isInWishlist(watchId);
   const [chartHeight, setChartHeight] = useState(70);
   useEffect(() => {
     const updateHeight = () => {
@@ -188,7 +195,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              setIsFavorite((prev) => !prev);
+              if (isFavorite) {
+                removeFromWishlist(watchId);
+              } else {
+                addToWishlist(watchId);
+              }
             }}
             className={`${styles.productCardScore} absolute top-0 left-0 z-10 flex items-center justify-center w-8 h-8`}
             aria-label={

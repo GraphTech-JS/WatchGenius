@@ -28,6 +28,7 @@ interface IMainContext {
 
 interface IWatch {
   id: number;
+  originalId?: string;
   slug: string;
   title?: string;
   image: string;

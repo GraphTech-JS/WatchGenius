@@ -76,6 +76,7 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
 
   return {
     id: parseInt(watch.id.replace(/\D/g, '')) || index + 1,
+    originalId: watch.id,
     slug: watch.slug,
     title: watch.title,
     image: imageUrl,
@@ -215,7 +216,11 @@ export const BrandSpotlight = () => {
           <div className={`${styles.brandCards} mt-8 w-full`}>
             {loading ? (
               <div className='flex justify-center items-center py-12'>
-                <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+                <ClockLoader
+                  size={60}
+                  color={'#04694f'}
+                  speedMultiplier={0.9}
+                />
               </div>
             ) : error && brandData.watches.length === 0 ? (
               <div className='flex justify-center items-center py-12'>

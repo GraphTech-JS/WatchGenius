@@ -40,6 +40,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   brand,
   isCompare = false,
   priceHistory,
+  currentPrice,
+  currency,
+  apiWatchCurrency,
 }) => {
   const [activeChartPeriod, setActiveChartPeriod] = useState<'3M' | '1P'>('3M');
   const [isVolatilityHovered, setIsVolatilityHovered] = useState(false);
@@ -379,7 +382,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
               period={activeChartPeriod}
               onPeriodChange={setActiveChartPeriod}
               priceHistory={priceHistory}
-              currency='EUR'
+              currency={currency}
+              currentPrice={currentPrice}
+              apiWatchCurrency={apiWatchCurrency}
             />
 
             <div className={styles.priceMetrics}>
