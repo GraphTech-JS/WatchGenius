@@ -342,9 +342,8 @@ const PriceChart: React.FC<PriceChartProps> = ({
           label: (context: TooltipItem<'line'>) => {
             const currencySymbol =
               currency === 'USD' ? '$' : currency === 'UAH' ? '₴' : '€';
-            return `${currencySymbol} ${
-              context.parsed.y?.toLocaleString('de-DE') ?? 0
-            }`;
+            const roundedValue = Math.round(context.parsed.y ?? 0);
+            return `${currencySymbol} ${roundedValue.toLocaleString('uk-UA')}`;
           },
         },
       },
