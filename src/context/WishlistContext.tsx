@@ -179,6 +179,7 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
       } else if (typeof watch === 'string') {
         const id = watch;
         if (wishlistIds.includes(id)) return;
+        setLoading(true);
         getWatchById(id, 'EUR')
           .then((apiWatch) => {
             const transformed = transformApiWatchFull(apiWatch, 'EUR');

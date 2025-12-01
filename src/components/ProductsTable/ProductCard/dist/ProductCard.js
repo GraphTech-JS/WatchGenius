@@ -28,7 +28,7 @@ var ArrowUp = function () { return (react_1["default"].createElement("svg", { wi
 var ArrowDown = function () { return (react_1["default"].createElement("svg", { width: '16', height: '14', viewBox: '0 0 16 14', fill: 'none', "aria-hidden": 'true' },
     react_1["default"].createElement("path", { d: '\r\n      M8 13 V1 \r\n      M8 12 L13 7 \r\n      M8 12 L3 7', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'butt', strokeLinejoin: 'miter' }))); };
 exports.ProductCard = function (_a) {
-    var image = _a.image, changePercent = _a.changePercent, brand = _a.brand, price = _a.price, chartData = _a.chartData, chartId = _a.chartId, slug = _a.slug, index = _a.index, title = _a.title, id = _a.id, originalId = _a.originalId, className = _a.className, cardStyle = _a.cardStyle, height = _a.height, _b = _a.dense, dense = _b === void 0 ? false : _b, _c = _a.priority, priority = _c === void 0 ? false : _c;
+    var image = _a.image, changePercent = _a.changePercent, brand = _a.brand, price = _a.price, chartData = _a.chartData, chartId = _a.chartId, slug = _a.slug, index = _a.index, title = _a.title, id = _a.id, originalId = _a.originalId, watchItem = _a.watchItem, className = _a.className, cardStyle = _a.cardStyle, height = _a.height, _b = _a.dense, dense = _b === void 0 ? false : _b, _c = _a.priority, priority = _c === void 0 ? false : _c;
     var variant = 'orange';
     var percentClass = ProductCard_module_css_1["default"].percentNeutral;
     var ArrowIcon = null;
@@ -122,7 +122,12 @@ exports.ProductCard = function (_a) {
                             removeFromWishlist(watchId);
                         }
                         else {
-                            addToWishlist(watchId);
+                            if (watchItem) {
+                                addToWishlist(watchItem);
+                            }
+                            else {
+                                addToWishlist(watchId);
+                            }
                         }
                     }, className: ProductCard_module_css_1["default"].productCardScore + " absolute top-0 left-0 z-10 flex items-center justify-center w-8 h-8", "aria-label": isFavorite
                         ? i18n_1.t(accessibility_1.a11yKeys.favorites.remove)

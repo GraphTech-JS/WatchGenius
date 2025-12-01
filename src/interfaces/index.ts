@@ -29,6 +29,7 @@ interface IMainContext {
 interface IWatch {
   id: number;
   originalId?: string;
+  watchItem?: import('./watch').WatchItem;
   slug: string;
   title?: string;
   image: string;
