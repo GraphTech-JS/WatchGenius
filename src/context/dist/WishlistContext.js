@@ -123,6 +123,7 @@ exports.WishlistProvider = function (_a) {
             var id = watch;
             if (wishlistIds.includes(id))
                 return;
+            setLoading(true);
             api_1.getWatchById(id, 'EUR')
                 .then(function (apiWatch) {
                 var transformed = transformers_1.transformApiWatchFull(apiWatch, 'EUR');

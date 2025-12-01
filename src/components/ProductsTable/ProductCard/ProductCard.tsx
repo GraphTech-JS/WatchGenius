@@ -74,6 +74,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   title,
   id,
   originalId,
+  watchItem,
   className,
   cardStyle,
   height,
@@ -198,7 +199,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               if (isFavorite) {
                 removeFromWishlist(watchId);
               } else {
-                addToWishlist(watchId);
+                if (watchItem) {
+                  addToWishlist(watchItem);
+                } else {
+                  addToWishlist(watchId);
+                }
               }
             }}
             className={`${styles.productCardScore} absolute top-0 left-0 z-10 flex items-center justify-center w-8 h-8`}

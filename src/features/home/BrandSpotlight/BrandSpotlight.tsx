@@ -77,6 +77,7 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
   return {
     id: parseInt(watch.id.replace(/\D/g, '')) || index + 1,
     originalId: watch.id,
+    watchItem: watch,
     slug: watch.slug,
     title: watch.title,
     image: imageUrl,
