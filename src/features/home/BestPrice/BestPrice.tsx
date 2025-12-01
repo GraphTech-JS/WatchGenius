@@ -352,6 +352,7 @@ export const BestPrice = () => {
       rating: 10,
       changePercent: 0,
       currency: currencySymbol,
+      description: apiWatch.description,
     } as IWatch & { currency?: string };
   }
 

@@ -12,6 +12,7 @@ export const BestProductCard: React.FC<IWatch & { currency?: string }> = ({
   price,
   slug,
   currency = '€',
+  description,
 }) => {
   return (
     <LocalizedLink
@@ -36,6 +37,13 @@ export const BestProductCard: React.FC<IWatch & { currency?: string }> = ({
           className={`${styles.cardBody} flex flex-col gap-2.5 justify-start flex-1`}
         >
           <div className={`${styles.cardBodyName}`}>{brand}</div>
+          {description && (
+            <div
+              className={`${styles.cardBodyDescription} text-sm text-gray-600 line-clamp-2`}
+            >
+              {description}
+            </div>
+          )}
           <div className={`${styles.cardBodyPrice} md:mb-2.5`}>
             {price} {currency}
           </div>
