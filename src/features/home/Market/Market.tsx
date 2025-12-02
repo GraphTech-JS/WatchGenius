@@ -10,6 +10,8 @@ import { ClockLoader } from 'react-spinners';
 import { transformApiWatchFull } from '@/lib/transformers';
 import type { WatchItem } from '@/interfaces/watch';
 import { IWatch } from '@/interfaces';
+import { t } from '@/i18n';
+import { marketKeys } from '@/i18n/keys/home';
 
 function getCurrencyFromStorage(): string {
   if (typeof window === 'undefined') return 'EUR';
@@ -188,8 +190,8 @@ export const Market = () => {
           setStable90d(transformed);
           setCachedStable(currency, transformed);
         }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load data');
+      } catch {
+        setError(t(marketKeys.error));
       } finally {
         setLoading(false);
       }
@@ -417,7 +419,7 @@ export const Market = () => {
           </div>
         ) : error ? (
           <div className='flex justify-center items-center py-12'>
-            <div className='text-red-500'>Error: {error}</div>
+            <div className='text-red-500 text-center px-4'>{error}</div>
           </div>
         ) : (
           <>

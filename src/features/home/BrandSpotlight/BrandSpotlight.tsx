@@ -146,8 +146,8 @@ export const BrandSpotlight = () => {
 
         setBrandData(brandData);
         setCachedBrandSpotlight(currency, brandData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load watches');
+      } catch {
+        setError(t(brandSpotlightKeys.error));
         setBrandData({ brand: 'Rolex', watches: mockTrending });
       } finally {
         setLoading(false);
@@ -234,7 +234,7 @@ export const BrandSpotlight = () => {
               </div>
             ) : error && brandData.watches.length === 0 ? (
               <div className='flex justify-center items-center py-12'>
-                <div className='text-red-500'>Error: {error}</div>
+                <div className='text-red-500 text-center px-4'>{error}</div>
               </div>
             ) : (
               <BrandCards items={brandData.watches} />

@@ -14,6 +14,7 @@ import { transformApiWatchFull } from '@/lib/transformers';
 import { t } from '@/i18n';
 import { productKeys } from '@/i18n/keys/product';
 import { catalogKeys } from '@/i18n/keys/catalog';
+import { compareKeys } from '@/i18n/keys/compare';
 import { ClockLoader } from 'react-spinners';
 
 function translateDetailValue(
@@ -249,8 +250,8 @@ const ComparePageWrapper = () => {
         );
         setWatches(transformed);
         setCachedWatches(selectedWatches, currency, transformed);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load watches');
+      } catch {
+        setError(t(compareKeys.error));
       } finally {
         setLoading(false);
       }
@@ -297,7 +298,7 @@ const ComparePageWrapper = () => {
   if (error) {
     return (
       <div className='flex justify-center items-center min-h-screen'>
-        <div className='text-red-500'>Error: {error}</div>
+        <div className='text-red-500 text-center px-4'>{error}</div>
       </div>
     );
   }

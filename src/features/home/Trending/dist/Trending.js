@@ -140,11 +140,11 @@ exports.Trending = function () {
     var _e = react_1.useState('popular'), filterType = _e[0], setFilterType = _e[1];
     react_1.useEffect(function () {
         var loadPopularWatches = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var currency_1, cachedWatches, data, transformed, iWatchItems, err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var currency_1, cachedWatches, data, transformed, iWatchItems, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _a.trys.push([0, 2, 3, 4]);
+                        _b.trys.push([0, 2, 3, 4]);
                         setLoading(true);
                         setError(null);
                         currency_1 = getCurrencyFromStorage();
@@ -154,7 +154,7 @@ exports.Trending = function () {
                         }
                         return [4 /*yield*/, api_1.getPopularWatches(filterType, currency_1)];
                     case 1:
-                        data = _a.sent();
+                        data = _b.sent();
                         if (!data || data.length === 0) {
                             setError('No watches found');
                             setWatches(watch_1.mockTrending);
@@ -179,8 +179,8 @@ exports.Trending = function () {
                         setCachedTrending(currency_1, filterType, iWatchItems);
                         return [3 /*break*/, 4];
                     case 2:
-                        err_1 = _a.sent();
-                        setError(err_1 instanceof Error ? err_1.message : 'Failed to load watches');
+                        _a = _b.sent();
+                        setError(i18n_1.t(home_1.trendingKeys.error));
                         setWatches(watch_1.mockTrending);
                         return [3 /*break*/, 4];
                     case 3:
@@ -238,7 +238,5 @@ exports.Trending = function () {
                             react_1["default"].createElement("span", null, i18n_1.t(home_1.trendingKeys.sort.rating)))))),
             loading ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
                 react_1["default"].createElement(react_spinners_1.ClockLoader, { size: 60, color: '#04694f', speedMultiplier: 0.9 }))) : error && watches.length === 0 ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
-                react_1["default"].createElement("div", { className: 'text-red-500' },
-                    "Error: ",
-                    error))) : (react_1["default"].createElement(ProductCarousel_1.ProductCarousel, { items: watches, ctaLabel: i18n_1.t(home_1.trendingKeys.carousel.cta) })))));
+                react_1["default"].createElement("div", { className: 'text-red-500 text-center px-4' }, error))) : (react_1["default"].createElement(ProductCarousel_1.ProductCarousel, { items: watches, ctaLabel: i18n_1.t(home_1.trendingKeys.carousel.cta) })))));
 };
