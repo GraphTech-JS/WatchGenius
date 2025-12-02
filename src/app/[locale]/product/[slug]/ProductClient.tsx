@@ -324,7 +324,6 @@ function calculatePriceReport(
     const reportPeak = Math.max(...prices);
     const reportMin = Math.min(...prices);
 
-    
     const firstPrice = prices[0];
     const lastPrice = prices[prices.length - 1];
     const reportChangePct =
@@ -653,7 +652,14 @@ export default function ProductClient({
     ],
     analytics: {
       demand: Math.min(100, Math.abs(watch.trend.value) * 10),
-      liquidity: 72,
+      liquidity: watch.liquidity
+        ? parseFloat(watch.liquidity) ||
+          (apiWatchData?.analytics?.liquidity
+            ? parseFloat(apiWatchData.analytics.liquidity)
+            : 0)
+        : apiWatchData?.analytics?.liquidity
+        ? parseFloat(apiWatchData.analytics.liquidity)
+        : 0,
       dynamics: watch.trend.value,
       ads: 'За 3 дні',
       trendGauge: Math.abs(watch.trend.value) * 10,
