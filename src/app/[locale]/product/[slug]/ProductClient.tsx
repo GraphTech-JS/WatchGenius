@@ -676,9 +676,15 @@ export default function ProductClient({
           : watch.index === 'B'
           ? 'Середня'
           : 'Низька',
-      popularity: watch.popularity
-        ? watch.popularity
-        : apiWatchData?.analytics?.popularity ?? 0,
+      popularity: Math.min(
+        10,
+        Math.max(
+          0,
+          watch.popularity
+            ? watch.popularity
+            : apiWatchData?.analytics?.popularity ?? 0
+        )
+      ),
       reportPeak: priceReport.reportPeak,
       reportMin: priceReport.reportMin,
       reportChangePct: priceReport.reportChangePct,
