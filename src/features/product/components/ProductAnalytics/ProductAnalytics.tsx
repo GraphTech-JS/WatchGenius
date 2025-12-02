@@ -498,7 +498,9 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                       {t(productKeys.analytics.price.popularity)}
                     </div>
                     <div className={styles.priceMetricValue}>
-                      {analytics.popularity.toFixed(1)}/10
+                      {analytics.popularity === 10
+                        ? '10/10'
+                        : `${analytics.popularity.toFixed(1)}/10`}
                     </div>
                   </div>
                 </div>

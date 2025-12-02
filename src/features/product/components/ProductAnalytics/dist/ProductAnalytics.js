@@ -190,9 +190,9 @@ var ProductAnalytics = function (_a) {
                             react_1["default"].createElement(image_1["default"], { src: product_icons_1.StarIcon, alt: i18n_1.t(product_1.productKeys.analytics.price.popularity), width: 30, height: 30 })),
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].priceMetricContent },
                             react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].priceMetricLabel }, i18n_1.t(product_1.productKeys.analytics.price.popularity)),
-                            react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].priceMetricValue },
-                                analytics.popularity.toFixed(1),
-                                "/10")))) : (react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].volatilityTooltip, onMouseEnter: function () { return setIsPopularityHovered(true); }, onMouseLeave: function () { return setIsPopularityHovered(false); } }, i18n_1.t(product_1.productKeys.analytics.price.tooltip.popularity)))),
+                            react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].priceMetricValue }, analytics.popularity === 10
+                                ? '10/10'
+                                : analytics.popularity.toFixed(1) + "/10")))) : (react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].volatilityTooltip, onMouseEnter: function () { return setIsPopularityHovered(true); }, onMouseLeave: function () { return setIsPopularityHovered(false); } }, i18n_1.t(product_1.productKeys.analytics.price.tooltip.popularity)))),
                 react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].monthlyReport },
                     react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].reportTitle }, i18n_1.t(product_1.productKeys.analytics.price.report.title)),
                     react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].reportItems },
