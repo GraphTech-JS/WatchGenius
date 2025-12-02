@@ -87,7 +87,7 @@ var ProductAnalytics = function (_a) {
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].trendContent + " flex flex-col" },
                             react_1["default"].createElement("span", { className: ProductAnalytics_module_css_1["default"].trendLabel }, i18n_1.t(product_1.productKeys.analytics.trend.demand)),
                             react_1["default"].createElement("span", { className: ProductAnalytics_module_css_1["default"].trendValue },
-                                Math.round(analytics.demand * 10) / 10,
+                                Math.min(100, Math.max(0, Math.round(analytics.demand * 10) / 10)),
                                 "%")))),
                     isLiquidityHovered ? (react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].trendTooltipLiquid, onMouseEnter: function () { return setIsLiquidityHovered(true); }, onMouseLeave: function () { return setIsLiquidityHovered(false); } }, i18n_1.t(product_1.productKeys.analytics.trend.tooltip.liquidity))) : (react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].trendCard, onMouseEnter: function () { return setIsLiquidityHovered(true); }, onMouseLeave: function () { return setIsLiquidityHovered(false); } },
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].trendIcon },
@@ -148,13 +148,24 @@ var ProductAnalytics = function (_a) {
                     }))))),
             activeTab === 'brand' &&
                 (function () {
-                    var _a;
-                    var content = (_a = brands_1.BRAND_CONTENT[brand]) !== null && _a !== void 0 ? _a : brands_1.BRAND_CONTENT["default"];
+                    var normalizedBrand = brand.trim();
+                    var content = brands_1.BRAND_CONTENT[normalizedBrand];
+                    if (!content) {
+                        var brandKeys = Object.keys(brands_1.BRAND_CONTENT);
+                        var foundKey = brandKeys.find(function (key) { return key.toLowerCase() === normalizedBrand.toLowerCase(); });
+                        if (foundKey) {
+                            content = brands_1.BRAND_CONTENT[foundKey];
+                        }
+                    }
+                    if (!content) {
+                        content = brands_1.BRAND_CONTENT["default"];
+                    }
+                    var displayTitle = content === brands_1.BRAND_CONTENT["default"] ? brand : content.title;
                     return (react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].brandContent },
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].brandBackground + " " + (isCompare ? ProductAnalytics_module_css_1["default"].brandBackgroundCompare : '') },
-                            react_1["default"].createElement(image_1["default"], { src: content.image, alt: content.title + " Brand Background", width: 592, height: 329, className: ProductAnalytics_module_css_1["default"].brandBackgroundImage })),
+                            react_1["default"].createElement(image_1["default"], { src: content.image, alt: displayTitle + " Brand Background", width: 592, height: 329, className: ProductAnalytics_module_css_1["default"].brandBackgroundImage })),
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].brandTextContent },
-                            react_1["default"].createElement("h3", { className: ProductAnalytics_module_css_1["default"].brandTitle }, content.title),
+                            react_1["default"].createElement("h3", { className: ProductAnalytics_module_css_1["default"].brandTitle }, displayTitle),
                             content.paragraphs.map(function (p, idx) { return (react_1["default"].createElement("p", { key: idx, className: ProductAnalytics_module_css_1["default"].brandText }, p)); }))));
                 })(),
             activeTab === 'price' && (react_1["default"].createElement("div", null,

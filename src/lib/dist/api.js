@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getCheapestWatches = exports.createPriceAlert = exports.getWatchModels = exports.trackDealerVisit = exports.getLiquidWatch = exports.getStableWatch = exports.getTrendingWatch90d = exports.getTrendingWatch30d = exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getSimilarWatches = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
+exports.getSegmentsTrend = exports.getCheapestWatches = exports.createPriceAlert = exports.getWatchModels = exports.trackDealerVisit = exports.getLiquidWatch = exports.getStableWatch = exports.getTrendingWatch90d = exports.getTrendingWatch30d = exports.getPopularWatchesByBrand = exports.getPopularWatches = exports.trackWatchView = exports.getSearchSuggestions = exports.getWatchBySlug = exports.getSimilarWatches = exports.getWatchById = exports.getWatchesByIds = exports.convertFiltersToApiParams = exports.searchDealers = exports.getDealerById = exports.getDealers = exports.getFilters = exports.getWatches = void 0;
 var transformers_1 = require("@/lib/transformers");
 function handleResponse(response) {
     return __awaiter(this, void 0, Promise, function () {
@@ -931,3 +931,27 @@ function getCheapestWatches(currency, limit) {
     });
 }
 exports.getCheapestWatches = getCheapestWatches;
+function getSegmentsTrend() {
+    return __awaiter(this, void 0, Promise, function () {
+        var url, response, error_22;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    url = "/api/watches/segments/trend";
+                    _a.label = 1;
+                case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, fetch(url)];
+                case 2:
+                    response = _a.sent();
+                    return [2 /*return*/, handleResponse(response)];
+                case 3:
+                    error_22 = _a.sent();
+                    console.error(' [API] Failed to fetch segments trend:', error_22);
+                    throw error_22;
+                case 4: return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.getSegmentsTrend = getSegmentsTrend;

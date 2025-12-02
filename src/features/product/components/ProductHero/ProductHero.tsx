@@ -22,6 +22,49 @@ import { useScreenWidth } from '@/hooks/useScreenWidth';
 import { useLocale } from '@/hooks/useLocale';
 import { productKeys } from '@/i18n/keys/product';
 
+const ArrowUp = () => (
+  <svg
+    width='16'
+    height='14'
+    viewBox='0 0 16 14'
+    fill='none'
+    aria-hidden='true'
+  >
+    <path
+      d='
+      M8 1 V14
+      M8 2 L13 7
+      M8 1 L3 7
+      '
+      stroke='currentColor'
+      strokeWidth='2'
+      strokeLinecap='butt'
+      strokeLinejoin='miter'
+    />
+  </svg>
+);
+
+const ArrowDown = () => (
+  <svg
+    width='16'
+    height='14'
+    viewBox='0 0 16 14'
+    fill='none'
+    aria-hidden='true'
+  >
+    <path
+      d='
+      M8 13 V1 
+      M8 12 L13 7 
+      M8 12 L3 7'
+      stroke='currentColor'
+      strokeWidth='2'
+      strokeLinecap='butt'
+      strokeLinejoin='miter'
+    />
+  </svg>
+);
+
 const mainButtonTextStyle = {
   background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
   backgroundClip: 'text',
@@ -306,19 +349,25 @@ const ProductHero: React.FC<ProductHeroProps> = ({
           </div>
           <div className='flex items-center space-x-1'>
             <span
-              className='font-inter text-[20px] font-semibold text-center text-[#05873b]'
+              className='font-inter text-[20px] font-semibold text-center flex items-center gap-1'
               style={{
                 fontWeight: 600,
                 fontSize: '20px',
                 textAlign: 'center',
-                color: '#05873b',
+                color: product.priceTrend.value >= 0 ? '#05873b' : '#B91B1BF4',
               }}
             >
-              ↑ {Math.abs(Math.round(product.priceTrend.value * 10) / 10)}%
+              {product.priceTrend.value >= 0 ? <ArrowUp /> : <ArrowDown />}
+              {product.priceTrend.value >= 0 ? '+' : ''}
+              {Math.abs(Math.round(product.priceTrend.value * 10) / 10)}%
             </span>
             <span
-              className='font-inter text-[15px] font-normal text-[#05873b]'
-              style={{ fontWeight: 400, fontSize: '15px', color: '#05873b' }}
+              className='font-inter text-[15px] font-normal'
+              style={{
+                fontWeight: 400,
+                fontSize: '15px',
+                color: '#05873b'
+              }}
             >
               {t(productKeys.hero.trendDays)}
             </span>

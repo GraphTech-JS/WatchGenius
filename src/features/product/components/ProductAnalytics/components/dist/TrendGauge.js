@@ -49,7 +49,7 @@ var TrendGauge = function (_a) {
     var _b, _c, _d;
     var value = _a.value, arcSrc = _a.arcSrc, pointerSrc = _a.pointerSrc, centerSrc = _a.centerSrc, lastUpdated = _a.lastUpdated, className = _a.className, width = _a.width, height = _a.height, config = _a.config;
     var v = Math.round(clamp(Number(value) || 0) * 10) / 10;
-    var angle = -100 + (v / 100) * 200;
+    var angle = -120 + (v / 100) * 180;
     var vbW = width;
     var vbH = height;
     var cx = vbW / 2;

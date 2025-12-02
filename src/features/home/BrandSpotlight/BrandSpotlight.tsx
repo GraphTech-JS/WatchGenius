@@ -85,7 +85,16 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
     price: watch.price,
     rating: Math.abs(watch.trend.value) % 11,
     changePercent: watch.trend.value,
-    chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
+    chartData:
+      watch.priceHistory && watch.priceHistory.length >= 2
+        ? [...watch.priceHistory]
+            .sort(
+              (a, b) =>
+                new Date(a.recordedAt).getTime() -
+                new Date(b.recordedAt).getTime()
+            )
+            .map((record) => record.price)
+        : [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: watch.trend.value > 0 ? '#22c55e' : '#EED09D',
     chartId: `brand-chart-${watch.id}`,
     index: watch.index,

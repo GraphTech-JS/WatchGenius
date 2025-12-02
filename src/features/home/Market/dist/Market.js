@@ -156,7 +156,13 @@ function convertWatchToMarketCard(watch, title, chartId) {
     var imageUrl = typeof watch.image === 'string' ? watch.image : ((_a = watch.image) === null || _a === void 0 ? void 0 : _a.src) || '';
     var changePercent = ((_b = watch.trend) === null || _b === void 0 ? void 0 : _b.value) ? Math.round(watch.trend.value * 10) / 10
         : 0;
-    var chartData = [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7];
+    var chartData = watch.priceHistory && watch.priceHistory.length >= 2
+        ? __spreadArrays(watch.priceHistory).sort(function (a, b) {
+            return new Date(a.recordedAt).getTime() -
+                new Date(b.recordedAt).getTime();
+        })
+            .map(function (record) { return record.price; })
+        : [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7];
     return {
         id: parseInt(watch.id.replace(/\D/g, '')) || 1,
         slug: watch.slug,

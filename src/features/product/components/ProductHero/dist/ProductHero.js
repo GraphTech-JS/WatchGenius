@@ -51,6 +51,10 @@ var FeedbackModal_1 = require("@/components/FeedbackModal/FeedbackModal");
 var useScreenWidth_1 = require("@/hooks/useScreenWidth");
 var useLocale_1 = require("@/hooks/useLocale");
 var product_1 = require("@/i18n/keys/product");
+var ArrowUp = function () { return (react_1["default"].createElement("svg", { width: '16', height: '14', viewBox: '0 0 16 14', fill: 'none', "aria-hidden": 'true' },
+    react_1["default"].createElement("path", { d: '\r\n      M8 1 V14\r\n      M8 2 L13 7\r\n      M8 1 L3 7\r\n      ', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'butt', strokeLinejoin: 'miter' }))); };
+var ArrowDown = function () { return (react_1["default"].createElement("svg", { width: '16', height: '14', viewBox: '0 0 16 14', fill: 'none', "aria-hidden": 'true' },
+    react_1["default"].createElement("path", { d: '\r\n      M8 13 V1 \r\n      M8 12 L13 7 \r\n      M8 12 L3 7', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'butt', strokeLinejoin: 'miter' }))); };
 var mainButtonTextStyle = {
     background: 'linear-gradient(180deg, #f9f7f3 0%, #edfdf4 100%)',
     backgroundClip: 'text',
@@ -258,16 +262,21 @@ var ProductHero = function (_a) {
             react_1["default"].createElement("div", { className: 'flex flex-col gap-2 justify-center items-center text-center sm:flex-row sm:justify-between sm:items-center sm:text-left' },
                 react_1["default"].createElement("div", { className: 'font-inter text-[24px]  lg:text-[24px] xl:text-[40px] font-medium text-black' }, formatPrice()),
                 react_1["default"].createElement("div", { className: 'flex items-center space-x-1' },
-                    react_1["default"].createElement("span", { className: 'font-inter text-[20px] font-semibold text-center text-[#05873b]', style: {
+                    react_1["default"].createElement("span", { className: 'font-inter text-[20px] font-semibold text-center flex items-center gap-1', style: {
                             fontWeight: 600,
                             fontSize: '20px',
                             textAlign: 'center',
-                            color: '#05873b'
+                            color: product.priceTrend.value >= 0 ? '#05873b' : '#B91B1BF4'
                         } },
-                        "\u2191 ",
+                        product.priceTrend.value >= 0 ? react_1["default"].createElement(ArrowUp, null) : react_1["default"].createElement(ArrowDown, null),
+                        product.priceTrend.value >= 0 ? '+' : '',
                         Math.abs(Math.round(product.priceTrend.value * 10) / 10),
                         "%"),
-                    react_1["default"].createElement("span", { className: 'font-inter text-[15px] font-normal text-[#05873b]', style: { fontWeight: 400, fontSize: '15px', color: '#05873b' } }, i18n_1.t(product_1.productKeys.hero.trendDays)))),
+                    react_1["default"].createElement("span", { className: 'font-inter text-[15px] font-normal', style: {
+                            fontWeight: 400,
+                            fontSize: '15px',
+                            color: '#05873b'
+                        } }, i18n_1.t(product_1.productKeys.hero.trendDays)))),
             react_1["default"].createElement("div", { className: 'flex flex-col md:grid md:grid-cols-2 xl:grid-cols-2 gap-[17px]' },
                 react_1["default"].createElement("div", { className: 'md:col-span-2 md:order-1 xl:col-span-1 xl:order-1' },
                     react_1["default"].createElement("button", { onClick: handleSave, className: ProductHero_module_css_1["default"].actionButton + " " + (isSaved ? ProductHero_module_css_1["default"].saved : '') + " group", "aria-label": isSaved ? i18n_1.t(accessibility_1.a11yKeys.product.saved) : i18n_1.t(accessibility_1.a11yKeys.product.save), "aria-pressed": isSaved },
