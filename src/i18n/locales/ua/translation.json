@@ -113,6 +113,7 @@
         "matchPrice": "Відповідатиме вартості",
         "email": "Email для сповіщень",
         "button": "Отримувати сповіщення",
+        "buttonSubmitting": "Відправка...",
         "note": "Ми надсилатимемо сповіщення не частіше 1 разу на день. Натискаючи \"Встановити\", Ви погоджуєтесь",
         "terms": "з умовами використання"
       },
@@ -434,7 +435,21 @@
       "secureWarning": "Використовуйте безпечну угоду. Не переводьте гроші напряму невідомому продавцю без гарантії.",
       "purchase": "Перейти до покупки",
       "noOffers": "Нажаль на цей час немає активних пропозицій від дилерів.",
-      "requestOffer": "Запросити пропозицію"
+      "requestOffer": "Запросити пропозицію",
+      "requestOfferFormTitle": "Запросити пропозицію від дилерів",
+      "requestOfferInterest": "Ви зацікавлені в покупці",
+      "requestOfferNamePlaceholder": "Ваше ім'я",
+      "requestOfferEmailPlaceholder": "Email",
+      "requestOfferMessagePlaceholder": "Повідомлення",
+      "requestOfferDefaultMessage": "Зацікавлений в покупці {{model}}",
+      "requestOfferSubmit": "Відправити запит",
+      "requestOfferSuccess": "Запит відправлено дилерам",
+      "requestOfferErrors": {
+        "nameRequired": "Ім'я обов'язкове",
+        "emailRequired": "Email обов'язковий",
+        "emailInvalid": "Невірний формат email",
+        "messageRequired": "Повідомлення обов'язкове"
+      }
     },
     "details": {
       "mechanism": "Механізм",
@@ -479,6 +494,7 @@
       "consentLink": "з умовами використання",
       "consentError": "Необхідно погодитись з умовами",
       "button": "Отримувати сповіщення",
+      "buttonSubmitting": "Відправка...",
       "success": "Дякуємо за ваш запит! Ми повідомимо вас про зниження ціни!"
     },
     "getQuote": {

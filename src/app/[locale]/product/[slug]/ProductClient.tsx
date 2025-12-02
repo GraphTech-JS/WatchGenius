@@ -11,7 +11,10 @@ import {
   getSimilarWatches,
   getWatchById,
 } from '@/lib/api';
-import { transformApiWatchFull } from '@/lib/transformers';
+import {
+  transformApiWatchFull,
+  transformDealerOffers,
+} from '@/lib/transformers';
 import type { WatchItem } from '@/interfaces/watch';
 import type { SimilarModel } from '@/interfaces/product';
 import { t } from '@/i18n';
@@ -104,7 +107,7 @@ function setCachedProduct(
     };
     localStorage.setItem(cacheKey, JSON.stringify(cacheData));
   } catch {
-    // Silent fail
+    // Ignore
   }
 }
 
@@ -144,7 +147,7 @@ function setCachedWatchId(slug: string, id: string): void {
     };
     localStorage.setItem(cacheKey, JSON.stringify(cacheData));
   } catch {
-    // Silent fail
+    // Ignore
   }
 }
 
@@ -195,7 +198,7 @@ function setCachedSimilar(
     };
     localStorage.setItem(cacheKey, JSON.stringify(cacheData));
   } catch {
-    // Silent fail
+    // Ignore
   }
 }
 
@@ -252,7 +255,7 @@ function setCachedPriceReport(
     };
     localStorage.setItem(cacheKey, JSON.stringify(cacheData));
   } catch {
-    // Silent fail
+    // Ignore
   }
 }
 
@@ -375,7 +378,9 @@ export default function ProductClient({
               if (apiWatch) {
                 setApiWatchData(apiWatch);
               }
-            } catch {}
+            } catch (err) {
+              console.error('Failed to load apiWatchData:', err);
+            }
           }
           setLoading(false);
           return;
@@ -422,6 +427,7 @@ export default function ProductClient({
     loadWatch();
 
     const handleCurrencyChange = () => {
+      setApiWatchData(null);
       loadWatch();
     };
 
@@ -527,10 +533,25 @@ export default function ProductClient({
     };
   }, [watch?.id]);
 
+  const currency = getCurrencyFromStorage();
+
   const sellerOffers = useMemo(() => {
     if (!watch) return [];
+
+    if (apiWatchData?.dealerOffers && apiWatchData.dealerOffers.length > 0) {
+      const translatedCondition = translateDetailValue(
+        'condition',
+        watch.condition
+      );
+      return transformDealerOffers(
+        apiWatchData.dealerOffers,
+        translatedCondition,
+        currency
+      );
+    }
+
     return generateSellerOffers(watch.id, watch.price);
-  }, [watch]);
+  }, [watch, apiWatchData, currency]);
 
   if (loading) {
     return <ProductLoading />;
@@ -540,7 +561,6 @@ export default function ProductClient({
     notFound();
   }
 
-  const currency = getCurrencyFromStorage();
   const currencySymbol =
     currency === 'EUR'
       ? '€'

@@ -61,7 +61,7 @@ export const BestPrice = () => {
 
       localStorage.setItem(WATCH_MODELS_CACHE_KEY, JSON.stringify(cacheData));
     } catch {
-      // Silent fail
+      // Ignore
     }
   }
 
@@ -102,7 +102,7 @@ export const BestPrice = () => {
 
       localStorage.setItem(cacheKey, JSON.stringify(cacheData));
     } catch {
-      // Silent fail
+      // Ignore
     }
   }
 

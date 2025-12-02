@@ -93,8 +93,22 @@ export interface ApiDealerFullResponse {
   rating: number;
   reviewsCount: number;
   isVerified: boolean;
-  badges: Array<Record<string, unknown>>;
+  badges: {
+    premium?: boolean;
+    certified?: boolean;
+  };
   createdAt: string;
+  visits?: number;
+}
+
+export interface ApiDealerOffer {
+  id: string;
+  price: number;
+  currency: string;
+  buyUrl: string;
+  shippingPrice: number;
+  createdAt: string;
+  dealer: ApiDealerFullResponse;
 }
 
 export interface ApiPriceHistory {
@@ -124,6 +138,7 @@ export interface ApiWatchFullResponse {
   brand: ApiBrand;
   dealer: ApiDealerFullResponse;
   priceHistory: ApiPriceHistory[];
+  dealerOffers?: ApiDealerOffer[];
   analytics?: ApiWatchAnalytics;
   price?: number; 
   defaultPrice?: number; 

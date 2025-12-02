@@ -13,6 +13,7 @@ import {
 import styles from './SellerOffers.module.css';
 import { t } from '@/i18n';
 import { productKeys } from '@/i18n/keys/product';
+import { RequestOfferModal } from '@/components/RequestOfferModal/RequestOfferModal';
 
 const SellerOffers: React.FC<SellerOffersProps> = ({
   offers,
@@ -20,12 +21,15 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
   onRegionChange,
   onConditionChange,
   onPurchase,
+  watchTitle,
+  onRequestOfferSuccess,
 }) => {
   const [sortBy, setSortBy] = useState('price');
   const [region, setRegion] = useState('all');
   const [condition, setCondition] = useState('all');
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [filteredOffers, setFilteredOffers] = useState(offers);
+  const [isRequestOfferModalOpen, setIsRequestOfferModalOpen] = useState(false);
 
   const handleSortChange = (value: string) => {
     setSortBy(value);
@@ -64,7 +68,9 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
           case 'usa':
             return (
               offerRegion.includes('сша') ||
+              offerRegion === 'us' ||
               offerRegion.includes('usa') ||
+              offerRegion.includes('united states') ||
               offerRegion.includes('америка') ||
               offerRegion.includes('атланта') ||
               offerRegion.includes('нью-йорк')
@@ -328,7 +334,7 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
         </p>
       </div>
 
-      {filteredOffers.filter((offer) => offer.isSecure).length > 0 ? (
+      {filteredOffers.length > 0 ? (
         <div className='grid grid-cols-1 gap-[18px] xl:gap-[21px] md:grid-cols-2'>
           {filteredOffers.map((offer) => (
             <div key={offer.id} className={styles.sellerCard}>
@@ -451,7 +457,10 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
           <p className={styles.emptyOffersText}>
             {t(productKeys.offers.noOffers)}
           </p>
-          <button className={styles.requestOfferButton}>
+          <button
+            className={styles.requestOfferButton}
+            onClick={() => setIsRequestOfferModalOpen(true)}
+          >
             <Image
               src={QuillLinkOutIcon}
               alt='Request'
@@ -462,6 +471,18 @@ const SellerOffers: React.FC<SellerOffersProps> = ({
           </button>
         </div>
       )}
+
+      <RequestOfferModal
+        isOpen={isRequestOfferModalOpen}
+        onClose={() => setIsRequestOfferModalOpen(false)}
+        watchTitle={watchTitle || ''}
+        onSuccess={() => {
+          setIsRequestOfferModalOpen(false);
+          if (onRequestOfferSuccess) {
+            onRequestOfferSuccess();
+          }
+        }}
+      />
     </div>
   );
 };

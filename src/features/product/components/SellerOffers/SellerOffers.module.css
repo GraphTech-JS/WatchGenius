@@ -37,8 +37,6 @@
   border-bottom-color: transparent;
 }
 
-/* Arrow styles moved to inline Tailwind classes */
-
 .filterDropdownList {
   position: absolute;
   top: 100%;

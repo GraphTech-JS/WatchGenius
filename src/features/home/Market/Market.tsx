@@ -61,7 +61,7 @@ function setCachedMarket(currency: string, watch: WatchItem): void {
     };
     localStorage.setItem(cacheKey, JSON.stringify(cacheData));
   } catch {
-    // Silent fail
+    // Ignore
   }
 }
 
@@ -101,7 +101,7 @@ function setCachedStable(currency: string, watch: WatchItem): void {
     };
     localStorage.setItem(cacheKey, JSON.stringify(cacheData));
   } catch {
-    // Silent fail
+    // Ignore
   }
 }
 

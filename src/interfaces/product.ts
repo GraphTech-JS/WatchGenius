@@ -73,7 +73,8 @@ export interface SellerOffer {
   shipping: string;
   price: string;
   currency: '€' | '$' | '₴';
-  isSecure: boolean; 
+  isSecure: boolean;
+  buyUrl?: string;
 }
 
 export interface ProductHeroProps {
@@ -113,4 +114,6 @@ export interface SellerOffersProps {
   onRegionChange: (region: string) => void;
   onConditionChange: (condition: string) => void;
   onPurchase: (offerId: string) => void;
+  watchTitle?: string;
+  onRequestOfferSuccess?: () => void;
 }

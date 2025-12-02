@@ -110,7 +110,7 @@ function setCachedMarket(currency, watch) {
         localStorage.setItem(cacheKey, JSON.stringify(cacheData));
     }
     catch (_a) {
-        // Silent fail
+        // Ignore
     }
 }
 var MARKET_STABLE_CACHE_PREFIX = 'market-stable-cache-';
@@ -146,7 +146,7 @@ function setCachedStable(currency, watch) {
         localStorage.setItem(cacheKey, JSON.stringify(cacheData));
     }
     catch (_a) {
-        // Silent fail
+        // Ignore
     }
 }
 function convertWatchToMarketCard(watch, title, chartId) {

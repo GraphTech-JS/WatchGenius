@@ -102,7 +102,7 @@ function setCachedTrending(currency, filterType, watches) {
         localStorage.setItem(cacheKey, JSON.stringify(cacheData));
     }
     catch (_a) {
-        // Silent fail
+        // Ignore
     }
 }
 function convertWatchItemToIWatch(watch, index) {

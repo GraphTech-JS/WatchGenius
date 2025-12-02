@@ -105,7 +105,7 @@ function setCachedSegmentsTrend(data: ApiSegmentTrendResponse): void {
     };
     localStorage.setItem(SEGMENTS_TREND_CACHE_KEY, JSON.stringify(cacheData));
   } catch {
-    // Silent fail
+    // Ignore
   }
 }
 
