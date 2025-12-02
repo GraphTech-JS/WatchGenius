@@ -39,7 +39,9 @@ export const DealerCard: React.FC<{ dealer: DealerData }> = ({ dealer }) => {
           className={`${styles.CardDesc} flex flex-col text-center lg:text-start`}
         >
           <div className={`${styles.CardDescTitle} mb-2.5`}>{dealer.name}</div>
-          <div className={`${styles.CardDescText}`}>{dealer.description}</div>
+          <div className={`${styles.CardDescText}`}>
+            {dealer.description || 'Поки що опису немає'}
+          </div>
 
           <div
             className={`${styles.CardInfo} mt-6 lg:mt-4.5 grid grid-cols-2 lg:flex gap-x-2.5 gap-y-5 lg:gap-5 text-center`}

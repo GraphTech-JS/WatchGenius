@@ -4,6 +4,7 @@ import styles from './Dealers.module.css';
 import { ArrowIcon } from '../../../../public/social/Icon';
 import { DealerCard } from '@/components/Main/Dealers/DealerCard';
 import { useDealers } from '@/hooks/useDealers';
+import { ClockLoader } from 'react-spinners';
 
 export const Dealers = () => {
   const [cols, setCols] = useState<1 | 2>(1);
@@ -12,7 +13,7 @@ export const Dealers = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [, setDirection] = useState<'next' | 'prev' | null>(null);
   const swipeRef = useRef<HTMLDivElement | null>(null);
-  const { dealers, error } = useDealers();
+  const { dealers, error, loading } = useDealers();
 
   useEffect(() => {
     setIsMounted(true);
@@ -123,14 +124,29 @@ export const Dealers = () => {
     };
   }, [page, isMounted]);
 
+  if (loading) {
+    return (
+      <section id='dealers' className={styles.dealers} suppressHydrationWarning>
+        <div className='flex flex-col items-center justify-center min-h-[400px] gap-6'>
+          <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+          <p className='text-[#8b8b8b] text-[20px] font-[var(--font-inter)]'>
+            Завантаження...
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   if (error) {
     return (
-      <div className='flex flex-col items-center justify-center min-h-[400px] gap-4'>
-        <p className='text-red-500 text-[20px]'>Помилка: {error}</p>
-        <button onClick={() => window.location.reload()}>
-          Спробувати ще раз
-        </button>
-      </div>
+      <section id='dealers' className={styles.dealers} suppressHydrationWarning>
+        <div className='flex flex-col items-center justify-center min-h-[400px] gap-4'>
+          <p className='text-red-500 text-[20px]'>Помилка: {error}</p>
+          <button onClick={() => window.location.reload()}>
+            Спробувати ще раз
+          </button>
+        </div>
+      </section>
     );
   }
 
