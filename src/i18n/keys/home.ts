@@ -30,6 +30,7 @@ export const marketKeys = {
   dealsLabel: "home.market.dealsLabel",
   dealsSuffix: "home.market.dealsSuffix",
   catalogLink: "home.market.catalogLink",
+  error: "home.market.error",
 };
 export const trendingKeys = {
   sort: {
@@ -40,6 +41,7 @@ export const trendingKeys = {
   carousel: {
     cta: "home.trending.carousel.cta",
   },
+  error: "home.trending.error",
 };
 export const bestPriceKeys = {
   form: {
@@ -55,6 +57,7 @@ export const bestPriceKeys = {
 export const brandSpotlightKeys = {
   description: "home.brandSpotlight.description",
   viewAll: "home.brandSpotlight.viewAll",
+  error: "home.brandSpotlight.error",
 };
 export const howToKeys = {
   subtitle: "home.howTo.subtitle",

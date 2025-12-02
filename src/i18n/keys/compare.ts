@@ -1,4 +1,5 @@
 export const compareKeys = {
+  error: "compare.error",
   breadcrumbs: {
     catalog: "compare.breadcrumbs.catalog",
     model: "compare.breadcrumbs.model",

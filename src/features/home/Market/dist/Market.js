@@ -64,6 +64,8 @@ var MarketTotal_1 = require("@/components/Main/Market/MarketCard/MarketTotal");
 var api_1 = require("@/lib/api");
 var react_spinners_1 = require("react-spinners");
 var transformers_1 = require("@/lib/transformers");
+var i18n_1 = require("@/i18n");
+var home_1 = require("@/i18n/keys/home");
 function getCurrencyFromStorage() {
     if (typeof window === 'undefined')
         return 'EUR';
@@ -188,11 +190,11 @@ exports.Market = function () {
     var _f = react_1.useState(null), error = _f[0], setError = _f[1];
     react_1.useEffect(function () {
         var loadMarketData = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var currency, cachedTop, cachedStable, _a, trending90d, stable, transformed, transformed, err_1;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
+            var currency, cachedTop, cachedStable, _a, trending90d, stable, transformed, transformed, _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
-                        _b.trys.push([0, 2, 3, 4]);
+                        _c.trys.push([0, 2, 3, 4]);
                         setLoading(true);
                         setError(null);
                         currency = getCurrencyFromStorage();
@@ -210,7 +212,7 @@ exports.Market = function () {
                                 api_1.getStableWatch(currency),
                             ])];
                     case 1:
-                        _a = _b.sent(), trending90d = _a[0], stable = _a[1];
+                        _a = _c.sent(), trending90d = _a[0], stable = _a[1];
                         if (trending90d) {
                             transformed = transformers_1.transformApiWatchFull(trending90d, currency);
                             setTopGainer90d(transformed);
@@ -223,8 +225,8 @@ exports.Market = function () {
                         }
                         return [3 /*break*/, 4];
                     case 2:
-                        err_1 = _b.sent();
-                        setError(err_1 instanceof Error ? err_1.message : 'Failed to load data');
+                        _b = _c.sent();
+                        setError(i18n_1.t(home_1.marketKeys.error));
                         return [3 /*break*/, 4];
                     case 3:
                         setLoading(false);
@@ -396,9 +398,7 @@ exports.Market = function () {
                 react_1["default"].createElement(ThemedText_1.ThemedText, { type: 'h2' }, "Market overview")),
             loading ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
                 react_1["default"].createElement(react_spinners_1.ClockLoader, { size: 60, color: '#04694f', speedMultiplier: 0.9 }))) : error ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
-                react_1["default"].createElement("div", { className: 'text-red-500' },
-                    "Error: ",
-                    error))) : (react_1["default"].createElement(react_1["default"].Fragment, null,
+                react_1["default"].createElement("div", { className: 'text-red-500 text-center px-4' }, error))) : (react_1["default"].createElement(react_1["default"].Fragment, null,
                 react_1["default"].createElement("div", { className: Market_module_css_1["default"].marketContent + " hidden md:grid md:grid-cols-3 gap-6" }, desktopCards.map(function (card) { return card.content; })),
                 react_1["default"].createElement("div", { className: 'md:hidden' },
                     react_1["default"].createElement("div", { ref: swipeRef, className: Market_module_css_1["default"].marketContent + " flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth " + Market_module_css_1["default"].swipe + " " + Market_module_css_1["default"].noScrollbar }, mobileCards.map(function (card, idx) { return (react_1["default"].createElement("div", { key: "mob-" + idx, className: 'flex justify-center snap-start shrink-0', style: { flex: '0 0 100%', maxWidth: '100%' } }, card.content)); })),

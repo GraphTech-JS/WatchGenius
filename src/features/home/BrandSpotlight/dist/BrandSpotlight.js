@@ -135,11 +135,11 @@ exports.BrandSpotlight = function () {
     var _c = react_1.useState(null), error = _c[0], setError = _c[1];
     react_1.useEffect(function () {
         var loadBrandWatches = function () { return __awaiter(void 0, void 0, void 0, function () {
-            var currency_1, cachedData, data, firstBrand, transformed, iWatchItems, brandData_1, err_1;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            var currency_1, cachedData, data, firstBrand, transformed, iWatchItems, brandData_1, _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _a.trys.push([0, 2, 3, 4]);
+                        _b.trys.push([0, 2, 3, 4]);
                         setLoading(true);
                         setError(null);
                         currency_1 = getCurrencyFromStorage();
@@ -150,7 +150,7 @@ exports.BrandSpotlight = function () {
                         }
                         return [4 /*yield*/, api_1.getPopularWatchesByBrand(currency_1)];
                     case 1:
-                        data = _a.sent();
+                        data = _b.sent();
                         if (data.length === 0) {
                             setBrandData({ brand: 'Rolex', watches: watch_2.mockTrending });
                             return [2 /*return*/];
@@ -170,8 +170,8 @@ exports.BrandSpotlight = function () {
                         setCachedBrandSpotlight(currency_1, brandData_1);
                         return [3 /*break*/, 4];
                     case 2:
-                        err_1 = _a.sent();
-                        setError(err_1 instanceof Error ? err_1.message : 'Failed to load watches');
+                        _a = _b.sent();
+                        setError(i18n_1.t(home_1.brandSpotlightKeys.error));
                         setBrandData({ brand: 'Rolex', watches: watch_2.mockTrending });
                         return [3 /*break*/, 4];
                     case 3:
@@ -205,8 +205,6 @@ exports.BrandSpotlight = function () {
                     react_1["default"].createElement("button", { className: BrandSpotlight_module_css_1["default"].brandViewAllBtn + " hidden lg:block py-4 rounded-xl w-full max-w-[28.25rem] text-center" }, i18n_1.t(home_1.brandSpotlightKeys.viewAll))),
                 react_1["default"].createElement("div", { className: BrandSpotlight_module_css_1["default"].brandCards + " mt-8 w-full" }, loading ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
                     react_1["default"].createElement(react_spinners_1.ClockLoader, { size: 60, color: '#04694f', speedMultiplier: 0.9 }))) : error && brandData.watches.length === 0 ? (react_1["default"].createElement("div", { className: 'flex justify-center items-center py-12' },
-                    react_1["default"].createElement("div", { className: 'text-red-500' },
-                        "Error: ",
-                        error))) : (react_1["default"].createElement(BrandCards_1.BrandCards, { items: brandData.watches })))),
+                    react_1["default"].createElement("div", { className: 'text-red-500 text-center px-4' }, error))) : (react_1["default"].createElement(BrandCards_1.BrandCards, { items: brandData.watches })))),
             react_1["default"].createElement("button", { className: BrandSpotlight_module_css_1["default"].brandViewAllBtn + " px-10 py-4 rounded-xl w-full max-w-[28.25rem] lg:hidden" }, i18n_1.t(home_1.brandSpotlightKeys.viewAll)))));
 };
