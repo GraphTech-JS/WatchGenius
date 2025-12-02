@@ -49,6 +49,7 @@ export interface GetWatchesParams {
   years?: string;
   currency?: string;
   segment?: string;
+  sort?: string;
 }
 
 export interface ApiFiltersResponse {

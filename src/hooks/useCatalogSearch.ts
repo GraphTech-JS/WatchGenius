@@ -206,7 +206,7 @@ const clearAllFilters = useCallback(() => {
     }
 
     return applySorting(items, sortOption);
-  }, [watches, selectedIndexes, sortOption]);  
+  }, [watches, selectedIndexes, sortOption]);
 
   useLayoutEffect(() => {
     if (!chipsRef.current) {
@@ -237,8 +237,12 @@ useEffect(() => {
   const loadWatches = () => {
     const currency = getCurrencyFromStorage();
     
+    // Всі сортування робляться на фронті, не передаємо sort на бекенд
     const apiParams: GetWatchesParams = !searchTerm.trim() && !sidebarFilters 
-      ? { pageSize: 12, currency: currency }
+      ? { 
+          pageSize: 12, 
+          currency: currency
+        }
       : {
           ...(searchTerm.trim() && { search: searchTerm.trim() }),
           ...(sidebarFilters ? convertFiltersToApiParams(sidebarFilters) : {}),
@@ -262,7 +266,7 @@ useEffect(() => {
     window.removeEventListener('storage', handleCurrencyChange);
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [searchTerm, sidebarFilters]);
+}, [searchTerm, sidebarFilters, sortOption]);
   return {
     searchTerm,
     setSearchTerm,

@@ -81,7 +81,12 @@ export const ChecklistSection: React.FC<Props> = ({
       normalizedOpt === 'europe' ||
       normalizedOpt === 'asia' ||
       normalizedOpt === 'america' ||
-      normalizedOpt.includes('united states')
+      normalizedOpt.includes('united states') ||
+      normalizedOpt === 'brazil' ||
+      normalizedOpt === 'iceland' ||
+      normalizedOpt === 'japan' ||
+      normalizedOpt === 'kenya' ||
+      normalizedOpt === 'switzerland'
     )
       return catalogKeys.filterData.locations;
 
@@ -94,8 +99,22 @@ export const ChecklistSection: React.FC<Props> = ({
         let label = opt;
 
         if (ns) {
-          const translationKey = `${ns}.${opt}`;
-          const translation = t(translationKey);
+          let translationKey = `${ns}.${opt}`;
+          let translation = t(translationKey);
+
+          if (translation === translationKey) {
+            const normalizedOpt = opt.toLowerCase();
+            translationKey = `${ns}.${normalizedOpt}`;
+            translation = t(translationKey);
+          }
+
+          if (translation === translationKey && opt.length > 0) {
+            const capitalizedOpt =
+              opt.charAt(0).toUpperCase() + opt.slice(1).toLowerCase();
+            translationKey = `${ns}.${capitalizedOpt}`;
+            translation = t(translationKey);
+          }
+
           label = translation !== translationKey ? translation : opt;
         }
 
