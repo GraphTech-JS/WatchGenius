@@ -271,7 +271,21 @@
         "Rose": "Рожеве золото",
         "Steel": "Сталь",
         "White": "Біле золото",
-        "Yellow": "Жовте золото"
+        "Yellow": "Жовте золото",
+        "Leather": "Шкіра",
+        "leather": "Шкіра",
+        "Rubber": "Гума",
+        "rubber": "Гума",
+        "Fabric": "Тканина",
+        "fabric": "Тканина",
+        "NATO": "NATO",
+        "nato": "NATO",
+        "Oyster": "Oyster",
+        "oyster": "Oyster",
+        "Jubilee": "Jubilee",
+        "jubilee": "Jubilee",
+        "President": "President",
+        "president": "President"
       },
       "documents": {
         "fullSet": "Тільки з документами і коробкою",

@@ -3,42 +3,111 @@ import React, { useState, useEffect, useRef } from 'react';
 import styles from './HeroChartsCarousel.module.css';
 import { HeroChartItem } from './HeroChartItem';
 import { HeroChartItemProps } from './HeroChartItem';
+import { ApiSegmentTrendResponse } from '@/interfaces/api';
+import { getSegmentsTrend } from '@/lib/api';
 
-const charts: HeroChartItemProps[] = [
-  {
-    id: 'hero-chart1',
-    label: 'A',
-    data: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
-    variant: 'green',
-    percent: '+7%',
-    period: 'за 90 днів',
-  },
-  {
-    id: 'hero-chart2',
-    label: 'B',
-    data: [7, 6, 7, 6, 7.5, 7, 8],
-    variant: 'orange',
-    percent: '+0%',
-    period: 'за 90 днів',
-  },
-  {
-    id: 'hero-chart3',
-    label: 'C',
-    data: [5, 6, 7, 6, 7.5, 7, 8],
-    variant: 'red',
-    percent: '-7%',
-    period: 'за 90 днів',
-  },
-  {
-    id: 'hero-chart4',
-    label: 'Overall',
-    data: [5, 6, 7, 6, 7.5, 7, 8],
-    variant: 'overall',
-    percent: '+1,2%',
-    period: 'за 90 днів',
-    isSpecial: true,
-  },
-];
+function formatPercent(value: number): string {
+  const rounded = Math.round(value * 10) / 10;
+  const formatted = rounded.toString().replace('.', ',');
+  const sign = rounded >= 0 ? '+' : '';
+  return `${sign}${formatted}%`;
+}
+
+function transformTrendDataToCharts(
+  data: ApiSegmentTrendResponse
+): HeroChartItemProps[] {
+  const historyDataA =
+    data.history && data.history.length >= 2
+      ? data.history.map((record) => record.A)
+      : [];
+  const historyDataB =
+    data.history && data.history.length >= 2
+      ? data.history.map((record) => record.B)
+      : [];
+  const historyDataC =
+    data.history && data.history.length >= 2
+      ? data.history.map((record) => record.C)
+      : [];
+  const historyDataOverall =
+    data.history && data.history.length >= 2
+      ? data.history.map((record) => record.overall)
+      : [];
+
+  return [
+    {
+      id: 'hero-chart1',
+      label: 'A',
+      data: historyDataA,
+      variant: 'green',
+      percent: formatPercent(data.segments.A.trend90avg),
+      period: 'за 90 днів',
+    },
+    {
+      id: 'hero-chart2',
+      label: 'B',
+      data: historyDataB,
+      variant: 'orange',
+      percent: formatPercent(data.segments.B.trend90avg),
+      period: 'за 90 днів',
+    },
+    {
+      id: 'hero-chart3',
+      label: 'C',
+      data: historyDataC,
+      variant: 'red',
+      percent: formatPercent(data.segments.C.trend90avg),
+      period: 'за 90 днів',
+    },
+    {
+      id: 'hero-chart4',
+      label: 'Overall',
+      data: historyDataOverall,
+      variant: 'overall',
+      percent: formatPercent(data.totalTrend),
+      period: 'за 90 днів',
+      isSpecial: true,
+    },
+  ];
+}
+
+const SEGMENTS_TREND_CACHE_KEY = 'segments-trend-cache';
+const CACHE_TTL = 5 * 60 * 1000;
+
+function getCachedSegmentsTrend(): ApiSegmentTrendResponse | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cached = localStorage.getItem(SEGMENTS_TREND_CACHE_KEY);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(SEGMENTS_TREND_CACHE_KEY);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedSegmentsTrend(data: ApiSegmentTrendResponse): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheData = {
+      data,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(SEGMENTS_TREND_CACHE_KEY, JSON.stringify(cacheData));
+  } catch {
+    // Silent fail
+  }
+}
 
 export const HeroChartsCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -47,6 +116,7 @@ export const HeroChartsCarousel = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const swipeRef = useRef<HTMLDivElement | null>(null);
   const rafId = useRef<number | null>(null);
+  const [charts, setCharts] = useState<HeroChartItemProps[]>([]);
 
   useEffect(() => {
     const checkSize = () => {
@@ -60,12 +130,41 @@ export const HeroChartsCarousel = () => {
   }, []);
 
   useEffect(() => {
+    const loadTrendData = async () => {
+      const cached = getCachedSegmentsTrend();
+      if (cached) {
+        const transformed = transformTrendDataToCharts(cached);
+        setCharts(transformed);
+        return;
+      }
+
+      try {
+        const data = await getSegmentsTrend();
+        setCachedSegmentsTrend(data);
+        const transformed = transformTrendDataToCharts(data);
+        if (transformed.some((chart) => chart.data.length >= 2)) {
+          setCharts(transformed);
+        } else {
+          console.warn(
+            'Not enough data points for charts, showing empty charts'
+          );
+          setCharts(transformed);
+        }
+      } catch (error) {
+        console.error('Failed to load segments trend:', error);
+      }
+    };
+
+    loadTrendData();
+  }, []);
+
+  useEffect(() => {
     if (isDesktop || isTablet) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev === charts.length - 1 ? 0 : prev + 1));
     }, 40000);
     return () => clearInterval(interval);
-  }, [isDesktop, isTablet]);
+  }, [isDesktop, isTablet, charts.length]);
 
   useEffect(() => {
     if (isDesktop) return;

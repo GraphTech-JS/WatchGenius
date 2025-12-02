@@ -1,3 +1,4 @@
+import { ApiPriceHistory } from './api';
 export type WatchIndex = 'A' | 'B' | 'C';
 export type Currency = '€' | '$' | '₴';
 
@@ -35,4 +36,6 @@ export type WatchItem = {
   waterResistance: boolean;   
   chronograph: boolean;     
   chronoUrl?:string;  
+
+  priceHistory?: ApiPriceHistory[];
 };

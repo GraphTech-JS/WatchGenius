@@ -36,6 +36,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 exports.__esModule = true;
 exports.BrandSpotlight = void 0;
 var react_1 = require("react");
@@ -110,7 +117,13 @@ function convertWatchItemToIWatch(watch, index) {
         price: watch.price,
         rating: Math.abs(watch.trend.value) % 11,
         changePercent: watch.trend.value,
-        chartData: [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
+        chartData: watch.priceHistory && watch.priceHistory.length >= 2
+            ? __spreadArrays(watch.priceHistory).sort(function (a, b) {
+                return new Date(a.recordedAt).getTime() -
+                    new Date(b.recordedAt).getTime();
+            })
+                .map(function (record) { return record.price; })
+            : [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
         chartColor: watch.trend.value > 0 ? '#22c55e' : '#EED09D',
         chartId: "brand-chart-" + watch.id,
         index: watch.index

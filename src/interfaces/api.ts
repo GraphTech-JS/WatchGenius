@@ -201,3 +201,26 @@ export interface ApiPriceAlertResponse {
   triggered: boolean;
   createdAt: string;
 }
+
+
+export interface ApiSegmentTrendResponse {
+  segments: {
+    A: ApiSegmentStats;
+    B: ApiSegmentStats;
+    C: ApiSegmentStats;
+  };
+  totalTrend: number;
+  history: ApiTrendHistoryRecord[];
+}
+
+export interface ApiSegmentStats {
+  trend90avg: number;
+}
+
+export interface ApiTrendHistoryRecord{
+date: string;
+A: number;
+B: number;
+C: number;
+overall: number;
+}

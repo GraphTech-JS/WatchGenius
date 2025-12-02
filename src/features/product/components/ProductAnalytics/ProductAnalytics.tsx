@@ -178,7 +178,11 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                       {t(productKeys.analytics.trend.demand)}
                     </span>
                     <span className={styles.trendValue}>
-                      {Math.round(analytics.demand * 10) / 10}%
+                      {Math.min(
+                        100,
+                        Math.max(0, Math.round(analytics.demand * 10) / 10)
+                      )}
+                      %
                     </span>
                   </div>
                 </div>
@@ -348,7 +352,26 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
 
         {activeTab === 'brand' &&
           (() => {
-            const content = BRAND_CONTENT[brand] ?? BRAND_CONTENT.default;
+            const normalizedBrand = brand.trim();
+            let content = BRAND_CONTENT[normalizedBrand];
+
+            if (!content) {
+              const brandKeys = Object.keys(BRAND_CONTENT);
+              const foundKey = brandKeys.find(
+                (key) => key.toLowerCase() === normalizedBrand.toLowerCase()
+              );
+              if (foundKey) {
+                content = BRAND_CONTENT[foundKey];
+              }
+            }
+
+            if (!content) {
+              content = BRAND_CONTENT.default;
+            }
+
+            const displayTitle =
+              content === BRAND_CONTENT.default ? brand : content.title;
+
             return (
               <div className={styles.brandContent}>
                 <div
@@ -358,14 +381,14 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                 >
                   <Image
                     src={content.image}
-                    alt={`${content.title} Brand Background`}
+                    alt={`${displayTitle} Brand Background`}
                     width={592}
                     height={329}
                     className={styles.brandBackgroundImage}
                   />
                 </div>
                 <div className={styles.brandTextContent}>
-                  <h3 className={styles.brandTitle}>{content.title}</h3>
+                  <h3 className={styles.brandTitle}>{displayTitle}</h3>
                   {content.paragraphs.map((p, idx) => (
                     <p key={idx} className={styles.brandText}>
                       {p}

@@ -324,7 +324,7 @@ function calculatePriceReport(
     const reportPeak = Math.max(...prices);
     const reportMin = Math.min(...prices);
 
-    // Перша ціна (найстаріша) і остання (найновіша) ЗА ВИБРАНИЙ ПЕРІОД
+    
     const firstPrice = prices[0];
     const lastPrice = prices[prices.length - 1];
     const reportChangePct =
@@ -376,9 +376,7 @@ export default function ProductClient({
               if (apiWatch) {
                 setApiWatchData(apiWatch);
               }
-            } catch {
-              // If failed to load by ID, continue without apiWatchData
-            }
+            } catch {}
           }
           setLoading(false);
           return;
@@ -399,9 +397,7 @@ export default function ProductClient({
               setLoading(false);
               return;
             }
-          } catch {
-            // Якщо ID не валідний, продовжуємо з getWatchBySlug
-          }
+          } catch {}
         }
 
         const apiWatch = await getWatchBySlug(resolvedParams.slug, currency);
@@ -486,9 +482,14 @@ export default function ProductClient({
                 price: `${watchItem.price.toLocaleString()} ${
                   watchItem.currency
                 }`,
-                priceTrend: `${watchItem.trend.value > 0 ? '+' : ''}${
-                  watchItem.trend.value
-                }%`,
+                priceTrend: (() => {
+                  const trendValue = watchItem.trend.value;
+
+                  if (isNaN(trendValue) || !isFinite(trendValue)) {
+                    return '0.0%';
+                  }
+                  return `${trendValue > 0 ? '+' : ''}${trendValue}%`;
+                })(),
                 image: imageUrl,
                 index: watchItem.index,
               });
@@ -651,7 +652,7 @@ export default function ProductClient({
       },
     ],
     analytics: {
-      demand: Math.abs(watch.trend.value) * 10,
+      demand: Math.min(100, Math.abs(watch.trend.value) * 10),
       liquidity: 72,
       dynamics: watch.trend.value,
       ads: 'За 3 дні',

@@ -61,20 +61,28 @@ export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
 
   let trendValue: number;
   
-  if (analytics?.trend90d !== undefined && analytics?.trend90d !== null) {
+  if (analytics?.trend90d !== undefined && analytics?.trend90d !== null && 
+      !isNaN(analytics.trend90d) && isFinite(analytics.trend90d)) {
     trendValue = analytics.trend90d;
-  } else if (apiWatch.trend90d !== undefined && apiWatch.trend90d !== null) {
+  } else if (apiWatch.trend90d !== undefined && apiWatch.trend90d !== null && 
+             !isNaN(apiWatch.trend90d) && isFinite(apiWatch.trend90d)) {
     trendValue = apiWatch.trend90d;
   } else if (apiWatch.priceHistory && apiWatch.priceHistory.length >= 2) {
     const firstPrice = apiWatch.priceHistory[0].price; 
     const lastPrice = apiWatch.priceHistory[apiWatch.priceHistory.length - 1].price; 
-    if (firstPrice > 0) {
+    if (firstPrice > 0 && !isNaN(firstPrice) && isFinite(firstPrice) && 
+        !isNaN(lastPrice) && isFinite(lastPrice)) {
       trendValue = ((lastPrice - firstPrice) / firstPrice) * 100;
     } else {
       trendValue = calculateTrend(apiWatch.price, apiWatch.defaultPrice).value;
     }
   } else {
     trendValue = calculateTrend(apiWatch.price, apiWatch.defaultPrice).value;
+  }
+  
+
+  if (isNaN(trendValue) || !isFinite(trendValue)) {
+    trendValue = 0;
   }
 
   const latestPriceFromHistory =
@@ -141,15 +149,28 @@ function calculateIndex(brandIndex: number): WatchIndex {
 }
 
 function calculateTrend(price: number, defaultPrice: number) {
-  if (!defaultPrice || defaultPrice === 0) {
+  if (!defaultPrice || defaultPrice === 0 || isNaN(defaultPrice) || !isFinite(defaultPrice)) {
+    return {
+      value: 0,
+      period: '90d',
+    };
+  }
+  if (isNaN(price) || !isFinite(price)) {
     return {
       value: 0,
       period: '90d',
     };
   }
   const change = ((price - defaultPrice) / defaultPrice) * 100;
+  const roundedValue = Math.round(change * 10) / 10;
+  if (isNaN(roundedValue) || !isFinite(roundedValue)) {
+    return {
+      value: 0,
+      period: '90d',
+    };
+  }
   return {
-    value: Math.round(change * 10) / 10,
+    value: roundedValue,
     period: '90d',
   };
 }
@@ -345,6 +366,7 @@ export function transformApiPopularWatchItem(
     chronograph: false,
     brandLogo: undefined,
     reference: undefined,
+    priceHistory: priceHistory,
   };
 }
 
@@ -445,9 +467,20 @@ const watchIndex: WatchIndex =
     chronoUrl: apiWatch.chronoUrl && apiWatch.chronoUrl.trim() !== '' ? apiWatch.chronoUrl : undefined,
     buttonLabel: 'Buy on Chrono24',
     trend: {
-      value: analytics?.trend90d !== undefined 
-        ? analytics.trend90d 
-        : calculateTrend(price, defaultPrice).value,
+      value: (() => {
+        let trendValue: number;
+        if (analytics?.trend90d !== undefined && analytics?.trend90d !== null && 
+            !isNaN(analytics.trend90d) && isFinite(analytics.trend90d)) {
+          trendValue = analytics.trend90d;
+        } else {
+          trendValue = calculateTrend(price, defaultPrice).value;
+        }
+        
+        if (isNaN(trendValue) || !isFinite(trendValue)) {
+          trendValue = 0;
+        }
+        return trendValue;
+      })(),
       period: '90d',
     },
     variant: undefined,
@@ -470,5 +503,6 @@ const watchIndex: WatchIndex =
     chronograph: apiWatch.isChronograph || false,
     brandLogo: undefined,
     reference: apiWatch.ref || undefined,
+    priceHistory: apiWatch.priceHistory,
   };
 }

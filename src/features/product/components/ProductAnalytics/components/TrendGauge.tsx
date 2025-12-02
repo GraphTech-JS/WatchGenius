@@ -100,11 +100,10 @@ const TrendGauge: React.FC<TrendGaugeProps> = ({
   config,
 }) => {
   const v = Math.round(clamp(Number(value) || 0) * 10) / 10;
-const angle = -100 + (v / 100) * 200; 
+  const angle = -120 + (v / 100) * 180;
   const vbW = width;
   const vbH = height;
   const cx = vbW / 2;
-
   const cfg = { ...defaultConfig, ...(config || {}) };
 
   const pivotY = vbH * cfg.pivotYR;

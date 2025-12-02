@@ -13,6 +13,7 @@ import {
   ApiBrandModel,
   ApiPriceAlertResponse,
   CreatePriceAlertRequest,
+  ApiSegmentTrendResponse,
 } from '@/interfaces/api';
 import { generateSlug } from '@/lib/transformers';
 
@@ -717,6 +718,17 @@ export async function getCheapestWatches(
     return handleResponse<ApiWatchFullResponse[]>(response);
   } catch (error) {
     console.error(' [API] Failed to fetch cheapest watches:', error);
+    throw error;
+  }
+}
+
+export async function getSegmentsTrend(): Promise<ApiSegmentTrendResponse>{
+  const url = `/api/watches/segments/trend`;
+  try{
+    const response = await fetch(url);
+    return handleResponse<ApiSegmentTrendResponse>(response);
+  } catch (error) {
+    console.error(' [API] Failed to fetch segments trend:', error);
     throw error;
   }
 }

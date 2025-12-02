@@ -119,7 +119,16 @@ function convertWatchToMarketCard(
     ? Math.round(watch.trend.value * 10) / 10
     : 0;
 
-  const chartData = [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7];
+  const chartData =
+    watch.priceHistory && watch.priceHistory.length >= 2
+      ? [...watch.priceHistory]
+          .sort(
+            (a, b) =>
+              new Date(a.recordedAt).getTime() -
+              new Date(b.recordedAt).getTime()
+          )
+          .map((record) => record.price)
+      : [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7];
 
   return {
     id: parseInt(watch.id.replace(/\D/g, '')) || 1,
@@ -403,9 +412,9 @@ export const Market = () => {
         </div>
 
         {loading ? (
-                <div className='flex justify-center items-center py-12'>
-                  <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
-                </div>
+          <div className='flex justify-center items-center py-12'>
+            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+          </div>
         ) : error ? (
           <div className='flex justify-center items-center py-12'>
             <div className='text-red-500'>Error: {error}</div>

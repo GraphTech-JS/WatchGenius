@@ -38,12 +38,28 @@ interface PriceChartProps {
   apiWatchCurrency?: string;
 }
 
-function createGradient(ctx: CanvasRenderingContext2D, area: ChartArea) {
+function createGradient(
+  ctx: CanvasRenderingContext2D,
+  area: ChartArea,
+  prices: number[]
+) {
   const gradient = ctx.createLinearGradient(area.left, 0, area.right, 0);
-  gradient.addColorStop(0, '#AB0000');
-  gradient.addColorStop(0.35, '#D97706');
-  gradient.addColorStop(0.5, '#38D95B');
-  gradient.addColorStop(1, '#04694F');
+
+  const isRising = prices.length >= 2 && prices[0] < prices[prices.length - 1];
+
+  if (isRising) {
+    gradient.addColorStop(0, '#AB0000');
+    gradient.addColorStop(0.35, '#D97706');
+    gradient.addColorStop(0.5, '#38D95B');
+    gradient.addColorStop(1, '#04694F');
+  } else {
+    // Падіння: від зеленого до червоного (зверху вниз)
+    gradient.addColorStop(0, '#04694F');
+    gradient.addColorStop(0.35, '#38D95B');
+    gradient.addColorStop(0.5, '#D97706');
+    gradient.addColorStop(1, '#AB0000');
+  }
+
   return gradient;
 }
 
@@ -401,11 +417,16 @@ const PriceChart: React.FC<PriceChartProps> = ({
     const chart = chartRef.current;
     if (!chart || !chart.chartArea) return;
 
+    const prices = chartData.datasets[0]?.data || [];
     const chartDataWithGradient = {
       ...chartData,
       datasets: chartData.datasets.map((dataset) => ({
         ...dataset,
-        borderColor: createGradient(chart.ctx, chart.chartArea),
+        borderColor: createGradient(
+          chart.ctx,
+          chart.chartArea,
+          prices as number[]
+        ),
       })),
     };
 
