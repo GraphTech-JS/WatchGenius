@@ -3,10 +3,14 @@ import {
   ApiDealerResponse,
   ApiWatchFullResponse,
   ApiPopularWatchItem,
+  ApiDealerOffer,
 } from '@/interfaces/api';
+import { SellerOffer } from '@/interfaces/product';
 import { Currency, WatchItem, WatchIndex } from '@/interfaces/watch';
 import { DealerData } from '@/types/dealers';
 import { getRandomWatchImage } from '@/lib/imageUtils';
+import { t } from '@/i18n';
+import { catalogKeys } from '@/i18n/keys/catalog';
 
 function convertCurrency(currency: string): Currency {
   const upperCurrency = currency.toUpperCase();
@@ -505,4 +509,70 @@ const watchIndex: WatchIndex =
     reference: apiWatch.ref || undefined,
     priceHistory: apiWatch.priceHistory,
   };
+}
+
+export function transformDealerOffers(
+  dealerOffers: ApiDealerOffer[] | undefined,
+  watchCondition: string,
+  targetCurrency: string
+): SellerOffer[] {
+  if (!dealerOffers || dealerOffers.length === 0) {
+    return [];
+  }
+
+  return dealerOffers
+    .filter((offer) => offer && offer.dealer)
+    .map((offer) => {
+      const offerCurrency = offer.currency || targetCurrency;
+      const currencySymbol = convertCurrency(offerCurrency);
+
+      const formatPrice = (price: number): string => {
+        return Math.round(price).toLocaleString('uk-UA', { 
+          useGrouping: true, 
+          minimumFractionDigits: 0, 
+          maximumFractionDigits: 0 
+        }).replace(/\s/g, ' ').replace(/,/g, ' ');
+      };
+
+      const shippingText =
+        offer.shippingPrice === 0
+          ? 'Безкоштовна доставка'
+          : `Доставка від ${currencySymbol}${formatPrice(offer.shippingPrice)}`;
+
+      const conditionText = watchCondition || 'Новий';
+
+      const translateLocation = (location: string): string => {
+        if (!location) return '';
+        const normalized = location.toLowerCase().trim();
+        
+        if (normalized === 'us' || normalized === 'usa' || normalized === 'united states') {
+          return 'США';
+        }
+        
+        const translationKey = `${catalogKeys.filterData.locations}.${normalized}`;
+        const translation = t(translationKey);
+        if (translation !== translationKey) return translation;
+        
+        const capitalizedKey = `${catalogKeys.filterData.locations}.${normalized.charAt(0).toUpperCase() + normalized.slice(1)}`;
+        const capitalizedTranslation = t(capitalizedKey);
+        if (capitalizedTranslation !== capitalizedKey) return capitalizedTranslation;
+        
+        return location;
+      };
+
+      return {
+        id: offer.id,
+        sellerName: offer.dealer?.name || 'Unknown Dealer',
+        sellerLogo: offer.dealer?.logoUrl || undefined,
+        rating: offer.dealer?.rating || 0,
+        reviewsCount: offer.dealer?.reviewsCount || 0,
+        location: translateLocation(offer.dealer?.location || ''),
+        details: conditionText,
+        shipping: shippingText,
+        price: formatPrice(offer.price),
+        currency: currencySymbol as '€' | '$' | '₴',
+        isSecure: offer.dealer?.isVerified || false,
+        buyUrl: offer.buyUrl || undefined,
+      };
+    });
 }

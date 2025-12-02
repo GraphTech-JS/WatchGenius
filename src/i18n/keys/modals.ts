@@ -15,6 +15,7 @@ export const modalsKeys = {
     consentLink: "modals.priceAlert.consentLink",
     consentError: "modals.priceAlert.consentError",
     button: "modals.priceAlert.button",
+    buttonSubmitting: "modals.priceAlert.buttonSubmitting",
     success: "modals.priceAlert.success",
   },
   getQuote: {

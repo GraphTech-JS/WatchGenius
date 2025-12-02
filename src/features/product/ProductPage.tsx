@@ -72,13 +72,9 @@ const ProductPage: React.FC<ProductPageProps> = ({
     }
   };
 
-  const handlePriceNotification = () => {
-    console.log('Сповіщення про ціну');
-  };
+  const handlePriceNotification = () => {};
 
-  const handleShare = () => {
-    console.log('Поділитися продуктом');
-  };
+  const handleShare = () => {};
 
   const handleBuy = () => {
     if (product.chronoUrl) {
@@ -86,28 +82,23 @@ const ProductPage: React.FC<ProductPageProps> = ({
     }
   };
 
-  const handleGetQuote = () => {
-    console.log('Отримати пропозицію');
-  };
+  const handleGetQuote = () => {};
 
   const handleTabChange = (tab: 'parameters' | 'brand' | 'price' | 'trend') => {
     setActiveTab(tab);
   };
 
-  const handleSortChange = (sort: string) => {
-    console.log('Зміна сортування:', sort);
-  };
+  const handleSortChange = () => {};
 
-  const handleRegionChange = (region: string) => {
-    console.log('Зміна регіону:', region);
-  };
+  const handleRegionChange = () => {};
 
-  const handleConditionChange = (condition: string) => {
-    console.log('Зміна стану:', condition);
-  };
+  const handleConditionChange = () => {};
 
   const handlePurchase = (offerId: string) => {
-    console.log('Покупка пропозиції:', offerId);
+    const offer = product.sellerOffers.find((o) => o.id === offerId);
+    if (offer?.buyUrl) {
+      window.open(offer.buyUrl, '_blank');
+    }
   };
 
   return (
@@ -166,6 +157,7 @@ const ProductPage: React.FC<ProductPageProps> = ({
           onRegionChange={handleRegionChange}
           onConditionChange={handleConditionChange}
           onPurchase={handlePurchase}
+          watchTitle={product.title}
         />
       </div>
     </main>

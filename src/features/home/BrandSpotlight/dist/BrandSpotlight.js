@@ -100,7 +100,7 @@ function setCachedBrandSpotlight(currency, brandData) {
         localStorage.setItem(cacheKey, JSON.stringify(cacheData));
     }
     catch (_a) {
-        // Silent fail
+        // Ignore
     }
 }
 function convertWatchItemToIWatch(watch, index) {

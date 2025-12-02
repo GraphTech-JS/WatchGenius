@@ -53,7 +53,6 @@ function createGradient(
     gradient.addColorStop(0.5, '#38D95B');
     gradient.addColorStop(1, '#04694F');
   } else {
-    // Падіння: від зеленого до червоного (зверху вниз)
     gradient.addColorStop(0, '#04694F');
     gradient.addColorStop(0.35, '#38D95B');
     gradient.addColorStop(0.5, '#D97706');
@@ -122,14 +121,11 @@ function processPriceHistory(
   dataToUse.forEach((item) => {
     const date = new Date(item.recordedAt);
     const day = date.getDate();
-    const month = date.getMonth() + 1; // 1-12
+    const month = date.getMonth() + 1;
 
-    // Для 3M показуємо місяць і день, для 1P - тільки день
     if (period === '3M') {
-      // Формат: "1.09сер." (день.місяцьсер.)
       labels.push(`${day}.${month}сер.`);
     } else {
-      // Формат: "1сер." (деньсер.)
       labels.push(`${day}сер.`);
     }
 

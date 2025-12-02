@@ -71,7 +71,7 @@ function setCachedTrending(
     };
     localStorage.setItem(cacheKey, JSON.stringify(cacheData));
   } catch {
-    // Silent fail
+    // Ignore
   }
 }
 

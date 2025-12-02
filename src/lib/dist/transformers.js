@@ -1,7 +1,9 @@
 "use strict";
 exports.__esModule = true;
-exports.transformApiWatchFull = exports.transformApiPopularWatchItem = exports.transformApiDealer = exports.generateSlug = exports.transformApiWatch = void 0;
+exports.transformDealerOffers = exports.transformApiWatchFull = exports.transformApiPopularWatchItem = exports.transformApiDealer = exports.generateSlug = exports.transformApiWatch = void 0;
 var imageUtils_1 = require("@/lib/imageUtils");
+var i18n_1 = require("@/i18n");
+var catalog_1 = require("@/i18n/keys/catalog");
 function convertCurrency(currency) {
     var upperCurrency = currency.toUpperCase();
     if (upperCurrency === 'EUR' || upperCurrency === '€')
@@ -452,3 +454,58 @@ function transformApiWatchFull(apiWatch, requestedCurrency) {
     };
 }
 exports.transformApiWatchFull = transformApiWatchFull;
+function transformDealerOffers(dealerOffers, watchCondition, targetCurrency) {
+    if (!dealerOffers || dealerOffers.length === 0) {
+        return [];
+    }
+    return dealerOffers
+        .filter(function (offer) { return offer && offer.dealer; })
+        .map(function (offer) {
+        var _a, _b, _c, _d, _e, _f;
+        var offerCurrency = offer.currency || targetCurrency;
+        var currencySymbol = convertCurrency(offerCurrency);
+        var formatPrice = function (price) {
+            return Math.round(price).toLocaleString('uk-UA', {
+                useGrouping: true,
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).replace(/\s/g, ' ').replace(/,/g, ' ');
+        };
+        var shippingText = offer.shippingPrice === 0
+            ? 'Безкоштовна доставка'
+            : "\u0414\u043E\u0441\u0442\u0430\u0432\u043A\u0430 \u0432\u0456\u0434 " + currencySymbol + formatPrice(offer.shippingPrice);
+        var conditionText = watchCondition || 'Новий';
+        var translateLocation = function (location) {
+            if (!location)
+                return '';
+            var normalized = location.toLowerCase().trim();
+            if (normalized === 'us' || normalized === 'usa' || normalized === 'united states') {
+                return 'США';
+            }
+            var translationKey = catalog_1.catalogKeys.filterData.locations + "." + normalized;
+            var translation = i18n_1.t(translationKey);
+            if (translation !== translationKey)
+                return translation;
+            var capitalizedKey = catalog_1.catalogKeys.filterData.locations + "." + (normalized.charAt(0).toUpperCase() + normalized.slice(1));
+            var capitalizedTranslation = i18n_1.t(capitalizedKey);
+            if (capitalizedTranslation !== capitalizedKey)
+                return capitalizedTranslation;
+            return location;
+        };
+        return {
+            id: offer.id,
+            sellerName: ((_a = offer.dealer) === null || _a === void 0 ? void 0 : _a.name) || 'Unknown Dealer',
+            sellerLogo: ((_b = offer.dealer) === null || _b === void 0 ? void 0 : _b.logoUrl) || undefined,
+            rating: ((_c = offer.dealer) === null || _c === void 0 ? void 0 : _c.rating) || 0,
+            reviewsCount: ((_d = offer.dealer) === null || _d === void 0 ? void 0 : _d.reviewsCount) || 0,
+            location: translateLocation(((_e = offer.dealer) === null || _e === void 0 ? void 0 : _e.location) || ''),
+            details: conditionText,
+            shipping: shippingText,
+            price: formatPrice(offer.price),
+            currency: currencySymbol,
+            isSecure: ((_f = offer.dealer) === null || _f === void 0 ? void 0 : _f.isVerified) || false,
+            buyUrl: offer.buyUrl || undefined
+        };
+    });
+}
+exports.transformDealerOffers = transformDealerOffers;
