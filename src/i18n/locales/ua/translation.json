@@ -254,9 +254,12 @@
       "mechanisms": {
         "mechanical": "Механічний",
         "quartz": "Кварцовий",
+        "Quartz": "Кварцовий",
         "kinetic": "Кінетичний",
         "automatic": "Автоматичний",
         "Automatic": "Автоматичний",
+        "Manual": "Ручний завід",
+        "manual": "Ручний завід",
         "Manual winding": "Ручний завід",
         "springDrive": "Spring Drive"
       },
@@ -264,6 +267,7 @@
         "gold": "Золото",
         "silver": "Срібло",
         "titanium": "Титан",
+        "Titanium": "Титан",
         "ceramic": "Кераміка",
         "Gold": "Золото",
         "Ceramic": "Кераміка",
@@ -297,7 +301,19 @@
         "europe": "Європа",
         "asia": "Азія",
         "america": "Америка",
-        "United States of America": "Сполучені Штати Америки"
+        "United States of America": "Сполучені Штати Америки",
+        "United states of america": "Сполучені Штати Америки",
+        "united states of america": "Сполучені Штати Америки",
+        "Brazil": "Бразилія",
+        "brazil": "Бразилія",
+        "Iceland": "Ісландія",
+        "iceland": "Ісландія",
+        "Japan": "Японія",
+        "japan": "Японія",
+        "Kenya": "Кенія",
+        "kenya": "Кенія",
+        "Switzerland": "Швейцарія",
+        "switzerland": "Швейцарія"
       }
     },
     "filterSections": {

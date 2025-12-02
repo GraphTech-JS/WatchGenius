@@ -36,6 +36,9 @@ async function handleResponse<T>(response: Response): Promise<T> {
   return data;
 }
 
+
+
+
 export async function getWatches(
   params: GetWatchesParams
 ): Promise<ApiWatchListResponse> {
@@ -54,6 +57,7 @@ export async function getWatches(
   if (params.years) searchParams.set('years', params.years);
   if (params.currency) searchParams.set('currency', params.currency);
   if (params.segment) searchParams.set('segment', params.segment);
+  if (params.sort) searchParams.set('sort', params.sort);
 
   const url = `/api/watches?${searchParams.toString()}`;
 

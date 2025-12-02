@@ -102,6 +102,8 @@ function getWatches(params) {
                         searchParams.set('currency', params.currency);
                     if (params.segment)
                         searchParams.set('segment', params.segment);
+                    if (params.sort)
+                        searchParams.set('sort', params.sort);
                     url = "/api/watches?" + searchParams.toString();
                     _a.label = 1;
                 case 1:
