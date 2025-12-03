@@ -16,9 +16,11 @@ import { useWishlistContext } from '@/context/WishlistContext';
 import { useCompareContext } from '@/context/CompareContext';
 import { Toast } from '@/components/Toast/Toast';
 import type { ApiPriceHistory } from '@/interfaces/api';
+import type { WatchItem } from '@/interfaces/watch';
 
 interface ProductPageProps {
   product: Product;
+  watch?: WatchItem;
   loadingSimilar?: boolean;
   priceHistory?: ApiPriceHistory[];
   currentPrice?: number;
@@ -28,6 +30,7 @@ interface ProductPageProps {
 
 const ProductPage: React.FC<ProductPageProps> = ({
   product,
+  watch,
   loadingSimilar = false,
   priceHistory,
   currentPrice,
@@ -60,7 +63,11 @@ const ProductPage: React.FC<ProductPageProps> = ({
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
     } else {
-      addToWishlist(product.id);
+      if (watch) {
+        addToWishlist(watch);
+      } else {
+        addToWishlist(product.id);
+      }
     }
   };
 
