@@ -717,6 +717,7 @@ export default function ProductClient({
   return (
     <ProductPage
       product={product}
+      watch={watch}
       loadingSimilar={loadingSimilar}
       priceHistory={apiWatchData?.priceHistory}
       currentPrice={watch.price}
