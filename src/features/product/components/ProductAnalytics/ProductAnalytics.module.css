@@ -72,10 +72,10 @@
 }
 .brandBackground {
   position: absolute;
-  top: 100px;
-  left: 0;
-  width: 592px;
-  height: 329px;
+  top: 52px;
+  left: 56px;
+  width: 400px;
+  height: 220px;
   z-index: 0;
   pointer-events: none;
 }
@@ -84,7 +84,7 @@
   width: 400px;
   height: 220px;
   top: 52px;
-    left: 56px;
+  left: 56px;
 }
 
 .brandBackgroundImage {

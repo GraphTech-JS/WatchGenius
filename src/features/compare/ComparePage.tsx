@@ -11,14 +11,23 @@ import { compareKeys } from '@/i18n/keys/compare';
 import { useWishlistContext } from '@/context/WishlistContext';
 import { Toast } from '@/components/Toast/Toast';
 
+import type { ApiWatchFullResponse } from '@/interfaces/api';
+import type { WatchItem } from '@/interfaces/watch';
+
 interface ComparePageProps {
   products: CompareProduct[];
+  watches?: WatchItem[];
   onBackToCatalog: () => void;
+  apiWatchesData?: Map<string, ApiWatchFullResponse>;
+  currency?: string;
 }
 
 const ComparePage: React.FC<ComparePageProps> = ({
   products,
+  watches = [],
   onBackToCatalog,
+  apiWatchesData = new Map(),
+  currency = 'EUR',
 }) => {
   const [activeTab1, setActiveTab1] = useState<
     'parameters' | 'brand' | 'price' | 'trend'
@@ -64,7 +73,12 @@ const ComparePage: React.FC<ComparePageProps> = ({
     if (isInWishlist(productId)) {
       removeFromWishlist(productId);
     } else {
-      addToWishlist(productId);
+      const watch = watches.find((w) => w.id === productId);
+      if (watch) {
+        addToWishlist(watch);
+      } else {
+        addToWishlist(productId);
+      }
     }
   };
 
@@ -155,6 +169,14 @@ const ComparePage: React.FC<ComparePageProps> = ({
                   details={products[0].details}
                   brand={products[0].brand}
                   isCompare={true}
+                  priceHistory={
+                    apiWatchesData.get(products[0].id)?.priceHistory
+                  }
+                  currentPrice={products[0].price.min}
+                  currency={currency}
+                  apiWatchCurrency={
+                    apiWatchesData.get(products[0].id)?.currency
+                  }
                 />
               </div>
             </div>
@@ -185,6 +207,14 @@ const ComparePage: React.FC<ComparePageProps> = ({
                   details={products[1].details}
                   brand={products[1].brand}
                   isCompare={true}
+                  priceHistory={
+                    apiWatchesData.get(products[1].id)?.priceHistory
+                  }
+                  currentPrice={products[1].price.min}
+                  currency={currency}
+                  apiWatchCurrency={
+                    apiWatchesData.get(products[1].id)?.currency
+                  }
                 />
               </div>
             </div>
