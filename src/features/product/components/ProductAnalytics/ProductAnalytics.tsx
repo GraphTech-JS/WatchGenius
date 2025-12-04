@@ -32,6 +32,14 @@ import PriceChart from './components/PriceChart';
 import TrendGauge from './components/TrendGauge';
 import { BRAND_CONTENT } from '@/data/brands';
 
+function convertCurrency(currency: string): string {
+  const upperCurrency = currency.toUpperCase();
+  if (upperCurrency === 'EUR' || upperCurrency === '€') return '€';
+  if (upperCurrency === 'USD' || upperCurrency === '$') return '$';
+  if (upperCurrency === 'UAH' || upperCurrency === '₴') return '₴';
+  return '€';
+}
+
 const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
   analytics,
   activeTab,
@@ -382,8 +390,8 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                   <Image
                     src={content.image}
                     alt={`${displayTitle} Brand Background`}
-                    width={592}
-                    height={329}
+                    width={400}
+                    height={220}
                     className={styles.brandBackgroundImage}
                   />
                 </div>
@@ -525,7 +533,8 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     {t(productKeys.analytics.price.report.peak)}
                   </span>
                   <span className={styles.reportItemValue}>
-                    €{analytics.reportPeak.toLocaleString('uk-UA')}
+                    {convertCurrency(currency || 'EUR')}
+                    {analytics.reportPeak.toLocaleString('uk-UA')}
                   </span>
                 </div>
                 <div className={styles.reportItem}>
@@ -533,7 +542,8 @@ const ProductAnalytics: React.FC<ProductAnalyticsProps> = ({
                     {t(productKeys.analytics.price.report.min)}
                   </span>
                   <span className={styles.reportItemValue}>
-                    €{analytics.reportMin.toLocaleString('uk-UA')}
+                    {convertCurrency(currency || 'EUR')}
+                    {analytics.reportMin.toLocaleString('uk-UA')}
                   </span>
                 </div>
                 <div className={styles.reportItem}>

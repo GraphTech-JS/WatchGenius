@@ -16,6 +16,7 @@ import { productKeys } from '@/i18n/keys/product';
 import { catalogKeys } from '@/i18n/keys/catalog';
 import { compareKeys } from '@/i18n/keys/compare';
 import { ClockLoader } from 'react-spinners';
+import type { ApiWatchFullResponse, ApiPriceHistory } from '@/interfaces/api';
 
 function translateDetailValue(
   type: 'condition' | 'mechanism' | 'material',
@@ -56,8 +57,155 @@ function getCurrencyFromStorage(): string {
     : 'EUR';
 }
 
+const PRICE_REPORT_CACHE_TTL = 5 * 60 * 1000;
+
+const PRICE_REPORT_CACHE_PREFIX = 'price-report-cache-';
+
+function getPriceReportCacheKey(
+  watchId: string,
+  currency: string,
+  period: '3M' | '1P'
+): string {
+  return `${PRICE_REPORT_CACHE_PREFIX}${watchId}-${currency}-${period}`;
+}
+
+function getCachedPriceReport(
+  watchId: string,
+  currency: string,
+  period: '3M' | '1P'
+): { reportPeak: number; reportMin: number; reportChangePct: number } | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = getPriceReportCacheKey(watchId, currency, period);
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > PRICE_REPORT_CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedPriceReport(
+  watchId: string,
+  currency: string,
+  period: '3M' | '1P',
+  report: { reportPeak: number; reportMin: number; reportChangePct: number }
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = getPriceReportCacheKey(watchId, currency, period);
+    const cacheData = {
+      data: report,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Ignore
+  }
+}
+
+function calculatePriceReport(
+  priceHistory: ApiPriceHistory[] | undefined,
+  currentPrice: number,
+  trendValue: number,
+  watchId: string,
+  period: '3M' | '1P' = '3M',
+  requestedCurrency?: string,
+  apiWatchCurrency?: string
+): { reportPeak: number; reportMin: number; reportChangePct: number } {
+  if (priceHistory && priceHistory.length > 0) {
+    const sorted = [...priceHistory].sort(
+      (a, b) =>
+        new Date(a.recordedAt).getTime() - new Date(b.recordedAt).getTime()
+    );
+
+    const lastHistoryItem = sorted[sorted.length - 1];
+    const targetCurrency = requestedCurrency || apiWatchCurrency || 'EUR';
+
+    let conversionRate = 1;
+
+    if (
+      lastHistoryItem &&
+      lastHistoryItem.currency &&
+      lastHistoryItem.currency !== targetCurrency &&
+      currentPrice > 0 &&
+      lastHistoryItem.price > 0
+    ) {
+      conversionRate = currentPrice / lastHistoryItem.price;
+    }
+
+    const now = new Date();
+    let startDate: Date;
+
+    if (period === '3M') {
+      startDate = new Date(now);
+      startDate.setMonth(startDate.getMonth() - 3);
+    } else {
+      startDate = new Date(now);
+      startDate.setMonth(startDate.getMonth() - 1);
+    }
+
+    const filtered = sorted.filter((item) => {
+      const itemDate = new Date(item.recordedAt);
+      return itemDate >= startDate && itemDate <= now;
+    });
+
+    const dataToUse = filtered.length > 0 ? filtered : sorted;
+
+    const prices = dataToUse
+      .map((h) => {
+        if (h.currency === targetCurrency) {
+          return h.price;
+        }
+        return h.price * conversionRate;
+      })
+      .filter((p) => p > 0);
+
+    if (prices.length === 0) {
+      return {
+        reportPeak: Math.round(currentPrice * 1.03),
+        reportMin: Math.round(currentPrice * 0.97),
+        reportChangePct: 0,
+      };
+    }
+
+    const reportPeak = Math.max(...prices);
+    const reportMin = Math.min(...prices);
+
+    const firstPrice = prices[0];
+    const lastPrice = prices[prices.length - 1];
+    const reportChangePct =
+      firstPrice > 0 ? (lastPrice - firstPrice) / firstPrice : 0;
+
+    return {
+      reportPeak: Math.round(reportPeak),
+      reportMin: Math.round(reportMin),
+      reportChangePct,
+    };
+  }
+
+  return {
+    reportPeak: Math.round(currentPrice * 1.03),
+    reportMin: Math.round(currentPrice * 0.97),
+    reportChangePct:
+      (Math.sign(trendValue) * (2 + ((watchId.charCodeAt(1) || 0) % 3))) / 10,
+  };
+}
+
 const COMPARE_CACHE_PREFIX = 'compare-cache-';
-const CACHE_TTL = 5 * 60 * 1000;
+const COMPARE_CACHE_TTL = 5 * 60 * 1000;
 
 function getCompareCacheKey(ids: string[], currency: string): string {
   const sortedIds = [...ids].sort().join(',');
@@ -76,7 +224,7 @@ function getCachedWatches(ids: string[], currency: string): WatchItem[] | null {
     const { data, timestamp } = JSON.parse(cached);
     const now = Date.now();
 
-    if (now - timestamp > CACHE_TTL) {
+    if (now - timestamp > COMPARE_CACHE_TTL) {
       localStorage.removeItem(cacheKey);
       return null;
     }
@@ -118,10 +266,46 @@ function setCachedWatches(
 
 const convertWatchToCompareProduct = (
   watch: WatchItem,
-  t: (key: string) => string
+  t: (key: string) => string,
+  apiWatchData?: ApiWatchFullResponse,
+  currency: string = 'EUR'
 ): CompareProduct => {
   const imageUrl =
     typeof watch.image === 'string' ? watch.image : watch.image.src;
+
+  const currencySymbol =
+    currency === 'EUR'
+      ? '€'
+      : currency === 'USD'
+      ? '$'
+      : currency === 'UAH'
+      ? '₴'
+      : '€';
+
+  const priceHistory = apiWatchData?.priceHistory;
+  const latestPriceInCurrency =
+    priceHistory && priceHistory.length > 0
+      ? priceHistory
+          .filter((p) => p.currency === currency)
+          .sort(
+            (a, b) =>
+              new Date(b.recordedAt).getTime() -
+              new Date(a.recordedAt).getTime()
+          )[0]
+      : null;
+            
+  const latestPrice =
+    priceHistory && priceHistory.length > 0
+      ? priceHistory[priceHistory.length - 1]
+      : null;
+
+  let currentPrice = watch.price;
+  if (latestPriceInCurrency) {
+    currentPrice = latestPriceInCurrency.price;
+  } else if (latestPrice && latestPrice.currency !== currency) {
+    
+    currentPrice = watch.price;
+  }
 
   return {
     id: watch.id,
@@ -133,14 +317,23 @@ const convertWatchToCompareProduct = (
     chronoUrl: watch.chronoUrl,
     index: watch.index,
     price: {
-      min: watch.price,
-      max: watch.price,
-      currency: watch.currency,
+      min: Math.round(currentPrice),
+      max: Math.round(currentPrice),
+      currency: currencySymbol as '€' | '$' | '₴',
     },
     priceTrend: {
-      value: watch.trend.value,
-      period: watch.trend.period,
-      isPositive: watch.trend.value > 0,
+      value:
+        watch.trend30d !== undefined && watch.trend30d !== null
+          ? watch.trend30d
+          : watch.trend.value,
+      period:
+        watch.trend30d !== undefined && watch.trend30d !== null
+          ? '30d'
+          : watch.trend.period,
+      isPositive:
+        (watch.trend30d !== undefined && watch.trend30d !== null
+          ? watch.trend30d
+          : watch.trend.value) > 0,
     },
     image: imageUrl,
     thumbnails: [imageUrl, imageUrl, imageUrl, imageUrl],
@@ -183,33 +376,75 @@ const convertWatchToCompareProduct = (
           : t(productKeys.details.no),
       },
     ],
-    analytics: {
-      demand: Math.floor((watch.id.charCodeAt(2) || 0) * 0.4) + 30,
-      liquidity: Math.floor((watch.id.charCodeAt(2) || 0) * 0.3) + 50,
-      dynamics: Math.floor((watch.id.charCodeAt(2) || 0) * 0.2) + 5,
-      ads: `За ${Math.floor((watch.id.charCodeAt(2) || 0) * 0.1) + 1} днів`,
-      trendGauge: Math.floor((watch.id.charCodeAt(2) || 0) * 0.4) + 30,
-      lastUpdated: 'вересень 2024 року',
-      volatility:
-        watch.index === 'A'
-          ? 'Низька'
-          : watch.index === 'C'
-          ? 'Висока'
-          : 'Середня',
-      liquidityLabel:
-        watch.index === 'A'
-          ? 'Висока'
-          : watch.index === 'B'
-          ? 'Середня'
-          : 'Низька',
-      popularity: 7.5 + ((watch.id.charCodeAt(2) || 0) % 20) / 10,
-      reportPeak: Math.round(watch.price * 1.03),
-      reportMin: Math.round(watch.price * 0.97),
-      reportChangePct:
-        (Math.sign(watch.trend.value) *
-          (2 + ((watch.id.charCodeAt(1) || 0) % 3))) /
-        10,
-    },
+    analytics: (() => {
+      const period = '3M';
+      const cachedPriceReport = getCachedPriceReport(
+        watch.id,
+        currency,
+        period
+      );
+
+      let priceReport: {
+        reportPeak: number;
+        reportMin: number;
+        reportChangePct: number;
+      };
+
+      if (cachedPriceReport) {
+        priceReport = cachedPriceReport;
+      } else {
+        priceReport = calculatePriceReport(
+          apiWatchData?.priceHistory,
+          watch.price,
+          watch.trend.value,
+          watch.id,
+          period,
+          currency,
+          apiWatchData?.currency
+        );
+        setCachedPriceReport(watch.id, currency, period, priceReport);
+      }
+
+      return {
+        demand: Math.min(100, Math.abs(watch.trend.value) * 10),
+        liquidity: watch.liquidity
+          ? parseFloat(watch.liquidity) ||
+            (apiWatchData?.analytics?.liquidity
+              ? parseFloat(apiWatchData.analytics.liquidity)
+              : 0)
+          : apiWatchData?.analytics?.liquidity
+          ? parseFloat(apiWatchData.analytics.liquidity)
+          : 0,
+        dynamics: watch.trend.value,
+        ads: 'За 3 дні',
+        trendGauge: Math.abs(watch.trend.value) * 10,
+        lastUpdated: 'вересень 2025 року',
+        volatility:
+          Math.abs(watch.trend.value) < 4
+            ? 'Низька'
+            : Math.abs(watch.trend.value) < 8
+            ? 'Середня'
+            : 'Висока',
+        liquidityLabel:
+          watch.index === 'A'
+            ? 'Висока'
+            : watch.index === 'B'
+            ? 'Середня'
+            : 'Низька',
+        popularity: Math.min(
+          10,
+          Math.max(
+            0,
+            watch.popularity
+              ? watch.popularity
+              : apiWatchData?.analytics?.popularity ?? 0
+          )
+        ),
+        reportPeak: priceReport.reportPeak,
+        reportMin: priceReport.reportMin,
+        reportChangePct: priceReport.reportChangePct,
+      };
+    })(),
     similarModels: [],
     sellerOffers: [],
     comparisonId: watch.id,
@@ -222,6 +457,9 @@ const ComparePageWrapper = () => {
   const locale = useLocale();
   const { selectedWatches } = useCompareContext();
   const [watches, setWatches] = useState<WatchItem[]>([]);
+  const [apiWatchesData, setApiWatchesData] = useState<
+    Map<string, ApiWatchFullResponse>
+  >(new Map());
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -250,6 +488,14 @@ const ComparePageWrapper = () => {
         );
         setWatches(transformed);
         setCachedWatches(selectedWatches, currency, transformed);
+
+        const watchesDataMap = new Map<string, ApiWatchFullResponse>();
+        apiWatches.forEach((watch) => {
+          if (watch && watch.id) {
+            watchesDataMap.set(watch.id, watch);
+          }
+        });
+        setApiWatchesData(watchesDataMap);
       } catch {
         setError(t(compareKeys.error));
       } finally {
@@ -277,8 +523,18 @@ const ComparePageWrapper = () => {
       return [];
     }
 
-    return watches.map((watch) => convertWatchToCompareProduct(watch, t));
-  }, [watches]);
+    const currency = getCurrencyFromStorage();
+    return watches.map((watch) =>
+      convertWatchToCompareProduct(
+        watch,
+        t,
+        apiWatchesData.get(watch.id),
+        currency
+      )
+    );
+  }, [watches, apiWatchesData]);
+
+  const currency = getCurrencyFromStorage();
 
   const handleBackToCatalog = () => {
     router.push(`/${locale}/catalog`);
@@ -298,13 +554,19 @@ const ComparePageWrapper = () => {
   if (error) {
     return (
       <div className='flex justify-center items-center min-h-screen'>
-        <div className='text-red-500 text-center px-4'>{error}</div>
+        <div className='px-4 text-center text-red-500'>{error}</div>
       </div>
     );
   }
 
   return (
-    <ComparePage products={products} onBackToCatalog={handleBackToCatalog} />
+    <ComparePage
+      products={products}
+      watches={watches}
+      onBackToCatalog={handleBackToCatalog}
+      apiWatchesData={apiWatchesData}
+      currency={currency}
+    />
   );
 };
 

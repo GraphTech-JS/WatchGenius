@@ -11,6 +11,16 @@ var product_icons_1 = require("@/product-icons");
 var PriceChart_1 = require("./components/PriceChart");
 var TrendGauge_1 = require("./components/TrendGauge");
 var brands_1 = require("@/data/brands");
+function convertCurrency(currency) {
+    var upperCurrency = currency.toUpperCase();
+    if (upperCurrency === 'EUR' || upperCurrency === '€')
+        return '€';
+    if (upperCurrency === 'USD' || upperCurrency === '$')
+        return '$';
+    if (upperCurrency === 'UAH' || upperCurrency === '₴')
+        return '₴';
+    return '€';
+}
 var ProductAnalytics = function (_a) {
     var analytics = _a.analytics, activeTab = _a.activeTab, onTabChange = _a.onTabChange, details = _a.details, brand = _a.brand, _b = _a.isCompare, isCompare = _b === void 0 ? false : _b, priceHistory = _a.priceHistory, currentPrice = _a.currentPrice, currency = _a.currency, apiWatchCurrency = _a.apiWatchCurrency;
     var _c = react_1.useState('3M'), activeChartPeriod = _c[0], setActiveChartPeriod = _c[1];
@@ -163,7 +173,7 @@ var ProductAnalytics = function (_a) {
                     var displayTitle = content === brands_1.BRAND_CONTENT["default"] ? brand : content.title;
                     return (react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].brandContent },
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].brandBackground + " " + (isCompare ? ProductAnalytics_module_css_1["default"].brandBackgroundCompare : '') },
-                            react_1["default"].createElement(image_1["default"], { src: content.image, alt: displayTitle + " Brand Background", width: 592, height: 329, className: ProductAnalytics_module_css_1["default"].brandBackgroundImage })),
+                            react_1["default"].createElement(image_1["default"], { src: content.image, alt: displayTitle + " Brand Background", width: 400, height: 220, className: ProductAnalytics_module_css_1["default"].brandBackgroundImage })),
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].brandTextContent },
                             react_1["default"].createElement("h3", { className: ProductAnalytics_module_css_1["default"].brandTitle }, displayTitle),
                             content.paragraphs.map(function (p, idx) { return (react_1["default"].createElement("p", { key: idx, className: ProductAnalytics_module_css_1["default"].brandText }, p)); }))));
@@ -199,12 +209,12 @@ var ProductAnalytics = function (_a) {
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].reportItem },
                             react_1["default"].createElement("span", { className: ProductAnalytics_module_css_1["default"].reportItemLabel }, i18n_1.t(product_1.productKeys.analytics.price.report.peak)),
                             react_1["default"].createElement("span", { className: ProductAnalytics_module_css_1["default"].reportItemValue },
-                                "\u20AC",
+                                convertCurrency(currency || 'EUR'),
                                 analytics.reportPeak.toLocaleString('uk-UA'))),
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].reportItem },
                             react_1["default"].createElement("span", { className: ProductAnalytics_module_css_1["default"].reportItemLabel }, i18n_1.t(product_1.productKeys.analytics.price.report.min)),
                             react_1["default"].createElement("span", { className: ProductAnalytics_module_css_1["default"].reportItemValue },
-                                "\u20AC",
+                                convertCurrency(currency || 'EUR'),
                                 analytics.reportMin.toLocaleString('uk-UA'))),
                         react_1["default"].createElement("div", { className: ProductAnalytics_module_css_1["default"].reportItem },
                             react_1["default"].createElement("span", { className: ProductAnalytics_module_css_1["default"].reportItemLabel }, i18n_1.t(product_1.productKeys.analytics.price.report.change)),
