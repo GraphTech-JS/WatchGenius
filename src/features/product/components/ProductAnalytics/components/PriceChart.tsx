@@ -181,6 +181,26 @@ const PriceChart: React.FC<PriceChartProps> = ({
       };
     }
 
+    if (processed.prices.length === 1) {
+  const singlePrice = processed.prices[0];
+  return {
+    labels: [processed.labels[0], processed.labels[0]], 
+    datasets: [
+      {
+        data: [singlePrice, singlePrice], 
+        borderWidth: 3,
+        fill: false,
+        tension: 0, 
+        pointRadius: 0,
+        pointBackgroundColor: '#38D95B',
+        pointHoverRadius: 8,
+        pointHoverBorderColor: 'white',
+        pointHoverBorderWidth: 2,
+      },
+    ],
+  };
+}
+
     return {
       labels: processed.labels,
       datasets: [
@@ -414,15 +434,17 @@ const PriceChart: React.FC<PriceChartProps> = ({
     if (!chart || !chart.chartArea) return;
 
     const prices = chartData.datasets[0]?.data || [];
+
+    const uniquePrices = [...new Set(prices as number[])];
+    const isSinglePrice = uniquePrices.length === 1;
+
     const chartDataWithGradient = {
       ...chartData,
       datasets: chartData.datasets.map((dataset) => ({
         ...dataset,
-        borderColor: createGradient(
-          chart.ctx,
-          chart.chartArea,
-          prices as number[]
-        ),
+        borderColor: isSinglePrice
+          ? '#38D95B' 
+          : createGradient(chart.ctx, chart.chartArea, prices as number[]),
       })),
     };
 
