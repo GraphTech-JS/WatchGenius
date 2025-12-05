@@ -21,6 +21,7 @@ import {
   ApiWatchFullResponse,
 } from '@/interfaces/api';
 import { IWatch } from '@/interfaces';
+import { trackEvent } from '@/lib/analytics';
 import { generateSlug } from '@/lib/transformers';
 
 export const BestPrice = () => {
@@ -299,6 +300,14 @@ export const BestPrice = () => {
       };
 
       await createPriceAlert(alertData);
+
+      trackEvent('price_alert_sub', {
+        product_id: selectedModel,
+        target_price: targetPrice,
+        currency: selectedCurrency,
+        brand: brand,
+        model: model,
+      });
 
       setShowSuccessModal(true);
 
