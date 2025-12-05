@@ -10,6 +10,7 @@ import { LocalizedLink } from '@/components/LocalizedLink';
 import { t } from '@/i18n';
 import { a11yKeys } from '@/i18n/keys/accessibility';
 import { useWishlistContext } from '@/context/WishlistContext';
+import { trackEvent } from '@/lib/analytics';
 
 const ArrowUp = () => (
   <svg
@@ -163,10 +164,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     return modelName || brand;
   };
 
+  const handleCardClick = () => {
+    trackEvent('card_click', {
+      product_id: id?.toString() || originalId || '',
+      product_slug: slug || '',
+      brand: brand || '',
+      price: price || 0,
+    });
+  };
+
   return (
     <LocalizedLink
       href={slug ? `/product/${slug}` : '/catalog'}
       prefetch={false}
+      onClick={handleCardClick}
       aria-label={t(a11yKeys.card.product, {
         brand,
         price,

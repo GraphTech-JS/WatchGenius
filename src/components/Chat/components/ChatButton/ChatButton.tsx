@@ -3,6 +3,7 @@ import { RobotWhiteIcon } from '../../../../../public/chat/Icon';
 import styles from './ChatButton.module.css';
 import { t } from '@/i18n';
 import { a11yKeys } from '@/i18n/keys/accessibility';
+import { trackEvent } from '@/lib/analytics';
 
 interface IChatButton {
   onClick: () => void;
@@ -19,7 +20,12 @@ export const ChatButton: React.FC<IChatButton> = ({
     <button
       type='button'
       aria-label={t(a11yKeys.ai.chat)}
-      onClick={onClick}
+      onClick={() => {
+        trackEvent('chat_open', {
+          source: 'floating_button',
+        });
+        onClick();
+      }}
       style={{
         bottom: `calc(${
           dynamicPosition?.bottom || '20%'

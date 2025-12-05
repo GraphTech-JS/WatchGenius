@@ -1,6 +1,7 @@
 'use client';
 import React, { useEffect, useContext } from 'react';
 import { MainContext } from '@/context';
+import { trackEvent } from '@/lib/analytics';
 
 import { CatalogSidebar } from '@/features/catalog/components/CatalogSidebar/CatalogSidebar';
 import { FixedSidebar } from '@/features/catalog/components/FixedSidebar/FixedSidebar';
@@ -103,6 +104,15 @@ const CatalogPage = () => {
   };
 
   const handleAskGeni = () => {};
+
+  useEffect(() => {
+    trackEvent('catalog_view', {
+      filters_count: search.activeFilters.length,
+      sort_option: search.sortOption,
+      results_count: search.filteredItems.length,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
 
   return (
     <main className='bg-white py-[60px] min-h-screen mx-auto'>

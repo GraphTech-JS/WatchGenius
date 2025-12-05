@@ -5,6 +5,7 @@ import { filterData, type IndexButton } from '@/mock/filterData';
 import { toggleInArray } from '@/utils/array';
 import { getFilters } from '@/lib/api';
 import type { ApiFiltersResponse } from '@/interfaces/api';
+import { trackEvent } from '@/lib/analytics';
 
 type Currency = '€' | '$' | '₴';
 
@@ -97,27 +98,81 @@ export const useCatalogFilters = () => {
   );
 
   const toggleBrand = useCallback(
-    (brand: string) => setSelectedBrands((prev) => toggleInArray(prev, brand)),
+    (brand: string) => {
+      setSelectedBrands((prev) => {
+        const newBrands = toggleInArray(prev, brand);
+        trackEvent('filter_change', {
+          filter_type: 'brand',
+          filter_value: brand,
+        });
+        return newBrands;
+      });
+    },
     []
   );
   const toggleCondition = useCallback(
-    (v: string) => setSelectedConditions((prev) => toggleInArray(prev, v)),
+    (v: string) => {
+      setSelectedConditions((prev) => {
+        const newConditions = toggleInArray(prev, v);
+        trackEvent('filter_change', {
+          filter_type: 'condition',
+          filter_value: v,
+        });
+        return newConditions;
+      });
+    },
     []
   );
   const toggleMechanism = useCallback(
-    (v: string) => setSelectedMechanisms((prev) => toggleInArray(prev, v)),
+    (v: string) => {
+      setSelectedMechanisms((prev) => {
+        const newMechanisms = toggleInArray(prev, v);
+        trackEvent('filter_change', {
+          filter_type: 'mechanism',
+          filter_value: v,
+        });
+        return newMechanisms;
+      });
+    },
     []
   );
   const toggleMaterial = useCallback(
-    (v: string) => setSelectedMaterials((prev) => toggleInArray(prev, v)),
+    (v: string) => {
+      setSelectedMaterials((prev) => {
+        const newMaterials = toggleInArray(prev, v);
+        trackEvent('filter_change', {
+          filter_type: 'material',
+          filter_value: v,
+        });
+        return newMaterials;
+      });
+    },
     []
   );
   const toggleDocument = useCallback(
-    (v: string) => setSelectedDocuments((prev) => toggleInArray(prev, v)),
+    (v: string) => {
+      setSelectedDocuments((prev) => {
+        const newDocuments = toggleInArray(prev, v);
+        trackEvent('filter_change', {
+          filter_type: 'document',
+          filter_value: v,
+        });
+        return newDocuments;
+      });
+    },
     []
   );
   const toggleLocation = useCallback(
-    (v: string) => setSelectedLocations((prev) => toggleInArray(prev, v)),
+    (v: string) => {
+      setSelectedLocations((prev) => {
+        const newLocations = toggleInArray(prev, v);
+        trackEvent('filter_change', {
+          filter_type: 'location',
+          filter_value: v,
+        });
+        return newLocations;
+      });
+    },
     []
   );
 

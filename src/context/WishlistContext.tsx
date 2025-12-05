@@ -14,6 +14,7 @@ import type { WatchItem } from '@/interfaces/watch';
 import { getWatchesByIds, getWatchById } from '@/lib/api';
 import { transformApiWatchFull } from '@/lib/transformers';
 import { Toast } from '@/components/Toast/Toast';
+import { trackEvent } from '@/lib/analytics';
 import { t } from '@/i18n';
 import { wishlistKeys } from '@/i18n/keys/wishlist';
 
@@ -184,6 +185,10 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
           .then((apiWatch) => {
             const transformed = transformApiWatchFull(apiWatch, 'EUR');
             dispatch({ type: 'ADD_TO_WISHLIST', payload: transformed });
+            trackEvent('watchlist_save', {
+              product_id: transformed.id,
+              source: 'card',
+            });
           })
           .catch((err) => {
             console.error('❌ [Wishlist] Failed to add watch:', err);
@@ -199,6 +204,10 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
           return;
         }
         dispatch({ type: 'ADD_TO_WISHLIST', payload: watch });
+        trackEvent('watchlist_save', {
+          product_id: watch.id,
+          source: 'card',
+        });
       }
     },
     [wishlistIds, wishlistItems.length]
@@ -206,6 +215,10 @@ export const WishlistProvider: React.FC<{ children: ReactNode }> = ({
 
   const removeFromWishlist = useCallback((watchId: string) => {
     dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: watchId });
+    trackEvent('watchlist_remove', {
+      product_id: watchId,
+      source: 'card',
+    });
   }, []);
 
   const clearWishlist = useCallback(() => {

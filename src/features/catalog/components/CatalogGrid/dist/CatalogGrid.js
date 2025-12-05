@@ -143,7 +143,7 @@ exports.CatalogGrid = function (_a) {
         ariaLabel = 'Показати більше годинників';
     }
     return (react_1["default"].createElement(react_1["default"].Fragment, null,
-        react_1["default"].createElement("div", { className: 'grid max-[375px]:gap-y-[17px] max-[375px]:gap-[17px] gap-[17px] gap-y-[25px] grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4' }, visible.map(function (item, index) { return (react_1["default"].createElement(WatchCard_1.WatchCard, { key: item.id, item: item, liked: isInWishlist(item.id), onToggleLike: handleToggleLike, onOpenFeedback: onOpenFeedback, priority: index === 0 })); })),
+        react_1["default"].createElement("div", { className: 'grid max-[375px]:gap-y-[17px] max-[375px]:gap-[17px] gap-[17px] gap-y-[25px] grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4' }, visible.map(function (item, index) { return (react_1["default"].createElement(WatchCard_1.WatchCard, { key: item.id, item: item, liked: isInWishlist(item.id), onToggleLike: handleToggleLike, onOpenFeedback: onOpenFeedback, priority: index === 0, positionInGrid: index + 1 })); })),
         showButton && (react_1["default"].createElement("div", { className: 'flex justify-center mt-6' },
             react_1["default"].createElement("button", { onClick: function () { return __awaiter(void 0, void 0, void 0, function () {
                     var error_2;

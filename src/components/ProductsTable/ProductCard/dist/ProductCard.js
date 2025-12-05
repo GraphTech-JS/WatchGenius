@@ -23,6 +23,7 @@ var LocalizedLink_1 = require("@/components/LocalizedLink");
 var i18n_1 = require("@/i18n");
 var accessibility_1 = require("@/i18n/keys/accessibility");
 var WishlistContext_1 = require("@/context/WishlistContext");
+var analytics_1 = require("@/lib/analytics");
 var ArrowUp = function () { return (react_1["default"].createElement("svg", { width: '16', height: '14', viewBox: '0 0 16 14', fill: 'none', "aria-hidden": 'true' },
     react_1["default"].createElement("path", { d: '\r\n      M8 1 V14\r\n      M8 2 L13 7\r\n      M8 1 L3 7\r\n      ', stroke: 'currentColor', strokeWidth: '2', strokeLinecap: 'butt', strokeLinejoin: 'miter' }))); };
 var ArrowDown = function () { return (react_1["default"].createElement("svg", { width: '16', height: '14', viewBox: '0 0 16 14', fill: 'none', "aria-hidden": 'true' },
@@ -105,7 +106,15 @@ exports.ProductCard = function (_a) {
         }
         return modelName || brand;
     };
-    return (react_1["default"].createElement(LocalizedLink_1.LocalizedLink, { href: slug ? "/product/" + slug : '/catalog', prefetch: false, "aria-label": i18n_1.t(accessibility_1.a11yKeys.card.product, {
+    var handleCardClick = function () {
+        analytics_1.trackEvent('card_click', {
+            product_id: (id === null || id === void 0 ? void 0 : id.toString()) || originalId || '',
+            product_slug: slug || '',
+            brand: brand || '',
+            price: price || 0
+        });
+    };
+    return (react_1["default"].createElement(LocalizedLink_1.LocalizedLink, { href: slug ? "/product/" + slug : '/catalog', prefetch: false, onClick: handleCardClick, "aria-label": i18n_1.t(accessibility_1.a11yKeys.card.product, {
             brand: brand,
             price: price,
             currency: '€',

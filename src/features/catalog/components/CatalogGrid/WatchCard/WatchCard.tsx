@@ -9,6 +9,7 @@ import type { WatchItem } from '@/interfaces/watch';
 import styles from './WatchCard.module.css';
 import { t } from '@/i18n';
 import { a11yKeys } from '@/i18n/keys/accessibility';
+import { trackEvent } from '@/lib/analytics';
 
 type Props = {
   item: WatchItem;
@@ -16,6 +17,7 @@ type Props = {
   onToggleLike: (id: string) => void;
   onOpenFeedback?: (watchTitle: string) => void;
   priority?: boolean;
+  positionInGrid?: number;
 };
 
 const indexBadgeClass = (idx: WatchItem['index']) => {
@@ -35,6 +37,7 @@ export const WatchCard: React.FC<Props> = ({
   onToggleLike,
   onOpenFeedback,
   priority = false,
+  positionInGrid,
 }) => {
   const router = useRouter();
   const locale = useLocale();
@@ -48,6 +51,13 @@ export const WatchCard: React.FC<Props> = ({
   const trendPeriod = '90d';
 
   const handleCardClick = () => {
+    trackEvent('card_click', {
+      product_id: item.id,
+      product_slug: item.slug,
+      brand: item.brand,
+      price: item.price,
+      position_in_grid: positionInGrid,
+    });
     router.push(`/${locale}/product/${item.slug}`);
   };
 

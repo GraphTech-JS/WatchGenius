@@ -13,6 +13,7 @@ var react_1 = require("react");
 var api_1 = require("@/lib/api");
 var transformers_1 = require("@/lib/transformers");
 var Toast_1 = require("@/components/Toast/Toast");
+var analytics_1 = require("@/lib/analytics");
 var i18n_1 = require("@/i18n");
 var wishlist_1 = require("@/i18n/keys/wishlist");
 var MAX_WISHLIST_ITEMS = 3;
@@ -128,6 +129,10 @@ exports.WishlistProvider = function (_a) {
                 .then(function (apiWatch) {
                 var transformed = transformers_1.transformApiWatchFull(apiWatch, 'EUR');
                 dispatch({ type: 'ADD_TO_WISHLIST', payload: transformed });
+                analytics_1.trackEvent('watchlist_save', {
+                    product_id: transformed.id,
+                    source: 'card'
+                });
             })["catch"](function (err) {
                 console.error('❌ [Wishlist] Failed to add watch:', err);
                 setError(err instanceof Error ? err.message : 'Failed to add watch');
@@ -140,10 +145,18 @@ exports.WishlistProvider = function (_a) {
                 return;
             }
             dispatch({ type: 'ADD_TO_WISHLIST', payload: watch });
+            analytics_1.trackEvent('watchlist_save', {
+                product_id: watch.id,
+                source: 'card'
+            });
         }
     }, [wishlistIds, wishlistItems.length]);
     var removeFromWishlist = react_1.useCallback(function (watchId) {
         dispatch({ type: 'REMOVE_FROM_WISHLIST', payload: watchId });
+        analytics_1.trackEvent('watchlist_remove', {
+            product_id: watchId,
+            source: 'card'
+        });
     }, []);
     var clearWishlist = react_1.useCallback(function () {
         dispatch({ type: 'CLEAR_WISHLIST' });

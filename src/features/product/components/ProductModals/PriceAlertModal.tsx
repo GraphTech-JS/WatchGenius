@@ -6,6 +6,7 @@ import { CustomSelect } from '@/components/CustomSelect/CustomSelect';
 import { useFormValidation } from '@/hooks/useFormValidation';
 import { createPriceAlert, getWatchModels } from '@/lib/api';
 import type { ApiCurrency, ApiBrandModel } from '@/interfaces/api';
+import { trackEvent } from '@/lib/analytics';
 import styles from './PriceAlertModal.module.css';
 import { t } from '@/i18n';
 import { modalsKeys } from '@/i18n/keys/modals';
@@ -226,6 +227,12 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
       };
 
       await createPriceAlert(alertData);
+
+      trackEvent('price_alert_sub', {
+        product_id: productTitle,
+        target_price: targetPrice,
+        currency: selectedCurrency,
+      });
 
       setShowSuccessModal(true);
 

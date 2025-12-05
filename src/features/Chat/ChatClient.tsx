@@ -5,6 +5,7 @@ import { ChatButton } from "@/components/Chat/components/ChatButton/ChatButton";
 import { FloatingButton } from "@/components/FloatingButton";
 import { MainContext } from "@/context";
 import React, { useContext, useEffect } from "react";
+import { trackEvent } from '@/lib/analytics';
 
 export default function ChatClient({
   children,
@@ -16,7 +17,15 @@ export default function ChatClient({
   useEffect(() => {
     const handleToggleChat = (e: Event) => {
       const custom = e as CustomEvent<boolean>;
-      setSideChatOpened(!!custom.detail);
+      const isOpening = !!custom.detail;
+
+      if (isOpening) {
+        trackEvent('chat_open', {
+          source: 'floating_button', 
+        });
+      }
+
+      setSideChatOpened(isOpening);
     };
 
     window.addEventListener("toggleChat", handleToggleChat as EventListener);

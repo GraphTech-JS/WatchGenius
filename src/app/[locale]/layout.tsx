@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation';
 import { languages, type Locale } from '@/i18n/settings';
 import { BackdropDistortionDefs } from '@/components/Chat/components/BackdropDistortionDefs';
 import { OrganizationJsonLd, WebSiteJsonLd } from '@/components/JsonLd';
+import { GTM } from '@/components/GTM/GTM';
 
 const inter = Inter({
   variable: '--font-inter',
@@ -118,6 +119,7 @@ export default async function RootLayout({
       <body
         className={`${roboto.variable} ${inter.variable} ${akatab.variable}`}
       >
+        <GTM />
         <OrganizationJsonLd />
         <WebSiteJsonLd />
         <BackdropDistortionDefs />

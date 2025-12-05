@@ -3,6 +3,7 @@
 exports.__esModule = true;
 var react_1 = require("react");
 var context_1 = require("@/context");
+var analytics_1 = require("@/lib/analytics");
 var CatalogSidebar_1 = require("@/features/catalog/components/CatalogSidebar/CatalogSidebar");
 var FixedSidebar_1 = require("@/features/catalog/components/FixedSidebar/FixedSidebar");
 var CatalogGrid_1 = require("@/features/catalog/components/CatalogGrid/CatalogGrid");
@@ -92,6 +93,14 @@ var CatalogPage = function () {
         search.clearSidebarFilters();
     };
     var handleAskGeni = function () { };
+    react_1.useEffect(function () {
+        analytics_1.trackEvent('catalog_view', {
+            filters_count: search.activeFilters.length,
+            sort_option: search.sortOption,
+            results_count: search.filteredItems.length
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (react_1["default"].createElement("main", { className: 'bg-white py-[60px] min-h-screen mx-auto' },
         react_1["default"].createElement("div", { className: 'flex flex-col mb-[15px]' },
             react_1["default"].createElement("h1", { className: page_module_css_1["default"].catalogTitle }, i18n_1.t(catalog_1.catalogKeys.page.title)),
