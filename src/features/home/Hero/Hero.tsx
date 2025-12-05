@@ -1,5 +1,7 @@
 'use client';
 import React, { useContext } from 'react';
+import { useRef, useEffect } from 'react';
+import { trackEvent } from '@/lib/analytics';
 import Image from 'next/image';
 import styles from './Hero.module.css';
 import { LocalizedLink } from '@/components/LocalizedLink';
@@ -12,13 +14,41 @@ import { a11yKeys } from '@/i18n/keys/accessibility';
 
 export const Hero = () => {
   const { setSideChatOpened } = useContext(MainContext);
-
+  const heroRef = useRef<HTMLDivElement>(null);
   const handleChatClick = () => {
+    trackEvent('cta_click', {
+      button_type: 'chat',
+      position: 'hero',
+    });
+    trackEvent('chat_open', {
+      source: 'hero',
+    });
     setSideChatOpened(true);
   };
 
+  useEffect(() => {
+    if (!heroRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          trackEvent('hero_exposed', {
+            timestamp: Date.now(),
+            viewport_height: window.innerHeight,
+          });
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(heroRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className={`${styles.hero} `}>
+    <section ref={heroRef} className={`${styles.hero} `}>
       <div className={`${styles.heroContainer} w-full relative`}>
         <Image
           src='/hero-section/HeroBgBig.webp'
@@ -53,6 +83,12 @@ export const Hero = () => {
             >
               <LocalizedLink href='/catalog' className={styles.heroLink}>
                 <button
+                  onClick={() => {
+                    trackEvent('cta_click', {
+                      button_type: 'catalog',
+                      position: 'hero',
+                    });
+                  }}
                   className={`${styles.heroCatalogBtn} w-full py-[12px] rounded-[10px] cursor-pointer`}
                 >
                   <div>{t(heroKeys.buttons.catalog)}</div>

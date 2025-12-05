@@ -8,6 +8,7 @@ import { convertFiltersToApiParams } from '@/lib/api';
 import { GetWatchesParams } from '@/interfaces/api';
 import { t } from '@/i18n';
 import { catalogKeys } from '@/i18n/keys/catalog';
+import { trackEvent } from '@/lib/analytics';
 
 
 type ActiveFilterChip ={
@@ -50,6 +51,7 @@ export const useCatalogSearch = () => {
   const [sidebarFilters, setSidebarFilters] =
     useState<UseCatalogFiltersReturn | null>(null);
   const [sortOption, setSortOption] = useState<SortOption>(SortOption.DEFAULT);
+  const previousSortRef = useRef<SortOption>(SortOption.DEFAULT);
   const chipsRef = useRef<HTMLDivElement | null>(null);
   const [chipsHeight, setChipsHeight] = useState(0);
   const { watches, loadMore, hasMore, reloadWithFilters, loading } = useWatches(); 
@@ -267,6 +269,15 @@ useEffect(() => {
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [searchTerm, sidebarFilters, sortOption]);
+  const handleSortChange = useCallback((newSort: SortOption) => {
+    trackEvent('sort_change', {
+      sort_option: newSort,
+      previous_sort: previousSortRef.current,
+    });
+    previousSortRef.current = newSort;
+    setSortOption(newSort);
+  }, []);
+
   return {
     searchTerm,
     setSearchTerm,
@@ -277,7 +288,7 @@ useEffect(() => {
     applySidebarFilters,
     clearSidebarFilters,
     sortOption,
-    setSortOption,
+    setSortOption: handleSortChange,
 
     activeFilters,
     removeFilter,

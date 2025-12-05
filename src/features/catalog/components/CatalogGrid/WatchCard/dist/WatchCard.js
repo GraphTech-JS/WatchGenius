@@ -10,6 +10,7 @@ var lucide_react_1 = require("lucide-react");
 var WatchCard_module_css_1 = require("./WatchCard.module.css");
 var i18n_1 = require("@/i18n");
 var accessibility_1 = require("@/i18n/keys/accessibility");
+var analytics_1 = require("@/lib/analytics");
 var indexBadgeClass = function (idx) {
     switch (idx) {
         case 'A':
@@ -22,7 +23,7 @@ var indexBadgeClass = function (idx) {
 };
 exports.WatchCard = function (_a) {
     var _b, _c;
-    var item = _a.item, liked = _a.liked, onToggleLike = _a.onToggleLike, onOpenFeedback = _a.onOpenFeedback, _d = _a.priority, priority = _d === void 0 ? false : _d;
+    var item = _a.item, liked = _a.liked, onToggleLike = _a.onToggleLike, onOpenFeedback = _a.onOpenFeedback, _d = _a.priority, priority = _d === void 0 ? false : _d, positionInGrid = _a.positionInGrid;
     var router = navigation_1.useRouter();
     var locale = useLocale_1.useLocale();
     var trendValue = item.trend90d !== undefined && item.trend90d !== null
@@ -32,6 +33,13 @@ exports.WatchCard = function (_a) {
     var isFlat = Math.abs(trendValue) < 0.01;
     var trendPeriod = '90d';
     var handleCardClick = function () {
+        analytics_1.trackEvent('card_click', {
+            product_id: item.id,
+            product_slug: item.slug,
+            brand: item.brand,
+            price: item.price,
+            position_in_grid: positionInGrid
+        });
         router.push("/" + locale + "/product/" + item.slug);
     };
     var hasValidImage = function () {

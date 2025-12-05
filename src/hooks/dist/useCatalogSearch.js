@@ -26,6 +26,7 @@ var sortingUtils_1 = require("@/utils/sortingUtils");
 var api_1 = require("@/lib/api");
 var i18n_1 = require("@/i18n");
 var catalog_1 = require("@/i18n/keys/catalog");
+var analytics_1 = require("@/lib/analytics");
 function translateFilterValue(group, value) {
     var translationKeyMap = {
         'brand': catalog_1.catalogKeys.filterData.brands,
@@ -51,6 +52,7 @@ exports.useCatalogSearch = function () {
     var _b = react_1.useState([]), selectedIndexes = _b[0], setSelectedIndexes = _b[1];
     var _c = react_1.useState(null), sidebarFilters = _c[0], setSidebarFilters = _c[1];
     var _d = react_1.useState(sorting_1.SortOption.DEFAULT), sortOption = _d[0], setSortOption = _d[1];
+    var previousSortRef = react_1.useRef(sorting_1.SortOption.DEFAULT);
     var chipsRef = react_1.useRef(null);
     var _e = react_1.useState(0), chipsHeight = _e[0], setChipsHeight = _e[1];
     var _f = useWatches_1.useWatches(), watches = _f.watches, loadMore = _f.loadMore, hasMore = _f.hasMore, reloadWithFilters = _f.reloadWithFilters, loading = _f.loading;
@@ -249,6 +251,14 @@ exports.useCatalogSearch = function () {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchTerm, sidebarFilters, sortOption]);
+    var handleSortChange = react_1.useCallback(function (newSort) {
+        analytics_1.trackEvent('sort_change', {
+            sort_option: newSort,
+            previous_sort: previousSortRef.current
+        });
+        previousSortRef.current = newSort;
+        setSortOption(newSort);
+    }, []);
     return {
         searchTerm: searchTerm,
         setSearchTerm: setSearchTerm,
@@ -259,7 +269,7 @@ exports.useCatalogSearch = function () {
         applySidebarFilters: applySidebarFilters,
         clearSidebarFilters: clearSidebarFilters,
         sortOption: sortOption,
-        setSortOption: setSortOption,
+        setSortOption: handleSortChange,
         activeFilters: activeFilters,
         removeFilter: removeFilter,
         clearAllFilters: clearAllFilters,

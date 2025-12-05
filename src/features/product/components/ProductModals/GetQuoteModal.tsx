@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { t } from '@/i18n';
 import { formKeys } from '@/i18n/keys/common';
 import { modalsKeys } from '@/i18n/keys/modals';
+import { trackEvent } from '@/lib/analytics';
 import styles from './GetQuoteModal.module.css';
 
 interface GetQuoteModalProps {
@@ -13,7 +14,11 @@ interface GetQuoteModalProps {
   productTitle?: string;
 }
 
-const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
+const GetQuoteModal: React.FC<GetQuoteModalProps> = ({
+  isOpen,
+  onClose,
+  productTitle,
+}) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -75,6 +80,9 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
+      trackEvent('quote_submit_open', {
+        product_title: productTitle,
+      });
       setFormData({
         name: '',
         email: '',
@@ -87,7 +95,7 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
       setConsentError('');
       setShowSuccessModal(false);
     }
-  }, [isOpen]);
+  }, [isOpen, productTitle]);
 
   const handleClose = useCallback(() => {
     onClose();
@@ -137,6 +145,9 @@ const GetQuoteModal: React.FC<GetQuoteModalProps> = ({ isOpen, onClose }) => {
     }
 
     try {
+      trackEvent('quote_submit_sent', {
+        form_fields_count: Object.keys(formData).length,
+      });
       setShowSuccessModal(true);
 
       setTimeout(() => {
