@@ -45,7 +45,6 @@ export async function generateMetadata({
     openGraph: {
       title: `${watch.title} - Аналітика та ціни`,
       description: `Актуальні ціни, історія котирувань, ринкові тренди для ${watch.brand}. AI-консультант для безпечної купівлі.`,
-      
       images: [
         {
           url: watchImage,
