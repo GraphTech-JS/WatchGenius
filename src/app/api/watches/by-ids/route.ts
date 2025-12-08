@@ -6,4 +6,5 @@ export async function GET(request: NextRequest) {
   const ids = idsParam ? idsParam.split(',') : [];
   const currency = request.nextUrl.searchParams.get('currency');
   return watchService.getWatchesByIds(ids, currency || undefined);
+  
 }
