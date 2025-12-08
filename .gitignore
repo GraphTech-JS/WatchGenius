@@ -48,3 +48,6 @@ next-env.d.ts
 
 # Cursor editor configuration
 .cursor/
+
+# VS Code configuration
+.vscode/
