@@ -6,6 +6,12 @@ export function GTM() {
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
   if (!gtmId) {
+    if (
+      typeof window !== 'undefined' &&
+      process.env.NODE_ENV === 'development'
+    ) {
+     
+    }
     return null;
   }
 

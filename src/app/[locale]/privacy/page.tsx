@@ -1,14 +1,13 @@
 import type { Metadata } from 'next';
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://watch-genius-olive.vercel.app';
 export const metadata: Metadata = {
   title: 'Політика конфіденційності - WatchGenius',
   description:
     'Політика конфіденційності WatchGenius. Як ми збираємо, використовуємо та захищаємо ваші персональні дані. Інформація про файли cookie, права користувачів та передачу даних третім особам.',
   alternates: {
-    canonical: `${
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      'https://watch-genius-olive.vercel.app'
-    }/ua/privacy`,
+    canonical: `${baseUrl}/ua/privacy`,
     languages: {
       'uk-UA': '/ua/privacy',
       'en-US': '/en/privacy',
@@ -18,10 +17,15 @@ export const metadata: Metadata = {
     title: 'Політика конфіденційності - WatchGenius',
     description:
       'Як ми збираємо, використовуємо та захищаємо ваші персональні дані. Інформація про права користувачів.',
-    url: `${
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      'https://watch-genius-olive.vercel.app'
-    }/ua/privacy`,
+    url: `${baseUrl}/ua/privacy`,
+    images: [
+      {
+        url: '/hero-section/HeroBgBig.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Політика конфіденційності - WatchGenius',
+      },
+    ],
   },
   robots: {
     index: true,

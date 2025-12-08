@@ -7,9 +7,12 @@ export const OrganizationJsonLd = () => {
     name: 'WatchGenius',
     description:
       'Аналітика цін та трендів для 300+ моделей годинників. Персональний чат-асистент допоможе обрати годинник та купити безпечно.',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://watchgenius.com',
+    url:
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      'https://watch-genius-olive.vercel.app',
     logo: `${
-      process.env.NEXT_PUBLIC_SITE_URL || 'https://watchgenius.com'
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      'https://watch-genius-olive.vercel.app'
     }/icons/Logo.svg`,
     sameAs: [
       'https://www.instagram.com/watchgenius',
@@ -36,13 +39,16 @@ export const WebSiteJsonLd = () => {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'WatchGenius',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://watchgenius.com',
+    url:
+      process.env.NEXT_PUBLIC_SITE_URL ||
+      'https://watch-genius-olive.vercel.app',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
         urlTemplate: `${
-          process.env.NEXT_PUBLIC_SITE_URL || 'https://watchgenius.com'
+          process.env.NEXT_PUBLIC_SITE_URL ||
+          'https://watch-genius-olive.vercel.app'
         }/catalog?search={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',

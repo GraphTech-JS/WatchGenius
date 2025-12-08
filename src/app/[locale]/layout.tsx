@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
   },
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://watchgenius.com'
+    process.env.NEXT_PUBLIC_SITE_URL || 'https://watch-genius-olive.vercel.app'
   ),
   other: {
     'dns-prefetch': 'https://fonts.gstatic.com',
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'uk_UA',
-    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://watchgenius.com',
+    url: process.env.NEXT_PUBLIC_SITE_URL || 'https://watch-genius-olive.vercel.app',
     siteName: 'WatchGenius',
     title: 'WatchGenius - Аналітика ринку годинників з Data+ AI',
     description:
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     images: ['/hero-section/HeroBgBig.webp'],
   },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://watchgenius.com',
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || 'https://watch-genius-olive.vercel.app',
     languages: {
       'uk-UA': '/ua',
       'en-US': '/en',
