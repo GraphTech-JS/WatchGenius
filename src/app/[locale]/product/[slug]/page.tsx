@@ -6,14 +6,36 @@ import type { WatchItem } from '@/interfaces';
 const baseUrl =
   process.env.NEXT_PUBLIC_SITE_URL || 'https://watch-genius-olive.vercel.app';
 
+function isUUID(str: string): boolean {
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(str);
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const resolvedParams = await params;
+  const identifier = resolvedParams.slug;
+
+  if (isUUID(identifier)) {
+    return {
+      title: 'Годинник - WatchGenius',
+      description: 'Детальна інформація про годинник',
+      alternates: {
+        canonical: `${baseUrl}/ua/product/${identifier}`,
+        languages: {
+          'uk-UA': `/ua/product/${identifier}`,
+          'en-US': `/en/product/${identifier}`,
+        },
+      },
+    };
+  }
+
   const watch: WatchItem | undefined = WATCHES.find(
-    (w) => w.slug === resolvedParams.slug
+    (w) => w.slug === identifier
   );
 
   if (!watch) {

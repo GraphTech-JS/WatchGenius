@@ -263,7 +263,7 @@ export interface ChatContext {
 
 export interface ChatMessageRequest {
   message: string;
-  guestId: string;
+  guestId: string | null;
   context?: ChatContext;
 }
 

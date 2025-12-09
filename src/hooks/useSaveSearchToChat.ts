@@ -1,6 +1,8 @@
 import { useContext, useCallback } from 'react';
 import { MainContext } from '@/context';
 
+import { saveSearchToStorage } from '@/utils/chatUtils';
+
 type ActiveFilter = {
   id: string;
   group:
@@ -70,23 +72,26 @@ export const useSaveSearchToChat = () => {
         : 'Знайти годинники по бюджету';
 
 
-    const newMessage = {
-      content: messageText,
-      by: 'me' as const,
-      id: Math.max(...messages.map(m => m.id), 0) + 1,
-      time: new Date().toLocaleTimeString('uk-UA', {
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
-      isSaved: true,
-      savedSearch: {
-        searchTerm: searchData.searchTerm,
-        filters: searchData.activeFilters.map(f => `${f.group}:${f.value}`),
-      },
-    };
+  
+const newMessage = {
+  content: messageText,
+  by: 'me' as const,
+  id: Math.max(...messages.map(m => m.id), 0) + 1,
+  time: new Date().toLocaleTimeString('uk-UA', {
+    hour: '2-digit',
+    minute: '2-digit',
+  }),
+  isSaved: true,
+  savedSearch: {
+    searchTerm: searchData.searchTerm,
+    filters: searchData.activeFilters.map(f => `${f.group}:${f.value}`),
+  },
+};
 
-    setMessages([...messages, newMessage]);
-    setMenuOpened(true);
+    saveSearchToStorage(newMessage);
+
+   setMessages((prev) => [...prev, newMessage]);
+setMenuOpened(true);
   }, [messages, setMessages, setMenuOpened]);
 
   return { saveSearchToChat };

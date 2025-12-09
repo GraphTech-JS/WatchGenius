@@ -9,39 +9,6 @@ const DEFAULT_MESSAGES: Message[] = [
     by: 'ai',
     id: 1,
   },
-  {
-    content: 'Для себе.',
-    by: 'me',
-    id: 2,
-  },
-  {
-    content:
-      'Чудово! 😊А ви шукаєте годинник більше для повсякденного носіння, офіційних подій чи спорту?',
-    by: 'ai',
-    id: 3,
-  },
-  {
-    content: 'Для повсякденного, але щоб виглядав стильно.',
-    by: 'me',
-    id: 4,
-  },
-  {
-    content:
-      'Розумію вас. Тоді рекомендую звернути увагу на класичні або мінімалістичні моделі.Підкажіть ще, вам важливо, щоб годинник був механічний чи на батарейці (кварцовий)?',
-    by: 'ai',
-    id: 5,
-  },
-  {
-    content: 'Напевно, на батарейці, щоб не заводити.',
-    by: 'me',
-    id: 6,
-  },
-  {
-    content:
-      'Тоді кварцовий — чудовий вибір: точний, не потребує щоденного обслуговування. Ще питання: ви надаєте перевагу шкіряним ремінцям, металевим браслетам чи можливо щось нестандартне?',
-    by: 'ai',
-    id: 7,
-  },
 ];
 
 export const MainContext = createContext<IMainContext>({
@@ -58,6 +25,8 @@ export const MainContext = createContext<IMainContext>({
   },
   savedCatalogFilters: null,
   setSavedCatalogFilters: () => {},
+  isApplyingSavedFilters: false,
+  setIsApplyingSavedFilters: () => {},
   messages: DEFAULT_MESSAGES,
 });
 
@@ -99,6 +68,7 @@ export const MainContextProvider = ({ children }: { children: ReactNode }) => {
     searchTerm: string;
     filters: string[];
   } | null>(null);
+  const [isApplyingSavedFilters, setIsApplyingSavedFilters] = useState(false);
 
   const values = {
     menuOpened,
@@ -111,6 +81,8 @@ export const MainContextProvider = ({ children }: { children: ReactNode }) => {
     setMessage,
     savedCatalogFilters,
     setSavedCatalogFilters,
+    isApplyingSavedFilters,
+    setIsApplyingSavedFilters,
   };
 
   return <MainContext.Provider value={values}>{children}</MainContext.Provider>;
