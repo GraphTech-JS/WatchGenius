@@ -19,21 +19,27 @@ import { useSidebarPosition } from '@/hooks/useSidebarPosition';
 import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
 import { t } from '@/i18n';
 import { catalogKeys } from '@/i18n/keys/catalog';
+import { convertFiltersToApiParams } from '@/lib/api';
 
 const CatalogPage = () => {
   const search = useCatalogSearch();
   const sidebar = useSidebarPosition();
   const feedbackModal = useFeedbackModal();
-  const { savedCatalogFilters, setSavedCatalogFilters } =
-    useContext(MainContext);
+  const {
+    savedCatalogFilters,
+    setSavedCatalogFilters,
+    isApplyingSavedFilters,
+    setIsApplyingSavedFilters,
+  } = useContext(MainContext);
 
   const { saveSearchToChat } = useSaveSearchToChat();
 
   useEffect(() => {
     if (savedCatalogFilters) {
-      if (savedCatalogFilters.searchTerm) {
-        search.setSearchTerm(savedCatalogFilters.searchTerm);
-      }
+      setIsApplyingSavedFilters(true);
+
+      const savedSearchTerm = savedCatalogFilters.searchTerm;
+      const savedFilters = savedCatalogFilters.filters;
 
       const selectedBrands: string[] = [];
       const selectedConditions: string[] = [];
@@ -43,7 +49,7 @@ const CatalogPage = () => {
       const selectedLocations: string[] = [];
       const selectedIndexes: Array<'A' | 'B' | 'C'> = [];
 
-      savedCatalogFilters.filters.forEach((filter) => {
+      savedFilters.forEach((filter) => {
         const [group, value] = filter.split(':');
 
         if (group === 'brand') selectedBrands.push(value);
@@ -60,12 +66,19 @@ const CatalogPage = () => {
         }
       });
 
-      if (
+      if (savedSearchTerm) {
+        search.setSearchTerm(savedSearchTerm);
+      }
+
+      const hasFilters =
         selectedBrands.length ||
         selectedConditions.length ||
         selectedMechanisms.length ||
-        selectedMaterials.length
-      ) {
+        selectedMaterials.length ||
+        selectedDocuments.length ||
+        selectedLocations.length;
+
+      if (hasFilters) {
         search.applySidebarFilters({
           selectedBrands,
           selectedConditions,
@@ -85,6 +98,45 @@ const CatalogPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [savedCatalogFilters]);
+
+  useEffect(() => {
+    if (
+      isApplyingSavedFilters &&
+      (search.sidebarFilters || search.searchTerm)
+    ) {
+      const getCurrencyFromStorage = (): string => {
+        if (typeof window === 'undefined') return 'EUR';
+        const savedCurrency = localStorage.getItem('selectedCurrency');
+        const validCurrencies = ['EUR', 'USD', 'PLN', 'UAH'];
+        return savedCurrency && validCurrencies.includes(savedCurrency)
+          ? savedCurrency
+          : 'EUR';
+      };
+
+      setTimeout(() => {
+        const currency = getCurrencyFromStorage();
+        const apiParams =
+          !search.searchTerm.trim() && !search.sidebarFilters
+            ? {
+                pageSize: 12,
+                currency: currency,
+              }
+            : {
+                ...(search.searchTerm.trim() && {
+                  search: search.searchTerm.trim(),
+                }),
+                ...(search.sidebarFilters
+                  ? convertFiltersToApiParams(search.sidebarFilters)
+                  : {}),
+                currency: currency,
+              };
+
+        search.reloadWithFilters(apiParams);
+        setIsApplyingSavedFilters(false);
+      }, 50);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isApplyingSavedFilters, search.sidebarFilters, search.searchTerm]);
 
   const handleSaveToChat = () => {
     saveSearchToChat({
@@ -112,7 +164,7 @@ const CatalogPage = () => {
       results_count: search.filteredItems.length,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, []);
 
   return (
     <main className='bg-white py-[60px] min-h-screen mx-auto'>

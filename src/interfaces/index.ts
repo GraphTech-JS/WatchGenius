@@ -24,6 +24,8 @@ interface IMainContext {
     filters: string[];
   } | null;
   setSavedCatalogFilters: (filters: { searchTerm: string; filters: string[] } | null) => void;
+  isApplyingSavedFilters: boolean;
+  setIsApplyingSavedFilters: (value: boolean) => void;
 }
 
 interface IWatch {

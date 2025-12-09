@@ -22,13 +22,6 @@ export class ChatService extends BaseApiService {
         );
       }
 
-      if (!body.guestId) {
-        return this.createErrorResponse<ChatMessageResponse>(
-          'Guest ID is required',
-          400
-        );
-      }
-
       const endpoint = '/api/chat/message';
 
       return this.handleApiRequest<ChatMessageResponse>(endpoint, {

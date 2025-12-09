@@ -23,6 +23,13 @@ import { catalogKeys } from '@/i18n/keys/catalog';
 import { ProductLoading } from '@/features/product/ProductLoading/ProductLoading';
 import type { ApiPriceHistory, ApiWatchFullResponse } from '@/interfaces/api';
 
+// Функція для перевірки, чи рядок є UUID
+function isUUID(str: string): boolean {
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(str);
+}
+
 function translateDetailValue(
   type: 'condition' | 'mechanism' | 'material',
   value: string
@@ -353,6 +360,8 @@ export default function ProductClient({
   params: Promise<{ slug: string }>;
 }) {
   const resolvedParams = React.use(params);
+  const identifier = resolvedParams.slug;
+  const isId = isUUID(identifier);
   const [watch, setWatch] = useState<WatchItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -368,11 +377,36 @@ export default function ProductClient({
         setError(null);
         const currency = getCurrencyFromStorage();
 
-        const cachedWatch = getCachedProduct(resolvedParams.slug, currency);
+        if (isId) {
+          try {
+            const apiWatch = await getWatchById(identifier, currency);
+            if (apiWatch) {
+              setApiWatchData(apiWatch);
+              const transformedWatch = transformApiWatchFull(
+                apiWatch,
+                currency
+              );
+              setWatch(transformedWatch);
+              if (apiWatch.id) {
+                setCachedWatchId(identifier, apiWatch.id);
+              }
+              setLoading(false);
+              return;
+            }
+          } catch (err) {
+            console.error('Failed to load watch by ID:', err);
+            setError('Watch not found');
+            setLoading(false);
+            return;
+          }
+        }
+
+        const cachedWatch = getCachedProduct(identifier, currency);
         if (cachedWatch) {
           setWatch(cachedWatch);
           const watchId = cachedWatch.id;
           if (watchId) {
+            setCachedWatchId(identifier, watchId);
             try {
               const apiWatch = await getWatchById(watchId, currency);
               if (apiWatch) {
@@ -386,7 +420,7 @@ export default function ProductClient({
           return;
         }
 
-        const cachedId = getCachedWatchId(resolvedParams.slug);
+        const cachedId = getCachedWatchId(identifier);
         if (cachedId) {
           try {
             const apiWatch = await getWatchById(cachedId, currency);
@@ -397,26 +431,26 @@ export default function ProductClient({
                 currency
               );
               setWatch(transformedWatch);
-              setCachedProduct(resolvedParams.slug, currency, transformedWatch);
+              setCachedProduct(identifier, currency, transformedWatch);
               setLoading(false);
               return;
             }
           } catch {}
         }
 
-        const apiWatch = await getWatchBySlug(resolvedParams.slug, currency);
+        const apiWatch = await getWatchBySlug(identifier, currency);
 
         if (!apiWatch) {
           setError('Watch not found');
           return;
         }
 
-        setCachedWatchId(resolvedParams.slug, apiWatch.id);
+        setCachedWatchId(identifier, apiWatch.id);
         setApiWatchData(apiWatch);
 
         const transformedWatch = transformApiWatchFull(apiWatch, currency);
         setWatch(transformedWatch);
-        setCachedProduct(resolvedParams.slug, currency, transformedWatch);
+        setCachedProduct(identifier, currency, transformedWatch);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load watch');
       } finally {
@@ -438,7 +472,7 @@ export default function ProductClient({
       window.removeEventListener('currencyChanged', handleCurrencyChange);
       window.removeEventListener('storage', handleCurrencyChange);
     };
-  }, [resolvedParams.slug]);
+  }, [identifier, isId]);
 
   useEffect(() => {
     if (watch?.id && !hasTrackedView.current) {

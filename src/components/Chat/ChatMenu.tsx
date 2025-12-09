@@ -13,6 +13,17 @@ import { t } from '@/i18n';
 import { chatKeys } from '@/i18n/keys/chat';
 import { a11yKeys } from '@/i18n/keys/accessibility';
 
+import { sendChatMessage, getChatHistory } from '@/lib/api';
+import {
+  getOrCreateGuestId,
+  chatHistoryItemToMessage,
+  getChatContext,
+} from '@/utils/chatUtils';
+import { usePathname } from 'next/navigation';
+import type { Message } from '@/interfaces';
+
+import { getSavedSearches } from '@/utils/chatUtils';
+
 interface ChatMenuProps {
   isOpen: boolean;
   onClose: () => void;
@@ -24,11 +35,119 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
   const chatBodyRef = useRef<HTMLDivElement>(null);
   const { message, messages, setMessage, setMessages } =
     useContext(MainContext);
+  const { savedCatalogFilters } = useContext(MainContext);
+  const [guestId, setGuestId] = useState<string>('');
+  const pathname = usePathname();
   const [isTyping, setIsTyping] = useState(false);
 
+  const getWatchIdFromPath = (): string | undefined => {
+    if (!pathname.includes('/product/')) {
+      return undefined;
+    }
+
+    const slugMatch = pathname.match(/\/product\/([^\/]+)/);
+    if (!slugMatch) {
+      return undefined;
+    }
+
+    const slug = slugMatch[1];
+
+    if (typeof window === 'undefined') return undefined;
+
+    try {
+      const SLUG_TO_ID_CACHE_PREFIX = 'slug-to-id-cache-';
+      const CACHE_TTL = 24 * 60 * 60 * 1000;
+      const cacheKey = `${SLUG_TO_ID_CACHE_PREFIX}${slug}`;
+      const cached = localStorage.getItem(cacheKey);
+
+      if (!cached) {
+        return undefined;
+      }
+
+      const { data, timestamp } = JSON.parse(cached);
+      const now = Date.now();
+
+      if (now - timestamp > CACHE_TTL) {
+        localStorage.removeItem(cacheKey);
+        return undefined;
+      }
+
+      return data;
+    } catch {
+      return undefined;
+    }
+  };
   useEffect(() => {
     if (isOpen) setIsAnimating(true);
   }, [isOpen]);
+
+  useEffect(() => {
+    const initChat = async () => {
+      const id = getOrCreateGuestId();
+      setGuestId(id);
+
+      try {
+        const history = await getChatHistory(id);
+
+        if (history.success && history.history.length > 0) {
+          const convertedMessages = history.history.map((item, index) =>
+            chatHistoryItemToMessage(item, index + 1)
+          );
+
+          const savedSearches = getSavedSearches();
+          const maxHistoryId =
+            convertedMessages.length > 0
+              ? Math.max(...convertedMessages.map((m) => m.id))
+              : 0;
+
+          const savedSearchesWithUniqueIds = savedSearches.map(
+            (msg, index) => ({
+              ...msg,
+              id: maxHistoryId + index + 1,
+            })
+          );
+
+          setMessages([...convertedMessages, ...savedSearchesWithUniqueIds]);
+        } else {
+          const savedSearches = getSavedSearches();
+          if (savedSearches.length > 0) {
+            setMessages(savedSearches);
+          }
+        }
+      } catch (error) {
+        console.error('❌ [ChatMenu] Failed to load history:', error);
+
+        const savedSearches = getSavedSearches();
+        if (savedSearches.length > 0) {
+          setMessages(savedSearches);
+        }
+      }
+    };
+
+    initChat();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (guestId) {
+        fetch(`/api/chat/history/${guestId}`, {
+          method: 'DELETE',
+          keepalive: true,
+        }).catch(() => {
+          // Ignore errors on unload
+        });
+
+        localStorage.removeItem('chatMessages');
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [guestId]);
 
   useEffect(() => {
     if (chatBodyRef.current) {
@@ -52,66 +171,134 @@ export const ChatMenu: React.FC<ChatMenuProps> = ({ isOpen, onClose }) => {
     });
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!message.content.trim()) return;
+
+    const userMessageContent = message.content.trim();
     setIsTyping(true);
-    const baseId = messages.length + 1 + Math.floor(Math.random() * 1000);
-    const aiResponse = t(chatKeys.messages.greeting);
-    setTimeout(() => {
-      setMessages([
-        ...messages,
-        {
-          content: message.content,
-          by: 'me',
-          id: baseId,
-          time: new Date().toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          }),
-        },
-        {
-          content: aiResponse,
+
+    const userMessageId =
+      messages.length + 1 + Math.floor(Math.random() * 1000);
+    const userMessage: Message = {
+      content: userMessageContent,
+      by: 'me',
+      id: userMessageId,
+      time: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setMessage({ content: '', by: 'me', id: userMessageId + 1 });
+
+    try {
+      const watchId = getWatchIdFromPath();
+      const chatContext = getChatContext(
+        pathname,
+        watchId,
+        savedCatalogFilters
+      );
+
+      const response = await sendChatMessage({
+        message: userMessageContent,
+        guestId: guestId || null,
+        context: chatContext,
+      });
+
+      if (response.success) {
+        const aiMessageId = userMessageId + 1;
+        const aiMessage: Message = {
+          content: response.answer,
           by: 'ai',
-          id: baseId + 1,
+          id: aiMessageId,
           time: new Date().toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
           }),
-        },
-      ]);
-      setMessage({ content: '', by: 'me', id: baseId + 2 });
+        };
+
+        setMessages((prev) => [...prev, aiMessage]);
+      } else {
+        throw new Error('Failed to get AI response');
+      }
+    } catch (error) {
+      console.error('❌ [ChatMenu] Failed to send message:', error);
+
+      const errorMessage: Message = {
+        content: 'Вибачте, сталася помилка. Спробуйте ще раз.',
+        by: 'ai',
+        id: userMessageId + 1,
+        time: new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 800);
+    }
   };
 
-  const handleInlineButtonClick = (buttonText: string) => {
+  const handleInlineButtonClick = async (buttonText: string) => {
     setIsTyping(true);
+
     const baseId = messages.length + 1 + Math.floor(Math.random() * 1000);
-    const aiResponse = t(chatKeys.messages.inlineResponse);
-    setTimeout(() => {
-      setMessages([
-        ...messages,
-        {
-          content: buttonText,
-          by: 'me',
-          id: baseId,
-          time: new Date().toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          }),
-        },
-        {
-          content: aiResponse,
+    const userMessage: Message = {
+      content: buttonText,
+      by: 'me',
+      id: baseId,
+      time: new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+
+    try {
+      const watchId = getWatchIdFromPath();
+      const chatContext = getChatContext(
+        pathname,
+        watchId,
+        savedCatalogFilters
+      );
+
+      const response = await sendChatMessage({
+        message: buttonText,
+        guestId: guestId || null,
+        context: chatContext,
+      });
+
+      if (response.success) {
+        const aiMessage: Message = {
+          content: response.answer,
           by: 'ai',
           id: baseId + 1,
           time: new Date().toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
           }),
-        },
-      ]);
+        };
+        setMessages((prev) => [...prev, aiMessage]);
+      } else {
+        throw new Error('Failed to get AI response');
+      }
+    } catch (error) {
+      console.error('❌ [ChatMenu] Failed to send inline message:', error);
+      const errorMessage: Message = {
+        content: 'Вибачте, сталася помилка. Спробуйте ще раз.',
+        by: 'ai',
+        id: baseId + 1,
+        time: new Date().toLocaleTimeString([], {
+          hour: '2-digit',
+          minute: '2-digit',
+        }),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 800);
+    }
   };
 
   return (

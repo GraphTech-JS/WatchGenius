@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useLayoutEffect, useRef, useEffect } from 'react';
+import { useState, useMemo, useCallback, useLayoutEffect, useRef, useEffect, useContext } from 'react';
 import { useWatches } from '@/hooks/useWatches';
 import { WatchIndex, WatchItem } from '@/interfaces'; 
 import { UseCatalogFiltersReturn } from '@/hooks/useCatalogFilters';
@@ -9,6 +9,7 @@ import { GetWatchesParams } from '@/interfaces/api';
 import { t } from '@/i18n';
 import { catalogKeys } from '@/i18n/keys/catalog';
 import { trackEvent } from '@/lib/analytics';
+import { MainContext } from '@/context';
 
 
 type ActiveFilterChip ={
@@ -54,7 +55,8 @@ export const useCatalogSearch = () => {
   const previousSortRef = useRef<SortOption>(SortOption.DEFAULT);
   const chipsRef = useRef<HTMLDivElement | null>(null);
   const [chipsHeight, setChipsHeight] = useState(0);
-  const { watches, loadMore, hasMore, reloadWithFilters, loading } = useWatches(); 
+  const { watches, loadMore, hasMore, reloadWithFilters, loading } = useWatches();
+  const { isApplyingSavedFilters, savedCatalogFilters } = useContext(MainContext); 
 
   const activeFilters = useMemo<ActiveFilterChip[]>(() => {
   const chips: ActiveFilterChip[] = [];
@@ -227,6 +229,10 @@ const clearAllFilters = useCallback(() => {
   }, [activeFilters]);
 
 useEffect(() => {
+  if (isApplyingSavedFilters || savedCatalogFilters) {
+    return;
+  }
+
   const getCurrencyFromStorage = (): string => {
     if (typeof window === 'undefined') return 'EUR';
     const savedCurrency = localStorage.getItem('selectedCurrency');
@@ -268,7 +274,7 @@ useEffect(() => {
     window.removeEventListener('storage', handleCurrencyChange);
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [searchTerm, sidebarFilters, sortOption]);
+}, [searchTerm, sidebarFilters, sortOption, isApplyingSavedFilters, savedCatalogFilters]);
   const handleSortChange = useCallback((newSort: SortOption) => {
     trackEvent('sort_change', {
       sort_option: newSort,
@@ -300,5 +306,7 @@ useEffect(() => {
     loadMore,
     hasMore,
     loading,
+    reloadWithFilters,
+    sidebarFilters,
   };
 };
