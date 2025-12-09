@@ -4,6 +4,7 @@ import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { MainContext } from '@/context';
 import { useLocale } from '@/hooks/useLocale';
+import Link from 'next/link';
 
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
@@ -26,6 +27,33 @@ export const ChatMessage = ({ message }: { message: Message }) => {
     }
   };
 
+  const fixProductUrl = (url: string): string => {
+    if (typeof url !== 'string') return url;
+
+    let fixedUrl = url;
+
+    const idMatch = fixedUrl.match(/\/product\/id=([a-f0-9-]+)/i);
+    if (idMatch) {
+      const id = idMatch[1];
+      fixedUrl = fixedUrl.replace(
+        /\/product\/id=[^\/\s"']+/i,
+        `/product/${id}`
+      );
+    }
+
+    const isAbsolute =
+      fixedUrl.startsWith('http://') || fixedUrl.startsWith('https://');
+    if (
+      !isAbsolute &&
+      fixedUrl.startsWith('/product/') &&
+      !fixedUrl.startsWith(`/${locale}/product/`)
+    ) {
+      fixedUrl = `/${locale}${fixedUrl}`;
+    }
+
+    return fixedUrl;
+  };
+
   return (
     <div
       className={`${styles.message} ${
@@ -36,7 +64,36 @@ export const ChatMessage = ({ message }: { message: Message }) => {
       <div className={styles.messageContainer}>
         {isSaved && <span className={styles.savedIcon}>⭐</span>}
         {isAi ? (
-          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+          <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
+            components={{
+              a: ({ href, children, ...props }) => {
+                const fixedHref = fixProductUrl(href || '');
+                const isExternal =
+                  fixedHref.startsWith('http://') ||
+                  fixedHref.startsWith('https://');
+
+                if (isExternal) {
+                  return (
+                    <a
+                      href={fixedHref}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      {...props}
+                    >
+                      {children}
+                    </a>
+                  );
+                }
+
+                return (
+                  <Link href={fixedHref} {...props}>
+                    {children}
+                  </Link>
+                );
+              },
+            }}
+          >
             {message.content}
           </ReactMarkdown>
         ) : (
