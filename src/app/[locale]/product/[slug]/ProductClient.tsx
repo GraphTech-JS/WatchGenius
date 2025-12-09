@@ -23,7 +23,6 @@ import { catalogKeys } from '@/i18n/keys/catalog';
 import { ProductLoading } from '@/features/product/ProductLoading/ProductLoading';
 import type { ApiPriceHistory, ApiWatchFullResponse } from '@/interfaces/api';
 
-// Функція для перевірки, чи рядок є UUID
 function isUUID(str: string): boolean {
   const uuidRegex =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -483,18 +482,37 @@ export default function ProductClient({
 
   const [similarModels, setSimilarModels] = useState<SimilarModel[]>([]);
   const [loadingSimilar, setLoadingSimilar] = useState(false);
+  const loadingSimilarRef = useRef(false);
+  const lastLoadParamsRef = useRef<{
+    watchId: string;
+    currency: string;
+  } | null>(null);
 
   useEffect(() => {
     const loadSimilarModels = async () => {
       if (!watch?.id) return;
 
+      const currency = getCurrencyFromStorage();
+
+      if (
+        loadingSimilarRef.current ||
+        (lastLoadParamsRef.current?.watchId === watch.id &&
+          lastLoadParamsRef.current?.currency === currency)
+      ) {
+        return;
+      }
+
+      loadingSimilarRef.current = true;
+      lastLoadParamsRef.current = { watchId: watch.id, currency };
+
       try {
         setLoadingSimilar(true);
-        const currency = getCurrencyFromStorage();
 
         const cachedModels = getCachedSimilar(watch.id, currency);
         if (cachedModels && cachedModels.length > 0) {
           setSimilarModels(cachedModels);
+          setLoadingSimilar(false);
+          loadingSimilarRef.current = false;
         }
 
         const similarWatches = await getSimilarWatches(watch.id, currency);
@@ -549,21 +567,28 @@ export default function ProductClient({
         setSimilarModels([]);
       } finally {
         setLoadingSimilar(false);
+        loadingSimilarRef.current = false;
       }
     };
 
     loadSimilarModels();
 
     const handleCurrencyChange = () => {
+      lastLoadParamsRef.current = null;
       loadSimilarModels();
     };
 
     window.addEventListener('currencyChanged', handleCurrencyChange);
-    window.addEventListener('storage', handleCurrencyChange);
+    const storageHandler = (e: StorageEvent) => {
+      if (e.key === 'selectedCurrency') {
+        handleCurrencyChange();
+      }
+    };
+    window.addEventListener('storage', storageHandler);
 
     return () => {
       window.removeEventListener('currencyChanged', handleCurrencyChange);
-      window.removeEventListener('storage', handleCurrencyChange);
+      window.removeEventListener('storage', storageHandler);
     };
   }, [watch?.id]);
 
