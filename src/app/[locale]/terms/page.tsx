@@ -1,14 +1,12 @@
 import type { Metadata } from 'next';
-
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://watch-genius-olive.vercel.app';
 export const metadata: Metadata = {
   title: 'Умови використання - WatchGenius',
   description:
     'Умови використання платформи WatchGenius. Правила та умови надання сервісів аналітики ринку годинників. Інформація про реєстрацію, використання даних, інтелектуальну власність та відповідальність.',
   alternates: {
-    canonical: `${
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      'https://watch-genius-olive.vercel.app'
-    }/ua/terms`,
+    canonical: `${baseUrl}/ua/terms`,
     languages: {
       'uk-UA': '/ua/terms',
       'en-US': '/en/terms',
@@ -18,10 +16,15 @@ export const metadata: Metadata = {
     title: 'Умови використання - WatchGenius',
     description:
       'Правила та умови надання сервісів аналітики ринку годинників. Інформація про використання платформи.',
-    url: `${
-      process.env.NEXT_PUBLIC_SITE_URL ||
-      'https://watch-genius-olive.vercel.app'
-    }/ua/terms`,
+    url: `${baseUrl}/ua/terms`,
+    images: [
+      {
+        url: '/hero-section/HeroBgBig.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Умови використання - WatchGenius',
+      },
+    ],
   },
   robots: {
     index: true,

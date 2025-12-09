@@ -1,9 +1,0 @@
-# https://www.robotstxt.org/robotstxt.html
-User-agent: *
-Allow: /
-
-Disallow: /admin/
-Disallow: /api/
-
-Sitemap: https://watch-genius-olive.vercel.app/sitemap.xml
-

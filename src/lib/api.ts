@@ -14,6 +14,10 @@ import {
   ApiPriceAlertResponse,
   CreatePriceAlertRequest,
   ApiSegmentTrendResponse,
+  ChatMessageRequest,
+  ChatMessageResponse,
+  ChatHistoryResponse,
+  ChatClearHistoryResponse,
 } from '@/interfaces/api';
 import { generateSlug } from '@/lib/transformers';
 
@@ -35,9 +39,6 @@ async function handleResponse<T>(response: Response): Promise<T> {
   const data = await response.json();
   return data;
 }
-
-
-
 
 export async function getWatches(
   params: GetWatchesParams
@@ -726,13 +727,71 @@ export async function getCheapestWatches(
   }
 }
 
-export async function getSegmentsTrend(): Promise<ApiSegmentTrendResponse>{
+export async function getSegmentsTrend(): Promise<ApiSegmentTrendResponse> {
   const url = `/api/watches/segments/trend`;
-  try{
+  try {
     const response = await fetch(url);
     return handleResponse<ApiSegmentTrendResponse>(response);
   } catch (error) {
     console.error(' [API] Failed to fetch segments trend:', error);
+    throw error;
+  }
+}
+
+export async function sendChatMessage(
+  data: ChatMessageRequest
+): Promise<ChatMessageResponse> {
+  const url = `/api/chat/message`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return handleResponse<ChatMessageResponse>(response);
+  } catch (error) {
+    console.error('❌ [API] Failed to send chat message:', error);
+    throw error;
+  }
+}
+
+export async function getChatHistory(
+  guestId: string
+): Promise<ChatHistoryResponse> {
+  if (!guestId) {
+    throw new Error('Guest ID is required');
+  }
+
+  const url = `/api/chat/history/${guestId}`;
+
+  try {
+    const response = await fetch(url);
+    return handleResponse<ChatHistoryResponse>(response);
+  } catch (error) {
+    console.error('❌ [API] Failed to fetch chat history:', error);
+    throw error;
+  }
+}
+
+export async function clearChatHistory(
+  guestId: string
+): Promise<ChatClearHistoryResponse> {
+  if (!guestId) {
+    throw new Error('Guest ID is required');
+  }
+
+  const url = `/api/chat/history/${guestId}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'DELETE',
+    });
+    return handleResponse<ChatClearHistoryResponse>(response);
+  } catch (error) {
+    console.error('❌ [API] Failed to clear chat history:', error);
     throw error;
   }
 }

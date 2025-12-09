@@ -10,7 +10,6 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     ignores: [
       "**/dist/**",
@@ -26,6 +25,7 @@ const eslintConfig = [
       "**/.turbo/**",
     ],
   },
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 
 export default eslintConfig;

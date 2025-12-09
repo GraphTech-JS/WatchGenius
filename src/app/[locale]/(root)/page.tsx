@@ -14,7 +14,14 @@ export const metadata: Metadata = {
     title: 'WatchGenius - Аналітика ринку годинників',
     description:
       'Аналітика цін та трендів для 300+ моделей годинників. Персональний чат-асистент.',
-    images: ['/hero-section/HeroBgBig.webp'],
+    images: [
+      {
+        url: '/hero-section/HeroBgBig.webp',
+        width: 1200,
+        height: 630,
+        alt: 'WatchGenius - Платформа аналітики годинників',
+      },
+    ],
   },
 };
 

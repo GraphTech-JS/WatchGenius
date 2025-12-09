@@ -15,7 +15,7 @@ interface IMainContext {
   setMenuOpened: (opened: boolean) => void;
   sideChatOpened: boolean;
   setSideChatOpened: (opened: boolean) => void;
-  setMessages: (messages: Message[]) => void;
+  setMessages: (messages: Message[] | ((prev: Message[]) => Message[])) => void;
   setMessage: (message: Message) => void;
   message: Message;
   messages: Array<Message>;

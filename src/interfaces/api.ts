@@ -240,3 +240,54 @@ B: number;
 C: number;
 overall: number;
 }
+
+
+export interface ChatContextFilters {
+  maxPrice?: number;
+  minPrice?: number;
+  brands?: string[];
+  materials?: string[];
+  conditions?: string[];
+  mechanisms?: string[];
+  maxYear?: number;
+  minYear?: number;
+  hasDocuments?: string[];
+  locations?: string[];
+}
+
+export interface ChatContext {
+  type: 'product' | 'search';
+  entityId?: string;
+  filters?: ChatContextFilters;
+}
+
+export interface ChatMessageRequest {
+  message: string;
+  guestId: string;
+  context?: ChatContext;
+}
+
+export interface ChatMessageResponse {
+  success: boolean;
+  answer: string;
+  role: 'assistant';
+  sessionId: string;
+  guestId: string;
+}
+
+export interface ChatHistoryItem {
+  role: 'user' | 'assistant';
+  content: string;
+  createdAt: string;
+}
+
+export interface ChatHistoryResponse {
+  success: boolean;
+  guestId: string;
+  history: ChatHistoryItem[];
+}
+
+export interface ChatClearHistoryResponse {
+  success: boolean;
+  message: string;
+}

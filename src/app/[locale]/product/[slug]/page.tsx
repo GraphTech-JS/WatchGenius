@@ -3,6 +3,9 @@ import ProductClient from './ProductClient';
 import { WATCHES } from '@/data/watches';
 import type { WatchItem } from '@/interfaces';
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://watch-genius-olive.vercel.app';
+
 export async function generateMetadata({
   params,
 }: {
@@ -33,10 +36,7 @@ export async function generateMetadata({
       watch.year
     } року. Порівняння пропозицій від перевірених продавців.`,
     alternates: {
-      canonical: `${
-        process.env.NEXT_PUBLIC_SITE_URL ||
-        'https://watch-genius-olive.vercel.app'
-      }/ua/product/${watch.slug}`,
+      canonical: `${baseUrl}/ua/product/${watch.slug}`,
       languages: {
         'uk-UA': `/ua/product/${watch.slug}`,
         'en-US': `/en/product/${watch.slug}`,
@@ -45,11 +45,15 @@ export async function generateMetadata({
     openGraph: {
       title: `${watch.title} - Аналітика та ціни`,
       description: `Актуальні ціни, історія котирувань, ринкові тренди для ${watch.brand}. AI-консультант для безпечної купівлі.`,
-      images: [watchImage],
-      url: `${
-        process.env.NEXT_PUBLIC_SITE_URL ||
-        'https://watch-genius-olive.vercel.app'
-      }/ua/product/${watch.slug}`,
+      images: [
+        {
+          url: watchImage,
+          width: 1200,
+          height: 630,
+          alt: `${watch.title} - WatchGenius`,
+        },
+      ],
+      url: `${baseUrl}/ua/product/${watch.slug}`,
     },
   };
 }

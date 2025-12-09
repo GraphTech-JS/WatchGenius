@@ -74,8 +74,7 @@ export const MainContextProvider = ({ children }: { children: ReactNode }) => {
         try {
           const parsed = JSON.parse(saved);
           setMessagesState(parsed);
-        } catch {
-        }
+        } catch {}
       }
     }
   }, []);
@@ -86,8 +85,8 @@ export const MainContextProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [messages]);
 
-  const setMessages = (
-    newMessages: Message[] | ((prev: Message[]) => Message[])
+  const setMessages: React.Dispatch<React.SetStateAction<Message[]>> = (
+    newMessages
   ) => {
     setMessagesState(newMessages);
   };
