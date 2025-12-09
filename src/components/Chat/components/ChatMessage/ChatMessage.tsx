@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation';
 import { MainContext } from '@/context';
 import { useLocale } from '@/hooks/useLocale';
 
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+
 export const ChatMessage = ({ message }: { message: Message }) => {
   const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
   const isAi = message.by === 'ai';
@@ -32,7 +35,13 @@ export const ChatMessage = ({ message }: { message: Message }) => {
     >
       <div className={styles.messageContainer}>
         {isSaved && <span className={styles.savedIcon}>⭐</span>}
-        <span>{message.content}</span>
+        {isAi ? (
+          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+            {message.content}
+          </ReactMarkdown>
+        ) : (
+          <span>{message.content}</span>
+        )}
         {!isSaved && message.time && (
           <span className={styles.time}>{message.time}</span>
         )}

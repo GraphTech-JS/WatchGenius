@@ -64,16 +64,16 @@ export class BaseApiService {
       );
   }
 
-  protected createErrorResponse(
-    message: string, 
-    status: number = 400 
-  ): NextResponse {
-    return NextResponse.json(
-      { message, error: {} },
-      {
-        status, 
-        headers: this.getCorsHeaders(),
-      }
-    );
-  }
+ protected createErrorResponse<T = unknown>(
+  message: string, 
+  status: number = 400 
+): NextResponse<T> {
+  return NextResponse.json(
+    { message, error: {} } as T,
+    {
+      status, 
+      headers: this.getCorsHeaders(),
+    }
+  );
+}
 }
