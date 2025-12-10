@@ -14,6 +14,21 @@ interface IMarketTotal {
   amount: number;
   chartData: number[];
   chartId?: string;
+  currency?: string;
+}
+
+function getCurrencySymbol(currency?: string): string {
+  switch (currency) {
+    case 'USD':
+      return '$';
+    case 'UAH':
+      return '₴';
+    case 'PLN':
+      return 'zł';
+    case 'EUR':
+    default:
+      return '€';
+  }
 }
 
 export const MarketTotal: React.FC<IMarketTotal> = ({
@@ -22,6 +37,7 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
   amount,
   chartData,
   chartId = 'market-total',
+  currency,
 }) => {
   const variant = 'green';
   const percentColor = '#009C05';
@@ -59,7 +75,8 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
             className={`${styles.marketCardHeadPercent} flex items-center gap-1 font-bold`}
             style={{ color: percentColor }}
           >
-            €{amount.toLocaleString()}
+            {getCurrencySymbol(currency)}
+            {Math.round(amount).toLocaleString()}
           </div>
         </div>
         <div

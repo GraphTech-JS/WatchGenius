@@ -114,8 +114,11 @@ export const HeroChartsCarousel = () => {
   const [isDesktop, setIsDesktop] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const swipeRef = useRef<HTMLDivElement | null>(null);
+  const tabletSwipeRef = useRef<HTMLDivElement | null>(null);
+  const mobileSwipeRef = useRef<HTMLDivElement | null>(null);
+  const tabletSlideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const rafId = useRef<number | null>(null);
+  const isScrollingProgrammatically = useRef(false);
   const [charts, setCharts] = useState<HeroChartItemProps[]>([]);
 
   useEffect(() => {
@@ -168,107 +171,167 @@ export const HeroChartsCarousel = () => {
 
   useEffect(() => {
     if (isDesktop) return;
-    const el = swipeRef.current;
-    if (!el) return;
+    if (charts.length === 0) return;
 
-    let isDown = false;
-    let startX = 0;
-    let startScroll = 0;
-    let pointerId: number | null = null;
+    tabletSlideRefs.current = new Array(charts.length).fill(null);
 
-    const onDown = (e: PointerEvent) => {
-      isDown = true;
-      startX = e.clientX;
-      startScroll = el.scrollLeft;
-      pointerId = e.pointerId;
-      (e.target as Element).setPointerCapture?.(e.pointerId);
-    };
+    let timeoutId: NodeJS.Timeout | null = null;
 
-    const onMove = (e: PointerEvent) => {
-      if (!isDown) return;
-      el.scrollLeft = startScroll - (e.clientX - startX);
-    };
-
-    const onUp = (e: PointerEvent) => {
-      if (!isDown) return;
-      isDown = false;
-      if (pointerId !== null) {
-        try {
-          (e.target as Element).releasePointerCapture?.(pointerId);
-        } catch {}
-        pointerId = null;
+    const setupHandlers = (): (() => void) | void => {
+      const el = isTablet ? tabletSwipeRef.current : mobileSwipeRef.current;
+      if (!el) {
+        if (isTablet) {
+          timeoutId = setTimeout(setupHandlers, 100);
+        }
+        return;
       }
 
-      if (!isTablet) {
-        const vw = el.clientWidth;
-        const idx = Math.round(el.scrollLeft / vw);
-        setActiveIndex(idx);
-        el.scrollTo({ left: idx * vw, behavior: 'smooth' });
-      }
-    };
+      let isDown = false;
+      let startX = 0;
+      let startScroll = 0;
+      let pointerId: number | null = null;
 
-    const onScroll = () => {
-      if (!rafId.current) {
-        rafId.current = requestAnimationFrame(() => {
-          rafId.current = null;
-          if (isTablet) {
-            const chartWidth = 350 + 16;
-            const scroll = el.scrollLeft;
-            const maxScroll = el.scrollWidth - el.clientWidth;
-            const zone1End = chartWidth * 0.7;
-            const zone2End = maxScroll - chartWidth * 0.7;
+      const onDown = (e: PointerEvent) => {
+        isDown = true;
+        startX = e.clientX;
+        startScroll = el.scrollLeft;
+        pointerId = e.pointerId;
+        (e.target as Element).setPointerCapture?.(e.pointerId);
+      };
 
-            if (scroll < zone1End) {
-              setActiveIndex(0);
-            } else if (scroll < zone2End) {
-              setActiveIndex(1);
-            } else {
-              setActiveIndex(2);
+      const onMove = (e: PointerEvent) => {
+        if (!isDown) return;
+        el.scrollLeft = startScroll - (e.clientX - startX);
+      };
+
+      const onUp = (e: PointerEvent) => {
+        if (!isDown) return;
+        isDown = false;
+        if (pointerId !== null) {
+          try {
+            (e.target as Element).releasePointerCapture?.(pointerId);
+          } catch {}
+          pointerId = null;
+        }
+
+        if (!isTablet) {
+          const vw = el.clientWidth;
+          const idx = Math.round(el.scrollLeft / vw);
+          setActiveIndex(idx);
+          el.scrollTo({ left: idx * vw, behavior: 'smooth' });
+        }
+      };
+
+      const updateActiveIndex = () => {
+        if (isScrollingProgrammatically.current) return;
+
+        if (isTablet) {
+          let mostVisibleIndex = 0;
+          let maxVisibleArea = 0;
+
+          tabletSlideRefs.current.forEach((slide, index) => {
+            if (!slide || !el) return;
+
+            const slideRect = slide.getBoundingClientRect();
+            const containerRect = el.getBoundingClientRect();
+
+            const left = Math.max(slideRect.left, containerRect.left);
+            const right = Math.min(slideRect.right, containerRect.right);
+            const visibleWidth = Math.max(0, right - left);
+
+            if (visibleWidth > maxVisibleArea) {
+              maxVisibleArea = visibleWidth;
+              mostVisibleIndex = index;
             }
-          } else {
-            const vw = el.clientWidth;
-            const idx = Math.round(el.scrollLeft / vw);
-            if (idx !== activeIndex) setActiveIndex(idx);
-          }
-        });
-      }
+          });
+
+          const dotIndex = Math.min(mostVisibleIndex, 2);
+          setActiveIndex(dotIndex);
+        } else {
+          const vw = el.clientWidth;
+          const idx = Math.round(el.scrollLeft / vw);
+          setActiveIndex(idx);
+        }
+      };
+
+      const onScroll = () => {
+        if (!rafId.current) {
+          rafId.current = requestAnimationFrame(() => {
+            rafId.current = null;
+            updateActiveIndex();
+          });
+        }
+      };
+
+      const onScrollEnd = () => {
+        updateActiveIndex();
+      };
+
+      el.addEventListener('pointerdown', onDown);
+      el.addEventListener('pointermove', onMove);
+      el.addEventListener('pointerup', onUp);
+      el.addEventListener('pointercancel', onUp);
+      el.addEventListener('scroll', onScroll, { passive: true });
+      el.addEventListener('scrollend', onScrollEnd, { passive: true });
+
+      return () => {
+        el.removeEventListener('pointerdown', onDown);
+        el.removeEventListener('pointermove', onMove);
+        el.removeEventListener('pointerup', onUp);
+        el.removeEventListener('pointercancel', onUp);
+        el.removeEventListener('scroll', onScroll);
+        el.removeEventListener('scrollend', onScrollEnd);
+        if (rafId.current) cancelAnimationFrame(rafId.current);
+      };
     };
 
-    el.addEventListener('pointerdown', onDown);
-    el.addEventListener('pointermove', onMove);
-    el.addEventListener('pointerup', onUp);
-    el.addEventListener('pointercancel', onUp);
-    el.addEventListener('scroll', onScroll, { passive: true });
+    const cleanup = setupHandlers();
 
     return () => {
-      el.removeEventListener('pointerdown', onDown);
-      el.removeEventListener('pointermove', onMove);
-      el.removeEventListener('pointerup', onUp);
-      el.removeEventListener('pointercancel', onUp);
-      el.removeEventListener('scroll', onScroll);
-      if (rafId.current) cancelAnimationFrame(rafId.current);
+      if (timeoutId) clearTimeout(timeoutId);
+      if (cleanup) cleanup();
     };
-  }, [isDesktop, isTablet, activeIndex]);
+  }, [isDesktop, isTablet, charts.length]);
 
   const scrollToChart = (index: number) => {
-    setActiveIndex(index);
-
     if (isDesktop && containerRef.current) {
       const chartWidth = 350 + 16;
+      isScrollingProgrammatically.current = true;
+      setActiveIndex(index);
       containerRef.current.scrollTo({
         left: index * chartWidth,
         behavior: 'smooth',
       });
-    } else if (isTablet && swipeRef.current) {
-      const el = swipeRef.current;
+      setTimeout(() => {
+        isScrollingProgrammatically.current = false;
+      }, 500);
+    } else if (isTablet && tabletSwipeRef.current) {
+      const el = tabletSwipeRef.current;
+      if (!el) return;
       const chartWidth = 350 + 16;
-      const maxScroll = el.scrollWidth - el.clientWidth;
-      const target = Math.min(index * chartWidth, maxScroll);
-      el.scrollTo({ left: target, behavior: 'smooth' });
-    } else if (!isDesktop && swipeRef.current) {
-      const el = swipeRef.current;
+
+      const targetSlideIndex = index === 2 ? 3 : index;
+
+      isScrollingProgrammatically.current = true;
+      setActiveIndex(index);
+
+      el.scrollTo({
+        left: targetSlideIndex * chartWidth,
+        behavior: 'smooth',
+      });
+
+      setTimeout(() => {
+        isScrollingProgrammatically.current = false;
+      }, 600);
+    } else if (!isDesktop && !isTablet && mobileSwipeRef.current) {
+      const el = mobileSwipeRef.current;
       const viewport = el.clientWidth;
+      isScrollingProgrammatically.current = true;
+      setActiveIndex(index);
       el.scrollTo({ left: index * viewport, behavior: 'smooth' });
+      setTimeout(() => {
+        isScrollingProgrammatically.current = false;
+      }, 500);
     }
   };
 
@@ -276,7 +339,6 @@ export const HeroChartsCarousel = () => {
 
   return (
     <>
-      {/* DESKTOP версія - показується тільки на lg */}
       <div
         className={`${styles.heroChartsCarousel} hidden lg:flex lg:w-fit flex-col`}
       >
@@ -295,7 +357,6 @@ export const HeroChartsCarousel = () => {
         </div>
       </div>
 
-      {/* TABLET версія - показується тільки на md до lg */}
       <div
         className={`${styles.heroChartsCarousel} hidden md:flex lg:hidden w-full flex-col`}
       >
@@ -304,15 +365,20 @@ export const HeroChartsCarousel = () => {
           className={`${styles.heroChartContainer} flex gap-4 h-[108px] rounded-l-[15px] overflow-hidden`}
         >
           <div
-            ref={swipeRef}
+            ref={tabletSwipeRef}
             className={`flex gap-4 overflow-x-auto ${styles.swipe} ${styles.noScrollbar}`}
             style={{ scrollSnapType: 'x mandatory' }}
           >
-            {charts.map((chart) => (
+            {charts.map((chart, idx) => (
               <div
                 key={`tablet-${chart.id}`}
+                ref={(el) => {
+                  if (tabletSlideRefs.current) {
+                    tabletSlideRefs.current[idx] = el;
+                  }
+                }}
                 className='snap-start shrink-0'
-                style={{ flex: '0 0 auto', width: '350px' }}
+                style={{ flex: '0 0 auto', width: '350px', minWidth: '350px' }}
               >
                 <div className={`${styles.heroChartItem} flex rounded-[10px]`}>
                   <HeroChartItem {...{ ...chart, id: `${chart.id}-tablet` }} />
@@ -321,7 +387,10 @@ export const HeroChartsCarousel = () => {
             ))}
           </div>
         </div>
-        <div className='flex gap-2 justify-center mt-3'>
+        <div
+          className='flex gap-2 justify-center mt-3'
+          style={{ width: '100%', minWidth: 'fit-content' }}
+        >
           {tabletDots.map((dotIndex) => (
             <button
               key={dotIndex}
@@ -331,12 +400,12 @@ export const HeroChartsCarousel = () => {
               }`}
               aria-label={`Переглянути графік ${dotIndex + 1}`}
               aria-current={activeIndex === dotIndex ? 'true' : 'false'}
+              style={{ flexShrink: 0 }}
             />
           ))}
         </div>
       </div>
 
-      {/* MOBILE версія - показується тільки до md */}
       <div
         className={`${styles.heroChartsCarousel} flex md:hidden w-full flex-col items-center`}
       >
@@ -344,7 +413,7 @@ export const HeroChartsCarousel = () => {
           className={`${styles.heroChartContainer} w-full h-[108px] max-w-[362px] rounded-[15px] `}
         >
           <div
-            ref={swipeRef}
+            ref={mobileSwipeRef}
             className={`flex gap-4 overflow-x-auto snap-x snap-mandatory ${styles.swipe} ${styles.noScrollbar}`}
             style={{ width: '100%' }}
           >

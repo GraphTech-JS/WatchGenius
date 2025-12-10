@@ -291,3 +291,24 @@ export interface ChatClearHistoryResponse {
   success: boolean;
   message: string;
 }
+
+export interface LiquidVolumeHistoryItem {
+  date: string;
+  liquiditySum: number;
+  volumeSum: number;
+  currency: string;
+}
+
+export interface LiquidVolumeWatchItem extends ApiWatchFullResponse {
+  volumeSum: number;
+}
+
+export interface LiquidVolumeResponse {
+  watches: LiquidVolumeWatchItem[];
+  totalLiquidity: number;
+  totalVolume: {
+    value: number;
+    currency: string;
+  };
+  history: LiquidVolumeHistoryItem[];
+}
