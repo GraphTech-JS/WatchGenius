@@ -349,6 +349,21 @@ export const Header = () => {
               />
             </button>
           </div>
+          <button
+            className={`${styles.headerLangSwitchBtn} shrink-0 relative cursor-pointer items-center justify-centers-center md:flex lg:hidden`}
+            aria-label={t(a11yKeys.favorites.view)}
+            onClick={() => setIsWishlistModalOpen(true)}
+          >
+            <HeartIcon className='w-5 h-5 text-green-800' aria-hidden='true' />
+            {wishlistCount > 0 && (
+              <span
+                className='flex absolute -top-2 -right-2  rig md:-top-0 md:-right-2 justify-center items-center w-4 h-4 text-[10px] font-bold text-white bg-red-500 rounded-full'
+                aria-label={`${wishlistCount} товарів у списку бажань`}
+              >
+                {wishlistCount > 9 ? '9+' : wishlistCount}
+              </span>
+            )}
+          </button>
           <div
             ref={searchRef}
             className={`md:flex
@@ -401,7 +416,7 @@ export const Header = () => {
               />
             </button>
             <button
-              className={`${styles.headerLangSwitchBtn} shrink-0 relative cursor-pointer`}
+              className={`${styles.headerLangSwitchBtn} ${styles.headerWishlistBtn} shrink-0 relative cursor-pointer`}
               aria-label={t(a11yKeys.favorites.view)}
               onClick={() => setIsWishlistModalOpen(true)}
             >
@@ -502,10 +517,9 @@ export const Header = () => {
                             onClick={() => {
                               setSelectedCurrency(cur);
                               setShowCurrency(false);
-                              // Зберігаємо в localStorage
                               if (typeof window !== 'undefined') {
                                 localStorage.setItem('selectedCurrency', cur);
-                                // Відправляємо custom event для оновлення компонентів
+
                                 window.dispatchEvent(
                                   new Event('currencyChanged')
                                 );

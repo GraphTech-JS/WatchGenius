@@ -72,7 +72,7 @@ export const Modal: React.FC<ModalProps> = ({
             )}
           </div>
         )}
-        <div className='p-6'>{children}</div>
+        <div className='p-0 md:p-6'>{children}</div>
       </div>
     </div>,
     document.body

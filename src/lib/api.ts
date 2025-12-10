@@ -18,6 +18,7 @@ import {
   ChatMessageResponse,
   ChatHistoryResponse,
   ChatClearHistoryResponse,
+  LiquidVolumeResponse,
 } from '@/interfaces/api';
 import { generateSlug } from '@/lib/transformers';
 
@@ -292,11 +293,24 @@ export async function getWatchesByIds(
   const url = `/api/watches/by-ids?${searchParams.toString()}`;
 
   try {
-    const response = await fetch(url);
-    const data = await handleResponse<ApiWatchFullResponse[]>(response);
-    return data;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+    
+    const data = await response.json();
+    if (!Array.isArray(data)) {
+      throw new Error('Response is not an array');
+    }
+    return data as ApiWatchFullResponse[];
   } catch (error) {
-    console.error('❌ [API] Failed to fetch watches by IDs:', error);
+    console.error('Failed to fetch watches by IDs:', error);
     throw error;
   }
 }
@@ -792,6 +806,18 @@ export async function clearChatHistory(
     return handleResponse<ChatClearHistoryResponse>(response);
   } catch (error) {
     console.error('❌ [API] Failed to clear chat history:', error);
+    throw error;
+  }
+}
+
+export async function getLiquidVolume(): Promise<LiquidVolumeResponse> {
+  const url = `/api/watches/liquid/volume?currency=EUR`;
+
+  try {
+    const response = await fetch(url);
+    return handleResponse<LiquidVolumeResponse>(response);
+  } catch (error) {
+    console.error('❌ [API] Failed to fetch liquid volume:', error);
     throw error;
   }
 }

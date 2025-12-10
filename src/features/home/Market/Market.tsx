@@ -13,6 +13,9 @@ import { IWatch } from '@/interfaces';
 import { t } from '@/i18n';
 import { marketKeys } from '@/i18n/keys/home';
 
+import { getLiquidVolume } from '@/lib/api';
+import type { LiquidVolumeResponse } from '@/interfaces/api';
+
 function getCurrencyFromStorage(): string {
   if (typeof window === 'undefined') return 'EUR';
   const stored = localStorage.getItem('selectedCurrency');
@@ -107,6 +110,49 @@ function setCachedStable(currency: string, watch: WatchItem): void {
   }
 }
 
+const MARKET_LIQUID_VOLUME_CACHE_PREFIX = 'market-liquid-volume-cache-';
+
+function getCachedLiquidVolume(currency: string): LiquidVolumeResponse | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const cacheKey = `${MARKET_LIQUID_VOLUME_CACHE_PREFIX}${currency}`;
+    const cached = localStorage.getItem(cacheKey);
+
+    if (!cached) return null;
+
+    const { data, timestamp } = JSON.parse(cached);
+    const now = Date.now();
+
+    if (now - timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey);
+      return null;
+    }
+
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+function setCachedLiquidVolume(
+  currency: string,
+  data: LiquidVolumeResponse
+): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const cacheKey = `${MARKET_LIQUID_VOLUME_CACHE_PREFIX}${currency}`;
+    const cacheData = {
+      data: data,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(cacheKey, JSON.stringify(cacheData));
+  } catch {
+    // Ignore
+  }
+}
+
 function convertWatchToMarketCard(
   watch: WatchItem | null,
   title: string,
@@ -156,6 +202,8 @@ export const Market = () => {
   const [stable90d, setStable90d] = useState<WatchItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [liquidVolumeData, setLiquidVolumeData] =
+    useState<LiquidVolumeResponse | null>(null);
 
   useEffect(() => {
     const loadMarketData = async () => {
@@ -167,16 +215,18 @@ export const Market = () => {
 
         const cachedTop = getCachedMarket(currency);
         const cachedStable = getCachedStable(currency);
+        const cachedLiquidVolume = getCachedLiquidVolume(currency);
         if (cachedTop) setTopGainer90d(cachedTop);
         if (cachedStable) setStable90d(cachedStable);
-
-        if (cachedTop || cachedStable) {
+        if (cachedLiquidVolume) setLiquidVolumeData(cachedLiquidVolume);
+        if (cachedTop || cachedStable || cachedLiquidVolume) {
           setLoading(false);
         }
 
-        const [trending90d, stable] = await Promise.all([
+        const [trending90d, stable, liquidVolume] = await Promise.all([
           getTrendingWatch90d(currency),
           getStableWatch(currency),
+          getLiquidVolume(),
         ]);
 
         if (trending90d) {
@@ -189,6 +239,10 @@ export const Market = () => {
           const transformed = transformApiWatchFull(stable, currency);
           setStable90d(transformed);
           setCachedStable(currency, transformed);
+        }
+        if (liquidVolume) {
+          setLiquidVolumeData(liquidVolume);
+          setCachedLiquidVolume(currency, liquidVolume);
         }
       } catch {
         setError(t(marketKeys.error));
@@ -268,12 +322,17 @@ export const Market = () => {
       type: 'total' as const,
       content: (
         <MarketTotal
-          key='desktop-total'
+          key='mobile-total'
           title='Liquidity Leaders'
-          deals={120}
-          amount={12545000}
-          chartData={[7, 6, 7, 6, 7.5, 7, 8]}
+          deals={liquidVolumeData?.watches.length || 0}
+          amount={liquidVolumeData?.totalVolume.value || 0}
+          chartData={
+            liquidVolumeData?.history && liquidVolumeData.history.length > 0
+              ? liquidVolumeData.history.map((h) => h.liquiditySum)
+              : [7, 6, 7, 6, 7.5, 7, 8]
+          }
           chartId='market-total-desktop'
+          currency={liquidVolumeData?.totalVolume.currency || 'EUR'}
         />
       ),
     },
@@ -322,12 +381,17 @@ export const Market = () => {
       type: 'total' as const,
       content: (
         <MarketTotal
-          key='mobile-total'
+          key='market-total-mobile'
           title='Liquidity Leaders'
-          deals={120}
-          amount={12545000}
-          chartData={[7, 6, 7, 6, 7.5, 7, 8]}
-          chartId='market-total-mobile'
+          deals={liquidVolumeData?.watches.length || 0}
+          amount={liquidVolumeData?.totalVolume.value || 0}
+          chartData={
+            liquidVolumeData?.history && liquidVolumeData.history.length > 0
+              ? liquidVolumeData.history.map((h) => h.liquiditySum)
+              : [7, 6, 7, 6, 7.5, 7, 8]
+          }
+          chartId='market-total-desktop'
+          currency={liquidVolumeData?.totalVolume.currency || 'EUR'}
         />
       ),
     },

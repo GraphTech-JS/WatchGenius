@@ -55,7 +55,7 @@ export const useCatalogSearch = () => {
   const previousSortRef = useRef<SortOption>(SortOption.DEFAULT);
   const chipsRef = useRef<HTMLDivElement | null>(null);
   const [chipsHeight, setChipsHeight] = useState(0);
-  const { watches, loadMore, hasMore, reloadWithFilters, loading } = useWatches();
+  const { watches, loadMore, hasMore, reloadWithFilters, loading, setWatchesDirectly } = useWatches();
   const { isApplyingSavedFilters, savedCatalogFilters } = useContext(MainContext); 
 
   const activeFilters = useMemo<ActiveFilterChip[]>(() => {
@@ -203,13 +203,17 @@ const clearAllFilters = useCallback(() => {
   }, []);
 
   const filteredItems = useMemo(() => {
+    console.log('[useCatalogSearch] filteredItems recalculating, watches:', watches.length, 'selectedIndexes:', selectedIndexes);
     let items: WatchItem[] = watches;
 
     if (selectedIndexes.length > 0) {
       items = items.filter((w) => selectedIndexes.includes(w.index));
+      console.log('[useCatalogSearch] After index filter:', items.length);
     }
 
-    return applySorting(items, sortOption);
+    const sorted = applySorting(items, sortOption);
+    console.log('[useCatalogSearch] Final filteredItems:', sorted.length);
+    return sorted;
   }, [watches, selectedIndexes, sortOption]);
 
   useLayoutEffect(() => {
@@ -233,6 +237,7 @@ useEffect(() => {
     return;
   }
 
+
   const getCurrencyFromStorage = (): string => {
     if (typeof window === 'undefined') return 'EUR';
     const savedCurrency = localStorage.getItem('selectedCurrency');
@@ -245,7 +250,6 @@ useEffect(() => {
   const loadWatches = () => {
     const currency = getCurrencyFromStorage();
     
-    // Всі сортування робляться на фронті, не передаємо sort на бекенд
     const apiParams: GetWatchesParams = !searchTerm.trim() && !sidebarFilters 
       ? { 
           pageSize: 12, 
@@ -274,7 +278,7 @@ useEffect(() => {
     window.removeEventListener('storage', handleCurrencyChange);
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [searchTerm, sidebarFilters, sortOption, isApplyingSavedFilters, savedCatalogFilters]);
+  }, [searchTerm, sidebarFilters, sortOption, isApplyingSavedFilters, savedCatalogFilters]);
   const handleSortChange = useCallback((newSort: SortOption) => {
     trackEvent('sort_change', {
       sort_option: newSort,
@@ -308,5 +312,6 @@ useEffect(() => {
     loading,
     reloadWithFilters,
     sidebarFilters,
+    setWatchesDirectly,
   };
 };

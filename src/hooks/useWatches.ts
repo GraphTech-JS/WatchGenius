@@ -109,6 +109,14 @@ export function useWatches(initialFilters?: GetWatchesParams) {
   const getManyByIds = (ids: string[]): WatchItem[] =>
     watches.filter((w) => ids.includes(w.id));
 
+  const setWatchesDirectly = useCallback((newWatches: WatchItem[]) => {
+    setWatches(newWatches);
+    setHasMore(false);
+    setCurrentPage(1);
+    isLoadingRef.current = false;
+    setLoading(false);
+  }, []);
+
   return {
     watches,
     getAll,
@@ -120,6 +128,7 @@ export function useWatches(initialFilters?: GetWatchesParams) {
     hasMore,
     loadMore,
     reloadWithFilters,
+    setWatchesDirectly,
   };
 }
 

@@ -19,6 +19,13 @@ export const LineChart: React.FC<LineChartProps> = ({
   'aria-label': ariaLabel,
 }) => {
   if (data.length === 0) return null;
+
+
+  const chartData =
+    data.length === 1
+      ? [data[0], data[0], data[0], data[0], data[0], data[0], data[0]]
+      : data;
+
   const padding = 0;
 
   const colorSchemes = {
@@ -30,8 +37,8 @@ export const LineChart: React.FC<LineChartProps> = ({
 
   const { fill: fillColor, line: lineColor } = colorSchemes[variant];
 
-  const min = Math.min(...data);
-  const max = Math.max(...data);
+  const min = Math.min(...chartData);
+  const max = Math.max(...chartData);
 
   const topPadding = 0.05;
   const bottomPadding = 0.6;
@@ -40,8 +47,9 @@ export const LineChart: React.FC<LineChartProps> = ({
   const top = max + range * topPadding;
   const bottom = min - range * bottomPadding;
 
-  const points = data.map((d, i) => {
-    const x = (i / (data.length - 1)) * (width - padding * 2) + padding;
+  const points = chartData.map((d, i) => {
+    const divisor = chartData.length > 1 ? chartData.length - 1 : 1;
+    const x = (i / divisor) * (width - padding * 2) + padding;
     const y = height - ((d - bottom) / (top - bottom)) * (height - padding * 2);
     return [x, y];
   });
