@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
+import { ClockLoader } from 'react-spinners';
 import styles from './page.module.css';
 import CatalogPage from '@/features/catalog/page';
 
@@ -36,7 +37,13 @@ export const metadata: Metadata = {
 const Catalog = () => {
   return (
     <section className={styles.catalog}>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense
+        fallback={
+          <div className='flex justify-center items-center py-12 min-h-[400px]'>
+            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+          </div>
+        }
+      >
         <CatalogPage />
       </Suspense>
     </section>

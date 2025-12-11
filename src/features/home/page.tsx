@@ -1,5 +1,6 @@
 'use client';
 import React, { lazy, Suspense } from 'react';
+import { ClockLoader } from 'react-spinners';
 import { Hero } from './Hero/Hero';
 import { Market } from './Market/Market';
 
@@ -26,19 +27,49 @@ const HomePage = () => {
     <main suppressHydrationWarning>
       <Hero />
       <Market />
-      <Suspense fallback={<div style={{ minHeight: '400px' }} />}>
+      <Suspense
+        fallback={
+          <div className='flex justify-center items-center py-12 min-h-[400px]'>
+            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+          </div>
+        }
+      >
         <Trending />
       </Suspense>
-      <Suspense fallback={<div style={{ minHeight: '500px' }} />}>
+      <Suspense
+        fallback={
+          <div className='flex justify-center items-center py-12 min-h-[500px]'>
+            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+          </div>
+        }
+      >
         <BestPrice />
       </Suspense>
-      <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+      <Suspense
+        fallback={
+          <div className='flex justify-center items-center py-12 min-h-[300px]'>
+            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+          </div>
+        }
+      >
         <BrandSpotlight />
       </Suspense>
-      <Suspense fallback={<div style={{ minHeight: '400px' }} />}>
+      <Suspense
+        fallback={
+          <div className='flex justify-center items-center py-12 min-h-[400px]'>
+            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+          </div>
+        }
+      >
         <HowTo />
       </Suspense>
-      <Suspense fallback={<div style={{ minHeight: '300px' }} />}>
+      <Suspense
+        fallback={
+          <div className='flex justify-center items-center py-12 min-h-[300px]'>
+            <ClockLoader size={60} color={'#04694f'} speedMultiplier={0.9} />
+          </div>
+        }
+      >
         <Dealers />
       </Suspense>
     </main>
