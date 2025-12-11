@@ -5,6 +5,8 @@ import { ArrowIcon } from '../../../../public/social/Icon';
 import { DealerCard } from '@/components/Main/Dealers/DealerCard';
 import { useDealers } from '@/hooks/useDealers';
 import { ClockLoader } from 'react-spinners';
+import { t } from '@/i18n';
+import { dealersKeys } from '@/i18n/keys/home';
 
 export const Dealers = () => {
   const [cols, setCols] = useState<1 | 2>(1);
@@ -137,14 +139,13 @@ export const Dealers = () => {
     );
   }
 
-  if (error) {
+  if (error || dealers.length === 0) {
     return (
       <section id='dealers' className={styles.dealers} suppressHydrationWarning>
-        <div className='flex flex-col items-center justify-center min-h-[400px] gap-4'>
-          <p className='text-red-500 text-[20px]'>Помилка: {error}</p>
-          <button onClick={() => window.location.reload()}>
-            Спробувати ще раз
-          </button>
+        <div className='flex justify-center items-center py-12 min-h-[300px]'>
+          <div className='px-4 text-center text-red-500'>
+            {t(dealersKeys.error)}
+          </div>
         </div>
       </section>
     );

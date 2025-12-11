@@ -88,3 +88,6 @@ export const dealerCardKeys = {
   visit: "home.dealers.dealerCard.visit",
   request: "home.dealers.dealerCard.request",
 };
+export const dealersKeys = {
+  error: "home.dealers.error",
+};
