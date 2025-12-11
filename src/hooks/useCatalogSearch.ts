@@ -364,6 +364,7 @@ export const useCatalogSearch = () => {
             currency: currency,
             ...(selectedIndexes.length > 0 && sortByLiquidityParam !== 'true' && {
               segment: selectedIndexes.join('/'),
+              
             }),
             ...(sortByLiquidityParam === 'true' && { sortByLiquidity: true }),
           }
