@@ -1,5 +1,6 @@
 'use client';
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { MainContext } from '@/context';
 import { trackEvent } from '@/lib/analytics';
 
@@ -22,6 +23,7 @@ import { catalogKeys } from '@/i18n/keys/catalog';
 import { convertFiltersToApiParams } from '@/lib/api';
 
 const CatalogPage = () => {
+  const searchParams = useSearchParams();
   const search = useCatalogSearch();
   const sidebar = useSidebarPosition();
   const feedbackModal = useFeedbackModal();
@@ -33,6 +35,24 @@ const CatalogPage = () => {
   } = useContext(MainContext);
 
   const { saveSearchToChat } = useSaveSearchToChat();
+  const previousIndexParamRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const indexParam = searchParams.get('index');
+
+    if (
+      indexParam &&
+      (indexParam === 'A' || indexParam === 'B' || indexParam === 'C') &&
+      previousIndexParamRef.current !== indexParam
+    ) {
+      previousIndexParamRef.current = indexParam;
+      search.setSelectedIndexes([indexParam as 'A' | 'B' | 'C']);
+    } else if (!indexParam && previousIndexParamRef.current !== null) {
+      previousIndexParamRef.current = null;
+      search.setSelectedIndexes([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   useEffect(() => {
     if (savedCatalogFilters) {
@@ -141,7 +161,21 @@ const CatalogPage = () => {
   const handleSaveToChat = () => {
     saveSearchToChat({
       searchTerm: search.searchTerm,
-      activeFilters: search.activeFilters,
+      activeFilters: search.activeFilters as Array<{
+        id: string;
+        group:
+          | 'index'
+          | 'brand'
+          | 'condition'
+          | 'mechanism'
+          | 'material'
+          | 'document'
+          | 'location'
+          | 'price'
+          | 'year';
+        value: string;
+        label: string;
+      }>,
     });
   };
 

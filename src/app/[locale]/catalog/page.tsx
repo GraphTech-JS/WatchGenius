@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import styles from './page.module.css';
 import CatalogPage from '@/features/catalog/page';
@@ -36,7 +36,9 @@ export const metadata: Metadata = {
 const Catalog = () => {
   return (
     <section className={styles.catalog}>
-      <CatalogPage />
+      <Suspense fallback={<div>Loading...</div>}>
+        <CatalogPage />
+      </Suspense>
     </section>
   );
 };

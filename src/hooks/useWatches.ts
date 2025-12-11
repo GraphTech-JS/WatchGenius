@@ -22,7 +22,8 @@ export function useWatches(initialFilters?: GetWatchesParams) {
       setLoading(true);
       try {
         const response: ApiWatchListResponse = await getWatches({ pageSize: 12, ...initialFilters });
-        const transformed: WatchItem[] = response.data.map(transformApiWatch);
+        const requestedCurrency = initialFilters?.currency;
+        const transformed: WatchItem[] = response.data.map(watch => transformApiWatch(watch, requestedCurrency));
         setWatches(transformed);
         setHasMore(transformed.length < response.pagination.total);
         setCurrentFilters(initialFilters || {});
@@ -49,7 +50,8 @@ export function useWatches(initialFilters?: GetWatchesParams) {
         pageSize: 12,
         ...currentFilters 
       });
-      const transformed: WatchItem[] = response.data.map(transformApiWatch);
+      const requestedCurrency = currentFilters?.currency;
+      const transformed: WatchItem[] = response.data.map(watch => transformApiWatch(watch, requestedCurrency));
       setWatches(prev => [...prev, ...transformed]);
       setCurrentPage(nextPage);
       setHasMore(nextPage < response.pagination.totalPages && response.data.length > 0);
@@ -71,13 +73,18 @@ export function useWatches(initialFilters?: GetWatchesParams) {
     setLoading(true);
     setWatches([]); 
     
-    const hasFilters = Object.keys(filters).filter(k => k !== 'page' && k !== 'pageSize').length > 0;
-    const pageSize = hasFilters ? 1000 : 12;
+    const hasFilters = Object.keys(filters).filter(
+      k => k !== 'page' && k !== 'pageSize' && k !== 'currency' && k !== 'sortByLiquidity'
+    ).length > 0;
+    
+    const finalPageSize = filters.pageSize || (hasFilters ? 1000 : 12);
     
     try {
-      
-      const response = await getWatches({ page: 1, pageSize, ...filters });
-      const transformed = response.data.map(transformApiWatch);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { pageSize, ...filtersWithoutPageSize } = filters;
+      const response = await getWatches({ page: 1, pageSize: finalPageSize, ...filtersWithoutPageSize });
+      const requestedCurrency = filters.currency;
+      const transformed = response.data.map(watch => transformApiWatch(watch, requestedCurrency));
       
       setToCache(cacheKey, transformed);
       setWatches(transformed);
@@ -89,7 +96,7 @@ export function useWatches(initialFilters?: GetWatchesParams) {
         setWatches(cached);
         setCurrentFilters(filters);
         setCurrentPage(1);
-        setHasMore(cached.length >= pageSize);
+        setHasMore(cached.length >= finalPageSize);
       } else {
         setError(err instanceof Error ? err.message : 'Unknown error');
       }
