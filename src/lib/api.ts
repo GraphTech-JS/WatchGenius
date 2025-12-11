@@ -60,6 +60,9 @@ export async function getWatches(
   if (params.currency) searchParams.set('currency', params.currency);
   if (params.segment) searchParams.set('segment', params.segment);
   if (params.sort) searchParams.set('sort', params.sort);
+  if (params.sortByLiquidity !== undefined) {
+    searchParams.set('sortByLiquidity', params.sortByLiquidity.toString());
+  }
 
   const url = `/api/watches?${searchParams.toString()}`;
 
@@ -810,8 +813,15 @@ export async function clearChatHistory(
   }
 }
 
-export async function getLiquidVolume(): Promise<LiquidVolumeResponse> {
-  const url = `/api/watches/liquid/volume?currency=EUR`;
+export async function getLiquidVolume(currency?: string): Promise<LiquidVolumeResponse> {
+  const searchParams = new URLSearchParams();
+  if (currency) {
+    searchParams.set('currency', currency);
+  } else {
+    searchParams.set('currency', 'EUR');
+  }
+
+  const url = `/api/watches/liquid/volume?${searchParams.toString()}`;
 
   try {
     const response = await fetch(url);

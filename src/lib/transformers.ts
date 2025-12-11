@@ -48,7 +48,7 @@ function convertLiquidityToLabel(
   return 'Висока';
 }
 
-export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
+export function transformApiWatch(apiWatch: ApiWatchResponse, requestedCurrency?: string): WatchItem {
   let watchTitle = apiWatch.model || apiWatch.name || '';
   watchTitle = cleanWatchTitle(watchTitle);
   const fullTitle = `${apiWatch.brand.name} ${watchTitle}`.trim();
@@ -98,8 +98,10 @@ export function transformApiWatch(apiWatch: ApiWatchResponse): WatchItem {
     latestPriceFromHistory?.price || apiWatch.price || 0
   );
   
-  const finalCurrencyCode =
-    latestPriceFromHistory?.currency || apiWatch.currency || 'EUR';
+  const finalCurrencyCode = requestedCurrency || 
+    latestPriceFromHistory?.currency || 
+    apiWatch.currency || 
+    'EUR';
   const finalCurrency = convertCurrency(finalCurrencyCode);
 
   const brandSegment = apiWatch.brand.segment;

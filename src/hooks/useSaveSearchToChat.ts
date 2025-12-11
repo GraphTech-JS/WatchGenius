@@ -14,7 +14,8 @@ type ActiveFilter = {
     | 'document'
     | 'location'
     | 'price'
-    | 'year';
+    | 'year'
+    | 'liquidityLeaders';
   value: string;
   label: string;
 };

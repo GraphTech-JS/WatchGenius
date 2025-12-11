@@ -226,7 +226,7 @@ export const Market = () => {
         const [trending90d, stable, liquidVolume] = await Promise.all([
           getTrendingWatch90d(currency),
           getStableWatch(currency),
-          getLiquidVolume(),
+          getLiquidVolume(currency),
         ]);
 
         if (trending90d) {
@@ -324,7 +324,7 @@ export const Market = () => {
         <MarketTotal
           key='mobile-total'
           title='Liquidity Leaders'
-          deals={liquidVolumeData?.watches.length || 0}
+          deals={liquidVolumeData?.totalLiquidity || 0}
           amount={liquidVolumeData?.totalVolume.value || 0}
           chartData={
             liquidVolumeData?.history && liquidVolumeData.history.length > 0
@@ -383,7 +383,7 @@ export const Market = () => {
         <MarketTotal
           key='market-total-mobile'
           title='Liquidity Leaders'
-          deals={liquidVolumeData?.watches.length || 0}
+          deals={liquidVolumeData?.totalLiquidity || 0}
           amount={liquidVolumeData?.totalVolume.value || 0}
           chartData={
             liquidVolumeData?.history && liquidVolumeData.history.length > 0

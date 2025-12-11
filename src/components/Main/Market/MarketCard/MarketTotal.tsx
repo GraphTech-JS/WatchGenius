@@ -106,7 +106,11 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
         />
       </div>
       <LocalizedLink
-        href='/catalog'
+        href={
+          title === 'Liquidity Leaders'
+            ? '/catalog?sortByLiquidity=true'
+            : '/catalog'
+        }
         className={`${styles.marketCardLink} absolute bottom-[16px] md:bottom-[20px] w-full left-1/2 transform -translate-x-1/2  text-center font-medium cursor-pointer`}
       >
         {t(marketKeys.catalogLink)}

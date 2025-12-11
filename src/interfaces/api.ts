@@ -50,6 +50,7 @@ export interface GetWatchesParams {
   currency?: string;
   segment?: string;
   sort?: string;
+  sortByLiquidity?: boolean;
 }
 
 export interface ApiFiltersResponse {

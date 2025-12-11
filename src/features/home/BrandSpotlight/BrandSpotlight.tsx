@@ -29,7 +29,7 @@ function getBrandSpotlightCacheKey(currency: string): string {
 
 function getCachedBrandSpotlight(
   currency: string
-): { brand: string; watches: IWatch[] } | null {
+): { brands: Array<{ brand: string; watches: IWatch[] }> } | null {
   if (typeof window === 'undefined') return null;
 
   try {
@@ -54,7 +54,7 @@ function getCachedBrandSpotlight(
 
 function setCachedBrandSpotlight(
   currency: string,
-  brandData: { brand: string; watches: IWatch[] }
+  brandData: { brands: Array<{ brand: string; watches: IWatch[] }> }
 ): void {
   if (typeof window === 'undefined') return;
 
@@ -86,14 +86,29 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
     rating: Math.abs(watch.trend.value) % 11,
     changePercent: watch.trend.value,
     chartData:
-      watch.priceHistory && watch.priceHistory.length >= 2
-        ? [...watch.priceHistory]
-            .sort(
+      watch.priceHistory && watch.priceHistory.length >= 1
+        ? (() => {
+            const sorted = [...watch.priceHistory].sort(
               (a, b) =>
                 new Date(a.recordedAt).getTime() -
                 new Date(b.recordedAt).getTime()
-            )
-            .map((record) => record.price)
+            );
+            const prices = sorted.map((record) => record.price);
+            if (prices.length === 1) {
+              return [
+                prices[0],
+                prices[0],
+                prices[0],
+                prices[0],
+                prices[0],
+                prices[0],
+                prices[0],
+              ];
+            }
+            return prices.length >= 2
+              ? prices
+              : [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7];
+          })()
         : [2.7, 2.4, 2.5, 3, 2.7, 3.2, 2.7],
     chartColor: watch.trend.value > 0 ? '#22c55e' : '#EED09D',
     chartId: `brand-chart-${watch.id}`,
@@ -103,9 +118,8 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
 
 export const BrandSpotlight = () => {
   const [brandData, setBrandData] = useState<{
-    brand: string;
-    watches: IWatch[];
-  }>({ brand: 'Rolex', watches: [] });
+    brands: Array<{ brand: string; watches: IWatch[] }>;
+  }>({ brands: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -125,30 +139,36 @@ export const BrandSpotlight = () => {
         const data = await getPopularWatchesByBrand(currency);
 
         if (data.length === 0) {
-          setBrandData({ brand: 'Rolex', watches: mockTrending });
+          setBrandData({ brands: [{ brand: 'Rolex', watches: mockTrending }] });
           return;
         }
 
-        const firstBrand = data[0];
+        const topBrands = data.slice(0, 3);
 
-        const transformed = firstBrand.watches.map((watch) =>
-          transformApiWatchFull(watch, currency)
-        );
+        const brandsData = topBrands.map((brandItem) => {
+          const transformed = brandItem.watches.map((watch) =>
+            transformApiWatchFull(watch, currency)
+          );
 
-        const iWatchItems = transformed.map((watch, index) =>
-          convertWatchItemToIWatch(watch, index)
-        );
+          const iWatchItems = transformed.map((watch, index) =>
+            convertWatchItemToIWatch(watch, index)
+          );
+
+          return {
+            brand: brandItem.brand,
+            watches: iWatchItems,
+          };
+        });
 
         const brandData = {
-          brand: firstBrand.brand,
-          watches: iWatchItems,
+          brands: brandsData,
         };
 
         setBrandData(brandData);
         setCachedBrandSpotlight(currency, brandData);
       } catch {
         setError(t(brandSpotlightKeys.error));
-        setBrandData({ brand: 'Rolex', watches: mockTrending });
+        setBrandData({ brands: [{ brand: 'Rolex', watches: mockTrending }] });
       } finally {
         setLoading(false);
       }
@@ -191,14 +211,14 @@ export const BrandSpotlight = () => {
           >
             <Image
               src={RolexBrand}
-              alt={brandData.brand}
+              alt={brandData.brands[0]?.brand || 'Brand'}
               width={155}
               height={86}
               className='w-[9.75rem] block lg:hidden '
             />
             <Image
               src={RolexBrandDark}
-              alt={brandData.brand}
+              alt={brandData.brands[0]?.brand || 'Brand'}
               width={155}
               height={86}
               className='w-[8.75rem] hidden lg:block'
@@ -209,7 +229,7 @@ export const BrandSpotlight = () => {
               <div
                 className={`${styles.BrandName} text-center md:w-full md:text-start lg:text-center`}
               >
-                {brandData.brand}
+                {brandData.brands[0]?.brand || 'Brand'}
               </div>
               <div
                 className={`${styles.BrandDescription} text-center md:text-start`}
@@ -232,12 +252,18 @@ export const BrandSpotlight = () => {
                   speedMultiplier={0.9}
                 />
               </div>
-            ) : error && brandData.watches.length === 0 ? (
+            ) : error &&
+              (brandData.brands.length === 0 ||
+                brandData.brands[0]?.watches.length === 0) ? (
               <div className='flex justify-center items-center py-12'>
                 <div className='text-red-500 text-center px-4'>{error}</div>
               </div>
             ) : (
-              <BrandCards items={brandData.watches} />
+              <BrandCards
+                items={brandData.brands.flatMap(
+                  (brandItem) => brandItem.watches
+                )}
+              />
             )}
           </div>
         </div>
