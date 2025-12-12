@@ -10,19 +10,14 @@ export async function GET(request: NextRequest) {
       searchParams.toString() ? `?${searchParams.toString()}` : ''
     }`;
     
-    console.log('[API Route] Fetching from:', backendUrl);
-    
     const response = await fetch(backendUrl, {
       headers: {
         'Content-Type': 'application/json',
       },
     });
 
-    console.log('[API Route] Response status:', response.status);
-
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('[API Route] Backend error:', errorText);
       return NextResponse.json(
         { message: 'Not Found', error: errorText },
         { status: response.status }

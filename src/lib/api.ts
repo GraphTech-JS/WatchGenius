@@ -70,40 +70,6 @@ export async function getWatches(
     const response = await fetch(url);
     const data = await handleResponse<ApiWatchListResponse>(response);
     
-    if (params.sortByLiquidity) {
-      console.log('🔍 LIQUIDITY SORT DEBUG:');
-      console.log('📤 Request URL:', url);
-      console.log('📥 Response - First 10 watches with liquidity:');
-      const first10 = data.data.slice(0, 10).map((watch, index) => ({
-        position: index + 1,
-        id: watch.id,
-        title: `${watch.brand?.name || ''} ${watch.model || watch.name}`,
-        liquidity: watch.analytics?.liquidity || null,
-        liquidityNum: watch.analytics?.liquidity ? parseFloat(watch.analytics.liquidity) || 0 : 0,
-      }));
-      console.table(first10);
-      console.log('✅ Expected: Sorted by liquidity DESC (highest first, e.g., 90+, 80+, 70+)');
-      console.log('❌ Actual: First watch has liquidity =', first10[0].liquidity);
-      
-      const liquidityValues = first10.map(w => w.liquidityNum);
-      const nonNullValues = liquidityValues.filter(v => v > 0);
-      const maxLiquidity = Math.max(...liquidityValues, 0);
-      const firstLiquidity = liquidityValues[0];
-      
-      console.log('📊 Analysis:');
-      console.log('  - First watch liquidity:', firstLiquidity);
-      console.log('  - Max liquidity in first 10:', maxLiquidity);
-      console.log('  - Watches with non-null liquidity:', nonNullValues.length, 'out of 10');
-      
-      const isCorrectlySorted = firstLiquidity >= 80 && firstLiquidity === maxLiquidity;
-      console.log('  - Is correctly sorted?', isCorrectlySorted ? '✅ YES' : '❌ NO');
-      
-      if (!isCorrectlySorted) {
-        console.warn('⚠️ PROBLEM: First watch should have HIGH liquidity (80+), but has:', firstLiquidity);
-        console.warn('⚠️ This means backend sorting is NOT working correctly!');
-      }
-    }
-    
     return data;
   } catch (error) {
     console.error('Fetch error:', error);
