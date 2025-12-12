@@ -101,6 +101,7 @@ export const MarketCard: React.FC<IWatch & { priority?: boolean }> = ({
             width={134}
             height={142}
             className={`${styles.cardImage}`}
+            style={{ width: 'auto', height: 'auto' }}
             priority={priority}
             unoptimized={typeof image === 'string' && image.startsWith('http')}
           />

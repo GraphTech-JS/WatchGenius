@@ -68,7 +68,9 @@ export async function getWatches(
 
   try {
     const response = await fetch(url);
-    return handleResponse<ApiWatchListResponse>(response);
+    const data = await handleResponse<ApiWatchListResponse>(response);
+    
+    return data;
   } catch (error) {
     console.error('Fetch error:', error);
     throw error;
@@ -450,7 +452,7 @@ export async function getWatchBySlug(
 
     const fullWatch = await getWatchById(matchedWatch.id, currency);
 
-    if (fullWatch && matchedWatch.price) {
+    if (fullWatch && matchedWatch.price && matchedWatch.id === fullWatch.id) {
       fullWatch.price = matchedWatch.price;
       fullWatch.defaultPrice = matchedWatch.defaultPrice;
       fullWatch.currency = matchedWatch.currency;

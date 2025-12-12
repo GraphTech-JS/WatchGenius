@@ -83,7 +83,13 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
           className={`${styles.marketCardDetails} flex w-full md:w-1/3 lg:w-full md:flex-col lg:flex-row justify-between items-start md:items-end lg-items-start`}
         >
           <div className='flex gap-2'>
-            <Image src={GreenCup.src} alt='' width={19} height={19} />
+            <Image
+              src={GreenCup.src}
+              alt=''
+              width={19}
+              height={19}
+              style={{ width: 'auto', height: 'auto' }}
+            />
 
             <div className={`${styles.marketCardDetailsName} hidden lg:flex`}>
               {t(marketKeys.dealsLabel)}
@@ -106,11 +112,12 @@ export const MarketTotal: React.FC<IMarketTotal> = ({
         />
       </div>
       <LocalizedLink
-        href={
-          title === 'Liquidity Leaders'
-            ? '/catalog?sortByLiquidity=true'
-            : '/catalog'
-        }
+        href='/catalog'
+        onClick={() => {
+          if (title === 'Liquidity Leaders') {
+            sessionStorage.setItem('sortByLiquidity', 'true');
+          }
+        }}
         className={`${styles.marketCardLink} absolute bottom-[16px] md:bottom-[20px] w-full left-1/2 transform -translate-x-1/2  text-center font-medium cursor-pointer`}
       >
         {t(marketKeys.catalogLink)}

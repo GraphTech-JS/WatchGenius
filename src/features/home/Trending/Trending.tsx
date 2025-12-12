@@ -88,6 +88,7 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
     image: imageUrl,
     brand: watch.brand,
     price: watch.price,
+    currency: watch.currency,
     rating: Math.abs(watch.trend.value) % 11,
     changePercent: Math.round(watch.trend.value * 10) / 10,
     chartData:

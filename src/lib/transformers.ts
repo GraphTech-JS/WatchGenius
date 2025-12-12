@@ -387,10 +387,10 @@ export function transformApiWatchFull(
 
   const apiPrice = apiWatch.price;
   const historyPrice = latestPrice?.price;
-  const price = Math.round(apiPrice || historyPrice || 0);
+  const price = Math.round(historyPrice || apiPrice || 0);
   
   const currencyCode =
-    apiWatch.currency || latestPrice?.currency || requestedCurrency || apiWatch.dealer?.location || 'EUR';
+    requestedCurrency || apiWatch.currency || latestPrice?.currency || 'EUR';
   const currency = convertCurrency(currencyCode);
   const defaultPrice =
     apiWatch.defaultPrice ||

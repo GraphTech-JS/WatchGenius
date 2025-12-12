@@ -64,6 +64,7 @@ export const Footer = () => {
               alt={t(footerKeys.chrono.alt)}
               width={190}
               height={40}
+              style={{ width: 'auto', height: 'auto' }}
             />
             <div className={styles.chronoName}>{t(footerKeys.poweredBy)}</div>
           </div>
@@ -191,6 +192,7 @@ export const Footer = () => {
               alt='chrono24'
               width={190}
               height={40}
+              style={{ width: 'auto', height: 'auto' }}
             />
             <div className={`${styles.chronoName} text-nowrap`}>
               {t(footerKeys.poweredBy)}
