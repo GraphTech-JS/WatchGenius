@@ -38,6 +38,7 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
 
   const [consentError, setConsentError] = useState('');
   const [models, setModels] = useState<string[]>([]);
+  const [brandModels, setBrandModels] = useState<ApiBrandModel[]>([]);
 
   const currencies = ['USD', 'EUR', 'UAH', 'PLN', 'KZT'];
 
@@ -70,11 +71,13 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
     async function loadModels() {
       try {
         const data: ApiBrandModel[] = await getWatchModels();
+        setBrandModels(data);
         const transformed = data.map((item) => `${item.brand} ${item.model}`);
         setModels(transformed);
       } catch (error) {
         console.error('❌ [PriceAlertModal] Failed to load models:', error);
         setModels([]);
+        setBrandModels([]);
       }
     }
     loadModels();
@@ -200,13 +203,16 @@ const PriceAlertModal: React.FC<PriceAlertModalProps> = ({
       return;
     }
 
-    const parts = formData.watchModel.split(' ');
-    if (parts.length < 2) {
+    const selectedBrandModel = brandModels.find(
+      (item) => `${item.brand} ${item.model}` === formData.watchModel
+    );
+
+    if (!selectedBrandModel) {
       return;
     }
 
-    const brand = parts[0];
-    const model = parts.slice(1).join(' ');
+    const brand = selectedBrandModel.brand;
+    const model = selectedBrandModel.model;
 
     const priceWithoutSpaces = formData.targetPrice.replace(/\s/g, '');
     const targetPrice = Number(priceWithoutSpaces);

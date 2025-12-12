@@ -129,6 +129,7 @@ export const BestPrice = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [models, setModels] = useState<string[]>([]);
+  const [brandModels, setBrandModels] = useState<ApiBrandModel[]>([]);
   const [cheapestWatches, setCheapestWatches] = useState<IWatch[]>([]);
   const [loadingCheapest, setLoadingCheapest] = useState(false);
 
@@ -170,6 +171,7 @@ export const BestPrice = () => {
       try {
         const data: ApiBrandModel[] = await getWatchModels();
 
+        setBrandModels(data);
         const transformed = data.map((item) => `${item.brand} ${item.model}`);
 
         setCachedModels(transformed);
@@ -177,6 +179,7 @@ export const BestPrice = () => {
       } catch (error) {
         console.error('❌ [BestPrice] Failed to load models:', error);
         setModels([]);
+        setBrandModels([]);
       }
     }
     loadModels();
@@ -272,14 +275,16 @@ export const BestPrice = () => {
       return;
     }
 
-    const parts = selectedModel.split(' ');
-    if (parts.length < 2) {
+    const selectedBrandModel = brandModels.find(
+      (item) => `${item.brand} ${item.model}` === selectedModel
+    );
+
+    if (!selectedBrandModel) {
       return;
     }
 
-    const brand = parts[0];
-
-    const model = parts.slice(1).join(' ');
+    const brand = selectedBrandModel.brand;
+    const model = selectedBrandModel.model;
 
     const priceWithoutSpaces = price.replace(/\s/g, '');
     const targetPrice = Number(priceWithoutSpaces);

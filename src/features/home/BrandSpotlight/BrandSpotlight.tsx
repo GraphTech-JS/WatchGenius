@@ -83,6 +83,7 @@ function convertWatchItemToIWatch(watch: WatchItem, index: number): IWatch {
     image: imageUrl,
     brand: watch.brand,
     price: watch.price,
+    currency: watch.currency,
     rating: Math.abs(watch.trend.value) % 11,
     changePercent: watch.trend.value,
     chartData:
@@ -256,7 +257,7 @@ export const BrandSpotlight = () => {
               (brandData.brands.length === 0 ||
                 brandData.brands[0]?.watches.length === 0) ? (
               <div className='flex justify-center items-center py-12'>
-                <div className='text-red-500 text-center px-4'>{error}</div>
+                <div className='px-4 text-center text-red-500'>{error}</div>
               </div>
             ) : (
               <BrandCards

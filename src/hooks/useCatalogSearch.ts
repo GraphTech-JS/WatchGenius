@@ -65,7 +65,8 @@ function translateFilterValue(
 }
 
 export const useCatalogSearch = () => {
-  const searchParams = useSearchParams();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const searchParams = useSearchParams(); 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedIndexes, setSelectedIndexes] = useState<WatchIndex[]>([]);
   const [sidebarFilters, setSidebarFilters] =
@@ -256,9 +257,9 @@ export const useCatalogSearch = () => {
     setSearchTerm('');
 
     if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('sortByLiquidity');
       const url = new URL(window.location.href);
       url.searchParams.delete('index');
-      url.searchParams.delete('sortByLiquidity');
       window.history.pushState({}, '', url.toString());
     }
   }, []);
@@ -281,13 +282,20 @@ export const useCatalogSearch = () => {
   }, []);
 
   const filteredItems = useMemo(() => {
-    const sortByLiquidityParam = searchParams.get('sortByLiquidity');
-    const isSortByLiquidity = sortByLiquidityParam === 'true';
+    const sortByLiquidityFromStorage = typeof window !== 'undefined' 
+      ? sessionStorage.getItem('sortByLiquidity') === 'true'
+      : false;
+    const isSortByLiquidity = sortByLiquidityFromStorage;
     
     let items: WatchItem[] = watches;
 
     if (isSortByLiquidity) {
-      return items;
+      const sorted = [...items].sort((a, b) => {
+        const liquidityA: number = a.liquidity ? parseFloat(a.liquidity) || 0 : 0;
+        const liquidityB: number = b.liquidity ? parseFloat(b.liquidity) || 0 : 0;
+        return liquidityB - liquidityA;
+      });
+      return sorted;
     }
 
     if (selectedIndexes.length > 0) {
@@ -296,7 +304,7 @@ export const useCatalogSearch = () => {
 
     const sorted = applySorting(items, sortOption);
     return sorted;
-  }, [watches, selectedIndexes, sortOption, searchParams]);
+  }, [watches, selectedIndexes, sortOption]);
 
   useLayoutEffect(() => {
     if (!chipsRef.current) {
@@ -337,13 +345,15 @@ export const useCatalogSearch = () => {
         : 'EUR';
     };
 
-    const sortByLiquidityParam = searchParams.get('sortByLiquidity');
+    const sortByLiquidityFromStorage = typeof window !== 'undefined' 
+      ? sessionStorage.getItem('sortByLiquidity') === 'true'
+      : false;
     const currency = getCurrencyFromStorage();
 
     const paramsKey = JSON.stringify({
       searchTerm: searchTerm.trim(),
       selectedIndexes: selectedIndexes.sort().join(','),
-      sortByLiquidity: sortByLiquidityParam === 'true',
+      sortByLiquidity: sortByLiquidityFromStorage,
       sidebarFilters: sidebarFilters ? JSON.stringify(sidebarFilters) : null,
       currency: currency,
     });
@@ -360,13 +370,13 @@ export const useCatalogSearch = () => {
     const apiParams: GetWatchesParams =
       !searchTerm.trim() && !sidebarFilters
         ? {
-            pageSize: sortByLiquidityParam === 'true' ? 100 : 12,
+            pageSize: 12,
             currency: currency,
-            ...(selectedIndexes.length > 0 && sortByLiquidityParam !== 'true' && {
+            ...(selectedIndexes.length > 0 && !sortByLiquidityFromStorage && {
               segment: selectedIndexes.join('/'),
               
             }),
-            ...(sortByLiquidityParam === 'true' && { sortByLiquidity: true }),
+            ...(sortByLiquidityFromStorage && { sortByLiquidity: true }),
           }
         : {
             ...(searchTerm.trim() && { search: searchTerm.trim() }),
@@ -374,13 +384,17 @@ export const useCatalogSearch = () => {
               ? convertFiltersToApiParams(sidebarFilters)
               : {}),
             ...(selectedIndexes.length > 0 &&
-              !sidebarFilters && sortByLiquidityParam !== 'true' && { segment: selectedIndexes.join('/') }),
+              !sidebarFilters && !sortByLiquidityFromStorage && { segment: selectedIndexes.join('/') }),
             currency: currency,
-            pageSize: sortByLiquidityParam === 'true' ? 100 : 12,
-            ...(sortByLiquidityParam === 'true' && { sortByLiquidity: true }),
+            pageSize: 12,
+            ...(sortByLiquidityFromStorage && { sortByLiquidity: true }),
           };
 
     reloadWithFilters(apiParams);
+
+    if (sortByLiquidityFromStorage && typeof window !== 'undefined') {
+      sessionStorage.removeItem('sortByLiquidity');
+    }
 
     const handleCurrencyChange = () => {
       previousParamsRef.current = '';
@@ -401,7 +415,6 @@ export const useCatalogSearch = () => {
     isApplyingSavedFilters,
     savedCatalogFilters,
     selectedIndexes,
-    searchParams,
   ]);
 
   const handleSortChange = useCallback((newSort: SortOption) => {

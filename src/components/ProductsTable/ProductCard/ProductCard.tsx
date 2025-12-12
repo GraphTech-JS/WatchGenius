@@ -68,6 +68,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   changePercent,
   brand,
   price,
+  currency = '€',
   chartData,
   chartId,
   slug,
@@ -181,7 +182,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       aria-label={t(a11yKeys.card.product, {
         brand,
         price,
-        currency: '€',
+        currency: currency,
         change: changePercent,
       })}
     >
@@ -289,7 +290,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         <div className='flex gap-2 items-center w-full'>
           <div className='relative text-center max-h-[54px] w-full flex flex-row justify-between items-center'>
-            <div className={`${styles.Price}`}>{price} €</div>
+            <div className={`${styles.Price}`}>
+              {Math.round(price).toLocaleString('uk-UA')} {currency}
+            </div>
             <div
               className={`${
                 styles.marketCardHeadPercent

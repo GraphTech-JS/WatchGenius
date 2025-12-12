@@ -37,6 +37,7 @@ interface IWatch {
   image: string;
   brand: string;
   price: number;
+  currency?: string;
   rating: number;
   changePercent: number;
   createdAt?: string;

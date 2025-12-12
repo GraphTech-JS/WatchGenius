@@ -185,6 +185,7 @@ function convertWatchToMarketCard(
     image: imageUrl,
     brand: watch.title || watch.brand,
     price: watch.price,
+    currency: watch.currency,
     rating: Math.abs(changePercent) % 11,
     changePercent: changePercent,
     chartData: chartData,
@@ -483,7 +484,7 @@ export const Market = () => {
           </div>
         ) : error ? (
           <div className='flex justify-center items-center py-12'>
-            <div className='text-red-500 text-center px-4'>{error}</div>
+            <div className='px-4 text-center text-red-500'>{error}</div>
           </div>
         ) : (
           <>
